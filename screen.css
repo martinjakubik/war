@@ -1,0 +1,33 @@
+.player {
+  width: 100%;
+}
+
+.table {
+  display: inline-block;
+  vertical-align: middle;
+  height: 110pt;
+  margin: 0 10pt 0 2pt;
+  min-width: 18%;
+}
+
+.hand {
+  display: inline-block;
+  vertical-align: middle;
+  height: 110pt;
+  overflow-x: hidden;
+}
+
+.card {
+  display: inline-block;
+  margin: 2pt 2pt 2pt 2pt;
+  height: 100pt;
+  width: 60pt;
+
+  border: 3pt solid #4a4;
+  border-radius: 4pt;
+}
+
+.card>.content {
+  font-family: sans-serif;
+  font-size: 22pt;
+}
