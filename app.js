@@ -72,43 +72,43 @@
 
         var doTurn = function (aPlayer1Cards, aPlayer2Cards) {
 
-        switch (nPlayState) {
-            case PLAY_STATE.movingToTable:
+            switch (nPlayState) {
+                case PLAY_STATE.movingToTable:
 
-                if (isGameFinished(aPlayer1Cards, aPlayer2Cards)) {
-                    return;
-                }
+                    if (isGameFinished(aPlayer1Cards, aPlayer2Cards)) {
+                        return;
+                    }
 
-                putCardOnTable(aPlayer1Table, aPlayer1Cards);
-                putCardOnTable(aPlayer2Table, aPlayer2Cards);
-
-                nPlayState = PLAY_STATE.checkingTable;
-
-                break;
-
-            case PLAY_STATE.checkingTable:
-
-                if (getTableCard(aPlayer1Table) > getTableCard(aPlayer2Table)) {
-                    Array.prototype.push.apply(aPlayer1Cards, aPlayer1Table);
-                    Array.prototype.push.apply(aPlayer1Cards, aPlayer2Table);
-                    clearTable(aPlayer1Table);
-                    clearTable(aPlayer2Table);
-                } else if (getTableCard(aPlayer1Table) < getTableCard(aPlayer2Table)) {
-                    Array.prototype.push.apply(aPlayer2Cards, aPlayer1Table);
-                    Array.prototype.push.apply(aPlayer2Cards, aPlayer2Table);
-                    clearTable(aPlayer1Table);
-                    clearTable(aPlayer2Table);
-                } else if (getTableCard(aPlayer1Table) === getTableCard(aPlayer2Table)) {
                     putCardOnTable(aPlayer1Table, aPlayer1Cards);
                     putCardOnTable(aPlayer2Table, aPlayer2Cards);
-                }
 
-                isGameFinished(aPlayer1Cards, aPlayer2Cards);
-                nPlayState = PLAY_STATE.movingToTable;
+                    nPlayState = PLAY_STATE.checkingTable;
 
-                break;
-            default:
-                break;
+                    break;
+
+                case PLAY_STATE.checkingTable:
+
+                    if (getTableCard(aPlayer1Table) > getTableCard(aPlayer2Table)) {
+                        Array.prototype.push.apply(aPlayer1Cards, aPlayer1Table);
+                        Array.prototype.push.apply(aPlayer1Cards, aPlayer2Table);
+                        clearTable(aPlayer1Table);
+                        clearTable(aPlayer2Table);
+                    } else if (getTableCard(aPlayer1Table) < getTableCard(aPlayer2Table)) {
+                        Array.prototype.push.apply(aPlayer2Cards, aPlayer1Table);
+                        Array.prototype.push.apply(aPlayer2Cards, aPlayer2Table);
+                        clearTable(aPlayer1Table);
+                        clearTable(aPlayer2Table);
+                    } else if (getTableCard(aPlayer1Table) === getTableCard(aPlayer2Table)) {
+                        putCardOnTable(aPlayer1Table, aPlayer1Cards);
+                        putCardOnTable(aPlayer2Table, aPlayer2Cards);
+                    }
+
+                    isGameFinished(aPlayer1Cards, aPlayer2Cards);
+                    nPlayState = PLAY_STATE.movingToTable;
+
+                    break;
+                default:
+                    break;
             }
 
             renderPlayerTable(1, aPlayer1Table);
@@ -213,7 +213,7 @@
     aCards = [1, 4, 6, 5, 3, 1, 2, 6, 6, 1, 4];
 
     aDistributedCards = distribute(aCards);
-    makeView(aDistributedCards[0], aDistributedCards[1]);
+    makeView(aCards, aDistributedCards[0], aDistributedCards[1]);
 
     close();
 } ());
