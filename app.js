@@ -7,6 +7,23 @@
     var close = function () {
         document.close();
     };
+    
+    var addCardToView = function (oView, nCard) {
+
+        var oCardView = document.createElement('div');
+        oCardView.setAttribute('class', 'card');
+        oCardView.setAttribute('id', 'card' + nCard);
+
+        var oCardFaceView = document.createElement('div');
+        oCardFaceView.setAttribute('class', 'content');
+
+        var oCardFaceText = document.createTextNode(nCard);
+        oCardFaceView.appendChild(oCardFaceText);
+
+        oCardView.insertBefore(oCardFaceView, null);
+
+        oView.insertBefore(oCardView, null);
+    };
 
     var renderPlayerTable = function (nPlayer, aPlayerTable) {
 
@@ -70,7 +87,14 @@
         return aShuffledCards;
     };
     
-    var makeView = function (aCards, aPlayer1Cards, aPlayer2Cards) {
+    var renderCards = function (aPlayer1Table, aPlayer2Table) {
+        renderPlayerTable(1, aPlayer1Table);
+        renderPlayerTable(2, aPlayer2Table);
+        renderPlayerHand(1, this.distributedCards[0]);
+        renderPlayerHand(2, this.distributedCards[1]);
+    };
+    
+    var makeView = function () {
 
         var nPlayState = 0;
         var aPlayer1Table = [];
@@ -81,17 +105,17 @@
             checkingTable: 1
         }
 
-        var doTurn = function (aPlayer1Cards, aPlayer2Cards) {
+        var doTurn = function () {
 
             switch (nPlayState) {
                 case PLAY_STATE.movingToTable:
 
-                    if (isGameFinished(aPlayer1Cards, aPlayer2Cards)) {
+                    if (isGameFinished(this.distributedCards[0], this.distributedCards[1])) {
                         return;
                     }
 
-                    putCardOnTable(aPlayer1Table, aPlayer1Cards);
-                    putCardOnTable(aPlayer2Table, aPlayer2Cards);
+                    putCardOnTable(aPlayer1Table, this.distributedCards[0]);
+                    putCardOnTable(aPlayer2Table, this.distributedCards[1]);
 
                     nPlayState = PLAY_STATE.checkingTable;
 
@@ -100,21 +124,21 @@
                 case PLAY_STATE.checkingTable:
 
                     if (getTableCard(aPlayer1Table) > getTableCard(aPlayer2Table)) {
-                        Array.prototype.push.apply(aPlayer1Cards, aPlayer1Table);
-                        Array.prototype.push.apply(aPlayer1Cards, aPlayer2Table);
+                        Array.prototype.push.apply(this.distributedCards[0], aPlayer1Table);
+                        Array.prototype.push.apply(this.distributedCards[0], aPlayer2Table);
                         clearTable(aPlayer1Table);
                         clearTable(aPlayer2Table);
                     } else if (getTableCard(aPlayer1Table) < getTableCard(aPlayer2Table)) {
-                        Array.prototype.push.apply(aPlayer2Cards, aPlayer1Table);
-                        Array.prototype.push.apply(aPlayer2Cards, aPlayer2Table);
+                        Array.prototype.push.apply(this.distributedCards[1], aPlayer1Table);
+                        Array.prototype.push.apply(this.distributedCards[1], aPlayer2Table);
                         clearTable(aPlayer1Table);
                         clearTable(aPlayer2Table);
                     } else if (getTableCard(aPlayer1Table) === getTableCard(aPlayer2Table)) {
-                        putCardOnTable(aPlayer1Table, aPlayer1Cards);
-                        putCardOnTable(aPlayer2Table, aPlayer2Cards);
+                        putCardOnTable(aPlayer1Table, this.distributedCards[0]);
+                        putCardOnTable(aPlayer2Table, this.distributedCards[1]);
                     }
 
-                    isGameFinished(aPlayer1Cards, aPlayer2Cards);
+                    isGameFinished(this.distributedCards[0], this.distributedCards[1]);
                     nPlayState = PLAY_STATE.movingToTable;
 
                     break;
@@ -122,22 +146,23 @@
                     break;
             }
 
-            renderPlayerTable(1, aPlayer1Table);
-            renderPlayerTable(2, aPlayer2Table);
-            renderPlayerHand(1, aPlayer1Cards);
-            renderPlayerHand(2, aPlayer2Cards);
+            renderCards.call(this, aPlayer1Table, aPlayer2Table);
         };
 
         var oPlayBtn = document.createElement('button');
         var oContent = document.createTextNode('Play');
         oPlayBtn.appendChild(oContent);
-        oPlayBtn.onclick = doTurn.bind(this, aPlayer1Cards, aPlayer2Cards);
+        oPlayBtn.onclick = doTurn.bind(this);
         document.body.insertBefore(oPlayBtn, null);
 
         var oShuffleBtn = document.createElement('button');
         var oContent = document.createTextNode('Shuffle');
         oShuffleBtn.appendChild(oContent);
-        oShuffleBtn.onclick = shuffle.bind(this, aCards);
+        oShuffleBtn.onclick = function () {
+            this.shuffledCards = shuffle.call(this, this.shuffledCards)
+            this.distributedCards = distribute(this.shuffledCards);
+            renderCards.call(this, [], []);
+        }.bind(this);
         document.body.insertBefore(oShuffleBtn, null);
 
         var oPlayer1View = document.createElement('div');
@@ -175,28 +200,8 @@
         oPlayer2HandView.setAttribute('id', 'hand2');
 
         oPlayer2View.insertBefore(oPlayer2HandView, null);
-
-        renderPlayerTable(1, aPlayer1Table);
-        renderPlayerTable(2, aPlayer2Table);
-        renderPlayerHand(1, aPlayer1Cards);
-        renderPlayerHand(2, aPlayer2Cards);
-    };
-
-    var addCardToView = function (oView, nCard) {
-
-        var oCardView = document.createElement('div');
-        oCardView.setAttribute('class', 'card');
-        oCardView.setAttribute('id', 'card' + nCard);
-
-        var oCardFaceView = document.createElement('div');
-        oCardFaceView.setAttribute('class', 'content');
-
-        var oCardFaceText = document.createTextNode(nCard);
-        oCardFaceView.appendChild(oCardFaceText);
-
-        oCardView.insertBefore(oCardFaceView, null);
-
-        oView.insertBefore(oCardView, null);
+        
+        renderCards.call(this, aPlayer1Table, aPlayer2Table);
     };
 
     var distribute = function (aCards) {
@@ -227,10 +232,12 @@
 
     setup();
 
-    aCards = [1, 4, 6, 5, 3, 1, 2, 6, 6, 1, 4];
+    var aCards = [1, 4, 6, 5, 3, 1, 2, 6, 6, 1, 4];
 
-    aDistributedCards = distribute(aCards);
-    makeView(aCards, aDistributedCards[0], aDistributedCards[1]);
+    this.shuffledCards = aCards;
+    this.distributedCards = distribute(this.shuffledCards);
+
+    makeView.call(this);
 
     close();
 } ());
