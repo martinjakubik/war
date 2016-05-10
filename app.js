@@ -1,4 +1,6 @@
 (function () {
+    
+    this.barkSound = new Audio('resources/small-dog-bark.wav');
 
     var setup = function () {
         document.open();
@@ -87,6 +89,32 @@
         return aShuffledCards;
     };
     
+    var distribute = function (aCards) {
+
+        var oGameView = document.getElementById('game');
+
+        var i, oCard;
+        var aPlayer1Cards = [],
+            aPlayer2Cards = [];
+
+        var aDistributedCards = [];
+
+        for (i = 0; i < aCards.length; i++) {
+            oCard = aCards[i];
+
+            if (i % 2 === 0) {
+                aPlayer1Cards.push(oCard);
+            } else {
+                aPlayer2Cards.push(oCard);
+            }
+        }
+
+        aDistributedCards[0] = aPlayer1Cards;
+        aDistributedCards[1] = aPlayer2Cards;
+
+        return aDistributedCards;
+    };
+
     var renderCards = function (aPlayer1Table, aPlayer2Table) {
         renderPlayerTable(1, aPlayer1Table);
         renderPlayerTable(2, aPlayer2Table);
@@ -116,6 +144,10 @@
 
                     putCardOnTable(aPlayer1Table, this.distributedCards[0]);
                     putCardOnTable(aPlayer2Table, this.distributedCards[1]);
+
+                    if (getTableCard(aPlayer1Table) === getTableCard(aPlayer2Table)) {
+                        this.barkSound.play();
+                    }
 
                     nPlayState = PLAY_STATE.checkingTable;
 
@@ -202,32 +234,6 @@
         oPlayer2View.insertBefore(oPlayer2HandView, null);
         
         renderCards.call(this, aPlayer1Table, aPlayer2Table);
-    };
-
-    var distribute = function (aCards) {
-
-        var oGameView = document.getElementById('game');
-
-        var i, oCard;
-        var aPlayer1Cards = [],
-            aPlayer2Cards = [];
-
-        var aDistributedCards = [];
-
-        for (i = 0; i < aCards.length; i++) {
-            oCard = aCards[i];
-
-            if (i % 2 === 0) {
-                aPlayer1Cards.push(oCard);
-            } else {
-                aPlayer2Cards.push(oCard);
-            }
-        }
-
-        aDistributedCards[0] = aPlayer1Cards;
-        aDistributedCards[1] = aPlayer2Cards;
-
-        return aDistributedCards;
     };
 
     setup();
