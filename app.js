@@ -59,7 +59,18 @@
         return false;
     };
 
-    var makeView = function (aPlayer1Cards, aPlayer2Cards) {
+    var shuffle = function (aCards) {
+        var i, n, aShuffledCards = [];
+        
+        while (aCards.length > 0) {
+            n = Math.floor(Math.random() * aCards.length);
+            aShuffledCards.push(aCards.splice(n, 1)[0]);
+        }
+        
+        return aShuffledCards;
+    };
+    
+    var makeView = function (aCards, aPlayer1Cards, aPlayer2Cards) {
 
         var nPlayState = 0;
         var aPlayer1Table = [];
@@ -122,6 +133,12 @@
         oPlayBtn.appendChild(oContent);
         oPlayBtn.onclick = doTurn.bind(this, aPlayer1Cards, aPlayer2Cards);
         document.body.insertBefore(oPlayBtn, null);
+
+        var oShuffleBtn = document.createElement('button');
+        var oContent = document.createTextNode('Shuffle');
+        oShuffleBtn.appendChild(oContent);
+        oShuffleBtn.onclick = shuffle.bind(this, aCards);
+        document.body.insertBefore(oShuffleBtn, null);
 
         var oPlayer1View = document.createElement('div');
         oPlayer1View.setAttribute('class', 'player');
