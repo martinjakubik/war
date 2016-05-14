@@ -1,4 +1,30 @@
-(function () {
+/*jshint node:true */
+//'use strict';
+require([], function() {
+    
+    var Player = function () {
+      
+        this._hand = [];
+        this._table = [];
+    
+    };
+
+    Player.prototype.getNumberCards = function () {
+        return _this.hand.length;
+    };
+
+    Player.prototype.putCardOnTable = function () {
+        this._table.push(aPlayerCards[0]);
+        this._cards.splice(0, 1);            
+    };
+
+    Player.prototype.clearTable = function () {
+        this._table.splice(0);  
+    };
+
+    Player.prototype.getTableCard = function () {
+        return this._table[this._table.length - 1];
+    };
     
     this.barkSound = new Audio('resources/small-dog-bark.wav');
 
@@ -236,14 +262,10 @@
         renderCards.call(this, aPlayer1Table, aPlayer2Table);
     };
 
-    setup();
-
     var aCards = [1, 4, 6, 5, 3, 1, 2, 6, 6, 1, 4];
 
     this.shuffledCards = aCards;
     this.distributedCards = distribute(this.shuffledCards);
 
-    makeView.call(this);
-
-    close();
-} ());
+    makeView();
+});
