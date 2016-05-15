@@ -117,9 +117,9 @@ requirejs(['Player'], function (Player) {
         return aDistributedCards;
     };
 
-    var renderCards = function (aPlayer1Table, aPlayer2Table) {
-        renderPlayerTable(1, aPlayer1Table);
-        renderPlayerTable(2, aPlayer2Table);
+    var renderCards = function () {
+        renderPlayerTable(1, this.table[0]);
+        renderPlayerTable(2, this.table[1]);
         renderPlayerHand(1, this.distributedCards[0]);
         renderPlayerHand(2, this.distributedCards[1]);
     };
@@ -127,8 +127,6 @@ requirejs(['Player'], function (Player) {
     var makeView = function () {
 
         var nPlayState = 0;
-        var aPlayer1Table = [];
-        var aPlayer2Table = [];
 
         var PLAY_STATE = {
             movingToTable: 0,
@@ -144,10 +142,10 @@ requirejs(['Player'], function (Player) {
                     return;
                 }
 
-                putCardOnTable(aPlayer1Table, this.distributedCards[0]);
-                putCardOnTable(aPlayer2Table, this.distributedCards[1]);
+                putCardOnTable(this.table[0], this.distributedCards[0]);
+                putCardOnTable(this.table[1], this.distributedCards[1]);
 
-                if (getTableCard(aPlayer1Table) === getTableCard(aPlayer2Table)) {
+                if (getTableCard(this.table[0]) === getTableCard(this.table[1])) {
                     this.barkSound.play();
                 }
 
@@ -157,19 +155,19 @@ requirejs(['Player'], function (Player) {
 
             case PLAY_STATE.checkingTable:
 
-                if (getTableCard(aPlayer1Table) > getTableCard(aPlayer2Table)) {
-                    Array.prototype.push.apply(this.distributedCards[0], aPlayer1Table);
-                    Array.prototype.push.apply(this.distributedCards[0], aPlayer2Table);
-                    clearTable(aPlayer1Table);
-                    clearTable(aPlayer2Table);
-                } else if (getTableCard(aPlayer1Table) < getTableCard(aPlayer2Table)) {
-                    Array.prototype.push.apply(this.distributedCards[1], aPlayer1Table);
-                    Array.prototype.push.apply(this.distributedCards[1], aPlayer2Table);
-                    clearTable(aPlayer1Table);
-                    clearTable(aPlayer2Table);
-                } else if (getTableCard(aPlayer1Table) === getTableCard(aPlayer2Table)) {
-                    putCardOnTable(aPlayer1Table, this.distributedCards[0]);
-                    putCardOnTable(aPlayer2Table, this.distributedCards[1]);
+                if (getTableCard(this.table[0]) > getTableCard(this.table[1])) {
+                    Array.prototype.push.apply(this.distributedCards[0], this.table[0]);
+                    Array.prototype.push.apply(this.distributedCards[0], this.table[1]);
+                    clearTable(this.table[0]);
+                    clearTable(this.table[1]);
+                } else if (getTableCard(this.table[0]) < getTableCard(this.table[1])) {
+                    Array.prototype.push.apply(this.distributedCards[1], this.table[0]);
+                    Array.prototype.push.apply(this.distributedCards[1], this.table[1]);
+                    clearTable(this.table[0]);
+                    clearTable(this.table[1]);
+                } else if (getTableCard(this.table[0]) === getTableCard(this.table[1])) {
+                    putCardOnTable(this.table[0], this.distributedCards[0]);
+                    putCardOnTable(this.table[1], this.distributedCards[1]);
                 }
 
                 isGameFinished(this.distributedCards[0], this.distributedCards[1]);
@@ -180,7 +178,7 @@ requirejs(['Player'], function (Player) {
                 break;
             }
 
-            renderCards.call(this, aPlayer1Table, aPlayer2Table);
+            renderCards.call(this, this.table[0], this.table[1]);
         };
 
         var oPlayBtn = document.createElement('button');
@@ -193,6 +191,7 @@ requirejs(['Player'], function (Player) {
         oContent = document.createTextNode('Shuffle');
         oShuffleBtn.appendChild(oContent);
         oShuffleBtn.onclick = function () {
+            this.table = [[],[]];
             this.shuffledCards = shuffle.call(this, this.shuffledCards);
             this.distributedCards = distribute(this.shuffledCards);
             renderCards.call(this, [], []);
@@ -235,7 +234,7 @@ requirejs(['Player'], function (Player) {
 
         oPlayer2View.insertBefore(oPlayer2HandView, null);
         
-        renderCards.call(this, aPlayer1Table, aPlayer2Table);
+        renderCards.call(this, this.table[0], this.table[1]);
 
         var oResultView = document.createElement('div');
         oResultView.setAttribute('class', 'result');
@@ -251,6 +250,9 @@ requirejs(['Player'], function (Player) {
 
         this.shuffledCards = aCards;
         this.distributedCards = distribute(this.shuffledCards);
+        this.table = [
+            [], []
+        ];
 
         makeView();
     };
