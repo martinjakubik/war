@@ -28,6 +28,16 @@ requirejs(['Player'], function (Player) {
         oView.insertBefore(oCardView, null);
     };
 
+    var renderResult = function () {
+        var oResultView = document.getElementById('result');
+
+        var oContent = document.createTextNode(this.result);
+        if (oResultView.firstChild) {
+            oResultView.removeChild(oResultView.firstChild);
+        }
+        oResultView.appendChild(oContent);
+    };
+
     var renderPlayerTable = function (nPlayer, aPlayerTable) {
 
         var i, oPlayerTableView = document.getElementById('table' + nPlayer);
@@ -71,10 +81,12 @@ requirejs(['Player'], function (Player) {
 
     var isGameFinished = function (aPlayer1Cards, aPlayer2Cards) {
         if (aPlayer1Cards.length === 0) {
-            console.log('player 2 wins');
+            this.result = 'player 2 wins';
+            renderResult();
             return true;
         } else if (aPlayer2Cards.length === 0) {
-            console.log('player 1 wins');
+            this.result = 'player 1 wins';
+            renderResult();
             return true;
         }
         return false;
@@ -191,6 +203,8 @@ requirejs(['Player'], function (Player) {
         oContent = document.createTextNode('Shuffle');
         oShuffleBtn.appendChild(oContent);
         oShuffleBtn.onclick = function () {
+            this.result = '';
+            renderResult();
             clearTable(this.table[0]);
             clearTable(this.table[1]);            
             this.shuffledCards = shuffle.call(this, this.shuffledCards);
@@ -254,6 +268,8 @@ requirejs(['Player'], function (Player) {
         this.table = [
             [], []
         ];
+        
+        this.result = '';
 
         makeView();
     };
