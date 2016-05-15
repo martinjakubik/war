@@ -193,37 +193,23 @@ requirejs(['Player'], function (Player) {
             renderCards.call(this, this.table[0], this.table[1]);
         };
 
-        var oPlayBtn = document.createElement('button');
-        var oContent = document.createTextNode('Play');
-        oPlayBtn.appendChild(oContent);
-        oPlayBtn.onclick = doTurn.bind(this);
-        document.body.insertBefore(oPlayBtn, null);
+        var oGameView = document.createElement('div');
+        oGameView.setAttribute('class', 'game');
+        oGameView.setAttribute('id', 'game');
 
-        var oShuffleBtn = document.createElement('button');
-        oContent = document.createTextNode('Shuffle');
-        oShuffleBtn.appendChild(oContent);
-        oShuffleBtn.onclick = function () {
-            this.result = '';
-            renderResult();
-            clearTable(this.table[0]);
-            clearTable(this.table[1]);            
-            this.shuffledCards = shuffle.call(this, this.shuffledCards);
-            this.distributedCards = distribute(this.shuffledCards);
-            renderCards.call(this, [], []);
-        }.bind(this);
-        document.body.insertBefore(oShuffleBtn, null);
-
+        document.body.insertBefore(oGameView, null);
+        
         var oPlayer1View = document.createElement('div');
         oPlayer1View.setAttribute('class', 'player');
         oPlayer1View.setAttribute('id', 'player1');
 
-        document.body.insertBefore(oPlayer1View, null);
+        oGameView.insertBefore(oPlayer1View, null);
 
         var oPlayer2View = document.createElement('div');
         oPlayer2View.setAttribute('class', 'player');
         oPlayer2View.setAttribute('id', 'player2');
 
-        document.body.insertBefore(oPlayer2View, null);
+        oGameView.insertBefore(oPlayer2View, null);
 
         var oPlayer1TableView = document.createElement('div');
         oPlayer1TableView.setAttribute('class', 'table');
@@ -250,6 +236,30 @@ requirejs(['Player'], function (Player) {
         oPlayer2View.insertBefore(oPlayer2HandView, null);
         
         renderCards.call(this, this.table[0], this.table[1]);
+
+        var oPlayBtn = document.createElement('button');
+        var oContent = document.createTextNode('Play');
+        oPlayBtn.setAttribute('class', 'button');
+        oPlayBtn.setAttribute('id', 'play');
+        oPlayBtn.appendChild(oContent);
+        oPlayBtn.onclick = doTurn.bind(this);
+        document.body.insertBefore(oPlayBtn, null);
+
+        var oShuffleBtn = document.createElement('button');
+        oContent = document.createTextNode('Shuffle');
+        oShuffleBtn.setAttribute('class', 'button');
+        oShuffleBtn.setAttribute('id', 'shuffle');
+        oShuffleBtn.appendChild(oContent);
+        oShuffleBtn.onclick = function () {
+            this.result = '';
+            renderResult();
+            clearTable(this.table[0]);
+            clearTable(this.table[1]);            
+            this.shuffledCards = shuffle.call(this, this.shuffledCards);
+            this.distributedCards = distribute(this.shuffledCards);
+            renderCards.call(this, [], []);
+        }.bind(this);
+        document.body.insertBefore(oShuffleBtn, null);
 
         var oResultView = document.createElement('div');
         oResultView.setAttribute('class', 'result');
