@@ -1,32 +1,7 @@
-/*jshint node:true */
-//'use strict';
-require([], function() {
-    
-    var Player = function () {
-      
-        this._hand = [];
-        this._table = [];
-    
-    };
-
-    Player.prototype.getNumberCards = function () {
-        return _this.hand.length;
-    };
-
-    Player.prototype.putCardOnTable = function () {
-        this._table.push(aPlayerCards[0]);
-        this._cards.splice(0, 1);            
-    };
-
-    Player.prototype.clearTable = function () {
-        this._table.splice(0);  
-    };
-
-    Player.prototype.getTableCard = function () {
-        return this._table[this._table.length - 1];
-    };
-    
-    this.barkSound = new Audio('resources/small-dog-bark.wav');
+/*global requirejs */
+/*global console */
+/*global Audio: false */
+requirejs(['Player'], function (Player) {
 
     var setup = function () {
         document.open();
@@ -69,7 +44,8 @@ require([], function() {
 
     var renderPlayerHand = function (nPlayer, aPlayerCards) {
 
-        var oPlayerHandView = document.getElementById('hand' + nPlayer);
+        var i,
+            oPlayerHandView = document.getElementById('hand' + nPlayer);
 
         while (oPlayerHandView.firstChild) {
             oPlayerHandView.removeChild(oPlayerHandView.firstChild);
@@ -157,51 +133,51 @@ require([], function() {
         var PLAY_STATE = {
             movingToTable: 0,
             checkingTable: 1
-        }
+        };
 
         var doTurn = function () {
 
             switch (nPlayState) {
-                case PLAY_STATE.movingToTable:
+            case PLAY_STATE.movingToTable:
 
-                    if (isGameFinished(this.distributedCards[0], this.distributedCards[1])) {
-                        return;
-                    }
+                if (isGameFinished(this.distributedCards[0], this.distributedCards[1])) {
+                    return;
+                }
 
+                putCardOnTable(aPlayer1Table, this.distributedCards[0]);
+                putCardOnTable(aPlayer2Table, this.distributedCards[1]);
+
+                if (getTableCard(aPlayer1Table) === getTableCard(aPlayer2Table)) {
+                    this.barkSound.play();
+                }
+
+                nPlayState = PLAY_STATE.checkingTable;
+
+                break;
+
+            case PLAY_STATE.checkingTable:
+
+                if (getTableCard(aPlayer1Table) > getTableCard(aPlayer2Table)) {
+                    Array.prototype.push.apply(this.distributedCards[0], aPlayer1Table);
+                    Array.prototype.push.apply(this.distributedCards[0], aPlayer2Table);
+                    clearTable(aPlayer1Table);
+                    clearTable(aPlayer2Table);
+                } else if (getTableCard(aPlayer1Table) < getTableCard(aPlayer2Table)) {
+                    Array.prototype.push.apply(this.distributedCards[1], aPlayer1Table);
+                    Array.prototype.push.apply(this.distributedCards[1], aPlayer2Table);
+                    clearTable(aPlayer1Table);
+                    clearTable(aPlayer2Table);
+                } else if (getTableCard(aPlayer1Table) === getTableCard(aPlayer2Table)) {
                     putCardOnTable(aPlayer1Table, this.distributedCards[0]);
                     putCardOnTable(aPlayer2Table, this.distributedCards[1]);
+                }
 
-                    if (getTableCard(aPlayer1Table) === getTableCard(aPlayer2Table)) {
-                        this.barkSound.play();
-                    }
+                isGameFinished(this.distributedCards[0], this.distributedCards[1]);
+                nPlayState = PLAY_STATE.movingToTable;
 
-                    nPlayState = PLAY_STATE.checkingTable;
-
-                    break;
-
-                case PLAY_STATE.checkingTable:
-
-                    if (getTableCard(aPlayer1Table) > getTableCard(aPlayer2Table)) {
-                        Array.prototype.push.apply(this.distributedCards[0], aPlayer1Table);
-                        Array.prototype.push.apply(this.distributedCards[0], aPlayer2Table);
-                        clearTable(aPlayer1Table);
-                        clearTable(aPlayer2Table);
-                    } else if (getTableCard(aPlayer1Table) < getTableCard(aPlayer2Table)) {
-                        Array.prototype.push.apply(this.distributedCards[1], aPlayer1Table);
-                        Array.prototype.push.apply(this.distributedCards[1], aPlayer2Table);
-                        clearTable(aPlayer1Table);
-                        clearTable(aPlayer2Table);
-                    } else if (getTableCard(aPlayer1Table) === getTableCard(aPlayer2Table)) {
-                        putCardOnTable(aPlayer1Table, this.distributedCards[0]);
-                        putCardOnTable(aPlayer2Table, this.distributedCards[1]);
-                    }
-
-                    isGameFinished(this.distributedCards[0], this.distributedCards[1]);
-                    nPlayState = PLAY_STATE.movingToTable;
-
-                    break;
-                default:
-                    break;
+                break;
+            default:
+                break;
             }
 
             renderCards.call(this, aPlayer1Table, aPlayer2Table);
@@ -214,10 +190,10 @@ require([], function() {
         document.body.insertBefore(oPlayBtn, null);
 
         var oShuffleBtn = document.createElement('button');
-        var oContent = document.createTextNode('Shuffle');
+        oContent = document.createTextNode('Shuffle');
         oShuffleBtn.appendChild(oContent);
         oShuffleBtn.onclick = function () {
-            this.shuffledCards = shuffle.call(this, this.shuffledCards)
+            this.shuffledCards = shuffle.call(this, this.shuffledCards);
             this.distributedCards = distribute(this.shuffledCards);
             renderCards.call(this, [], []);
         }.bind(this);
@@ -260,12 +236,24 @@ require([], function() {
         oPlayer2View.insertBefore(oPlayer2HandView, null);
         
         renderCards.call(this, aPlayer1Table, aPlayer2Table);
+
+        var oResultView = document.createElement('div');
+        oResultView.setAttribute('class', 'result');
+        oResultView.setAttribute('id', 'result');
+
+        document.body.insertBefore(oResultView, null);
     };
 
-    var aCards = [1, 4, 6, 5, 3, 1, 2, 6, 6, 1, 4];
+    var startGame = function () {
+        this.barkSound = new Audio('resources/small-dog-bark.wav');
 
-    this.shuffledCards = aCards;
-    this.distributedCards = distribute(this.shuffledCards);
+        var aCards = [1, 4, 6, 5, 3, 1, 2, 6, 6, 1, 4];
 
-    makeView();
+        this.shuffledCards = aCards;
+        this.distributedCards = distribute(this.shuffledCards);
+
+        makeView();
+    };
+    
+    startGame();
 });
