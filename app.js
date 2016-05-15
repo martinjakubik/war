@@ -191,7 +191,8 @@ requirejs(['Player'], function (Player) {
         oContent = document.createTextNode('Shuffle');
         oShuffleBtn.appendChild(oContent);
         oShuffleBtn.onclick = function () {
-            this.table = [[],[]];
+            clearTable(this.table[0]);
+            clearTable(this.table[1]);            
             this.shuffledCards = shuffle.call(this, this.shuffledCards);
             this.distributedCards = distribute(this.shuffledCards);
             renderCards.call(this, [], []);
