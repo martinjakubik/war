@@ -5,139 +5,109 @@
 define(['Player'], function (Player) {
     'use strict';
 
+    var addCardToView = function (oView, nCard) {
+
+        var oCardView = document.createElement('div');
+        oCardView.setAttribute('class', 'card');
+        oCardView.setAttribute('id', 'card' + nCard);
+
+        var oCardFaceView = document.createElement('div');
+        oCardFaceView.setAttribute('class', 'content');
+
+        var oCardFaceText = document.createTextNode(nCard);
+        oCardFaceView.appendChild(oCardFaceText);
+
+        oCardView.insertBefore(oCardFaceView, null);
+
+        oView.insertBefore(oCardView, null);
+    };
+
+    var renderPlayerTable = function (nPlayer, aPlayerTable) {
+
+        var i, oPlayerTableView = document.getElementById('table' + nPlayer);
+
+        while (oPlayerTableView.firstChild) {
+            oPlayerTableView.removeChild(oPlayerTableView.firstChild);
+        }
+
+        for (i = 0; i < aPlayerTable.length; i++) {
+            addCardToView(oPlayerTableView, aPlayerTable[i]);
+        }
+
+    };
+
+    var renderPlayerHand = function (nPlayer, aPlayerCards) {
+
+        var i,
+            oPlayerHandView = document.getElementById('hand' + nPlayer);
+
+        while (oPlayerHandView.firstChild) {
+            oPlayerHandView.removeChild(oPlayerHandView.firstChild);
+        }
+
+        for (i = 0; i < aPlayerCards.length; i++) {
+            addCardToView(oPlayerHandView, aPlayerCards[i]);
+        }
+    };
+
+    var putCardOnTable = function (aPlayerTable, aPlayerCards) {
+        aPlayerTable.push(aPlayerCards[0]);
+        aPlayerCards.splice(0, 1);
+    };
+
+    var clearTable = function (aPlayerTable) {
+        aPlayerTable.splice(0);
+    };
+
+    var getTableCard = function (aPlayerTable) {
+        return aPlayerTable[aPlayerTable.length - 1];
+    };
+
+    var shuffle = function (aCards) {
+        var i, n, aShuffledCards = [];
+
+        while (aCards.length > 0) {
+            n = Math.floor(Math.random() * aCards.length);
+            aShuffledCards.push(aCards.splice(n, 1)[0]);
+        }
+
+        return aShuffledCards;
+    };
+
+    var distribute = function (aCards) {
+
+        var oGameView = document.getElementById('game');
+
+        var i, oCard;
+        var aPlayer1Cards = [],
+            aPlayer2Cards = [];
+
+        var aDistributedCards = [];
+
+        for (i = 0; i < aCards.length; i++) {
+            oCard = aCards[i];
+
+            if (i % 2 === 0) {
+                aPlayer1Cards.push(oCard);
+            } else {
+                aPlayer2Cards.push(oCard);
+            }
+        }
+
+        aDistributedCards[0] = aPlayer1Cards;
+        aDistributedCards[1] = aPlayer2Cards;
+
+        return aDistributedCards;
+    };
+
+    var renderCards = function () {
+        renderPlayerTable(1, this.table[0]);
+        renderPlayerTable(2, this.table[1]);
+        renderPlayerHand(1, this.distributedCards[0]);
+        renderPlayerHand(2, this.distributedCards[1]);
+    };
+
     function GameBox() {
-        var setup = function () {
-            document.open();
-        };
-
-        var close = function () {
-            document.close();
-        };
-
-        var addCardToView = function (oView, nCard) {
-
-            var oCardView = document.createElement('div');
-            oCardView.setAttribute('class', 'card');
-            oCardView.setAttribute('id', 'card' + nCard);
-
-            var oCardFaceView = document.createElement('div');
-            oCardFaceView.setAttribute('class', 'content');
-
-            var oCardFaceText = document.createTextNode(nCard);
-            oCardFaceView.appendChild(oCardFaceText);
-
-            oCardView.insertBefore(oCardFaceView, null);
-
-            oView.insertBefore(oCardView, null);
-        };
-
-        GameBox.prototype.renderResult = function () {
-            var oResultView = document.getElementById('result');
-
-            var oContent = document.createTextNode(this.result);
-            if (oResultView.firstChild) {
-                oResultView.removeChild(oResultView.firstChild);
-            }
-            oResultView.appendChild(oContent);
-        };
-
-        var renderPlayerTable = function (nPlayer, aPlayerTable) {
-
-            var i, oPlayerTableView = document.getElementById('table' + nPlayer);
-
-            while (oPlayerTableView.firstChild) {
-                oPlayerTableView.removeChild(oPlayerTableView.firstChild);
-            }
-
-            for (i = 0; i < aPlayerTable.length; i++) {
-                addCardToView(oPlayerTableView, aPlayerTable[i]);
-            }
-
-        };
-
-        var renderPlayerHand = function (nPlayer, aPlayerCards) {
-
-            var i,
-                oPlayerHandView = document.getElementById('hand' + nPlayer);
-
-            while (oPlayerHandView.firstChild) {
-                oPlayerHandView.removeChild(oPlayerHandView.firstChild);
-            }
-
-            for (i = 0; i < aPlayerCards.length; i++) {
-                addCardToView(oPlayerHandView, aPlayerCards[i]);
-            }
-        };
-
-        var putCardOnTable = function (aPlayerTable, aPlayerCards) {
-            aPlayerTable.push(aPlayerCards[0]);
-            aPlayerCards.splice(0, 1);
-        };
-
-        var clearTable = function (aPlayerTable) {
-            aPlayerTable.splice(0);
-        };
-
-        var getTableCard = function (aPlayerTable) {
-            return aPlayerTable[aPlayerTable.length - 1];
-        };
-
-        GameBox.prototype.isGameFinished = function (aPlayer1Cards, aPlayer2Cards) {
-            if (aPlayer1Cards.length === 0) {
-                this.result = 'player 2 wins';
-                this.renderResult();
-                return true;
-            } else if (aPlayer2Cards.length === 0) {
-                this.result = 'player 1 wins';
-                this.renderResult();
-                return true;
-            }
-            return false;
-        };
-
-        var shuffle = function (aCards) {
-            var i, n, aShuffledCards = [];
-
-            while (aCards.length > 0) {
-                n = Math.floor(Math.random() * aCards.length);
-                aShuffledCards.push(aCards.splice(n, 1)[0]);
-            }
-
-            return aShuffledCards;
-        };
-
-        var distribute = function (aCards) {
-
-            var oGameView = document.getElementById('game');
-
-            var i, oCard;
-            var aPlayer1Cards = [],
-                aPlayer2Cards = [];
-
-            var aDistributedCards = [];
-
-            for (i = 0; i < aCards.length; i++) {
-                oCard = aCards[i];
-
-                if (i % 2 === 0) {
-                    aPlayer1Cards.push(oCard);
-                } else {
-                    aPlayer2Cards.push(oCard);
-                }
-            }
-
-            aDistributedCards[0] = aPlayer1Cards;
-            aDistributedCards[1] = aPlayer2Cards;
-
-            return aDistributedCards;
-        };
-
-        var renderCards = function () {
-            renderPlayerTable(1, this.table[0]);
-            renderPlayerTable(2, this.table[1]);
-            renderPlayerHand(1, this.distributedCards[0]);
-            renderPlayerHand(2, this.distributedCards[1]);
-        };
 
         GameBox.prototype.makeView = function () {
 
@@ -269,6 +239,29 @@ define(['Player'], function (Player) {
             oResultView.setAttribute('id', 'result');
 
             document.body.insertBefore(oResultView, null);
+        };
+
+        GameBox.prototype.isGameFinished = function (aPlayer1Cards, aPlayer2Cards) {
+            if (aPlayer1Cards.length === 0) {
+                this.result = 'player 2 wins';
+                this.renderResult();
+                return true;
+            } else if (aPlayer2Cards.length === 0) {
+                this.result = 'player 1 wins';
+                this.renderResult();
+                return true;
+            }
+            return false;
+        };
+
+        GameBox.prototype.renderResult = function () {
+            var oResultView = document.getElementById('result');
+
+            var oContent = document.createTextNode(this.result);
+            if (oResultView.firstChild) {
+                oResultView.removeChild(oResultView.firstChild);
+            }
+            oResultView.appendChild(oContent);
         };
 
         GameBox.prototype.startGame = function () {
