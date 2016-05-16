@@ -9,4 +9,4 @@ requirejs.config({
 });
 
 // starts loading the main app file
-requirejs(['GameBox']);
+requirejs(['GameBox']);    
