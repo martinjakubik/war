@@ -269,11 +269,11 @@ requirejs(['Player'], function (Player) {
     };
 
     var startGame = function () {
-        this.barkSound = new Audio('resources/small-dog-bark.wav');
+        this.barkSound = new Audio('../resources/small-dog-bark.wav');
 
-        var aCards = [1, 4, 6, 5, 3, 1, 2, 6, 6, 1, 4];
+        var aBatawafCards = [1, 4, 6, 5, 3, 1, 2, 6, 6, 1, 4];
 
-        this.shuffledCards = aCards;
+        this.shuffledCards = aBatawafCards;
         this.distributedCards = distribute(this.shuffledCards);
         this.table = [
             [], []
