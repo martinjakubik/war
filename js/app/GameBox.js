@@ -159,10 +159,13 @@ define(['Player'], function (Player) {
                         clearTable(this.table[0]);
                         clearTable(this.table[1]);
                     } else if (getTableCard(this.table[0]) === getTableCard(this.table[1])) {
+                        if (this.isGameFinished(this.distributedCards[0], this.distributedCards[1])) {
+                            return;
+                        }
                         putCardOnTable(this.table[0], this.distributedCards[0]);
                         putCardOnTable(this.table[1], this.distributedCards[1]);
                     }
-
+                        
                     this.isGameFinished(this.distributedCards[0], this.distributedCards[1]);
                     nPlayState = PLAY_STATE.movingToTable;
 
