@@ -180,17 +180,23 @@ define(['Player'], function (Player) {
 
             document.body.insertBefore(oGameView, null);
 
+            var oPlayAreaView = document.createElement('div');
+            oPlayAreaView.setAttribute('class', 'playArea');
+            oPlayAreaView.setAttribute('id', 'playArea');
+
+            oGameView.insertBefore(oPlayAreaView, null);
+
             var oPlayer1View = document.createElement('div');
             oPlayer1View.setAttribute('class', 'player');
             oPlayer1View.setAttribute('id', 'player1');
 
-            oGameView.insertBefore(oPlayer1View, null);
+            oPlayAreaView.insertBefore(oPlayer1View, null);
 
             var oPlayer2View = document.createElement('div');
             oPlayer2View.setAttribute('class', 'player');
             oPlayer2View.setAttribute('id', 'player2');
 
-            oGameView.insertBefore(oPlayer2View, null);
+            oPlayAreaView.insertBefore(oPlayer2View, null);
 
             var oPlayer1TableView = document.createElement('div');
             oPlayer1TableView.setAttribute('class', 'table');
