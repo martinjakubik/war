@@ -5,16 +5,20 @@
 define(['Player'], function (Player) {
     'use strict';
 
-    var addCardToView = function (oView, nCard) {
+    var addCardToView = function (oView, nCardValue, nCardPosition, bLastCard) {
 
         var oCardView = document.createElement('div');
-        oCardView.setAttribute('class', 'card');
-        oCardView.setAttribute('id', 'card' + nCard);
+        if (nCardPosition < 4 || bLastCard) {
+            oCardView.setAttribute('class', 'card');
+        } else {
+            oCardView.setAttribute('class', 'card' + ' manyCards');
+        }
+        oCardView.setAttribute('id', 'card' + nCardValue);
 
         var oCardFaceView = document.createElement('div');
         oCardFaceView.setAttribute('class', 'content');
 
-        var oCardFaceText = document.createTextNode(nCard);
+        var oCardFaceText = document.createTextNode(nCardValue);
         oCardFaceView.appendChild(oCardFaceText);
 
         oCardView.insertBefore(oCardFaceView, null);
@@ -26,12 +30,14 @@ define(['Player'], function (Player) {
 
         var i, oPlayerTableView = document.getElementById('table' + nPlayer);
 
+        // clears view of all cards
         while (oPlayerTableView.firstChild) {
             oPlayerTableView.removeChild(oPlayerTableView.firstChild);
         }
 
+        // redraws the whole hand
         for (i = 0; i < aPlayerTable.length; i++) {
-            addCardToView(oPlayerTableView, aPlayerTable[i]);
+            addCardToView(oPlayerTableView, aPlayerTable[i], 0);
         }
 
     };
@@ -41,12 +47,14 @@ define(['Player'], function (Player) {
         var i,
             oPlayerHandView = document.getElementById('hand' + nPlayer);
 
+        // clears view of all cards
         while (oPlayerHandView.firstChild) {
             oPlayerHandView.removeChild(oPlayerHandView.firstChild);
         }
 
+        // redraws the whole hand
         for (i = 0; i < aPlayerCards.length; i++) {
-            addCardToView(oPlayerHandView, aPlayerCards[i]);
+            addCardToView(oPlayerHandView, aPlayerCards[i], i, (i === aPlayerCards.length - 1));
         }
     };
 
@@ -267,7 +275,7 @@ define(['Player'], function (Player) {
         GameBox.prototype.startGame = function () {
             this.barkSound = new Audio('../resources/small-dog-bark.wav');
 
-            var aBatawafCards = [1, 4, 6, 5, 3, 1, 2, 6, 6, 1, 4];
+            var aBatawafCards = [6, 3, 5, 5, 1, 6, 4, 2, 4, 3, 1, 3, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
 
             this.shuffledCards = aBatawafCards;
             this.distributedCards = distribute(this.shuffledCards);

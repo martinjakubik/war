@@ -1,5 +1,5 @@
 .game {
-    height: 60%;
+    height: 80%;
     background-color: aquamarine;
 }
 
@@ -39,6 +39,21 @@
     width: 60pt;
 
     border: 3pt solid #4a4;
+    border-radius: 4pt;
+    
+    background-color: white;
+}
+
+.manyCards {
+    display: inline-block;
+    margin: 2pt 0 2pt 0;
+    height: 100pt;
+    width: 6pt;
+
+    border-top: 3pt solid #4a4;
+    border-right: none;
+    border-bottom: 3pt solid #4a4;
+    border-left: 3pt solid #4a4;
     border-radius: 4pt;
     
     background-color: white;
