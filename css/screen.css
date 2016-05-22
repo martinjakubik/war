@@ -53,6 +53,7 @@ body {
     border-radius: 4pt;
     
     background-color: white;
+    background-size: cover;
 }
 
 .manyCards {
@@ -80,4 +81,8 @@ body {
 
     font-family: sans-serif;
     font-size: 14pt;
+}
+
+#card6 {
+    background-image: url('../resources/card-batanimo-6a.png');
 }
