@@ -5,20 +5,20 @@
 define(['Player'], function (Player) {
     'use strict';
 
-    var addCardToView = function (oView, nCardValue, nCardPosition, bLastCard) {
+    var addCardToView = function (oView, oCard, nCardPosition, bLastCard) {
 
         var oCardView = document.createElement('div');
-        if (nCardPosition < 4 || bLastCard) {
+        if (nCardPosition < 3 || bLastCard) {
             oCardView.setAttribute('class', 'card');
         } else {
             oCardView.setAttribute('class', 'card' + ' manyCards');
         }
-        oCardView.setAttribute('id', 'card' + nCardValue);
+        oCardView.setAttribute('id', 'card' + oCard.value);
 
         var oCardFaceView = document.createElement('div');
         oCardFaceView.setAttribute('class', 'content');
 
-        var oCardFaceText = document.createTextNode(nCardValue);
+        var oCardFaceText = document.createTextNode(oCard.value);
         oCardFaceView.appendChild(oCardFaceText);
 
         oCardView.insertBefore(oCardFaceView, null);
@@ -71,6 +71,25 @@ define(['Player'], function (Player) {
         return aPlayerTable[aPlayerTable.length - 1];
     };
 
+    var makeCards = function (aCardValues) {
+        var i, nSuit, aCards = [], mHighestSuitsFoundForValue = {};
+        
+        for (i = 0; i < aCardValues.length; i++) {
+            nSuit = -1;
+            if (!mHighestSuitsFoundForValue[aCardValues[i]] && mHighestSuitsFoundForValue[aCardValues[i]] !== 0) {
+                mHighestSuitsFoundForValue[aCardValues[i]] = nSuit;
+            }
+            mHighestSuitsFoundForValue[aCardValues[i]]++;
+
+            aCards.push({
+                value: aCardValues[i],
+                suit: mHighestSuitsFoundForValue[aCardValues[i]]
+            });
+        }
+        
+        return aCards;
+    };
+
     var shuffle = function (aCards) {
         var i, n, aShuffledCards = [];
 
@@ -119,12 +138,12 @@ define(['Player'], function (Player) {
 
         GameBox.prototype.makeView = function () {
 
-            var nPlayState = 0;
-
             var PLAY_STATE = {
                 movingToTable: 0,
                 checkingTable: 1
             };
+
+            var nPlayState = PLAY_STATE.movingToTable;
 
             var doTurn = function () {
 
@@ -138,7 +157,7 @@ define(['Player'], function (Player) {
                     putCardOnTable(this.table[0], this.distributedCards[0]);
                     putCardOnTable(this.table[1], this.distributedCards[1]);
 
-                    if (getTableCard(this.table[0]) === getTableCard(this.table[1])) {
+                    if (getTableCard(this.table[0]).value === getTableCard(this.table[1]).value) {
                         this.barkSound.play();
                     }
 
@@ -148,17 +167,17 @@ define(['Player'], function (Player) {
 
                 case PLAY_STATE.checkingTable:
 
-                    if (getTableCard(this.table[0]) > getTableCard(this.table[1])) {
+                    if (getTableCard(this.table[0]).value > getTableCard(this.table[1]).value) {
                         Array.prototype.push.apply(this.distributedCards[0], this.table[0]);
                         Array.prototype.push.apply(this.distributedCards[0], this.table[1]);
                         clearTable(this.table[0]);
                         clearTable(this.table[1]);
-                    } else if (getTableCard(this.table[0]) < getTableCard(this.table[1])) {
+                    } else if (getTableCard(this.table[0]).value < getTableCard(this.table[1]).value) {
                         Array.prototype.push.apply(this.distributedCards[1], this.table[0]);
                         Array.prototype.push.apply(this.distributedCards[1], this.table[1]);
                         clearTable(this.table[0]);
                         clearTable(this.table[1]);
-                    } else if (getTableCard(this.table[0]) === getTableCard(this.table[1])) {
+                    } else if (getTableCard(this.table[0]).value === getTableCard(this.table[1]).value) {
                         if (this.isGameFinished(this.distributedCards[0], this.distributedCards[1])) {
                             return;
                         }
@@ -225,7 +244,7 @@ define(['Player'], function (Player) {
 
             oPlayer2View.insertBefore(oPlayer2HandView, null);
 
-            renderCards.call(this, this.table[0], this.table[1]);
+            renderCards.call(this);
 
             var oPlayBtn = document.createElement('button');
             var oContent = document.createTextNode('Play');
@@ -241,6 +260,7 @@ define(['Player'], function (Player) {
             oShuffleBtn.setAttribute('id', 'shuffle');
             oShuffleBtn.appendChild(oContent);
             oShuffleBtn.onclick = function () {
+                nPlayState = PLAY_STATE.movingToTable;
                 this.result = '';
                 this.renderResult();
                 clearTable(this.table[0]);
@@ -284,9 +304,11 @@ define(['Player'], function (Player) {
         GameBox.prototype.startGame = function () {
             this.barkSound = new Audio('../resources/small-dog-bark.wav');
 
-            var aBatawafCards = [6, 3, 5, 5, 1, 6, 4, 2, 4, 3, 1, 3, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
+            var aBatawafCardValues = [6, 3, 5, 5, 1, 6, 4, 2, 4, 3, 1, 3, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
+            
+            this.cards = makeCards(aBatawafCardValues);
 
-            this.shuffledCards = aBatawafCards;
+            this.shuffledCards = this.cards;
             this.distributedCards = distribute(this.shuffledCards);
             this.table = [
                 [], []
