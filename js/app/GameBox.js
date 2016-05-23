@@ -13,12 +13,17 @@ define(['Player'], function (Player) {
         } else {
             oCardView.setAttribute('class', 'card' + ' manyCards');
         }
-        oCardView.setAttribute('id', 'card' + oCard.value);
+        oCardView.setAttribute('id', 'card' + oCard.value + '-' + oCard.suit);
 
         var oCardFaceView = document.createElement('div');
         oCardFaceView.setAttribute('class', 'content');
 
-        var oCardFaceText = document.createTextNode(oCard.value);
+        var oCardFaceText;
+        if (oCard.suit !== 0) {
+            oCardFaceText = document.createTextNode(oCard.value);
+        } else {
+            oCardFaceText = document.createTextNode('');
+        }
         oCardFaceView.appendChild(oCardFaceText);
 
         oCardView.insertBefore(oCardFaceView, null);

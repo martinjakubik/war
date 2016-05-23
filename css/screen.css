@@ -21,7 +21,7 @@ body {
 .table {
     display: inline-block;
     vertical-align: middle;
-    height: 110pt;
+    height: 120pt;
     margin: 0 10pt 0 2pt;
     min-width: 18%;
 }
@@ -39,15 +39,16 @@ body {
 .hand {
     display: inline-block;
     vertical-align: middle;
-    height: 110pt;
+    height: 120pt;
     overflow-x: hidden;
 }
 
 .card {
     display: inline-block;
+    vertical-align: middle;
     margin: 2pt 2pt 2pt 2pt;
-    height: 100pt;
-    width: 60pt;
+    height: 110pt;
+    width: 68pt;
 
     border: 3pt solid #488;
     border-radius: 4pt;
@@ -83,6 +84,26 @@ body {
     font-size: 14pt;
 }
 
-#card6 {
+#card1-0 {
+    background-image: url('../resources/card-batanimo-1a.png');
+}
+
+#card2-0 {
+    background-image: url('../resources/card-batanimo-2a.png');
+}
+
+#card3-0 {
+    background-image: url('../resources/card-batanimo-3a.png');
+}
+
+#card4-0 {
+    background-image: url('../resources/card-batanimo-4a.png');
+}
+
+#card5-0 {
+    background-image: url('../resources/card-batanimo-5a.png');
+}
+
+#card6-0 {
     background-image: url('../resources/card-batanimo-6a.png');
 }
