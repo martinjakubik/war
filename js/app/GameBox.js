@@ -19,7 +19,7 @@ define(['Player'], function (Player) {
         oCardFaceView.setAttribute('class', 'content');
 
         var oCardFaceText;
-        if (oCard.suit !== 0 && !(oCard.suit === 1 && oCard.value === 1)) {
+        if (oCard.suit !== 0 && !(oCard.suit === 1 && oCard.value >= 1 && oCard.value <= 3)) {
             oCardFaceText = document.createTextNode(oCard.value);
         } else {
             oCardFaceText = document.createTextNode('');

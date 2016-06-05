@@ -1,5 +1,5 @@
 body {
-    margin: 70 0 0 0;
+    margin: 0 0 0 0;
     background: url('../resources/background.png');
     background-size: cover;
 }
@@ -110,4 +110,12 @@ body {
 
 #card1-1 {
     background-image: url('../resources/card-batanimo-1b.png');
+}
+
+#card2-1 {
+    background-image: url('../resources/card-batanimo-2b.png');
+}
+
+#card3-1 {
+    background-image: url('../resources/card-batanimo-3b.png');
 }
