@@ -84,38 +84,146 @@ body {
     font-size: 14pt;
 }
 
-#card1-0 {
+#card1-a {
     background-image: url('../resources/card-batanimo-1a.png');
 }
 
-#card2-0 {
+#card2-a {
     background-image: url('../resources/card-batanimo-2a.png');
 }
 
-#card3-0 {
+#card3-a {
     background-image: url('../resources/card-batanimo-3a.png');
 }
 
-#card4-0 {
+#card4-a {
     background-image: url('../resources/card-batanimo-4a.png');
 }
 
-#card5-0 {
+#card5-a {
     background-image: url('../resources/card-batanimo-5a.png');
 }
 
-#card6-0 {
+#card6-a {
     background-image: url('../resources/card-batanimo-6a.png');
 }
 
-#card1-1 {
+#card1-b {
     background-image: url('../resources/card-batanimo-1b.png');
 }
 
-#card2-1 {
+#card2-b {
     background-image: url('../resources/card-batanimo-2b.png');
 }
 
-#card3-1 {
+#card3-b {
     background-image: url('../resources/card-batanimo-3b.png');
+}
+
+#card4-b {
+    background-image: url('../resources/card-batanimo-4b.png');
+}
+
+#card5-b {
+    background-image: url('../resources/card-batanimo-5b.png');
+}
+
+#card6-b {
+    background-image: url('../resources/card-batanimo-6b.png');
+}
+
+#card1-c {
+    background-image: url('../resources/card-batanimo-1c.png');
+}
+
+#card2-c {
+    background-image: url('../resources/card-batanimo-2c.png');
+}
+
+#card3-c {
+    background-image: url('../resources/card-batanimo-3c.png');
+}
+
+#card4-c {
+    background-image: url('../resources/card-batanimo-4c.png');
+}
+
+#card5-c {
+    background-image: url('../resources/card-batanimo-5c.png');
+}
+
+#card6-c {
+    background-image: url('../resources/card-batanimo-6c.png');
+}
+
+#card1-d {
+    background-image: url('../resources/card-batanimo-1d.png');
+}
+
+#card2-d {
+    background-image: url('../resources/card-batanimo-2d.png');
+}
+
+#card3-d {
+    background-image: url('../resources/card-batanimo-3d.png');
+}
+
+#card4-d {
+    background-image: url('../resources/card-batanimo-4d.png');
+}
+
+#card5-d {
+    background-image: url('../resources/card-batanimo-5d.png');
+}
+
+#card6-d {
+    background-image: url('../resources/card-batanimo-6d.png');
+}
+
+#card1-e {
+    background-image: url('../resources/card-batanimo-1e.png');
+}
+
+#card2-e {
+    background-image: url('../resources/card-batanimo-2e.png');
+}
+
+#card3-e {
+    background-image: url('../resources/card-batanimo-3e.png');
+}
+
+#card4-e {
+    background-image: url('../resources/card-batanimo-4e.png');
+}
+
+#card5-e {
+    background-image: url('../resources/card-batanimo-5e.png');
+}
+
+#card6-e {
+    background-image: url('../resources/card-batanimo-6e.png');
+}
+
+#card1-f {
+    background-image: url('../resources/card-batanimo-1f.png');
+}
+
+#card2-f {
+    background-image: url('../resources/card-batanimo-2f.png');
+}
+
+#card3-f {
+    background-image: url('../resources/card-batanimo-3f.png');
+}
+
+#card4-f {
+    background-image: url('../resources/card-batanimo-4f.png');
+}
+
+#card5-f {
+    background-image: url('../resources/card-batanimo-5f.png');
+}
+
+#card6-f {
+    background-image: url('../resources/card-batanimo-6f.png');
 }

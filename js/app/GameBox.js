@@ -18,14 +18,6 @@ define(['Player'], function (Player) {
         var oCardFaceView = document.createElement('div');
         oCardFaceView.setAttribute('class', 'content');
 
-        var oCardFaceText;
-        if (oCard.suit !== 0 && !(oCard.suit === 1 && oCard.value >= 1 && oCard.value <= 3)) {
-            oCardFaceText = document.createTextNode(oCard.value);
-        } else {
-            oCardFaceText = document.createTextNode('');
-        }
-        oCardFaceView.appendChild(oCardFaceText);
-
         oCardView.insertBefore(oCardFaceView, null);
 
         oView.insertBefore(oCardView, null);
@@ -77,6 +69,7 @@ define(['Player'], function (Player) {
     };
 
     var makeCards = function (aCardValues) {
+        var aSuitLetters = ['a', 'b', 'c', 'd', 'e', 'f'];
         var i, nSuit, aCards = [], mHighestSuitsFoundForValue = {};
         
         for (i = 0; i < aCardValues.length; i++) {
@@ -88,7 +81,7 @@ define(['Player'], function (Player) {
 
             aCards.push({
                 value: aCardValues[i],
-                suit: mHighestSuitsFoundForValue[aCardValues[i]]
+                suit: aSuitLetters[mHighestSuitsFoundForValue[aCardValues[i]]]
             });
         }
         
