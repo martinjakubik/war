@@ -4,6 +4,7 @@
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-ftp": "^2.1.0",
+    "grunt-ftp-push": "^1.0.0",
     "load-grunt-tasks": "^3.5.0"
   }
 }
