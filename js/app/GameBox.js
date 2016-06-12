@@ -4,11 +4,15 @@
 /*global Audio: false */
 define(['Player'], function (Player) {
     'use strict';
+    
+    var nCardWidth = 68;
 
-    var addCardToView = function (oView, oCard, nCardPosition, bLastCard) {
+    var addCardToView = function (oView, oCard, nCardPosition, bLastCard, bStackCard) {
 
         var oCardView = document.createElement('div');
-        if (nCardPosition < 3 || bLastCard) {
+        if (bStackCard) {
+            oCardView.setAttribute('class', 'card' + ' manyCards');  
+        } else if (nCardPosition < 1 || bLastCard) {
             oCardView.setAttribute('class', 'card');
         } else {
             oCardView.setAttribute('class', 'card' + ' manyCards');
@@ -26,15 +30,24 @@ define(['Player'], function (Player) {
     var renderPlayerTable = function (nPlayer, aPlayerTable) {
 
         var i, oPlayerTableView = document.getElementById('table' + nPlayer);
+        var nWidth = window.innerWidth;
+        var nTableWidth = aPlayerTable.length * nCardWidth;
 
         // clears view of all cards
         while (oPlayerTableView.firstChild) {
             oPlayerTableView.removeChild(oPlayerTableView.firstChild);
         }
+        
+        var nNumStackedCards = 0, bStackCard = false;
+        while (nTableWidth >= 0.15 * nWidth) {
+            nNumStackedCards++;
+            nTableWidth = (aPlayerTable.length - nNumStackedCards) * nCardWidth;
+        }
 
-        // redraws the whole hand
+        // redraws the whole table
         for (i = 0; i < aPlayerTable.length; i++) {
-            addCardToView(oPlayerTableView, aPlayerTable[i], 0);
+            bStackCard = (i < nNumStackedCards && i !== aPlayerTable.length - 1);
+            addCardToView(oPlayerTableView, aPlayerTable[i], 0, true, bStackCard);
         }
 
     };
@@ -303,6 +316,7 @@ define(['Player'], function (Player) {
             this.barkSound = new Audio('../resources/small-dog-bark.wav');
 
             var aBatawafCardValues = [6, 3, 5, 5, 1, 6, 4, 2, 4, 3, 1, 3, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
+//            var aBatawafCardValues = [3, 3, 5, 5, 2, 2, 4, 4, 6, 6, 1, 1, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
             
             this.cards = makeCards(aBatawafCardValues);
 
