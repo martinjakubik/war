@@ -1,17 +1,18 @@
-/*global requirejs */
+/*global require */
 /*global define */
 /*global console */
 /*global Audio: false */
-define(['Player'], function (Player) {
+require(['Player'], function (Player) {
     'use strict';
     
     var nCardWidth = 68;
+    var nNumPlayers = 2;
 
     var addCardToView = function (oView, oCard, nCardPosition, bLastCard, bStackCard) {
 
         var oCardView = document.createElement('div');
         if (bStackCard) {
-            oCardView.setAttribute('class', 'card' + ' manyCards');  
+            oCardView.setAttribute('class', 'card' + ' manyCards');
         } else if (nCardPosition < 1 || bLastCard) {
             oCardView.setAttribute('class', 'card');
         } else {
@@ -112,28 +113,24 @@ define(['Player'], function (Player) {
         return aShuffledCards;
     };
 
-    var distribute = function (aCards) {
+    var distribute = function (aCards, nNumPlayers) {
 
-        var oGameView = document.getElementById('game');
-
-        var i, oCard;
-        var aPlayer1Cards = [],
-            aPlayer2Cards = [];
-
+        var i, j, oCard;
         var aDistributedCards = [];
 
         for (i = 0; i < aCards.length; i++) {
             oCard = aCards[i];
 
-            if (i % 2 === 0) {
-                aPlayer1Cards.push(oCard);
-            } else {
-                aPlayer2Cards.push(oCard);
+            for (j = 0; j < nNumPlayers; j++) {
+                if (i % nNumPlayers === j) {
+                    if (!aDistributedCards[j]) {
+                        aDistributedCards[j] = [];
+                    }
+                    aDistributedCards[j].push(oCard);
+                    break;
+                }
             }
         }
-
-        aDistributedCards[0] = aPlayer1Cards;
-        aDistributedCards[1] = aPlayer2Cards;
 
         return aDistributedCards;
     };
@@ -146,6 +143,14 @@ define(['Player'], function (Player) {
     };
 
     function GameBox() {
+        
+        var i;
+
+        this.players = [];
+        
+        for (i = 0; i < nNumPlayers; i++) {
+            this.players.push(new Player());
+        }
 
         GameBox.prototype.makeView = function () {
 
@@ -277,7 +282,7 @@ define(['Player'], function (Player) {
                 clearTable(this.table[0]);
                 clearTable(this.table[1]);
                 this.shuffledCards = shuffle.call(this, this.shuffledCards);
-                this.distributedCards = distribute(this.shuffledCards);
+                this.distributedCards = distribute(this.shuffledCards, nNumPlayers);
                 renderCards.call(this, [], []);
             }.bind(this);
             document.body.insertBefore(oShuffleBtn, null);
@@ -316,12 +321,11 @@ define(['Player'], function (Player) {
             this.barkSound = new Audio('../resources/small-dog-bark.wav');
 
             var aBatawafCardValues = [6, 3, 5, 5, 1, 6, 4, 2, 4, 3, 1, 3, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
-//            var aBatawafCardValues = [3, 3, 5, 5, 2, 2, 4, 4, 6, 6, 1, 1, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
             
             this.cards = makeCards(aBatawafCardValues);
 
             this.shuffledCards = this.cards;
-            this.distributedCards = distribute(this.shuffledCards);
+            this.distributedCards = distribute(this.shuffledCards, nNumPlayers);
             this.table = [
                 [], []
             ];
