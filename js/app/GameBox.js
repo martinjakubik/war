@@ -1,6 +1,4 @@
 /*global require */
-/*global define */
-/*global console */
 /*global Audio: false */
 require(['Player'], function (Player) {
     'use strict';
@@ -136,10 +134,14 @@ require(['Player'], function (Player) {
     };
 
     var renderCards = function () {
-        renderPlayerTable(1, this.table[0]);
-        renderPlayerTable(2, this.table[1]);
-        renderPlayerHand(1, this.distributedCards[0]);
-        renderPlayerHand(2, this.distributedCards[1]);
+        var i;
+        renderPlayerTable(1, this.players[0].getTable());
+        renderPlayerTable(2, this.players[1].getTable());
+        for (i = 0; i < nNumPlayers; i++) {
+            if (i < this.players.length) {
+                renderPlayerHand(i + 1, this.players[i].getHand());
+            }
+        }
     };
 
     function GameBox() {
@@ -163,17 +165,21 @@ require(['Player'], function (Player) {
 
             var doTurn = function () {
 
+                var i;
                 switch (nPlayState) {
                 case PLAY_STATE.movingToTable:
 
-                    if (this.isGameFinished(this.distributedCards[0], this.distributedCards[1])) {
+                    if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
                         return;
                     }
 
-                    putCardOnTable(this.table[0], this.distributedCards[0]);
-                    putCardOnTable(this.table[1], this.distributedCards[1]);
+                    for (i = 0; i < nNumPlayers; i++) {
+                        if (i < this.players.length) {
+                            this.players[i].putCardOnTable();
+                        }
+                    }
 
-                    if (getTableCard(this.table[0]).value === getTableCard(this.table[1]).value) {
+                    if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
                         this.barkSound.play();
                     }
 
@@ -183,25 +189,34 @@ require(['Player'], function (Player) {
 
                 case PLAY_STATE.checkingTable:
 
-                    if (getTableCard(this.table[0]).value > getTableCard(this.table[1]).value) {
-                        Array.prototype.push.apply(this.distributedCards[0], this.table[0]);
-                        Array.prototype.push.apply(this.distributedCards[0], this.table[1]);
-                        clearTable(this.table[0]);
-                        clearTable(this.table[1]);
-                    } else if (getTableCard(this.table[0]).value < getTableCard(this.table[1]).value) {
-                        Array.prototype.push.apply(this.distributedCards[1], this.table[0]);
-                        Array.prototype.push.apply(this.distributedCards[1], this.table[1]);
-                        clearTable(this.table[0]);
-                        clearTable(this.table[1]);
-                    } else if (getTableCard(this.table[0]).value === getTableCard(this.table[1]).value) {
-                        if (this.isGameFinished(this.distributedCards[0], this.distributedCards[1])) {
+                    if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
+                        this.players[0].moveTableToHand();
+                        this.players[0].moveTableToHand(this.players[1].getTable());
+                        for (i = 0; i < nNumPlayers; i++) {
+                            if (i < this.players.length) {
+                                this.players[i].clearTable();
+                            }
+                        }
+                    } else if (this.players[0].getTableCard().value < this.players[1].getTableCard().value) {
+                        this.players[1].moveTableToHand();
+                        this.players[1].moveTableToHand(this.players[0].getTable());
+                        for (i = 0; i < nNumPlayers; i++) {
+                            if (i < this.players.length) {
+                                this.players[i].clearTable();
+                            }
+                        }
+                    } else if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
+                        if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
                             return;
                         }
-                        putCardOnTable(this.table[0], this.distributedCards[0]);
-                        putCardOnTable(this.table[1], this.distributedCards[1]);
+                        for (i = 0; i < nNumPlayers; i++) {
+                            if (i < this.players.length) {
+                                this.players[i].putCardOnTable();
+                            }
+                        }
                     }
                         
-                    this.isGameFinished(this.distributedCards[0], this.distributedCards[1]);
+                    this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
                     nPlayState = PLAY_STATE.movingToTable;
 
                     break;
@@ -209,7 +224,7 @@ require(['Player'], function (Player) {
                     break;
                 }
 
-                renderCards.call(this, this.table[0], this.table[1]);
+                renderCards.call(this, this.players[0].getTable(), this.players[1].getTable());
             };
 
             var oGameView = document.createElement('div');
@@ -276,13 +291,19 @@ require(['Player'], function (Player) {
             oShuffleBtn.setAttribute('id', 'shuffle');
             oShuffleBtn.appendChild(oContent);
             oShuffleBtn.onclick = function () {
+                var i, aDistributedCards;
                 nPlayState = PLAY_STATE.movingToTable;
                 this.result = '';
                 this.renderResult();
-                clearTable(this.table[0]);
-                clearTable(this.table[1]);
+                this.players[0].clearTable();
+                this.players[1].clearTable();
                 this.shuffledCards = shuffle.call(this, this.shuffledCards);
-                this.distributedCards = distribute(this.shuffledCards, nNumPlayers);
+                aDistributedCards = distribute(this.shuffledCards, nNumPlayers);
+                for (i = 0; i < nNumPlayers; i++) {
+                    if (i < this.players.length) {
+                        this.players[i].setHand(aDistributedCards[i]);
+                    }
+                }
                 renderCards.call(this, [], []);
             }.bind(this);
             document.body.insertBefore(oShuffleBtn, null);
@@ -325,10 +346,14 @@ require(['Player'], function (Player) {
             this.cards = makeCards(aBatawafCardValues);
 
             this.shuffledCards = this.cards;
-            this.distributedCards = distribute(this.shuffledCards, nNumPlayers);
-            this.table = [
-                [], []
-            ];
+            var aDistributedCards = distribute(this.shuffledCards, nNumPlayers);
+
+            var i;
+            for (i = 0; i < nNumPlayers; i++) {
+                if (i < this.players.length) {
+                    this.players[i].setHand(aDistributedCards[i]);
+                }
+            }
 
             this.result = '';
 
