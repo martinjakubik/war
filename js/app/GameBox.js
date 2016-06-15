@@ -290,7 +290,7 @@ require(['Player'], function (Player) {
             oShuffleBtn.setAttribute('class', 'button');
             oShuffleBtn.setAttribute('id', 'shuffle');
             oShuffleBtn.appendChild(oContent);
-            oShuffleBtn.onclick = function () {
+            oShuffleBtn.onclick = function (oEvent) {
                 var i, aDistributedCards;
                 nPlayState = PLAY_STATE.movingToTable;
                 this.result = '';

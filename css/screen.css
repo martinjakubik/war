@@ -21,7 +21,6 @@ body {
 .table {
     display: inline-block;
     vertical-align: middle;
-    height: 120pt;
     margin: 0 10pt 0 2pt;
     min-width: 18%;
 }
@@ -39,7 +38,6 @@ body {
 .hand {
     display: inline-block;
     vertical-align: middle;
-    height: 120pt;
     overflow-x: hidden;
 }
 
@@ -47,11 +45,11 @@ body {
     display: inline-block;
     vertical-align: middle;
     margin: 2pt 2pt 2pt 2pt;
-    height: 110pt;
-    width: 68pt;
+    height: 120pt;
+    width: 74pt;
 
-    border: 3pt solid #488;
-    border-radius: 4pt;
+    border: 2pt solid #404090;
+    border-radius: 12pt;
     
     background-color: white;
     background-size: cover;
@@ -82,6 +80,66 @@ body {
 
     font-family: sans-serif;
     font-size: 14pt;
+}
+
+@media only screen
+    and (min-device-width: 320px)
+    and (max-device-width: 568px) {
+
+    .button {
+        width: 300pt;
+        height: 88pt;
+        font-size: 38pt;
+    }
+
+    .playArea {
+        width: 100%;
+    }
+
+    .card {
+        height: 220pt;
+        width: 136pt;
+    }
+
+    .manyCards {
+        margin: 2pt 0 0 0;
+        width: 2pt;
+
+        border-right: none;
+    }
+
+}
+
+@media only screen
+    and (min-device-width: 320px)
+    and (max-device-width: 568px)
+    and (orientation: landscape) {
+
+    .game {
+        height: 64%;        
+    }
+    .button {
+        width: 300pt;
+        height: 88pt;
+        font-size: 38pt;
+    }
+
+    .playArea {
+        width: 80%;
+    }
+
+    .card {
+        height: 120pt;
+        width: 74pt;
+    }
+
+    .manyCards {
+        margin: 2pt 0 0 0;
+        width: 6pt;
+
+        border-right: none;
+    }
+
 }
 
 #card1-a {
