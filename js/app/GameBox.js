@@ -180,7 +180,14 @@ require(['Player'], function (Player) {
                     }
 
                     if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
-                        this.barkSound.play();
+                        switch (this.players[0].getTableCard().value) {
+                        case 3:
+                            this.meowSound.play();
+                            break;
+                        default:
+                            this.barkSound.play();
+                            break;
+                        }
                     }
 
                     nPlayState = PLAY_STATE.checkingTable;
@@ -340,6 +347,7 @@ require(['Player'], function (Player) {
 
         GameBox.prototype.startGame = function () {
             this.barkSound = new Audio('../resources/small-dog-bark.wav');
+            this.meowSound = new Audio('../resources/kitten-meow.wav');
 
             var aBatawafCardValues = [6, 3, 5, 5, 1, 6, 4, 2, 4, 3, 1, 3, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
             
