@@ -290,10 +290,19 @@ require(['Player'], function (Player) {
                 
                 oPlayerView.insertBefore(oPlayerHandView, null);
                 
-                oPlayerNameView = document.createElement('div');
+                oPlayerNameView = document.createElement('input');
                 oPlayerNameView.setAttribute('class', 'name');
                 oPlayerNameView.setAttribute('id', 'name' + nPlayer);
-                oPlayerNameView.innerHTML = this.players[i].getName();
+                oPlayerNameView.setAttribute('ref-id', i);
+                oPlayerNameView.value = this.players[i].getName();
+                oPlayerNameView.onchange = function (oEvent) {
+                    var nRefId, sValue = '';
+                    if (oEvent && oEvent.target) {
+                        nRefId = oEvent.target.getAttribute('ref-id');
+                        sValue = oEvent.target.value;
+                    }
+                    this.players[nRefId].setName(sValue);
+                }.bind(this);
                 
                 oPlayerView.insertBefore(oPlayerNameView, null);
             }
