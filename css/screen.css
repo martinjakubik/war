@@ -41,6 +41,11 @@ body {
     overflow-x: hidden;
 }
 
+.name {
+    font-family: sans-serif;
+    font-size: 14pt;
+}
+
 .card {
     display: inline-block;
     vertical-align: middle;

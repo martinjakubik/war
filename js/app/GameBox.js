@@ -146,13 +146,15 @@ require(['Player'], function (Player) {
 
     function GameBox() {
         
-        var i;
+        var i, nPlayer;
 
         this.players = [];
         
         for (i = 0; i < nNumPlayers; i++) {
             this.players.push(new Player());
-            this.players[i].setName('Player' + i);
+
+            nPlayer = i + 1;
+            this.players[i].setName('Player ' + nPlayer);
         }
 
         GameBox.prototype.makeView = function () {
@@ -265,7 +267,8 @@ require(['Player'], function (Player) {
             var i, nPlayer,
                 oPlayerView,
                 oPlayerTableView,
-                oPlayerHandView;
+                oPlayerHandView,
+                oPlayerNameView;
 
             for (i = 0; i < nNumPlayers; i++) {
                 nPlayer = i + 1;
@@ -286,6 +289,13 @@ require(['Player'], function (Player) {
                 oPlayerHandView.setAttribute('id', 'hand' + nPlayer);
                 
                 oPlayerView.insertBefore(oPlayerHandView, null);
+                
+                oPlayerNameView = document.createElement('div');
+                oPlayerNameView.setAttribute('class', 'name');
+                oPlayerNameView.setAttribute('id', 'name' + nPlayer);
+                oPlayerNameView.innerHTML = this.players[i].getName();
+                
+                oPlayerView.insertBefore(oPlayerNameView, null);
             }
 
             renderCards.call(this);
@@ -329,14 +339,20 @@ require(['Player'], function (Player) {
         };
 
         GameBox.prototype.isGameFinished = function (aPlayer1Cards, aPlayer2Cards) {
-            if (aPlayer1Cards.length === 0) {
-                this.result = 'player 2 wins';
-                this.renderResult();
-                return true;
-            } else if (aPlayer2Cards.length === 0) {
-                this.result = 'player 1 wins';
-                this.renderResult();
-                return true;
+            
+            var i, nOtherPlayer;
+            
+            for (i = 0; i < this.players.length; i++) {
+                if (this.players[i].hand.length === 0) {
+                    if (i === 0) {
+                        nOtherPlayer = 1;
+                    } else if (i === 1) {
+                        nOtherPlayer = 0;
+                    }
+                    this.result = this.players[nOtherPlayer].getName() + ' wins';
+                    this.renderResult();
+                    return true;
+                }
             }
             return false;
         };
