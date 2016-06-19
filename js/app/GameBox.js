@@ -152,6 +152,7 @@ require(['Player'], function (Player) {
         
         for (i = 0; i < nNumPlayers; i++) {
             this.players.push(new Player());
+            this.players[i].setName('Player' + i);
         }
 
         GameBox.prototype.makeView = function () {
@@ -261,41 +262,31 @@ require(['Player'], function (Player) {
 
             oGameView.insertBefore(oPlayAreaView, null);
 
-            var oPlayer1View = document.createElement('div');
-            oPlayer1View.setAttribute('class', 'player');
-            oPlayer1View.setAttribute('id', 'player1');
+            var i, nPlayer,
+                oPlayerView,
+                oPlayerTableView,
+                oPlayerHandView;
 
-            oPlayAreaView.insertBefore(oPlayer1View, null);
+            for (i = 0; i < nNumPlayers; i++) {
+                nPlayer = i + 1;
+                oPlayerView = document.createElement('div');
+                oPlayerView.setAttribute('class', 'player');
+                oPlayerView.setAttribute('id', 'player' + nPlayer);
 
-            var oPlayer2View = document.createElement('div');
-            oPlayer2View.setAttribute('class', 'player');
-            oPlayer2View.setAttribute('id', 'player2');
-
-            oPlayAreaView.insertBefore(oPlayer2View, null);
-
-            var oPlayer1TableView = document.createElement('div');
-            oPlayer1TableView.setAttribute('class', 'table');
-            oPlayer1TableView.setAttribute('id', 'table1');
-
-            oPlayer1View.insertBefore(oPlayer1TableView, null);
-
-            var oPlayer2TableView = document.createElement('div');
-            oPlayer2TableView.setAttribute('class', 'table');
-            oPlayer2TableView.setAttribute('id', 'table2');
-
-            oPlayer2View.insertBefore(oPlayer2TableView, null);
-
-            var oPlayer1HandView = document.createElement('div');
-            oPlayer1HandView.setAttribute('class', 'hand');
-            oPlayer1HandView.setAttribute('id', 'hand1');
-
-            oPlayer1View.insertBefore(oPlayer1HandView, null);
-
-            var oPlayer2HandView = document.createElement('div');
-            oPlayer2HandView.setAttribute('class', 'hand');
-            oPlayer2HandView.setAttribute('id', 'hand2');
-
-            oPlayer2View.insertBefore(oPlayer2HandView, null);
+                oPlayAreaView.insertBefore(oPlayerView, null);
+                
+                oPlayerTableView = document.createElement('div');
+                oPlayerTableView.setAttribute('class', 'table');
+                oPlayerTableView.setAttribute('id', 'table' + nPlayer);
+                
+                oPlayerView.insertBefore(oPlayerTableView, null);
+                
+                oPlayerHandView = document.createElement('div');
+                oPlayerHandView.setAttribute('class', 'hand');
+                oPlayerHandView.setAttribute('id', 'hand' + nPlayer);
+                
+                oPlayerView.insertBefore(oPlayerHandView, null);
+            }
 
             renderCards.call(this);
 

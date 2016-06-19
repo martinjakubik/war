@@ -3,10 +3,19 @@ define("Player", function () {
     'use strict';
     
     var Player = function () {
-
+        
+        this.name = '';
         this.hand = [];
         this.table = [];
 
+    };
+
+    Player.prototype.getName = function () {
+        return this.name;
+    };
+
+    Player.prototype.setName = function (sName) {
+        this.name = sName;
     };
 
     Player.prototype.getHand = function () {
