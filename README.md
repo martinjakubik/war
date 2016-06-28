@@ -1,2 +1,2 @@
 # war
-the mechanics of the war card game
+the war card game, with animals
