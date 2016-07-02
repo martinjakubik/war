@@ -97,6 +97,11 @@ require(['Player'], function (Player) {
             });
         }
         
+        aCards.push({
+            value: 14,
+            suit: 'a'
+        });
+        
         return aCards;
     };
 
