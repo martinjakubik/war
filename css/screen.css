@@ -26,6 +26,7 @@ body {
 }
 
 .button {
+    height: 3em;
     border: 3pt solid #488;
     border-radius: 4pt;
     padding: 4pt 14pt;
@@ -44,11 +45,20 @@ body {
 .name {
     display: block;
 
-    background-color: aliceblue;
-    border: none;
+    height: 3em;
+    margin: 1em 0 1em 21%;
+    padding: 1em;
 
-    font-family: sans-serif;
+    border-radius: 4pt;
+    border-color: rgba(255,255,255,0.7);
+    border-width: 4pt;
+    border-style: solid;
+
     font-size: 14pt;
+    font-family: fantasy;
+
+    background-color: rgba(40,20,10,.1);
+    color: white;
 }
 
 .card {
