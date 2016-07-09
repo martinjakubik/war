@@ -105,15 +105,15 @@ require(['Player'], function (Player) {
         return aCards;
     };
 
-    var shuffle = function (aCards) {
-        var i, n, aShuffledCards = [];
+    var shuffle = function (aThings) {
+        var i, n, aShuffledThings = [];
 
-        while (aCards.length > 0) {
-            n = Math.floor(Math.random() * aCards.length);
-            aShuffledCards.push(aCards.splice(n, 1)[0]);
+        while (aThings.length > 0) {
+            n = Math.floor(Math.random() * aThings.length);
+            aShuffledThings.push(aThings.splice(n, 1)[0]);
         }
 
-        return aShuffledCards;
+        return aShuffledThings;
     };
 
     var distribute = function (aCards, nNumPlayers) {
@@ -154,12 +154,26 @@ require(['Player'], function (Player) {
         var i, nPlayer;
 
         this.players = [];
+
+        var getRandomPlayerName = function (nPlayer) {
+            
+            var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck' ];
+            
+            var aShuffledPlayerNames = shuffle(aPlayerNames);
+            
+            if (nPlayer >= 0 && nPlayer < aShuffledPlayerNames.length) {
+                return aShuffledPlayerNames[nPlayer];
+            }
+            
+            return 'Player' + nPlayer;
+            
+        };
         
         for (i = 0; i < nNumPlayers; i++) {
             this.players.push(new Player());
 
             nPlayer = i + 1;
-            this.players[i].setName('Player ' + nPlayer);
+            this.players[i].setName(getRandomPlayerName(nPlayer));
         }
 
         GameBox.prototype.makeView = function () {
