@@ -2,13 +2,15 @@
 /*global Audio: false */
 require(['Player'], function (Player) {
     'use strict';
-    
+
     var nCardWidth = 68;
     var nNumPlayers = 2;
 
-    var addCardToView = function (oView, oCard, nCardPosition, bLastCard, bStackCard) {
+    var addCardToView = function (oView, oCard, nCardPosition, bLastCard, bStackCard, bShowCardFace) {
 
         var oCardView = document.createElement('div');
+
+        // decides if card should be shown as stacked to save space
         if (bStackCard) {
             oCardView.setAttribute('class', 'card' + ' manyCards');
         } else if (nCardPosition < 1 || bLastCard) {
@@ -16,6 +18,15 @@ require(['Player'], function (Player) {
         } else {
             oCardView.setAttribute('class', 'card' + ' manyCards');
         }
+
+        // sets the card to show back or face
+        if (bShowCardFace === false) {
+            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' showBack');
+        } else {
+            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' showFace');
+        }
+
+        // sets the card's id as suit+value
         oCardView.setAttribute('id', 'card' + oCard.value + '-' + oCard.suit);
 
         var oCardFaceView = document.createElement('div');
@@ -36,7 +47,8 @@ require(['Player'], function (Player) {
         while (oPlayerTableView.firstChild) {
             oPlayerTableView.removeChild(oPlayerTableView.firstChild);
         }
-        
+
+        // counts how many cards to stack depending on how wide the screen is
         var nNumStackedCards = 0, bStackCard = false;
         while (nTableWidth >= 0.15 * nWidth) {
             nNumStackedCards++;
@@ -44,9 +56,11 @@ require(['Player'], function (Player) {
         }
 
         // redraws the whole table
+        var bShowCardFace = false;
         for (i = 0; i < aPlayerTable.length; i++) {
             bStackCard = (i < nNumStackedCards && i !== aPlayerTable.length - 1);
-            addCardToView(oPlayerTableView, aPlayerTable[i], 0, true, bStackCard);
+            bShowCardFace = i % 2 === 0;
+            addCardToView(oPlayerTableView, aPlayerTable[i], 0, true, bStackCard, bShowCardFace);
         }
 
     };
@@ -92,7 +106,7 @@ require(['Player'], function (Player) {
             value: 14,
             suit: 'a'
         });
-        
+
         return aCards;
     };
 
@@ -151,25 +165,25 @@ require(['Player'], function (Player) {
     };
 
     function GameBox() {
-        
+
         var i, nPlayer;
 
         this.players = [];
 
         var getRandomPlayerName = function (nPlayer) {
-            
+
             var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck' ];
-            
+
             var aShuffledPlayerNames = shuffle(aPlayerNames);
-            
+
             if (nPlayer >= 0 && nPlayer < aShuffledPlayerNames.length) {
                 return aShuffledPlayerNames[nPlayer];
             }
-            
+
             return 'Player' + nPlayer;
-            
+
         };
-        
+
         for (i = 0; i < nNumPlayers; i++) {
             this.players.push(new Player());
 
@@ -234,6 +248,7 @@ require(['Player'], function (Player) {
 
                 case PLAY_STATE.checkingTable:
 
+                    // checks if player 0's card is higher than player 1's
                     if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
                         this.players[0].moveTableToHand();
                         this.players[0].moveTableToHand(this.players[1].getTable());
@@ -243,6 +258,7 @@ require(['Player'], function (Player) {
                             }
                         }
                     } else if (this.players[0].getTableCard().value < this.players[1].getTableCard().value) {
+                        // player 1's card is higher than player 0's
                         this.players[1].moveTableToHand();
                         this.players[1].moveTableToHand(this.players[0].getTable());
                         for (i = 0; i < nNumPlayers; i++) {
@@ -251,16 +267,19 @@ require(['Player'], function (Player) {
                             }
                         }
                     } else if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
+                        // players' cards are the same
+                        // first checks if game is over (ie. in a 2-player game, if a player ran out of cards)
                         if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
                             return;
                         }
+                        // if game is not over, all players add a face-down card to the table
                         for (i = 0; i < nNumPlayers; i++) {
                             if (i < this.players.length) {
                                 this.players[i].putCardOnTable();
                             }
                         }
                     }
-                        
+
                     this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
                     nPlayState = PLAY_STATE.movingToTable;
 
@@ -297,19 +316,19 @@ require(['Player'], function (Player) {
                 oPlayerView.setAttribute('id', 'player' + nPlayer);
 
                 oPlayAreaView.insertBefore(oPlayerView, null);
-                
+
                 oPlayerTableView = document.createElement('div');
                 oPlayerTableView.setAttribute('class', 'table');
                 oPlayerTableView.setAttribute('id', 'table' + nPlayer);
-                
+
                 oPlayerView.insertBefore(oPlayerTableView, null);
-                
+
                 oPlayerHandView = document.createElement('div');
                 oPlayerHandView.setAttribute('class', 'hand');
                 oPlayerHandView.setAttribute('id', 'hand' + nPlayer);
-                
+
                 oPlayerView.insertBefore(oPlayerHandView, null);
-                
+
                 oPlayerNameView = document.createElement('input');
                 oPlayerNameView.setAttribute('class', 'name');
                 oPlayerNameView.setAttribute('id', 'name' + nPlayer);
@@ -323,7 +342,7 @@ require(['Player'], function (Player) {
                     }
                     this.players[nRefId].setName(sValue);
                 }.bind(this);
-                
+
                 oPlayerView.insertBefore(oPlayerNameView, null);
             }
 
@@ -368,9 +387,9 @@ require(['Player'], function (Player) {
         };
 
         GameBox.prototype.isGameFinished = function (aPlayer1Cards, aPlayer2Cards) {
-            
+
             var i, nOtherPlayer;
-            
+
             for (i = 0; i < this.players.length; i++) {
                 if (this.players[i].hand.length === 0) {
                     if (i === 0) {
@@ -405,7 +424,7 @@ require(['Player'], function (Player) {
             this.elephantSound = new Audio('../resources/elephant.wav');
 
             var aBatawafCardValues = [6, 3, 5, 5, 1, 6, 4, 2, 4, 3, 1, 3, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
-            
+
             this.cards = makeCards(aBatawafCardValues);
 
             this.shuffledCards = this.cards;
@@ -423,7 +442,7 @@ require(['Player'], function (Player) {
             this.makeView();
         };
     }
-    
+
     var oGameBox = new GameBox();
     oGameBox.startGame();
 });

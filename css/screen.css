@@ -70,9 +70,13 @@ body {
 
     border: 2pt solid #404090;
     border-radius: 12pt;
-    
+
     background-color: white;
     background-size: cover;
+}
+
+.showBack {
+  background-image: none;
 }
 
 .manyCards {
@@ -136,7 +140,7 @@ body {
     and (orientation: landscape) {
 
     .game {
-        height: 64%;        
+        height: 64%;
     }
     .button {
         width: 300pt;
@@ -162,150 +166,150 @@ body {
 
 }
 
-#card1-a {
+#card1-a.showFace {
     background-image: url('../resources/card-batanimo-1a.png');
 }
 
-#card2-a {
+#card2-a.showFace {
     background-image: url('../resources/card-batanimo-2a.png');
 }
 
-#card3-a {
+#card3-a.showFace {
     background-image: url('../resources/card-batanimo-3a.png');
 }
 
-#card4-a {
+#card4-a.showFace {
     background-image: url('../resources/card-batanimo-4a.png');
 }
 
-#card5-a {
+#card5-a.showFace {
     background-image: url('../resources/card-batanimo-5a.png');
 }
 
-#card6-a {
+#card6-a.showFace {
     background-image: url('../resources/card-batanimo-6a.png');
 }
 
-#card1-b {
+#card1-b.showFace {
     background-image: url('../resources/card-batanimo-1b.png');
 }
 
-#card2-b {
+#card2-b.showFace {
     background-image: url('../resources/card-batanimo-2b.png');
 }
 
-#card3-b {
+#card3-b.showFace {
     background-image: url('../resources/card-batanimo-3b.png');
 }
 
-#card4-b {
+#card4-b.showFace {
     background-image: url('../resources/card-batanimo-4b.png');
 }
 
-#card5-b {
+#card5-b.showFace {
     background-image: url('../resources/card-batanimo-5b.png');
 }
 
-#card6-b {
+#card6-b.showFace {
     background-image: url('../resources/card-batanimo-6b.png');
 }
 
-#card1-c {
+#card1-c.showFace {
     background-image: url('../resources/card-batanimo-1c.png');
 }
 
-#card2-c {
+#card2-c.showFace {
     background-image: url('../resources/card-batanimo-2c.png');
 }
 
-#card3-c {
+#card3-c.showFace {
     background-image: url('../resources/card-batanimo-3c.png');
 }
 
-#card4-c {
+#card4-c.showFace {
     background-image: url('../resources/card-batanimo-4c.png');
 }
 
-#card5-c {
+#card5-c.showFace {
     background-image: url('../resources/card-batanimo-5c.png');
 }
 
-#card6-c {
+#card6-c.showFace {
     background-image: url('../resources/card-batanimo-6c.png');
 }
 
-#card1-d {
+#card1-d.showFace {
     background-image: url('../resources/card-batanimo-1d.png');
 }
 
-#card2-d {
+#card2-d.showFace {
     background-image: url('../resources/card-batanimo-2d.png');
 }
 
-#card3-d {
+#card3-d.showFace {
     background-image: url('../resources/card-batanimo-3d.png');
 }
 
-#card4-d {
+#card4-d.showFace {
     background-image: url('../resources/card-batanimo-4d.png');
 }
 
-#card5-d {
+#card5-d.showFace {
     background-image: url('../resources/card-batanimo-5d.png');
 }
 
-#card6-d {
+#card6-d.showFace {
     background-image: url('../resources/card-batanimo-6d.png');
 }
 
-#card1-e {
+#card1-e.showFace {
     background-image: url('../resources/card-batanimo-1e.png');
 }
 
-#card2-e {
+#card2-e.showFace {
     background-image: url('../resources/card-batanimo-2e.png');
 }
 
-#card3-e {
+#card3-e.showFace {
     background-image: url('../resources/card-batanimo-3e.png');
 }
 
-#card4-e {
+#card4-e.showFace {
     background-image: url('../resources/card-batanimo-4e.png');
 }
 
-#card5-e {
+#card5-e.showFace {
     background-image: url('../resources/card-batanimo-5e.png');
 }
 
-#card6-e {
+#card6-e.showFace {
     background-image: url('../resources/card-batanimo-6e.png');
 }
 
-#card1-f {
+#card1-f.showFace {
     background-image: url('../resources/card-batanimo-1f.png');
 }
 
-#card2-f {
+#card2-f.showFace {
     background-image: url('../resources/card-batanimo-2f.png');
 }
 
-#card3-f {
+#card3-f.showFace {
     background-image: url('../resources/card-batanimo-3f.png');
 }
 
-#card4-f {
+#card4-f.showFace {
     background-image: url('../resources/card-batanimo-4f.png');
 }
 
-#card5-f {
+#card5-f.showFace {
     background-image: url('../resources/card-batanimo-5f.png');
 }
 
-#card6-f {
+#card6-f.showFace {
     background-image: url('../resources/card-batanimo-6f.png');
 }
 
-#card14-a {
+#card14-a.showFace {
     background-image: url('../resources/card-batanimo-14a.png');
 }
