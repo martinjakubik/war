@@ -67,23 +67,13 @@ require(['Player'], function (Player) {
         }
     };
 
-    var putCardOnTable = function (aPlayerTable, aPlayerCards) {
-        aPlayerTable.push(aPlayerCards[0]);
-        aPlayerCards.splice(0, 1);
-    };
-
-    var clearTable = function (aPlayerTable) {
-        aPlayerTable.splice(0);
-    };
-
-    var getTableCard = function (aPlayerTable) {
-        return aPlayerTable[aPlayerTable.length - 1];
-    };
-
     var makeCards = function (aCardValues) {
+        var aCards = [];
+
         var aSuitLetters = ['a', 'b', 'c', 'd', 'e', 'f'];
-        var i, nSuit, aCards = [], mHighestSuitsFoundForValue = {};
-        
+        var i, nSuit, mHighestSuitsFoundForValue = {};
+
+        // distributes the cards into suits
         for (i = 0; i < aCardValues.length; i++) {
             nSuit = -1;
             if (!mHighestSuitsFoundForValue[aCardValues[i]] && mHighestSuitsFoundForValue[aCardValues[i]] !== 0) {
@@ -96,7 +86,8 @@ require(['Player'], function (Player) {
                 suit: aSuitLetters[mHighestSuitsFoundForValue[aCardValues[i]]]
             });
         }
-        
+
+        // adds skunk
         aCards.push({
             value: 14,
             suit: 'a'
@@ -116,6 +107,16 @@ require(['Player'], function (Player) {
         return aShuffledThings;
     };
 
+    /**
+     * distributes the cards to the given number of players
+     *
+     * @param aCards an array of cards
+     * @param nNumPlayers the number of players
+     *
+     * @return the cards distributed between players; in the
+     *      form of an array of player arrays, each player
+     *      array containing cards
+     */
     var distribute = function (aCards, nNumPlayers) {
 
         var i, j, oCard;
