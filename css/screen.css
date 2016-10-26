@@ -19,6 +19,7 @@ body {
 }
 
 .table {
+    position: absolute;
     display: inline-block;
     vertical-align: middle;
     margin: 0 10pt 0 2pt;
@@ -37,6 +38,7 @@ body {
 }
 
 .hand {
+    margin-left: 98pt;
     display: inline-block;
     vertical-align: middle;
     overflow-x: hidden;
@@ -59,6 +61,22 @@ body {
 
     background-color: rgba(40,20,10,.1);
     color: white;
+}
+
+@keyframes moveToTable {
+    from {
+        margin-left: 98pt;
+    }
+
+    to {
+        margin-left: 0pt;
+    }
+}
+
+.table>.card.movingToTable {
+    animation-duration: 200ms;
+    animation-timing-function: cubic-bezier(.17,.03,.95,.3);
+    animation-name: moveToTable;
 }
 
 .card {

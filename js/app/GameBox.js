@@ -6,7 +6,41 @@ require(['Player'], function (Player) {
     var nCardWidth = 68;
     var nNumPlayers = 2;
 
-    var addCardToView = function (oView, oCard, nCardPosition, bLastCard, bStackCard, bShowCardFace) {
+    var addClass = function (oView, sClass) {
+        var sClasses = oView.getAttribute('class');
+
+        if (sClasses.indexOf(sClass) < 0) {
+            oView.setAttribute('class', oView.getAttribute('class', + ' ' + sClass));
+        }
+    };
+
+    var removeClass = function (oView, sClass) {
+        var sCurrentClasses = oView.getAttribute('class');
+        var nStartIndex = sCurrentClasses.indexOf(sClass);
+        var nEndIndex = nStartIndex + sClass.length;
+        var sUpdatedClasses;
+
+        if (nStartIndex > 0 && nEndIndex <= sCurrentClasses.length) {
+            sUpdatedClasses = (sCurrentClasses.substr(0, nStartIndex) + ' ' +
+                sCurrentClasses.substr(nEndIndex)).trim();
+            oView.setAttribute('class', sUpdatedClasses);
+        }
+    };
+
+    var finishedMovingToTableListener = function (oEvent) {
+        switch (oEvent.type) {
+          case 'animationend':
+              var oElement = oEvent.target;
+
+              // removes moving to table flag
+              removeClass(oElement, 'movingToTable');
+              break;
+          default:
+
+        }
+    };
+
+    var addCardToView = function (oView, oCard, nCardPosition, bLastCard, bStackCard, bShowCardFace, bMoving) {
 
         var oCardView = document.createElement('div');
 
@@ -24,6 +58,13 @@ require(['Player'], function (Player) {
             oCardView.setAttribute('class', oCardView.getAttribute('class') + ' showBack');
         } else {
             oCardView.setAttribute('class', oCardView.getAttribute('class') + ' showFace');
+        }
+
+        // uses a class to flag that the card should be animated
+        // (ie. moving to the table)
+        if (bMoving) {
+            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' movingToTable');
+            oCardView.addEventListener('animationend', finishedMovingToTableListener, false);
         }
 
         // sets the card's id as suit+value
@@ -56,11 +97,13 @@ require(['Player'], function (Player) {
         }
 
         // redraws the whole table
-        var bShowCardFace = false;
+        var bShowCardFace = false,
+            bMoving = false;
         for (i = 0; i < aPlayerTable.length; i++) {
             bStackCard = (i < nNumStackedCards && i !== aPlayerTable.length - 1);
             bShowCardFace = i % 2 === 0;
-            addCardToView(oPlayerTableView, aPlayerTable[i], 0, true, bStackCard, bShowCardFace);
+            bMoving = i === (aPlayerTable.length - 1);
+            addCardToView(oPlayerTableView, aPlayerTable[i], 0, true, bStackCard, bShowCardFace, bMoving);
         }
 
     };
