@@ -243,6 +243,19 @@ require(['Player'], function (Player) {
 
             var nPlayState = PLAY_STATE.movingToTable;
 
+            var preventZoom = function(e) {
+                var t2 = e.timeStamp;
+                var t1 = e.currentTarget.dataset.lastTouch || t2;
+                var dt = t2 - t1;
+                var fingers = e.touches.length;
+                e.currentTarget.dataset.lastTouch = t2;
+
+                if (!dt || dt > 500 || fingers > 1) return; // not double-tap
+
+                e.preventDefault();
+                e.target.click();
+            }
+
             var doTurn = function () {
 
                 var i;
@@ -396,6 +409,7 @@ require(['Player'], function (Player) {
             oPlayBtn.setAttribute('class', 'button');
             oPlayBtn.setAttribute('id', 'play');
             oPlayBtn.appendChild(oContent);
+            oPlayBtn.addEventListener('touchstart', preventZoom);
             oPlayBtn.onclick = doTurn.bind(this);
             document.body.insertBefore(oPlayBtn, null);
 
