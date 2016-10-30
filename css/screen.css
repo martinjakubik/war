@@ -38,7 +38,7 @@ body {
 }
 
 .hand {
-    margin-left: 98pt;
+    margin-left: 224pt;
     display: inline-block;
     vertical-align: middle;
     overflow-x: hidden;
@@ -139,8 +139,8 @@ body {
     }
 
     .card {
-        height: 220pt;
-        width: 136pt;
+        height: 240pt;
+        width: 148pt;
     }
 
     .stackedCard {
