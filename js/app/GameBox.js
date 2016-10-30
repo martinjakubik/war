@@ -46,11 +46,11 @@ require(['Player'], function (Player) {
 
         // decides if card should be shown as stacked to save space
         if (bStackCard) {
-            oCardView.setAttribute('class', 'card' + ' manyCards');
+            oCardView.setAttribute('class', 'card' + ' stackedCard');
         } else if (nCardPosition < 1 || bLastCard) {
             oCardView.setAttribute('class', 'card');
         } else {
-            oCardView.setAttribute('class', 'card' + ' manyCards');
+            oCardView.setAttribute('class', 'card' + ' stackedCard');
         }
 
         // sets the card to show back or face

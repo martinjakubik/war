@@ -97,7 +97,7 @@ body {
   background-image: none;
 }
 
-.manyCards {
+.stackedCard {
     margin: 2pt 0 0 0;
     width: 6pt;
 
@@ -111,7 +111,7 @@ body {
     text-align: right;
 }
 
-.manyCards>.content {
+.stackedCard>.content {
     width: 0pt;
 }
 
@@ -143,7 +143,7 @@ body {
         width: 136pt;
     }
 
-    .manyCards {
+    .stackedCard {
         margin: 2pt 0 0 0;
         width: 2pt;
 
@@ -175,7 +175,7 @@ body {
         width: 74pt;
     }
 
-    .manyCards {
+    .stackedCard {
         margin: 2pt 0 0 0;
         width: 6pt;
 
