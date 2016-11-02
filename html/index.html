@@ -4,6 +4,18 @@
     </head>
 
     <body>
-        <script data-main="../js/app" src="../js/lib/require.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase.js"></script>
+      <script>
+        // initializes Firebase
+        var config = {
+          apiKey: "AIzaSyCDxPN8uUg6_LjuHKZIGCQr4epNEozZ38g",
+          authDomain: "batanimal-ede7e.firebaseapp.com",
+          databaseURL: "https://batanimal-ede7e.firebaseio.com",
+          storageBucket: "",
+          messagingSenderId: "31013166062"
+        };
+        firebase.initializeApp(config);
+      </script>
+      <script data-main="../js/app" src="../js/lib/require.js"></script>
     </body>
 </html>

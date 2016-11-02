@@ -473,6 +473,20 @@ require(['Player'], function (Player) {
         };
 
         GameBox.prototype.startGame = function () {
+
+            var nGameSlot = 0;
+
+            var oDatabase = firebase.database();
+            var oNextGameSlot = oDatabase.ref('game/nextslot');
+
+            oNextGameSlot.on('value', function(snapshot) {
+                nGameSlot = snapshot ? snapshot.val() : 0;
+            });
+
+            oDatabase.ref('game').set({
+                nextslot: nGameSlot + 1
+            });
+
             this.hamsterSound = new Audio('../resources/hamster-wheel.wav');
             this.rabbitSound = new Audio('../resources/rabbit-crunch.wav');
             this.meowSound = new Audio('../resources/kitten-meow.wav');
