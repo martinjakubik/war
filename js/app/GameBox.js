@@ -209,6 +209,8 @@ require(['Player'], function (Player) {
 
     function GameBox() {
 
+        var MAX_NUMBER_OF_SLOTS = 8;
+
         var i, nPlayer;
 
         this.players = [];
@@ -474,17 +476,20 @@ require(['Player'], function (Player) {
 
         GameBox.prototype.startGame = function () {
 
-            var nGameSlot = 0;
 
             var oDatabase = firebase.database();
             var oNextGameSlot = oDatabase.ref('game/nextslot');
 
-            oNextGameSlot.on('value', function(snapshot) {
-                nGameSlot = snapshot ? snapshot.val() : 0;
-            });
+            oNextGameSlot.once('value', function(snapshot) {
+                var nNextSlot,
+                    nCurrentSlot;
 
-            oDatabase.ref('game').set({
-                nextslot: nGameSlot + 1
+                nCurrentSlot = snapshot ? snapshot.val() : 0;
+                nNextSlot = (nCurrentSlot + 1) % MAX_NUMBER_OF_SLOTS;
+
+                oDatabase.ref('game').set({
+                    nextslot: nNextSlot
+                });
             });
 
             this.hamsterSound = new Audio('../resources/hamster-wheel.wav');
