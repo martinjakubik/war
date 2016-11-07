@@ -211,8 +211,11 @@ require(['Player'], function (Player) {
 
         var MAX_NUMBER_OF_SLOTS = 8;
 
-        var i, nPlayer;
+        var i,
+            nPlayer;
 
+        this.bIsRoomForAnotherPlayer = false;
+        this.nLastSlot;
         this.players = [];
 
         var getRandomPlayerName = function (nPlayer) {
@@ -476,23 +479,35 @@ require(['Player'], function (Player) {
 
         GameBox.prototype.startGame = function () {
 
-
             var oDatabase = firebase.database();
-            var oGameNextSlot = oDatabase.ref('game/nextslot');
+            var oGameLastSlot = oDatabase.ref('game/lastslot');
 
-            oGameNextSlot.once('value', function(snapshot) {
-                var nNextSlot,
-                    nCurrentSlot;
+            oGameLastSlot.once('value', function (snapshot) {
 
                 // finds the next available game slot, but starts over at 0
                 // if the max number is reached
-                nCurrentSlot = snapshot ? snapshot.val() : 0;
-                nNextSlot = (nCurrentSlot + 1) % MAX_NUMBER_OF_SLOTS;
+                this.nLastSlot = (snapshot && snapshot.val()) ? snapshot.val().value : 0;
 
-                oDatabase.ref('game').set({
-                    nextslot: nNextSlot
-                });
-            });
+                if (this.bIsRoomForAnotherPlayer) {
+                    // keeps the last slot if there's still room for a player
+                    oGameLastSlot.set({
+                        value: this.nLastSlot
+                    });
+                    oDatabase.ref('game/slots').child(this.nLastSlot).set({
+                        player2: this.players[1].getName()
+                    });
+                } else {
+                    // moves to the next slot if there's no more room
+                    this.nLastSlot = (this.nLastSlot + 1) % MAX_NUMBER_OF_SLOTS;
+                    oGameLastSlot.set({
+                        value: this.nLastSlot
+                    });
+                    oDatabase.ref('game/slots').child(this.nLastSlot).set({
+                        player1: this.players[0].getName()
+                    });
+                }
+
+            }.bind(this));
 
             this.hamsterSound = new Audio('../resources/hamster-wheel.wav');
             this.rabbitSound = new Audio('../resources/rabbit-crunch.wav');
