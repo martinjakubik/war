@@ -214,8 +214,7 @@ require(['Player'], function (Player) {
         var i,
             nPlayer;
 
-        this.bIsRoomForAnotherPlayer = false;
-        this.nLastSlot;
+        this.nCurrentSlot;
         this.players = [];
 
         var getRandomPlayerName = function (nPlayer) {
@@ -480,32 +479,50 @@ require(['Player'], function (Player) {
         GameBox.prototype.startGame = function () {
 
             var oDatabase = firebase.database();
-            var oGameLastSlot = oDatabase.ref('game/lastslot');
+            var oRefGameSlots = oDatabase.ref('game/slots');
 
-            oGameLastSlot.once('value', function (snapshot) {
+            oRefGameSlots.once('value', function (snapshot) {
+
+                var oGameSlots = snapshot.val();
+
+                if (!oGameSlots) {
+                    oGameSlots = {
+                        lastSlot: 0,
+                        list: {}
+                    };
+                    oRefGameSlots.set(oGameSlots);
+                }
+
+                var aGameSlots = oGameSlots ? oGameSlots.list : null ;
+
+                var oGameLastSlot = oGameSlots.lastSlot || {
+                    value: 0
+                };
 
                 // finds the next available game slot, but starts over at 0
                 // if the max number is reached
-                this.nLastSlot = (snapshot && snapshot.val()) ? snapshot.val().value : 0;
+                this.nCurrentSlot = (oGameLastSlot && oGameLastSlot.value) ? oGameLastSlot.value : 0;
 
-                if (this.bIsRoomForAnotherPlayer) {
+                // if there is NO player2, then there's room for another player
+                var bIsRoomForAnotherPlayer =
+                    (aGameSlots && aGameSlots.length > this.nCurrentSlot) ? !(aGameSlots[this.nCurrentSlot].player2) : false;
+
+                if (bIsRoomForAnotherPlayer) {
                     // keeps the last slot if there's still room for a player
-                    oGameLastSlot.set({
-                        value: this.nLastSlot
-                    });
-                    oDatabase.ref('game/slots').child(this.nLastSlot).set({
+                    oRefGameSlots.child('list').child(this.nCurrentSlot).set({
+                        player1: this.players[0].getName(),
                         player2: this.players[1].getName()
                     });
                 } else {
                     // moves to the next slot if there's no more room
-                    this.nLastSlot = (this.nLastSlot + 1) % MAX_NUMBER_OF_SLOTS;
-                    oGameLastSlot.set({
-                        value: this.nLastSlot
-                    });
-                    oDatabase.ref('game/slots').child(this.nLastSlot).set({
+                    this.nCurrentSlot = (this.nCurrentSlot + 1) % MAX_NUMBER_OF_SLOTS;
+                    oRefGameSlots.child('list').child(this.nCurrentSlot).set({
                         player1: this.players[0].getName()
                     });
                 }
+                oRefGameSlots.child('lastSlot').set({
+                    value: this.nCurrentSlot
+                });
 
             }.bind(this));
 
