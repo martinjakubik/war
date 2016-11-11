@@ -94,7 +94,7 @@ body {
 }
 
 .showBack {
-  background-image: none;
+    background-image: url('../resources/card-back.png');
 }
 
 .stackedCard {

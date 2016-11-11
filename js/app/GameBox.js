@@ -111,7 +111,9 @@ require(['Player'], function (Player) {
     var renderPlayerHand = function (nPlayer, aPlayerCards) {
 
         var i,
-            oPlayerHandView = document.getElementById('hand' + nPlayer);
+            oPlayerHandView = document.getElementById('hand' + nPlayer),
+            bStackCard = null,
+            bShowCardFace = false;
 
         // clears view of all cards
         while (oPlayerHandView.firstChild) {
@@ -120,7 +122,7 @@ require(['Player'], function (Player) {
 
         // redraws the whole hand
         for (i = 0; i < aPlayerCards.length; i++) {
-            addCardToView(oPlayerHandView, aPlayerCards[i], i, (i === aPlayerCards.length - 1));
+            addCardToView(oPlayerHandView, aPlayerCards[i], i, (i === aPlayerCards.length - 1), bStackCard, bShowCardFace);
         }
     };
 
