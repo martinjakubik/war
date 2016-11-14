@@ -531,10 +531,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.0603175"
-     inkscape:cx="101.25"
-     inkscape:cy="157.5"
+     inkscape:cx="43.00655"
+     inkscape:cy="118.67103"
      inkscape:document-units="px"
-     inkscape:current-layer="layer18"
+     inkscape:current-layer="g10562"
      showgrid="false"
      units="pt"
      inkscape:window-width="1440"
@@ -4689,7 +4689,7 @@
      inkscape:groupmode="layer"
      id="layer18"
      inkscape:label="6c"
-     style="display:inline">
+     style="display:none">
     <rect
        transform="translate(0,-737.36219)"
        style="display:inline;fill:#d2cbaf;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -9369,7 +9369,7 @@
        inkscape:connector-curvature="0" />
   </g>
   <g
-     style="display:none"
+     style="display:inline"
      inkscape:label="back"
      id="g10562"
      inkscape:groupmode="layer">
@@ -10051,27 +10051,39 @@
        style="font-style:normal;font-weight:normal;font-size:17.93808556px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="text11070"
        sodipodi:linespacing="125%"
-       transform="matrix(0.99509733,0.09890046,-0.09890047,0.99509733,59.207078,-269.92964)"><textPath
+       transform="matrix(0.99557733,0.09394558,-0.09394559,0.99557733,34.989709,-10.824904)"><textPath
          xlink:href="#path11074"
-         id="textPath11076"><tspan
+         id="textPath5855"><tspan
    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.93808556px;line-height:125%;font-family:Luminari;-inkscape-font-specification:'Luminari, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
    id="tspan11072">BATANIMAL</tspan></textPath></text>
     <path
        style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 23.782743,364.02157 c 0,0 20.708784,-12.61941 81.783517,-12.61941 61.07473,0 80.81279,12.61941 80.81279,12.61941"
+       d="m 23.782742,103.38212 c 0,0 20.708785,-12.619411 81.783518,-12.619411 61.07473,0 80.81279,12.619411 80.81279,12.619411"
        id="path11074"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czc" />
+    <path
+       sodipodi:nodetypes="czc"
+       inkscape:connector-curvature="0"
+       id="path5864"
+       d="m 23.782742,103.38212 c 0,0 20.708785,-12.619411 81.783518,-12.619411 61.07473,0 80.81279,12.619411 80.81279,12.619411"
+       style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <text
-       transform="matrix(-0.99509733,-0.09890046,0.09890047,-0.99509733,145.72202,581.12311)"
+       transform="matrix(-0.99557733,-0.09394558,0.09394559,-0.99557733,173.23978,322.33269)"
        sodipodi:linespacing="125%"
-       id="text11081"
+       id="text5866"
        style="font-style:normal;font-weight:normal;font-size:17.93808556px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><textPath
-         id="textPath11083"
+         id="textPath5868"
          xlink:href="#path11074"><tspan
-   id="tspan11085"
+   id="tspan5870"
    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.93808556px;line-height:125%;font-family:Luminari;-inkscape-font-specification:'Luminari, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">BATANIMAL</tspan></textPath></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 184.44675,208.12567 c 0,0 -20.70878,12.61941 -81.78352,12.61941 -61.074726,0 -80.812786,-12.61941 -80.812786,-12.61941"
+       id="path5872"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czc" />
   </g>
   <g
      inkscape:groupmode="layer"
