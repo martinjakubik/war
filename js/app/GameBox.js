@@ -229,6 +229,121 @@ require(['Player'], function (Player) {
         this.result = '';
     };
 
+    var PLAY_STATE = {
+        movingToTable: 0,
+        checkingTable: 1
+    };
+
+    var nPlayState = PLAY_STATE.movingToTable;
+
+    var preventZoom = function(e) {
+        var t2 = e.timeStamp;
+        var t1 = e.currentTarget.dataset.lastTouch || t2;
+        var dt = t2 - t1;
+        var fingers = e.touches.length;
+        e.currentTarget.dataset.lastTouch = t2;
+
+        if (!dt || dt > 500 || fingers > 1) return; // not double-tap
+
+        e.preventDefault();
+        e.target.click();
+    }
+
+    var playPressed = function () {
+        doTurn.call(this);
+    };
+
+    var doTurn = function () {
+
+        var i;
+        switch (nPlayState) {
+        case PLAY_STATE.movingToTable:
+
+            if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
+                return;
+            }
+
+            for (i = 0; i < nNumPlayers; i++) {
+                if (i < this.players.length) {
+                    this.players[i].putCardOnTable();
+                }
+            }
+
+            if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
+                switch (this.players[0].getTableCard().value) {
+                case 1:
+                    this.hamsterSound.play();
+                    break;
+                case 2:
+                    this.rabbitSound.play();
+                    break;
+                case 3:
+                    this.meowSound.play();
+                    break;
+                case 4:
+                    this.barkSound.play();
+                    break;
+                case 5:
+                    this.tigerSound.play();
+                    break;
+                case 6:
+                    this.elephantSound.play();
+                    break;
+                default:
+                    this.barkSound.play();
+                    break;
+                }
+            }
+
+            nPlayState = PLAY_STATE.checkingTable;
+
+            break;
+
+        case PLAY_STATE.checkingTable:
+
+            // checks if player 0's card is higher than player 1's
+            if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
+                this.players[0].moveTableToHand();
+                this.players[0].moveTableToHand(this.players[1].getTable());
+                for (i = 0; i < nNumPlayers; i++) {
+                    if (i < this.players.length) {
+                        this.players[i].clearTable();
+                    }
+                }
+            } else if (this.players[0].getTableCard().value < this.players[1].getTableCard().value) {
+                // player 1's card is higher than player 0's
+                this.players[1].moveTableToHand();
+                this.players[1].moveTableToHand(this.players[0].getTable());
+                for (i = 0; i < nNumPlayers; i++) {
+                    if (i < this.players.length) {
+                        this.players[i].clearTable();
+                    }
+                }
+            } else if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
+                // players' cards are the same
+                // first checks if game is over (ie. in a 2-player game, if a player ran out of cards)
+                if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
+                    return;
+                }
+                // if game is not over, all players add a face-down card to the table
+                for (i = 0; i < nNumPlayers; i++) {
+                    if (i < this.players.length) {
+                        this.players[i].putCardOnTable();
+                    }
+                }
+            }
+
+            this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
+            nPlayState = PLAY_STATE.movingToTable;
+
+            break;
+        default:
+            break;
+        }
+
+        renderCards.call(this, this.players[0].getTable(), this.players[1].getTable());
+    };
+
     function GameBox() {
 
         var MAX_NUMBER_OF_SLOTS = 8;
@@ -261,117 +376,6 @@ require(['Player'], function (Player) {
         }
 
         GameBox.prototype.makeView = function () {
-
-            var PLAY_STATE = {
-                movingToTable: 0,
-                checkingTable: 1
-            };
-
-            var nPlayState = PLAY_STATE.movingToTable;
-
-            var preventZoom = function(e) {
-                var t2 = e.timeStamp;
-                var t1 = e.currentTarget.dataset.lastTouch || t2;
-                var dt = t2 - t1;
-                var fingers = e.touches.length;
-                e.currentTarget.dataset.lastTouch = t2;
-
-                if (!dt || dt > 500 || fingers > 1) return; // not double-tap
-
-                e.preventDefault();
-                e.target.click();
-            }
-
-            var doTurn = function () {
-
-                var i;
-                switch (nPlayState) {
-                case PLAY_STATE.movingToTable:
-
-                    if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
-                        return;
-                    }
-
-                    for (i = 0; i < nNumPlayers; i++) {
-                        if (i < this.players.length) {
-                            this.players[i].putCardOnTable();
-                        }
-                    }
-
-                    if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
-                        switch (this.players[0].getTableCard().value) {
-                        case 1:
-                            this.hamsterSound.play();
-                            break;
-                        case 2:
-                            this.rabbitSound.play();
-                            break;
-                        case 3:
-                            this.meowSound.play();
-                            break;
-                        case 4:
-                            this.barkSound.play();
-                            break;
-                        case 5:
-                            this.tigerSound.play();
-                            break;
-                        case 6:
-                            this.elephantSound.play();
-                            break;
-                        default:
-                            this.barkSound.play();
-                            break;
-                        }
-                    }
-
-                    nPlayState = PLAY_STATE.checkingTable;
-
-                    break;
-
-                case PLAY_STATE.checkingTable:
-
-                    // checks if player 0's card is higher than player 1's
-                    if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
-                        this.players[0].moveTableToHand();
-                        this.players[0].moveTableToHand(this.players[1].getTable());
-                        for (i = 0; i < nNumPlayers; i++) {
-                            if (i < this.players.length) {
-                                this.players[i].clearTable();
-                            }
-                        }
-                    } else if (this.players[0].getTableCard().value < this.players[1].getTableCard().value) {
-                        // player 1's card is higher than player 0's
-                        this.players[1].moveTableToHand();
-                        this.players[1].moveTableToHand(this.players[0].getTable());
-                        for (i = 0; i < nNumPlayers; i++) {
-                            if (i < this.players.length) {
-                                this.players[i].clearTable();
-                            }
-                        }
-                    } else if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
-                        // players' cards are the same
-                        // first checks if game is over (ie. in a 2-player game, if a player ran out of cards)
-                        if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
-                            return;
-                        }
-                        // if game is not over, all players add a face-down card to the table
-                        for (i = 0; i < nNumPlayers; i++) {
-                            if (i < this.players.length) {
-                                this.players[i].putCardOnTable();
-                            }
-                        }
-                    }
-
-                    this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
-                    nPlayState = PLAY_STATE.movingToTable;
-
-                    break;
-                default:
-                    break;
-                }
-
-                renderCards.call(this, this.players[0].getTable(), this.players[1].getTable());
-            };
 
             var oGameView = document.createElement('div');
             oGameView.setAttribute('class', 'game');
@@ -436,7 +440,7 @@ require(['Player'], function (Player) {
             oPlayBtn.setAttribute('id', 'play');
             oPlayBtn.appendChild(oContent);
             oPlayBtn.addEventListener('touchstart', preventZoom);
-            oPlayBtn.onclick = doTurn.bind(this);
+            oPlayBtn.onclick = playPressed.bind(this);
             document.body.insertBefore(oPlayBtn, null);
 
             var oShuffleBtn = document.createElement('button');
