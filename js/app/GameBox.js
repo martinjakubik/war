@@ -209,6 +209,26 @@ require(['Player'], function (Player) {
         }
     };
 
+    /**
+     * initializes a game; makes players and cards and distributes them
+     */
+    var initializeGameEvent = function () {
+        var aBatawafCardValues = [6, 3, 5, 5, 1, 6, 4, 2, 4, 3, 1, 3, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
+        this.cards = makeCards(aBatawafCardValues);
+
+        this.shuffledCards = shuffle(this.cards);
+        var aDistributedCards = distribute(this.shuffledCards, nNumPlayers);
+
+        var i;
+        for (i = 0; i < nNumPlayers; i++) {
+            if (i < this.players.length) {
+                this.players[i].setHand(aDistributedCards[i]);
+            }
+        }
+
+        this.result = '';
+    };
+
     function GameBox() {
 
         var MAX_NUMBER_OF_SLOTS = 8;
@@ -535,20 +555,7 @@ require(['Player'], function (Player) {
             this.tigerSound = new Audio('../resources/tiger-growl.wav');
             this.elephantSound = new Audio('../resources/elephant.wav');
 
-            var aBatawafCardValues = [6, 3, 5, 5, 1, 6, 4, 2, 4, 3, 1, 3, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
-            this.cards = makeCards(aBatawafCardValues);
-
-            this.shuffledCards = shuffle(this.cards);
-            var aDistributedCards = distribute(this.shuffledCards, nNumPlayers);
-
-            var i;
-            for (i = 0; i < nNumPlayers; i++) {
-                if (i < this.players.length) {
-                    this.players[i].setHand(aDistributedCards[i]);
-                }
-            }
-
-            this.result = '';
+            initializeGameEvent.call(this);
 
             this.makeView();
         };
