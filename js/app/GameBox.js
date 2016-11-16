@@ -533,8 +533,31 @@ require(['Player'], function (Player) {
                 // if there is NO player2, then there's room for another player
                 var bIsRoomForAnotherPlayer =
                     (aGameSlots && aGameSlots.length > this.nCurrentSlot) ? !(aGameSlots[this.nCurrentSlot].player2) : false;
+                var bIsAnotherPlayerWanted = true,
+                    nMaxTime = 5,
+                    nStartTime = Date.now(),
+                    nCurrentTime;
 
                 if (bIsRoomForAnotherPlayer) {
+
+                    var fnDontWaitPressed = function (bIsAnotherPlayerWanted) {
+                        bIsAnotherPlayerWanted = false;
+                    };
+
+                    var oDontWaitBtn = document.createElement('button');
+                    var oContent = document.createTextNode('Don\'t Wait');
+                    oDontWaitBtn.setAttribute('class', 'button');
+                    oDontWaitBtn.setAttribute('id', 'dontWait');
+                    oDontWaitBtn.appendChild(oContent);
+                    oDontWaitBtn.onclick = fnDontWaitPressed.bind(this, bIsAnotherPlayerWanted);
+                    // document.body.insertBefore(oDontWaitBtn, null);
+
+                    while (bIsAnotherPlayerWanted) {
+                        nCurrentTime = Date.now();
+                        if (nCurrentTime - nStartTime > nMaxTime) {
+                            bIsAnotherPlayerWanted = false;
+                        }
+                    }
                     // keeps the last slot if there's still room for a player
                     oRefGameSlots.child('list').child(this.nCurrentSlot).set({
                         player1: this.players[0].getName(),
