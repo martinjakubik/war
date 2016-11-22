@@ -184,6 +184,12 @@ body {
 
 }
 
+#clock {
+    font-family: fantasy;
+    font-size: 18pt;
+    font-weight: bold;
+}
+
 #card1-a.showFace {
     background-image: url('../resources/card-batanimo-1a.png');
 }

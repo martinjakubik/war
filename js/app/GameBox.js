@@ -4,7 +4,6 @@ require(['Player'], function (Player) {
     'use strict';
 
     var nCardWidth = 68;
-    var nNumPlayers = 2;
 
     var addClass = function (oView, sClass) {
         var sClasses = oView.getAttribute('class');
@@ -91,7 +90,7 @@ require(['Player'], function (Player) {
 
         // counts how many cards to stack depending on how wide the screen is
         var nNumStackedCards = 0, bStackCard = false;
-        while (nTableWidth >= 0.15 * nWidth) {
+        while (nTableWidth >= 0.105 * nWidth) {
             nNumStackedCards++;
             nTableWidth = (aPlayerTable.length - nNumStackedCards) * nCardWidth;
         }
@@ -200,25 +199,23 @@ require(['Player'], function (Player) {
 
     var renderCards = function () {
         var i;
-        renderPlayerTable(1, this.players[0].getTable());
-        renderPlayerTable(2, this.players[1].getTable());
-        for (i = 0; i < nNumPlayers; i++) {
-            if (i < this.players.length) {
-                renderPlayerHand(i + 1, this.players[i].getHand());
-            }
+        for (i = 0; i < this.players.length; i++) {
+            renderPlayerTable(i + 1, this.players[i].getTable());
+            renderPlayerHand(i + 1, this.players[i].getHand());
         }
     };
 
     /**
      * initializes a game; makes players and cards and distributes them
      */
-    var initializeGameEvent = function () {
+    var initializeGameEvent = function (nNumPlayers) {
 
         var aBatawafCardValues = [6, 3, 5, 5, 1, 6, 4, 2, 4, 3, 1, 3, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
         this.cards = makeCards(aBatawafCardValues);
 
         this.shuffledCards = shuffle(this.cards);
-        var aDistributedCards = distribute(this.shuffledCards, nNumPlayers);
+        var nNumPlayersAmongWhomToDistributeCards = nNumPlayers > 1 ? nNumPlayers : 2;
+        var aDistributedCards = distribute(this.shuffledCards, nNumPlayersAmongWhomToDistributeCards);
 
         var i;
         for (i = 0; i < nNumPlayers; i++) {
@@ -228,6 +225,22 @@ require(['Player'], function (Player) {
         }
 
         this.result = '';
+    };
+
+    /**
+     * initializes a game; makes players and cards and distributes them
+     */
+    var addPlayerToGameEvent = function (nNumPlayers) {
+
+        var nNumPlayersAmongWhomToDistributeCards = nNumPlayers > 1 ? nNumPlayers : 2;
+        var aDistributedCards = distribute(this.shuffledCards, nNumPlayersAmongWhomToDistributeCards);
+
+        var i;
+        for (i = 0; i < nNumPlayers; i++) {
+            if (i < this.players.length) {
+                this.players[i].setHand(aDistributedCards[i]);
+            }
+        }
     };
 
     var PLAY_STATE = {
@@ -250,11 +263,11 @@ require(['Player'], function (Player) {
         e.target.click();
     }
 
-    var playPressed = function () {
-        doTurn.call(this);
+    var playPressed = function (nNumPlayers) {
+        doTurn.call(this, nNumPlayers);
     };
 
-    var doTurn = function () {
+    var doTurn = function (nNumPlayers) {
 
         var i;
         switch (nPlayState) {
@@ -347,36 +360,15 @@ require(['Player'], function (Player) {
 
     function GameBox() {
 
-        var MAX_NUMBER_OF_SLOTS = 8;
+        var MAX_NUMBER_OF_SLOTS = 3;
 
         var i,
             nPlayer;
 
-        this.nCurrentSlot;
+        this.lastSlot;
         this.players = [];
 
-        var getRandomPlayerName = function (nPlayer) {
-
-            var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck' ];
-
-            var aShuffledPlayerNames = shuffle(aPlayerNames);
-
-            if (nPlayer >= 0 && nPlayer < aShuffledPlayerNames.length) {
-                return aShuffledPlayerNames[nPlayer];
-            }
-
-            return 'Player' + nPlayer;
-
-        };
-
-        for (i = 0; i < nNumPlayers; i++) {
-            this.players.push(new Player());
-
-            nPlayer = i + 1;
-            this.players[i].setName(getRandomPlayerName(nPlayer));
-        }
-
-        GameBox.prototype.makeView = function () {
+        GameBox.prototype.makeView = function (nNumPlayers) {
 
             var oGameView = document.createElement('div');
             oGameView.setAttribute('class', 'game');
@@ -396,7 +388,7 @@ require(['Player'], function (Player) {
                 oPlayerHandView,
                 oPlayerNameView;
 
-            for (i = 0; i < nNumPlayers; i++) {
+            for (i = 0; i < this.players.length; i++) {
                 nPlayer = i + 1;
                 oPlayerView = document.createElement('div');
                 oPlayerView.setAttribute('class', 'player');
@@ -441,7 +433,7 @@ require(['Player'], function (Player) {
             oPlayBtn.setAttribute('id', 'play');
             oPlayBtn.appendChild(oContent);
             oPlayBtn.addEventListener('touchstart', preventZoom);
-            oPlayBtn.onclick = playPressed.bind(this);
+            oPlayBtn.onclick = playPressed.bind(this, nNumPlayers);
             document.body.insertBefore(oPlayBtn, null);
 
             var oShuffleBtn = document.createElement('button');
@@ -457,11 +449,9 @@ require(['Player'], function (Player) {
                 this.players[0].clearTable();
                 this.players[1].clearTable();
                 this.shuffledCards = shuffle.call(this, this.shuffledCards);
-                aDistributedCards = distribute(this.shuffledCards, nNumPlayers);
-                for (i = 0; i < nNumPlayers; i++) {
-                    if (i < this.players.length) {
-                        this.players[i].setHand(aDistributedCards[i]);
-                    }
+                aDistributedCards = distribute(this.shuffledCards, this.players.length);
+                for (i = 0; i < this.players.length; i++) {
+                    this.players[i].setHand(aDistributedCards[i]);
                 }
                 renderCards.call(this, [], []);
             }.bind(this);
@@ -503,7 +493,21 @@ require(['Player'], function (Player) {
             oResultView.appendChild(oContent);
         };
 
-        GameBox.prototype.startGame = function () {
+        GameBox.prototype.startGame = function (nNumPlayers) {
+
+            var getRandomPlayerName = function (nPlayer) {
+
+                var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck' ];
+
+                var aShuffledPlayerNames = shuffle(aPlayerNames);
+
+                if (nPlayer >= 0 && nPlayer < aShuffledPlayerNames.length) {
+                    return aShuffledPlayerNames[nPlayer];
+                }
+
+                return 'Player' + nPlayer;
+
+            };
 
             var oDatabase = firebase.database();
             var oRefGameSlots = oDatabase.ref('game/slots');
@@ -526,53 +530,71 @@ require(['Player'], function (Player) {
                     value: 0
                 };
 
+                var nInitialNumPlayers = 1;
+
                 // finds the next available game slot, but starts over at 0
                 // if the max number is reached
-                this.nCurrentSlot = (oGameLastSlot && oGameLastSlot.value) ? oGameLastSlot.value : 0;
+                this.lastSlot = oGameLastSlot ? oGameLastSlot.value : -1;
 
-                // if there is NO player2, then there's room for another player
-                var bIsRoomForAnotherPlayer =
-                    (aGameSlots && aGameSlots.length > this.nCurrentSlot) ? !(aGameSlots[this.nCurrentSlot].player2) : false;
-                var bIsAnotherPlayerWanted = true,
-                    nMaxTime = 5,
-                    nStartTime = Date.now(),
-                    nCurrentTime;
-
-                if (bIsRoomForAnotherPlayer) {
-
-                    var fnDontWaitPressed = function (bIsAnotherPlayerWanted) {
-                        bIsAnotherPlayerWanted = false;
-                    };
-
-                    var oDontWaitBtn = document.createElement('button');
-                    var oContent = document.createTextNode('Don\'t Wait');
-                    oDontWaitBtn.setAttribute('class', 'button');
-                    oDontWaitBtn.setAttribute('id', 'dontWait');
-                    oDontWaitBtn.appendChild(oContent);
-                    oDontWaitBtn.onclick = fnDontWaitPressed.bind(this, bIsAnotherPlayerWanted);
-                    // document.body.insertBefore(oDontWaitBtn, null);
-
-                    while (bIsAnotherPlayerWanted) {
-                        nCurrentTime = Date.now();
-                        if (nCurrentTime - nStartTime > nMaxTime) {
-                            bIsAnotherPlayerWanted = false;
-                        }
+                // checks if this is player 1 - this can only be player 1 if
+                // there are no players yet
+                var nCheckSlot = this.lastSlot;
+                var bIsPlayer1 = true;
+                var bIsAnotherPlayerPresent = false;
+                if (aGameSlots && aGameSlots.length > nCheckSlot) {
+                    if (aGameSlots[nCheckSlot]['player2']) {
+                        nCheckSlot = (nCheckSlot + 1) % MAX_NUMBER_OF_SLOTS;
+                        bIsAnotherPlayerPresent = true;
+                    } else {
+                        bIsAnotherPlayerPresent = false;
                     }
-                    // keeps the last slot if there's still room for a player
-                    oRefGameSlots.child('list').child(this.nCurrentSlot).set({
+                    if (aGameSlots[nCheckSlot]['isFirstPlayerInSlot']) {
+                        bIsPlayer1 = bIsAnotherPlayerPresent;
+                    }
+                }
+
+                // makes room for first player
+                this.players.push(new Player());
+
+                if (bIsPlayer1) {
+                    // moves to the next slot and makes this the first player
+                    this.lastSlot = nCheckSlot;
+
+                    // makes the first player
+                    this.players[0].setName(getRandomPlayerName(1));
+
+                    // sets name for a new first player
+                    this.players[0].setName(getRandomPlayerName(1));
+
+                    initializeGameEvent.call(this, nInitialNumPlayers);
+
+                    oRefGameSlots.child('list').child(this.lastSlot).set({
+                        isFirstPlayerInSlot: true,
+                        player1: this.players[0].getName(),
+                        player2: null
+                    });
+                } else {
+                    // gets name of first player
+                    this.players[0].setName(aGameSlots[this.lastSlot].player1);
+
+                    initializeGameEvent.call(this, nInitialNumPlayers);
+
+                    // makes second player
+                    this.players.push(new Player());
+                    this.players[1].setName(getRandomPlayerName(2));
+                    addPlayerToGameEvent.call(this, nNumPlayers);
+
+                    oRefGameSlots.child('list').child(this.lastSlot).set({
+                        isFirstPlayerInSlot: false,
                         player1: this.players[0].getName(),
                         player2: this.players[1].getName()
                     });
-                } else {
-                    // moves to the next slot if there's no more room
-                    this.nCurrentSlot = (this.nCurrentSlot + 1) % MAX_NUMBER_OF_SLOTS;
-                    oRefGameSlots.child('list').child(this.nCurrentSlot).set({
-                        player1: this.players[0].getName()
-                    });
                 }
+
                 oRefGameSlots.child('lastSlot').set({
-                    value: this.nCurrentSlot
+                    value: this.lastSlot
                 });
+                this.makeView(nNumPlayers);
 
             }.bind(this));
 
@@ -583,12 +605,10 @@ require(['Player'], function (Player) {
             this.tigerSound = new Audio('../resources/tiger-growl.wav');
             this.elephantSound = new Audio('../resources/elephant.wav');
 
-            initializeGameEvent.call(this);
-
-            this.makeView();
         };
     }
 
     var oGameBox = new GameBox();
-    oGameBox.startGame();
+    var nNumPlayers = 2;
+    oGameBox.startGame(nNumPlayers);
 });
