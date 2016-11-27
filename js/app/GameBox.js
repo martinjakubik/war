@@ -604,7 +604,7 @@ require(['Player'], function (Player) {
                     });
                 } else if (bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
                     // increments game slotNumber
-                    this.slotNumber = this.slotNumber + 1 % MAX_NUMBER_OF_SLOTS;
+                    this.slotNumber = (this.slotNumber + 1) % MAX_NUMBER_OF_SLOTS;
 
                     // makes player 1
                     this.players[0].setName(getRandomPlayerName(1));
