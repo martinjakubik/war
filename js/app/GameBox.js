@@ -365,7 +365,7 @@ require(['Player'], function (Player) {
         var i,
             nPlayer;
 
-        this.lastSlot;
+        this.slotNumber;
         this.players = [];
 
         GameBox.prototype.makeView = function (nNumPlayers) {
@@ -512,8 +512,12 @@ require(['Player'], function (Player) {
             var oDatabase = firebase.database();
             var oRefGameSlots = oDatabase.ref('game/slots');
 
+            /*
+             * checks remote database and stores players in a game slot
+             */
             oRefGameSlots.once('value', function (snapshot) {
 
+                // gets game slot object from remote database
                 var oGameSlots = snapshot.val();
 
                 if (!oGameSlots) {
@@ -524,8 +528,10 @@ require(['Player'], function (Player) {
                     oRefGameSlots.set(oGameSlots);
                 }
 
+                // gets list of game slots
                 var aGameSlots = oGameSlots ? oGameSlots.list : null ;
 
+                // gets index of last game slot
                 var oGameLastSlot = oGameSlots.lastSlot || {
                     value: 0
                 };
@@ -534,65 +540,87 @@ require(['Player'], function (Player) {
 
                 // finds the next available game slot, but starts over at 0
                 // if the max number is reached
-                this.lastSlot = oGameLastSlot ? oGameLastSlot.value : -1;
+                this.slotNumber = oGameLastSlot ? oGameLastSlot.value : 0;
 
                 // checks if this is player 1 - this can only be player 1 if
                 // there are no players yet
-                var nCheckSlot = this.lastSlot;
-                var bIsPlayer1 = true;
-                var bIsAnotherPlayerPresent = false;
-                if (aGameSlots && aGameSlots.length > nCheckSlot) {
-                    if (aGameSlots[nCheckSlot]['player2']) {
-                        nCheckSlot = (nCheckSlot + 1) % MAX_NUMBER_OF_SLOTS;
-                        bIsAnotherPlayerPresent = true;
-                    } else {
-                        bIsAnotherPlayerPresent = false;
-                    }
-                    if (aGameSlots[nCheckSlot]['isFirstPlayerInSlot']) {
-                        bIsPlayer1 = bIsAnotherPlayerPresent;
-                    }
+                var bIsPlayer1SlotFull = false;
+                var bIsPlayer2SlotFull = false;
+
+                if (aGameSlots && aGameSlots.length > this.slotNumber && aGameSlots[this.slotNumber]) {
+                    bIsPlayer1SlotFull = aGameSlots[this.slotNumber].player1 ? true : false;
+                    bIsPlayer2SlotFull = aGameSlots[this.slotNumber].player2 ? true : false;
                 }
 
-                // makes room for first player
                 this.players.push(new Player());
+                if (!bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
-                if (bIsPlayer1) {
-                    // moves to the next slot and makes this the first player
-                    this.lastSlot = nCheckSlot;
-
-                    // makes the first player
+                    // makes player 1
                     this.players[0].setName(getRandomPlayerName(1));
 
-                    // sets name for a new first player
-                    this.players[0].setName(getRandomPlayerName(1));
-
+                    // adds player 1 to game
                     initializeGameEvent.call(this, nInitialNumPlayers);
 
-                    oRefGameSlots.child('list').child(this.lastSlot).set({
-                        isFirstPlayerInSlot: true,
+                    // waits for player 2
+                    oRefGameSlots.child('list').child(this.slotNumber).set({
                         player1: this.players[0].getName(),
                         player2: null
                     });
-                } else {
-                    // gets name of first player
-                    this.players[0].setName(aGameSlots[this.lastSlot].player1);
+                } else if (bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
-                    initializeGameEvent.call(this, nInitialNumPlayers);
+                    // gets player 1
+                    this.players[0].setName(aGameSlots[this.slotNumber].player1);
 
-                    // makes second player
+                    // makes player 2
                     this.players.push(new Player());
                     this.players[1].setName(getRandomPlayerName(2));
-                    addPlayerToGameEvent.call(this, nNumPlayers);
 
-                    oRefGameSlots.child('list').child(this.lastSlot).set({
-                        isFirstPlayerInSlot: false,
+                    // adds player 1 and 2 to game
+                    nInitialNumPlayers = 2;
+                    initializeGameEvent.call(this, nInitialNumPlayers);
+
+                    oRefGameSlots.child('list').child(this.slotNumber).set({
                         player1: this.players[0].getName(),
                         player2: this.players[1].getName()
+                    });
+                } else if (!bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
+
+                    // makes player 1
+                    this.players[0].setName(getRandomPlayerName(1));
+
+                    // gets player 2
+                    this.players[1].setName(aGameSlots[this.slotNumber].player2);
+
+                    // adds player 1 to game
+                    initializeGameEvent.call(this, nInitialNumPlayers);
+
+                    // adds player 1 and 2 to game
+                    nInitialNumPlayers = 2;
+                    initializeGameEvent.call(this, nInitialNumPlayers);
+
+                    oRefGameSlots.child('list').child(this.slotNumber).set({
+                        player1: this.players[0].getName(),
+                        player2: this.players[1].getName()
+                    });
+                } else if (bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
+                    // increments game slotNumber
+                    this.slotNumber = this.slotNumber + 1 % MAX_NUMBER_OF_SLOTS;
+
+                    // makes player 1
+                    this.players[0].setName(getRandomPlayerName(1));
+
+                    // adds player 1 to game
+                    initializeGameEvent.call(this, nInitialNumPlayers);
+
+                    // clears player 2 and waits for new player 2
+                    oRefGameSlots.child('list').child(this.slotNumber).set({
+                        player1: this.players[0].getName(),
+                        player2: null
                     });
                 }
 
                 oRefGameSlots.child('lastSlot').set({
-                    value: this.lastSlot
+                    value: this.slotNumber
                 });
                 this.makeView(nNumPlayers);
 
