@@ -511,6 +511,7 @@ require(['Player'], function (Player) {
 
             var oDatabase = firebase.database();
             var oRefGameSlots = oDatabase.ref('game/slots');
+            var oRefGameSlotNumberOtherPlayer = null;
 
             /*
              * checks remote database and stores players in a game slot
@@ -555,7 +556,7 @@ require(['Player'], function (Player) {
                 this.players.push(new Player());
                 if (!bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
-                    // makes player 1
+                    // makes player 1 and waits for player 2
                     this.players[0].setName(getRandomPlayerName(1));
 
                     // adds player 1 to game
@@ -566,9 +567,16 @@ require(['Player'], function (Player) {
                         player1: this.players[0].getName(),
                         player2: null
                     });
+
+                    oRefGameSlotNumberOtherPlayer = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
+
+                    oRefGameSlotNumberOtherPlayer.on('value', function (snapshot) {
+                        console.log('player 2 joined');
+                    });
+
                 } else if (bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
-                    // gets player 1
+                    // keeps player 1 and makes player 2
                     this.players[0].setName(aGameSlots[this.slotNumber].player1);
 
                     // makes player 2
@@ -585,7 +593,7 @@ require(['Player'], function (Player) {
                     });
                 } else if (!bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
 
-                    // makes player 1
+                    // keeps player 2 and makes player 1
                     this.players[0].setName(getRandomPlayerName(1));
 
                     // gets player 2
@@ -603,7 +611,8 @@ require(['Player'], function (Player) {
                         player2: this.players[1].getName()
                     });
                 } else if (bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
-                    // increments game slotNumber
+
+                    // moves to next slot
                     this.slotNumber = (this.slotNumber + 1) % MAX_NUMBER_OF_SLOTS;
 
                     // makes player 1
@@ -616,6 +625,12 @@ require(['Player'], function (Player) {
                     oRefGameSlots.child('list').child(this.slotNumber).set({
                         player1: this.players[0].getName(),
                         player2: null
+                    });
+
+                    oRefGameSlotNumberOtherPlayer = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
+
+                    oRefGameSlotNumberOtherPlayer.on('value', function (snapshot) {
+                        console.log('player 2 joined');
                     });
                 }
 
