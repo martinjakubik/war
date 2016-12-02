@@ -526,7 +526,6 @@ require(['Player'], function (Player) {
                         lastSlot: 0,
                         list: {}
                     };
-                    oRefGameSlots.set(oGameSlots);
                 }
 
                 // gets list of game slots
@@ -553,6 +552,11 @@ require(['Player'], function (Player) {
                     bIsPlayer2SlotFull = aGameSlots[this.slotNumber].player2 ? true : false;
                 }
 
+                // clears the list of players
+                while (this.players.length > 0) {
+                    this.players.pop();
+                }
+
                 this.players.push(new Player());
                 if (!bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
@@ -564,20 +568,37 @@ require(['Player'], function (Player) {
 
                     // waits for player 2
                     oRefGameSlots.child('list').child(this.slotNumber).set({
-                        player1: this.players[0].getName(),
+                        player1: {
+                            name: this.players[0].getName(),
+                            hand: this.players[0].getHand()
+                        },
                         player2: null
                     });
 
                     oRefGameSlotNumberOtherPlayer = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
 
                     oRefGameSlotNumberOtherPlayer.on('value', function (snapshot) {
-                        console.log('player 2 joined');
+                        var oPlayerValue = snapshot.val();
+
+                        // checks if a remote player 2 just joined
+                        if (oPlayerValue) {
+                            // gets player 2
+                            this.players.push(new Player());
+                            this.players[1].setName(oPlayerValue.name);
+                            this.players[1].setHand(oPlayerValue.hand);
+
+                            // adds player 2 to game
+                            addPlayerToGameEvent.call(this, 2);
+
+                            // renderPlayerTable(2, this.players[1].getTable());
+                            // renderPlayerHand(2, this.players[1].getHand());
+                        }
                     });
 
                 } else if (bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
                     // keeps player 1 and makes player 2
-                    this.players[0].setName(aGameSlots[this.slotNumber].player1);
+                    this.players[0].setName(aGameSlots[this.slotNumber].player1.name);
 
                     // makes player 2
                     this.players.push(new Player());
@@ -587,9 +608,9 @@ require(['Player'], function (Player) {
                     nInitialNumPlayers = 2;
                     initializeGameEvent.call(this, nInitialNumPlayers);
 
-                    oRefGameSlots.child('list').child(this.slotNumber).set({
-                        player1: this.players[0].getName(),
-                        player2: this.players[1].getName()
+                    oRefGameSlots.child('list').child(this.slotNumber).child('player2').set({
+                        name: this.players[1].getName(),
+                        hand: this.players[1].getHand()
                     });
                 } else if (!bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
 
@@ -597,22 +618,19 @@ require(['Player'], function (Player) {
                     this.players[0].setName(getRandomPlayerName(1));
 
                     // gets player 2
-                    this.players[1].setName(aGameSlots[this.slotNumber].player2);
-
-                    // adds player 1 to game
-                    initializeGameEvent.call(this, nInitialNumPlayers);
+                    this.players[1].setName(aGameSlots[this.slotNumber].player2.name);
 
                     // adds player 1 and 2 to game
-                    nInitialNumPlayers = 2;
                     initializeGameEvent.call(this, nInitialNumPlayers);
+                    addPlayerToGameEvent.call(this, 2);
 
-                    oRefGameSlots.child('list').child(this.slotNumber).set({
-                        player1: this.players[0].getName(),
-                        player2: this.players[1].getName()
+                    oRefGameSlots.child('list').child(this.slotNumber).child('player1').set({
+                        name: this.players[0].getName(),
+                        hand: this.players[0].getHand()
                     });
                 } else if (bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
 
-                    // moves to next slot
+                    // moves to next slot, waits for player 2
                     this.slotNumber = (this.slotNumber + 1) % MAX_NUMBER_OF_SLOTS;
 
                     // makes player 1
@@ -623,15 +641,32 @@ require(['Player'], function (Player) {
 
                     // clears player 2 and waits for new player 2
                     oRefGameSlots.child('list').child(this.slotNumber).set({
-                        player1: this.players[0].getName(),
+                        player1: {
+                            name: this.players[0].getName(),
+                            hand: this.players[0].getHand()
+                        },
                         player2: null
                     });
 
                     oRefGameSlotNumberOtherPlayer = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
 
                     oRefGameSlotNumberOtherPlayer.on('value', function (snapshot) {
-                        console.log('player 2 joined');
-                    });
+                        var oPlayerValue = snapshot.val();
+
+                        // checks if a remote player 2 just joined
+                        if (oPlayerValue) {
+                            // gets player 2
+                            this.players.push(new Player());
+                            this.players[1].setName(oPlayerValue.name);
+                            this.players[1].setHand(oPlayerValue.hand);
+
+                            // adds player 2 to game
+                            addPlayerToGameEvent.call(this, 2);
+
+                            // renderPlayerTable(2, this.players[1].getTable());
+                            // renderPlayerHand(2, this.players[1].getHand());
+                        }
+                    }.bind(this));
                 }
 
                 oRefGameSlots.child('lastSlot').set({
