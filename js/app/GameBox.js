@@ -77,9 +77,52 @@ require(['Player'], function (Player) {
         oView.insertBefore(oCardView, null);
     };
 
+    var makePlayerView = function (oPlayAreaView, nPlayerIndex) {
+        var nPlayer,
+            oPlayerView,
+            oPlayerTableView,
+            oPlayerHandView,
+            oPlayerNameView;
+
+        nPlayer = nPlayerIndex + 1;
+        oPlayerView = document.createElement('div');
+        oPlayerView.setAttribute('class', 'player');
+        oPlayerView.setAttribute('id', 'player' + nPlayer);
+
+        oPlayAreaView.insertBefore(oPlayerView, null);
+
+        oPlayerTableView = document.createElement('div');
+        oPlayerTableView.setAttribute('class', 'table');
+        oPlayerTableView.setAttribute('id', 'table' + nPlayer);
+
+        oPlayerView.insertBefore(oPlayerTableView, null);
+
+        oPlayerHandView = document.createElement('div');
+        oPlayerHandView.setAttribute('class', 'hand');
+        oPlayerHandView.setAttribute('id', 'hand' + nPlayer);
+
+        oPlayerView.insertBefore(oPlayerHandView, null);
+
+        oPlayerNameView = document.createElement('input');
+        oPlayerNameView.setAttribute('class', 'name');
+        oPlayerNameView.setAttribute('id', 'name' + nPlayer);
+        oPlayerNameView.setAttribute('ref-id', nPlayerIndex);
+        oPlayerNameView.value = this.players[nPlayerIndex].getName();
+        oPlayerNameView.onchange = function (oEvent) {
+            var nRefId, sValue = '';
+            if (oEvent && oEvent.target) {
+                nRefId = oEvent.target.getAttribute('ref-id');
+                sValue = oEvent.target.value;
+            }
+            this.players[nRefId].setName(sValue);
+        }.bind(this);
+
+        oPlayerView.insertBefore(oPlayerNameView, null);
+    };
+
     var renderPlayerTable = function (nPlayer, aPlayerTable) {
 
-        var i, oPlayerTableView = document.getElementById('table' + nPlayer);
+        var i, oPlayerTableView = document.getElementById('table' + (nPlayer + 1));
         var nWidth = window.innerWidth;
         var nTableWidth = aPlayerTable.length * nCardWidth;
 
@@ -109,10 +152,15 @@ require(['Player'], function (Player) {
 
     var renderPlayerHand = function (nPlayer, aPlayerCards) {
 
-        var i,
-            oPlayerHandView = document.getElementById('hand' + nPlayer),
+        var i, oPlayAreaView = document.getElementById('playArea'),
+            oPlayerHandView = document.getElementById('hand' + (nPlayer + 1)),
             bStackCard = null,
             bShowCardFace = false;
+
+        if (!oPlayerHandView) {
+            makePlayerView.call(this, oPlayAreaView, nPlayer);
+            oPlayerHandView = document.getElementById('hand' + (nPlayer + 1));
+        }
 
         // clears view of all cards
         while (oPlayerHandView.firstChild) {
@@ -200,8 +248,8 @@ require(['Player'], function (Player) {
     var renderCards = function () {
         var i;
         for (i = 0; i < this.players.length; i++) {
-            renderPlayerTable(i + 1, this.players[i].getTable());
-            renderPlayerHand(i + 1, this.players[i].getHand());
+            renderPlayerTable.call(this, i, this.players[i].getTable());
+            renderPlayerHand.call(this, i, this.players[i].getHand());
         }
     };
 
@@ -382,47 +430,10 @@ require(['Player'], function (Player) {
 
             oGameView.insertBefore(oPlayAreaView, null);
 
-            var i, nPlayer,
-                oPlayerView,
-                oPlayerTableView,
-                oPlayerHandView,
-                oPlayerNameView;
+            var i;
 
             for (i = 0; i < this.players.length; i++) {
-                nPlayer = i + 1;
-                oPlayerView = document.createElement('div');
-                oPlayerView.setAttribute('class', 'player');
-                oPlayerView.setAttribute('id', 'player' + nPlayer);
-
-                oPlayAreaView.insertBefore(oPlayerView, null);
-
-                oPlayerTableView = document.createElement('div');
-                oPlayerTableView.setAttribute('class', 'table');
-                oPlayerTableView.setAttribute('id', 'table' + nPlayer);
-
-                oPlayerView.insertBefore(oPlayerTableView, null);
-
-                oPlayerHandView = document.createElement('div');
-                oPlayerHandView.setAttribute('class', 'hand');
-                oPlayerHandView.setAttribute('id', 'hand' + nPlayer);
-
-                oPlayerView.insertBefore(oPlayerHandView, null);
-
-                oPlayerNameView = document.createElement('input');
-                oPlayerNameView.setAttribute('class', 'name');
-                oPlayerNameView.setAttribute('id', 'name' + nPlayer);
-                oPlayerNameView.setAttribute('ref-id', i);
-                oPlayerNameView.value = this.players[i].getName();
-                oPlayerNameView.onchange = function (oEvent) {
-                    var nRefId, sValue = '';
-                    if (oEvent && oEvent.target) {
-                        nRefId = oEvent.target.getAttribute('ref-id');
-                        sValue = oEvent.target.value;
-                    }
-                    this.players[nRefId].setName(sValue);
-                }.bind(this);
-
-                oPlayerView.insertBefore(oPlayerNameView, null);
+                makePlayerView.call(this, oPlayAreaView, i);
             }
 
             renderCards.call(this);
@@ -505,7 +516,7 @@ require(['Player'], function (Player) {
                     return aShuffledPlayerNames[nPlayer];
                 }
 
-                return 'Player' + nPlayer;
+                return 'Player' + (nPlayer + 1);
 
             };
 
@@ -561,7 +572,7 @@ require(['Player'], function (Player) {
                 if (!bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
                     // makes player 1 and waits for player 2
-                    this.players[0].setName(getRandomPlayerName(1));
+                    this.players[0].setName(getRandomPlayerName(0));
 
                     // adds player 1 to game
                     initializeGameEvent.call(this, nInitialNumPlayers);
@@ -588,10 +599,10 @@ require(['Player'], function (Player) {
                             this.players[1].setHand(oPlayerValue.hand);
 
                             // adds player 2 to game
-                            addPlayerToGameEvent.call(this, 2);
+                            addPlayerToGameEvent.call(this, 1);
 
-                            // renderPlayerTable(2, this.players[1].getTable());
-                            // renderPlayerHand(2, this.players[1].getHand());
+                            renderPlayerHand.call(this, 1, this.players[1].getHand());
+                            // renderPlayerTable.call(this, 1, this.players[1].getTable());
                         }
                     });
 
@@ -602,7 +613,7 @@ require(['Player'], function (Player) {
 
                     // makes player 2
                     this.players.push(new Player());
-                    this.players[1].setName(getRandomPlayerName(2));
+                    this.players[1].setName(getRandomPlayerName(1));
 
                     // adds player 1 and 2 to game
                     nInitialNumPlayers = 2;
@@ -615,7 +626,7 @@ require(['Player'], function (Player) {
                 } else if (!bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
 
                     // keeps player 2 and makes player 1
-                    this.players[0].setName(getRandomPlayerName(1));
+                    this.players[0].setName(getRandomPlayerName(0));
 
                     // gets player 2
                     this.players[1].setName(aGameSlots[this.slotNumber].player2.name);
@@ -634,7 +645,7 @@ require(['Player'], function (Player) {
                     this.slotNumber = (this.slotNumber + 1) % MAX_NUMBER_OF_SLOTS;
 
                     // makes player 1
-                    this.players[0].setName(getRandomPlayerName(1));
+                    this.players[0].setName(getRandomPlayerName(0));
 
                     // adds player 1 to game
                     initializeGameEvent.call(this, nInitialNumPlayers);
@@ -663,8 +674,8 @@ require(['Player'], function (Player) {
                             // adds player 2 to game
                             addPlayerToGameEvent.call(this, 2);
 
-                            // renderPlayerTable(2, this.players[1].getTable());
-                            // renderPlayerHand(2, this.players[1].getHand());
+                            renderPlayerHand.call(this, 1, this.players[1].getHand());
+                            // renderPlayerTable.call(this, 1, this.players[1].getTable());
                         }
                     }.bind(this));
                 }
@@ -672,6 +683,7 @@ require(['Player'], function (Player) {
                 oRefGameSlots.child('lastSlot').set({
                     value: this.slotNumber
                 });
+
                 this.makeView(nNumPlayers);
 
             }.bind(this));
