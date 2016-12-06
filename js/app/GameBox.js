@@ -271,20 +271,20 @@ require(['Player'], function (Player) {
                 this.players[i].setHand(aDistributedCards[i]);
             }
         }
+        if (aDistributedCards.length > i) {
+            this.restOfCards = aDistributedCards[i];
+        }
 
         this.result = '';
     };
 
     /**
-     * initializes a game; makes players and cards and distributes them
+     * adds players to a game
      */
-    var addPlayerToGameEvent = function (nNumPlayers) {
-
-        var nNumPlayersAmongWhomToDistributeCards = nNumPlayers > 1 ? nNumPlayers : 2;
-        var aDistributedCards = distribute(this.shuffledCards, nNumPlayersAmongWhomToDistributeCards);
+    var addPlayerToGameEvent = function (nFirstPlayer, nLastPlayer, aDistributedCards) {
 
         var i;
-        for (i = 0; i < nNumPlayers; i++) {
+        for (i = nFirstPlayer; i <= nLastPlayer; i++) {
             if (i < this.players.length) {
                 this.players[i].setHand(aDistributedCards[i]);
             }
@@ -543,7 +543,7 @@ require(['Player'], function (Player) {
                 var aGameSlots = oGameSlots ? oGameSlots.list : null ;
 
                 // gets index of last game slot
-                var oGameLastSlot = oGameSlots.lastSlot || {
+                var oGameSlotNumber = oGameSlots.lastSlot || {
                     value: 0
                 };
 
@@ -551,7 +551,7 @@ require(['Player'], function (Player) {
 
                 // finds the next available game slot, but starts over at 0
                 // if the max number is reached
-                this.slotNumber = oGameLastSlot ? oGameLastSlot.value : 0;
+                this.slotNumber = oGameSlotNumber ? oGameSlotNumber.value : 0;
 
                 // checks if this is player 1 - this can only be player 1 if
                 // there are no players yet
@@ -583,7 +583,8 @@ require(['Player'], function (Player) {
                             name: this.players[0].getName(),
                             hand: this.players[0].getHand()
                         },
-                        player2: null
+                        player2: null,
+                        restOfCards: this.restOfCards
                     });
 
                     oRefGameSlotNumberOtherPlayer = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
@@ -599,26 +600,39 @@ require(['Player'], function (Player) {
                             this.players[1].setHand(oPlayerValue.hand);
 
                             // adds player 2 to game
-                            addPlayerToGameEvent.call(this, 1);
+                            addPlayerToGameEvent.call(this, 1, 1, [null, this.restOfCards]);
+                            this.restOfCards = [];
 
                             renderPlayerHand.call(this, 1, this.players[1].getHand());
                             // renderPlayerTable.call(this, 1, this.players[1].getTable());
                         }
-                    });
+                    }.bind(this));
 
                 } else if (bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
                     // keeps player 1 and makes player 2
                     this.players[0].setName(aGameSlots[this.slotNumber].player1.name);
+                    this.players[0].setHand(aGameSlots[this.slotNumber].player1.hand);
 
                     // makes player 2
                     this.players.push(new Player());
                     this.players[1].setName(getRandomPlayerName(1));
 
-                    // adds player 1 and 2 to game
-                    nInitialNumPlayers = 2;
-                    initializeGameEvent.call(this, nInitialNumPlayers);
+                    // distributes cards again if it wasn't done
+                    if (!this.restOfCards) {
+                        this.restOfCards = aGameSlots[this.slotNumber].restOfCards;
+                    }
+                    if (!this.restOfCards) {
+                        initializeGameEvent.call(this, 1);
+                    }
 
+                    // adds player 2 to game
+                    addPlayerToGameEvent.call(this, 1, 1, [null, this.restOfCards]);
+
+                    // removes rest of cards
+                    oRefGameSlots.child('list').child(this.slotNumber).child('restOfCards').remove();
+
+                    // stores player 2
                     oRefGameSlots.child('list').child(this.slotNumber).child('player2').set({
                         name: this.players[1].getName(),
                         hand: this.players[1].getHand()
@@ -631,9 +645,19 @@ require(['Player'], function (Player) {
                     // gets player 2
                     this.players[1].setName(aGameSlots[this.slotNumber].player2.name);
 
+                    // distributes cards again if it wasn't done
+                    if (!this.restOfCards) {
+                        this.restOfCards = aGameSlots[this.slotNumber].restOfCards;
+                    }
+                    if (!this.restOfCards) {
+                        initializeGameEvent.call(this, 1);
+                    }
+
                     // adds player 1 and 2 to game
-                    initializeGameEvent.call(this, nInitialNumPlayers);
-                    addPlayerToGameEvent.call(this, 2);
+                    addPlayerToGameEvent.call(this, 0, 0, [this.restOfCards, null]);
+
+                    // removes rest of cards
+                    oRefGameSlots.child('list').child(this.slotNumber).child('restOfCards').remove();
 
                     oRefGameSlots.child('list').child(this.slotNumber).child('player1').set({
                         name: this.players[0].getName(),
@@ -656,7 +680,8 @@ require(['Player'], function (Player) {
                             name: this.players[0].getName(),
                             hand: this.players[0].getHand()
                         },
-                        player2: null
+                        player2: null,
+                        restOfCards: this.restOfCards
                     });
 
                     oRefGameSlotNumberOtherPlayer = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
@@ -672,7 +697,7 @@ require(['Player'], function (Player) {
                             this.players[1].setHand(oPlayerValue.hand);
 
                             // adds player 2 to game
-                            addPlayerToGameEvent.call(this, 2);
+                            addPlayerToGameEvent.call(this, 1, 1, [null, this.restOfCards]);
 
                             renderPlayerHand.call(this, 1, this.players[1].getHand());
                             // renderPlayerTable.call(this, 1, this.players[1].getTable());
