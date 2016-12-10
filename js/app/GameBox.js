@@ -526,6 +526,64 @@ require(['Player'], function (Player) {
 
             this.makeView(nNumPlayers);
 
+            var keepPlayer1AndWaitForPlayer1 = function () {
+                var nInitialNumPlayers = 1;
+
+                // makes player 1
+                this.players[0].setName(getRandomPlayerName(0));
+
+                // adds player 1 to game
+                initializeGameEvent.call(this, nInitialNumPlayers);
+
+                // clears player 2 and waits for new player 2
+                oRefGameSlots.child('list').child(this.slotNumber).set({
+                    player1: {
+                        name: this.players[0].getName(),
+                        hand: this.players[0].getHand()
+                    },
+                    player2: null,
+                    restOfCards: this.restOfCards
+                });
+
+                // renders player 1
+                var oPlayAreaView = document.getElementById('playArea');
+                makePlayerView.call(this, oPlayAreaView, 0);
+                renderCards.call(this);
+
+                // message
+                this.result = 'waiting for player 2';
+                this.renderResult.call(this);
+
+                oRefGameSlotNumberOtherPlayer = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
+
+                oRefGameSlotNumberOtherPlayer.on('value', function (snapshot) {
+                    var oPlayerValue = snapshot.val();
+
+                    // checks if a remote player 2 just joined
+                    if (oPlayerValue) {
+                        // gets player 2
+                        this.players.push(new Player());
+                        this.players[1].setName(oPlayerValue.name);
+                        this.players[1].setHand(oPlayerValue.hand);
+
+                        // adds player 2 to game
+                        addPlayerToGameEvent.call(this, 1, 1, [null, this.restOfCards]);
+                        this.restOfCards = [];
+
+                        // renderPlayerTable.call(this, 1, this.players[1].getTable());
+
+                        // renders player 2
+                        var oPlayAreaView = document.getElementById('playArea');
+                        makePlayerView.call(this, oPlayAreaView, 1);
+                        renderCards.call(this);
+
+                        // clears message
+                        this.result = '';
+                        this.renderResult.call(this);
+                    }
+                }.bind(this));
+            };
+
             /*
              * checks remote database and stores players in a game slot
              */
@@ -549,8 +607,6 @@ require(['Player'], function (Player) {
                     value: 0
                 };
 
-                var nInitialNumPlayers = 1;
-
                 // finds the next available game slot, but starts over at 0
                 // if the max number is reached
                 this.slotNumber = oGameSlotNumber ? oGameSlotNumber.value : 0;
@@ -572,60 +628,16 @@ require(['Player'], function (Player) {
                 this.players.push(new Player());
                 if (!bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
-                    // makes player 1 and waits for player 2
-                    this.players[0].setName(getRandomPlayerName(0));
+                    // keeps player 1 waits for player 2
+                    keepPlayer1AndWaitForPlayer1.call(this);
 
-                    // adds player 1 to game
-                    initializeGameEvent.call(this, nInitialNumPlayers);
+                } else if (bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
 
-                    // waits for player 2
-                    oRefGameSlots.child('list').child(this.slotNumber).set({
-                        player1: {
-                            name: this.players[0].getName(),
-                            hand: this.players[0].getHand()
-                        },
-                        player2: null,
-                        restOfCards: this.restOfCards
-                    });
+                    // moves to next slot
+                    this.slotNumber = (this.slotNumber + 1) % MAX_NUMBER_OF_SLOTS;
 
-                    // renders player 1
-                    var oPlayAreaView = document.getElementById('playArea');
-                    makePlayerView.call(this, oPlayAreaView, 0);
-                    renderCards.call(this);
-
-                    // message
-                    this.result = 'waiting for player 2';
-                    this.renderResult.call(this);
-
-                    oRefGameSlotNumberOtherPlayer = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
-
-                    oRefGameSlotNumberOtherPlayer.on('value', function (snapshot) {
-                        var oPlayerValue = snapshot.val();
-
-                        // checks if a remote player 2 just joined
-                        if (oPlayerValue) {
-                            // gets player 2
-                            this.players.push(new Player());
-                            this.players[1].setName(oPlayerValue.name);
-                            this.players[1].setHand(oPlayerValue.hand);
-
-                            // adds player 2 to game
-                            addPlayerToGameEvent.call(this, 1, 1, [null, this.restOfCards]);
-                            this.restOfCards = [];
-
-                            renderPlayerHand.call(this, 1, this.players[1].getHand());
-                            // renderPlayerTable.call(this, 1, this.players[1].getTable());
-
-                            // renders player 2
-                            var oPlayAreaView = document.getElementById('playArea');
-                            makePlayerView.call(this, oPlayAreaView, 1);
-                            renderCards.call(this);
-
-                            // clears message
-                            this.result = '';
-                            this.renderResult.call(this);
-                        }
-                    }.bind(this));
+                    // keeps player 1 waits for player 2
+                    keepPlayer1AndWaitForPlayer1.call(this);
 
                 } else if (bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
@@ -702,63 +714,6 @@ require(['Player'], function (Player) {
                         name: this.players[0].getName(),
                         hand: this.players[0].getHand()
                     });
-                } else if (bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
-
-                    // moves to next slot, waits for player 2
-                    this.slotNumber = (this.slotNumber + 1) % MAX_NUMBER_OF_SLOTS;
-
-                    // makes player 1
-                    this.players[0].setName(getRandomPlayerName(0));
-
-                    // adds player 1 to game
-                    initializeGameEvent.call(this, nInitialNumPlayers);
-
-                    // clears player 2 and waits for new player 2
-                    oRefGameSlots.child('list').child(this.slotNumber).set({
-                        player1: {
-                            name: this.players[0].getName(),
-                            hand: this.players[0].getHand()
-                        },
-                        player2: null,
-                        restOfCards: this.restOfCards
-                    });
-
-                    // renders player 1
-                    var oPlayAreaView = document.getElementById('playArea');
-                    makePlayerView.call(this, oPlayAreaView, 0);
-                    renderCards.call(this);
-
-                    // message
-                    this.result = 'waiting for player 2';
-                    this.renderResult.call(this);
-
-                    oRefGameSlotNumberOtherPlayer = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
-
-                    oRefGameSlotNumberOtherPlayer.on('value', function (snapshot) {
-                        var oPlayerValue = snapshot.val();
-
-                        // checks if a remote player 2 just joined
-                        if (oPlayerValue) {
-                            // gets player 2
-                            this.players.push(new Player());
-                            this.players[1].setName(oPlayerValue.name);
-                            this.players[1].setHand(oPlayerValue.hand);
-
-                            // adds player 2 to game
-                            addPlayerToGameEvent.call(this, 1, 1, [null, this.restOfCards]);
-
-                            // renderPlayerTable.call(this, 1, this.players[1].getTable());
-
-                            // renders player 2
-                            var oPlayAreaView = document.getElementById('playArea');
-                            makePlayerView.call(this, oPlayAreaView, 1);
-                            renderCards.call(this);
-
-                            // clears message
-                            this.result = '';
-                            this.renderResult.call(this);
-                        }
-                    }.bind(this));
                 }
 
                 oRefGameSlots.child('lastSlot').set({
