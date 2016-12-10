@@ -466,7 +466,7 @@ require(['Player'], function (Player) {
                 }
                 renderCards.call(this, [], []);
             }.bind(this);
-            document.body.insertBefore(oShuffleBtn, null);
+            // document.body.insertBefore(oShuffleBtn, null);
 
             var oResultView = document.createElement('div');
             oResultView.setAttribute('class', 'result');
@@ -524,6 +524,8 @@ require(['Player'], function (Player) {
             var oRefGameSlots = oDatabase.ref('game/slots');
             var oRefGameSlotNumberOtherPlayer = null;
 
+            this.makeView(nNumPlayers);
+
             /*
              * checks remote database and stores players in a game slot
              */
@@ -553,8 +555,7 @@ require(['Player'], function (Player) {
                 // if the max number is reached
                 this.slotNumber = oGameSlotNumber ? oGameSlotNumber.value : 0;
 
-                // checks if this is player 1 - this can only be player 1 if
-                // there are no players yet
+                // checks if player 1 or player 2 have joined
                 var bIsPlayer1SlotFull = false;
                 var bIsPlayer2SlotFull = false;
 
@@ -587,6 +588,15 @@ require(['Player'], function (Player) {
                         restOfCards: this.restOfCards
                     });
 
+                    // renders player 1
+                    var oPlayAreaView = document.getElementById('playArea');
+                    makePlayerView.call(this, oPlayAreaView, 0);
+                    renderCards.call(this);
+
+                    // message
+                    this.result = 'waiting for player 2';
+                    this.renderResult.call(this);
+
                     oRefGameSlotNumberOtherPlayer = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
 
                     oRefGameSlotNumberOtherPlayer.on('value', function (snapshot) {
@@ -605,14 +615,28 @@ require(['Player'], function (Player) {
 
                             renderPlayerHand.call(this, 1, this.players[1].getHand());
                             // renderPlayerTable.call(this, 1, this.players[1].getTable());
+
+                            // renders player 2
+                            var oPlayAreaView = document.getElementById('playArea');
+                            makePlayerView.call(this, oPlayAreaView, 1);
+                            renderCards.call(this);
+
+                            // clears message
+                            this.result = '';
+                            this.renderResult.call(this);
                         }
                     }.bind(this));
 
                 } else if (bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
-                    // keeps player 1 and makes player 2
+                    // keeps player 1
                     this.players[0].setName(aGameSlots[this.slotNumber].player1.name);
                     this.players[0].setHand(aGameSlots[this.slotNumber].player1.hand);
+
+                    // renders player 1
+                    var oPlayAreaView = document.getElementById('playArea');
+                    makePlayerView.call(this, oPlayAreaView, 0);
+                    renderCards.call(this);
 
                     // makes player 2
                     this.players.push(new Player());
@@ -629,6 +653,11 @@ require(['Player'], function (Player) {
                     // adds player 2 to game
                     addPlayerToGameEvent.call(this, 1, 1, [null, this.restOfCards]);
 
+                    // renders player 2
+                    var oPlayAreaView = document.getElementById('playArea');
+                    makePlayerView.call(this, oPlayAreaView, 1);
+                    renderCards.call(this);
+
                     // removes rest of cards
                     oRefGameSlots.child('list').child(this.slotNumber).child('restOfCards').remove();
 
@@ -639,10 +668,15 @@ require(['Player'], function (Player) {
                     });
                 } else if (!bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
 
-                    // keeps player 2 and makes player 1
+                    // keeps player 2
                     this.players[0].setName(getRandomPlayerName(0));
 
-                    // gets player 2
+                    // renders player 2
+                    var oPlayAreaView = document.getElementById('playArea');
+                    makePlayerView.call(this, oPlayAreaView, 1);
+                    renderCards.call(this);
+
+                    // makes player 1
                     this.players[1].setName(aGameSlots[this.slotNumber].player2.name);
 
                     // distributes cards again if it wasn't done
@@ -655,6 +689,11 @@ require(['Player'], function (Player) {
 
                     // adds player 1 and 2 to game
                     addPlayerToGameEvent.call(this, 0, 0, [this.restOfCards, null]);
+
+                    // renders player 1
+                    var oPlayAreaView = document.getElementById('playArea');
+                    makePlayerView.call(this, oPlayAreaView, 0);
+                    renderCards.call(this);
 
                     // removes rest of cards
                     oRefGameSlots.child('list').child(this.slotNumber).child('restOfCards').remove();
@@ -684,6 +723,15 @@ require(['Player'], function (Player) {
                         restOfCards: this.restOfCards
                     });
 
+                    // renders player 1
+                    var oPlayAreaView = document.getElementById('playArea');
+                    makePlayerView.call(this, oPlayAreaView, 0);
+                    renderCards.call(this);
+
+                    // message
+                    this.result = 'waiting for player 2';
+                    this.renderResult.call(this);
+
                     oRefGameSlotNumberOtherPlayer = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
 
                     oRefGameSlotNumberOtherPlayer.on('value', function (snapshot) {
@@ -699,8 +747,16 @@ require(['Player'], function (Player) {
                             // adds player 2 to game
                             addPlayerToGameEvent.call(this, 1, 1, [null, this.restOfCards]);
 
-                            renderPlayerHand.call(this, 1, this.players[1].getHand());
                             // renderPlayerTable.call(this, 1, this.players[1].getTable());
+
+                            // renders player 2
+                            var oPlayAreaView = document.getElementById('playArea');
+                            makePlayerView.call(this, oPlayAreaView, 1);
+                            renderCards.call(this);
+
+                            // clears message
+                            this.result = '';
+                            this.renderResult.call(this);
                         }
                     }.bind(this));
                 }
@@ -708,8 +764,6 @@ require(['Player'], function (Player) {
                 oRefGameSlots.child('lastSlot').set({
                     value: this.slotNumber
                 });
-
-                this.makeView(nNumPlayers);
 
             }.bind(this));
 
