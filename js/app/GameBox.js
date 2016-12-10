@@ -526,7 +526,7 @@ require(['Player'], function (Player) {
 
             this.makeView(nNumPlayers);
 
-            var keepPlayer1AndWaitForPlayer1 = function () {
+            var keepPlayer1AndWaitForPlayer2 = function () {
                 var nInitialNumPlayers = 1;
 
                 // makes player 1
@@ -629,7 +629,7 @@ require(['Player'], function (Player) {
                 if (!bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
                     // keeps player 1 waits for player 2
-                    keepPlayer1AndWaitForPlayer1.call(this);
+                    keepPlayer1AndWaitForPlayer2.call(this);
 
                 } else if (bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
 
@@ -637,7 +637,7 @@ require(['Player'], function (Player) {
                     this.slotNumber = (this.slotNumber + 1) % MAX_NUMBER_OF_SLOTS;
 
                     // keeps player 1 waits for player 2
-                    keepPlayer1AndWaitForPlayer1.call(this);
+                    keepPlayer1AndWaitForPlayer2.call(this);
 
                 } else if (bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
 
