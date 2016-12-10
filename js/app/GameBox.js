@@ -447,6 +447,9 @@ require(['Player'], function (Player) {
             oPlayBtn.onclick = playPressed.bind(this, nNumPlayers);
             document.body.insertBefore(oPlayBtn, null);
 
+            // hides play button
+            oPlayBtn.style.display = 'none';
+
             var oShuffleBtn = document.createElement('button');
             oContent = document.createTextNode('Shuffle');
             oShuffleBtn.setAttribute('class', 'button');
@@ -527,6 +530,11 @@ require(['Player'], function (Player) {
             this.makeView(nNumPlayers);
 
             var keepPlayer1AndWaitForPlayer2 = function () {
+
+                // hides play button
+                var oPlayBtn = document.getElementById('play');
+                oPlayBtn.style.display = 'none';
+
                 var nInitialNumPlayers = 1;
 
                 // makes player 1
@@ -550,7 +558,7 @@ require(['Player'], function (Player) {
                 makePlayerView.call(this, oPlayAreaView, 0);
                 renderCards.call(this);
 
-                // message
+                // adds waiting message
                 this.result = 'waiting for player 2';
                 this.renderResult.call(this);
 
@@ -577,11 +585,77 @@ require(['Player'], function (Player) {
                         makePlayerView.call(this, oPlayAreaView, 1);
                         renderCards.call(this);
 
-                        // clears message
+                        // shows play button
+                        var oPlayBtn = document.getElementById('play');
+                        oPlayBtn.style.display = 'block';
+
+                        // hides don't wait button
+                        var oDontWaitBtn = document.getElementById('dontWait');
+                        oDontWaitBtn.style.display = 'none';
+
+                        // clears waiting message
                         this.result = '';
                         this.renderResult.call(this);
                     }
                 }.bind(this));
+
+                // if don't wait button is pressed, removes listener for second player
+                var dontWaitPressed = function () {
+
+                    // removes the listener that detects and new remote player 2
+                    oRefGameSlotNumberOtherPlayer.off();
+
+                    // shows play button
+                    var oPlayBtn = document.getElementById('play');
+                    oPlayBtn.style.display = 'block';
+
+                    // hides don't wait button
+                    var oDontWaitBtn = document.getElementById('dontWait');
+                    oDontWaitBtn.style.display = 'none';
+
+                    // clears waiting message
+                    this.result = '';
+                    this.renderResult.call(this);
+
+                    // makes player 2
+                    this.players.push(new Player());
+                    this.players[1].setName(getRandomPlayerName(1));
+
+                    // distributes cards again if it wasn't done
+                    if (!this.restOfCards) {
+                        this.restOfCards = aGameSlots[this.slotNumber].restOfCards;
+                    }
+                    if (!this.restOfCards) {
+                        initializeGameEvent.call(this, 1);
+                    }
+
+                    // adds player 2 to game
+                    addPlayerToGameEvent.call(this, 1, 1, [null, this.restOfCards]);
+
+                    // renders player 2
+                    var oPlayAreaView = document.getElementById('playArea');
+                    makePlayerView.call(this, oPlayAreaView, 1);
+                    renderCards.call(this);
+
+                    // removes rest of cards
+                    oRefGameSlots.child('list').child(this.slotNumber).child('restOfCards').remove();
+
+                    // stores player 2
+                    oRefGameSlots.child('list').child(this.slotNumber).child('player2').set({
+                        name: this.players[1].getName(),
+                        hand: this.players[1].getHand()
+                    });
+                };
+
+                // makes don't wait button
+                var oDontWaitBtn = document.createElement('button');
+                var oContent = document.createTextNode('Don\'t wait');
+                oDontWaitBtn.setAttribute('class', 'button');
+                oDontWaitBtn.setAttribute('id', 'dontWait');
+                oDontWaitBtn.appendChild(oContent);
+                oDontWaitBtn.onclick = dontWaitPressed.bind(this, oDontWaitBtn);
+                document.body.insertBefore(oDontWaitBtn, null);
+
             };
 
             /*
@@ -678,6 +752,11 @@ require(['Player'], function (Player) {
                         name: this.players[1].getName(),
                         hand: this.players[1].getHand()
                     });
+
+                    // shows play button
+                    var oPlayBtn = document.getElementById('play');
+                    oPlayBtn.style.display = 'block';
+
                 } else if (!bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
 
                     // keeps player 2
@@ -714,6 +793,11 @@ require(['Player'], function (Player) {
                         name: this.players[0].getName(),
                         hand: this.players[0].getHand()
                     });
+
+                    // shows play button
+                    var oPlayBtn = document.getElementById('play');
+                    oPlayBtn.style.display = 'block';
+
                 }
 
                 oRefGameSlots.child('lastSlot').set({
