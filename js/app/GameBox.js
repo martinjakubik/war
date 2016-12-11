@@ -365,8 +365,14 @@ require(['Player'], function (Player) {
 
             // checks if player 0's card is higher than player 1's
             if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
-                this.players[0].moveTableToHand();
-                this.players[0].moveTableToHand(this.players[1].getTable());
+                if (Math.random() < 0.5) {
+                    this.players[0].moveTableToHand();
+                    this.players[0].moveTableToHand(this.players[1].getTable());
+                } else {
+                    this.players[0].moveTableToHand(this.players[1].getTable());
+                    this.players[0].moveTableToHand();
+                }
+
                 for (i = 0; i < nNumPlayers; i++) {
                     if (i < this.players.length) {
                         this.players[i].clearTable();
@@ -374,8 +380,14 @@ require(['Player'], function (Player) {
                 }
             } else if (this.players[0].getTableCard().value < this.players[1].getTableCard().value) {
                 // player 1's card is higher than player 0's
-                this.players[1].moveTableToHand();
-                this.players[1].moveTableToHand(this.players[0].getTable());
+                if (Math.random() < 0.5) {
+                    this.players[1].moveTableToHand();
+                    this.players[1].moveTableToHand(this.players[0].getTable());
+                } else {
+                    this.players[1].moveTableToHand(this.players[0].getTable());
+                    this.players[1].moveTableToHand();
+                }
+
                 for (i = 0; i < nNumPlayers; i++) {
                     if (i < this.players.length) {
                         this.players[i].clearTable();
