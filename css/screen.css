@@ -66,10 +66,13 @@ body {
 @keyframes moveToTable {
     from {
         margin-left: 98pt;
+        transform: rotateY(0);
+        background-image: url('../resources/card-back.png');
     }
 
     to {
         margin-left: 0pt;
+        transform: rotateY(-180deg);
     }
 }
 
@@ -103,7 +106,7 @@ body {
 
     border-left: none;
 
-    background-position: -96px;  
+    background-position: -96px;
 }
 
 .card>.content {
