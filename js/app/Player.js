@@ -1,13 +1,49 @@
 /*global define */
-define("Player", function () {
+define('Player', function () {
     'use strict';
-    
+
     var Player = function () {
-        
+
         this.name = '';
         this.hand = [];
         this.table = [];
 
+    };
+
+    Player.prototype.makePlayerView = function (nPlayerIndex, oPlayAreaView, fnOnNameChanged) {
+        var nPlayer,
+            oPlayerView,
+            oPlayerTableView,
+            oPlayerHandView,
+            oPlayerNameView;
+
+        nPlayer = nPlayerIndex + 1;
+        oPlayerView = document.createElement('div');
+        oPlayerView.setAttribute('class', 'player');
+        oPlayerView.setAttribute('id', 'player' + nPlayer);
+
+        oPlayAreaView.insertBefore(oPlayerView, null);
+
+        oPlayerTableView = document.createElement('div');
+        oPlayerTableView.setAttribute('class', 'table');
+        oPlayerTableView.setAttribute('id', 'table' + nPlayer);
+
+        oPlayerView.insertBefore(oPlayerTableView, null);
+
+        oPlayerHandView = document.createElement('div');
+        oPlayerHandView.setAttribute('class', 'hand');
+        oPlayerHandView.setAttribute('id', 'hand' + nPlayer);
+
+        oPlayerView.insertBefore(oPlayerHandView, null);
+
+        oPlayerNameView = document.createElement('input');
+        oPlayerNameView.setAttribute('class', 'name');
+        oPlayerNameView.setAttribute('id', 'name' + nPlayer);
+        oPlayerNameView.setAttribute('ref-id', nPlayerIndex);
+        oPlayerNameView.value = this.getName();
+        oPlayerNameView.onchange = fnOnNameChanged;
+
+        oPlayerView.insertBefore(oPlayerNameView, null);
     };
 
     Player.prototype.getName = function () {
@@ -50,10 +86,10 @@ define("Player", function () {
     Player.prototype.getTableCard = function () {
         return this.table[this.table.length - 1];
     };
-    
+
     Player.prototype.getTable = function () {
         return this.table;
     };
-    
+
     return Player;
 });
