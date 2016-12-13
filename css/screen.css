@@ -98,10 +98,12 @@ body {
 }
 
 .stackedCard {
-    margin: 2pt 0 0 0;
+    margin: 0 0 0 2pt;
     width: 6pt;
 
-    border-right: none;
+    border-left: none;
+
+    background-position: -96px;  
 }
 
 .card>.content {
