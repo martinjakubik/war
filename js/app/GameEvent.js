@@ -248,7 +248,7 @@ define('GameEvent', ['Player'], function (Player) {
 
     GameEvent.prototype.getRandomPlayerName = function (nPlayer) {
 
-        var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck' ];
+        var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck', 'jackal' ];
 
         var aShuffledPlayerNames = this.shuffle(aPlayerNames);
 
