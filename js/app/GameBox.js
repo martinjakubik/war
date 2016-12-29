@@ -109,10 +109,19 @@ require(['Player', 'GameEvent'], function (Player, GameEvent) {
 
     var oGameBox = new GameBox();
 
-    var aBatawafCardValues = [6, 3, 5, 5, 1, 6, 4, 2, 4, 3, 1, 3, 5, 6, 2, 4, 6, 3, 4, 4, 6, 1, 2, 1, 4,  5, 1, 3, 5, 2, 6, 1, 2, 2, 3, 5];
+    var aBatawafCardValues = [
+      6, 3, 5, 5, 1, 6,
+      4, 2, 4, 3, 1, 3,
+      5, 6, 2, 4, 6, 3,
+      4, 4, 6, 1, 2, 1,
+      4, 5, 1, 3, 5, 2,
+      6, 1, 2, 2, 3, 5
+    ];
     var aCards = oGameBox.makeCards(aBatawafCardValues);
 
-    var oGameEvent = new GameEvent(nNumPlayers, aCards,
+    var oGameEvent = new GameEvent(
+        nNumPlayers,
+        aCards,
         oGameBox.maxNumberOfSlots,
         oGameBox.cardWidth,
         {
