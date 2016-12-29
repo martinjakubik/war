@@ -10,10 +10,11 @@ define('GameEvent', ['Player'], function (Player) {
 
     var nPlayState = PLAY_STATE.movingToTable;
 
-    var GameEvent = function (nNumPlayers, aCards, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
+    var GameEvent = function (nNumPlayers, aCards, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
 
         this.numPlayers = nNumPlayers;
         this.cards = aCards;
+        this.playerNames = aPlayerNames;
         this.maxNumberOfSlots = nMaxNumberOfSlots;
         this.cardWidth = nCardWidth;
         this.callbacks = oCallbacks;
@@ -246,9 +247,7 @@ define('GameEvent', ['Player'], function (Player) {
         this.result = '';
     };
 
-    GameEvent.prototype.getRandomPlayerName = function (nPlayer) {
-
-        var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck', 'jackal' ];
+    GameEvent.prototype.getRandomPlayerName = function (nPlayer, aPlayerNames) {
 
         var aShuffledPlayerNames = this.shuffle(aPlayerNames);
 
@@ -257,7 +256,6 @@ define('GameEvent', ['Player'], function (Player) {
         }
 
         return 'Player' + (nPlayer + 1);
-
     };
 
     /**
@@ -285,7 +283,7 @@ define('GameEvent', ['Player'], function (Player) {
         var nInitialNumPlayers = 1;
 
         // makes player 1
-        this.players[0].setName(this.getRandomPlayerName(0));
+        this.players[0].setName(this.getRandomPlayerName(0, this.playerNames));
 
         // adds player 1 to game
         this.initializeGameEvent(nInitialNumPlayers);
@@ -366,7 +364,7 @@ define('GameEvent', ['Player'], function (Player) {
 
             // makes player 2
             this.players.push(new Player());
-            this.players[1].setName(this.getRandomPlayerName(1));
+            this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
 
             // distributes cards again if it wasn't done
             if (!this.restOfCards) {
@@ -635,7 +633,7 @@ define('GameEvent', ['Player'], function (Player) {
 
                 // makes player 2
                 this.players.push(new Player());
-                this.players[1].setName(this.getRandomPlayerName(1));
+                this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
 
                 // distributes cards again if it wasn't done
                 if (!this.restOfCards) {
@@ -669,7 +667,7 @@ define('GameEvent', ['Player'], function (Player) {
             } else if (!bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
 
                 // keeps player 2
-                this.players[0].setName(this.getRandomPlayerName(0));
+                this.players[0].setName(this.getRandomPlayerName(0, this.playerNames));
 
                 // renders player 2
                 var oPlayAreaView = document.getElementById('playArea');

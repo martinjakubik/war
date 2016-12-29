@@ -119,9 +119,12 @@ require(['Player', 'GameEvent'], function (Player, GameEvent) {
     ];
     var aCards = oGameBox.makeCards(aBatawafCardValues);
 
+    var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck', 'jackal' ];
+
     var oGameEvent = new GameEvent(
         nNumPlayers,
         aCards,
+        aPlayerNames,
         oGameBox.maxNumberOfSlots,
         oGameBox.cardWidth,
         {
