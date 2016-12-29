@@ -249,7 +249,12 @@ define('GameEvent', ['Player'], function (Player) {
 
     GameEvent.prototype.getRandomPlayerName = function (nPlayer, aPlayerNames) {
 
-        var aShuffledPlayerNames = this.shuffle(aPlayerNames);
+        var i, aCopyOfPlayerNames = [];
+        for (i = 0; i < aPlayerNames.length; i++) {
+            aCopyOfPlayerNames.push(aPlayerNames[i]);
+        }
+
+        var aShuffledPlayerNames = this.shuffle(aCopyOfPlayerNames);
 
         if (nPlayer >= 0 && nPlayer < aShuffledPlayerNames.length) {
             return aShuffledPlayerNames[nPlayer];
@@ -315,7 +320,7 @@ define('GameEvent', ['Player'], function (Player) {
             // checks if a remote player 2 just joined
             if (oPlayerValue) {
                 // gets player 2
-                this.players.push(new Player());
+                this.players.push(new Player(oRefGameSlots.child('list').child(this.slotNumber).child('player2')));
                 this.players[1].setName(oPlayerValue.name);
                 this.players[1].setHand(oPlayerValue.hand);
 
@@ -347,7 +352,7 @@ define('GameEvent', ['Player'], function (Player) {
         // if don't wait button is pressed, removes listener for second player
         var dontWaitPressed = function () {
 
-            // removes the listener that detects and new remote player 2
+            // removes the listener that detects a new remote player 2
             oRefGameSlotNumberOtherPlayer.off();
 
             // shows play button
@@ -363,7 +368,7 @@ define('GameEvent', ['Player'], function (Player) {
             this.callbacks.renderResult(this.result);
 
             // makes player 2
-            this.players.push(new Player());
+            this.players.push(new Player(oRefGameSlots.child('list').child(this.slotNumber).child('player2')));
             this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
 
             // distributes cards again if it wasn't done
@@ -606,8 +611,9 @@ define('GameEvent', ['Player'], function (Player) {
                 this.players.pop();
             }
 
-            this.players.push(new Player());
             if (!bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
+
+                this.players.push(new Player(oRefGameSlots.child('list').child(this.slotNumber).child('player1')));
 
                 // keeps player 1 waits for player 2
                 this.keepPlayer1AndWaitForPlayer2();
@@ -617,10 +623,14 @@ define('GameEvent', ['Player'], function (Player) {
                 // moves to next slot
                 this.slotNumber = (this.slotNumber + 1) % this.maxNumberOfSlots;
 
+                this.players.push(new Player(oRefGameSlots.child('list').child(this.slotNumber).child('player1')));
+
                 // keeps player 1 waits for player 2
                 this.keepPlayer1AndWaitForPlayer2();
 
             } else if (bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
+
+                this.players.push(new Player(oRefGameSlots.child('list').child(this.slotNumber).child('player1')));
 
                 // keeps player 1
                 this.players[0].setName(aGameSlots[this.slotNumber].player1.name);
@@ -632,7 +642,7 @@ define('GameEvent', ['Player'], function (Player) {
                 this.renderCards();
 
                 // makes player 2
-                this.players.push(new Player());
+                this.players.push(new Player(oRefGameSlots.child('list').child(this.slotNumber).child('player2')));
                 this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
 
                 // distributes cards again if it wasn't done
@@ -665,6 +675,8 @@ define('GameEvent', ['Player'], function (Player) {
                 oPlayBtn.style.display = 'block';
 
             } else if (!bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
+
+                this.players.push(new Player(oRefGameSlots.child('list').child(this.slotNumber).child('player1')));
 
                 // keeps player 2
                 this.players[0].setName(this.getRandomPlayerName(0, this.playerNames));
