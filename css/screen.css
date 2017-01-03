@@ -65,7 +65,7 @@ body {
 
 @keyframes moveToTable {
     from {
-        margin-left: 98pt;
+        margin-left: 198pt;
         transform: rotateY(0);
         background-image: url('../resources/card-back.png');
     }
