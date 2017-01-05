@@ -335,6 +335,9 @@ define('GameEvent', ['Player'], function (Player) {
                 this.players[1].makePlayerView(1, oPlayAreaView);
                 this.renderCards();
 
+                // removes the listener that detects a new remote player 2
+                oRefGameSlotNumberOtherPlayer.off();
+
                 // shows play button
                 var oPlayBtn = document.getElementById('play');
                 oPlayBtn.style.display = 'block';
