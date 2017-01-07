@@ -83,19 +83,27 @@ define('Player', function () {
         var oDatabase = firebase.database();
         var oRefGameSlots = oDatabase.ref('game/slots');
 
-        this.remoteReference.set({
-            name: this.getName(),
-            hand: this.getHand(),
-            table: this.getTable()
-        });
+        this.updateRemoteReference();
     };
 
     Player.prototype.moveTableToHand = function (aTable) {
+
+        // copies the given table to this player's hand
         if (aTable && aTable.length > 0) {
             Array.prototype.push.apply(this.hand, aTable);
+
+            // clears the given table
+            aTable.splice(0);
         } else {
+            // if no given table, copies this player's table to this player's
+            // hand
             Array.prototype.push.apply(this.hand, this.table);
+
+            // clears this player's table
+            this.clearTable();
         }
+
+        this.updateRemoteReference();
     };
 
     Player.prototype.clearTable = function () {
@@ -104,6 +112,14 @@ define('Player', function () {
 
     Player.prototype.getTableCard = function () {
         return this.table[this.table.length - 1];
+    };
+
+    Player.prototype.updateRemoteReference = function () {
+        this.remoteReference.set({
+            name: this.getName(),
+            hand: this.getHand(),
+            table: this.getTable()
+        });
     };
 
     return Player;

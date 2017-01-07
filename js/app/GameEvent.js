@@ -129,6 +129,7 @@ define('GameEvent', ['Player'], function (Player) {
     /**
     * renders the cards in a player's table
     */
+    // TODO: move this method to Player class
     GameEvent.prototype.renderPlayerTable = function (nPlayer, aPlayerTable) {
 
         var i, oPlayerTableView = document.getElementById('table' + (nPlayer + 1));
@@ -162,6 +163,7 @@ define('GameEvent', ['Player'], function (Player) {
     /**
      * renders the cards in a player's hand
      */
+     // TODO: move this method to Player class
     GameEvent.prototype.renderPlayerHand = function (nPlayer, aPlayerCards) {
 
         var i, oPlayAreaView = document.getElementById('playArea'),
@@ -470,20 +472,10 @@ define('GameEvent', ['Player'], function (Player) {
             if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
                 this.players[0].moveTableToHand();
                 this.players[0].moveTableToHand(this.players[1].getTable());
-                for (i = 0; i < this.numPlayers; i++) {
-                    if (i < this.players.length) {
-                        this.players[i].clearTable();
-                    }
-                }
             } else if (this.players[0].getTableCard().value < this.players[1].getTableCard().value) {
                 // player 1's card is higher than player 0's
                 this.players[1].moveTableToHand();
                 this.players[1].moveTableToHand(this.players[0].getTable());
-                for (i = 0; i < this.numPlayers; i++) {
-                    if (i < this.players.length) {
-                        this.players[i].clearTable();
-                    }
-                }
             } else if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
                 // players' cards are the same
                 // first checks if game is over (ie. in a 2-player game, if a player ran out of cards)
@@ -634,6 +626,11 @@ define('GameEvent', ['Player'], function (Player) {
                 // moves to next slot
                 this.slotNumber = (this.slotNumber + 1) % this.maxNumberOfSlots;
 
+                // updates remote references after the slot number changed
+                oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
+                oReferencePlayer2 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
+                oReferenceRestOfCards = oDatabase.ref('game/slots/list/' + this.slotNumber + '/restOfCards');
+
                 this.players.push(new Player(oReferencePlayer1));
 
                 // keeps player 1 waits for player 2
@@ -733,6 +730,43 @@ define('GameEvent', ['Player'], function (Player) {
             oReferenceGameAllSlots.child('lastSlot').set({
                 value: this.slotNumber
             });
+
+            // listens if player 2's hand changed
+            this.oReferencePlayer2Hand = oDatabase.ref('/game/slots/list/' + this.slotNumber + '/player2/hand');
+            this.oReferencePlayer2Hand.on('value', function (snapshot) {
+                var oPlayer2HandValue = snapshot.val();
+
+                // checks if we have a value of the hand in the remote
+                // reference, and checks if player 2 has already been created
+                // (it is possible that this is the start of the game and
+                // player 2 is just joining... which is why we are seeing their
+                // hand change)
+                if (oPlayer2HandValue && this.players[1]) {
+                    this.players[1].setHand(
+                        oPlayer2HandValue
+                    );
+                    this.renderCards();
+                }
+            }.bind(this));
+
+            // listens if player 2's table changed
+            this.oReferencePlayer2Table = oDatabase.ref('/game/slots/list/' + this.slotNumber + '/player2/table');
+            this.oReferencePlayer2Table.on('value', function (snapshot) {
+                var oPlayer2TableValue = snapshot.val();
+
+                // checks if we have a value of the table in the remote
+                // reference, and checks if player 2 has already been created
+                // (player 2 should exist already, because this is a change in
+                // their table... that only happens after the game has started;
+                // so we can probably assume that this.players[1] exists, but
+                // we check it anyway)
+                if (oPlayer2TableValue && this.players[1]) {
+                    this.players[1].setTable(
+                        oPlayer2TableValue
+                    );
+                    this.renderCards();
+                }
+            }.bind(this));
 
         }.bind(this));
 
