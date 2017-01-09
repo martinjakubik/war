@@ -769,43 +769,6 @@ define('GameEvent', ['Player'], function (Player) {
 
             }.bind(this));
 
-            // listens if player 1's hand changed
-            // this.oReferencePlayer1Hand = oDatabase.ref('/game/slots/list/' + this.slotNumber + '/player1/hand');
-            // this.oReferencePlayer1Hand.on('value', function (snapshot) {
-            //     var oPlayer1HandValue = snapshot.val();
-            //
-            //     // checks if we have a value of the hand in the remote
-            //     // reference, and checks if player 1 has already been created
-            //     // (it is possible that this is the start of the game and
-            //     // player 1 is just joining... which is why we are seeing their
-            //     // hand change)
-            //     if (oPlayer1HandValue && this.players[1]) {
-            //         this.players[1].setHand(
-            //             oPlayer1HandValue
-            //         );
-            //         this.renderCards();
-            //     }
-            // }.bind(this));
-
-            // listens if player 1's table changed
-            // this.oReferencePlayer1Table = oDatabase.ref('/game/slots/list/' + this.slotNumber + '/player1/table');
-            // this.oReferencePlayer1Table.on('value', function (snapshot) {
-            //     var oPlayer1TableValue = snapshot.val();
-            //
-            //     // checks if we have a value of the table in the remote
-            //     // reference, and checks if player 1 has already been created
-            //     // (player 1 should exist already, because this is a change in
-            //     // their table... that only happens after the game has started;
-            //     // so we can probably assume that this.players[1] exists, but
-            //     // we check it anyway)
-            //     if (oPlayer1TableValue && this.players[1]) {
-            //         this.players[1].setTable(
-            //             oPlayer1TableValue
-            //         );
-            //         this.renderCards();
-            //     }
-            // }.bind(this));
-
         }.bind(this));
 
         this.hamsterSound = new Audio('../resources/hamster-wheel.wav');
