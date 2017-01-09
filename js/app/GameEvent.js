@@ -472,12 +472,19 @@ define('GameEvent', ['Player'], function (Player) {
 
             // checks if player 0's card is higher than player 1's
             if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
+                // moves everyone's cards to the winner's hand
                 this.players[0].moveTableToHand();
                 this.players[0].moveTableToHand(this.players[1].getTable());
+
+                // updates the loser's cards
+                this.players[1].updateRemoteReference();
             } else if (this.players[0].getTableCard().value < this.players[1].getTableCard().value) {
                 // player 1's card is higher than player 0's
                 this.players[1].moveTableToHand();
                 this.players[1].moveTableToHand(this.players[0].getTable());
+
+                // updates the loser's cards
+                this.players[0].updateRemoteReference();
             } else if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
                 // players' cards are the same
                 // first checks if game is over (ie. in a 2-player game, if a player ran out of cards)
@@ -746,7 +753,7 @@ define('GameEvent', ['Player'], function (Player) {
                         this.renderCards();
                     }
 
-                    var oPlayer2TableValue = oPlayer2Value.table;
+                    var oPlayer2TableValue = oPlayer2Value.table || [];
                     if (oPlayer2TableValue && this.players[1]) {
                         this.players[1].setTable(
                             oPlayer2TableValue

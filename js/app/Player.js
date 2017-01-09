@@ -103,6 +103,13 @@ define('Player', function () {
             this.clearTable();
         }
 
+        // updates the remote reference for this player
+        // TODO: optimize performance here; if we have two or more players, all
+        // of whose cards are "won" by the present player, then we will update
+        // the remote reference every time we call this method; instead, we
+        // should only call update once: for example, make moveTableToHand a
+        // promise, and only when all promises complete call
+        // updateRemoteReference
         this.updateRemoteReference();
     };
 
