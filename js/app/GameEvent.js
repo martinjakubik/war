@@ -8,7 +8,6 @@ define('GameEvent', ['Player'], function (Player) {
         checkingTable: 1
     };
 
-    var nPlayState = PLAY_STATE.movingToTable;
 
     var GameEvent = function (nNumPlayers, aCards, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
 
@@ -22,6 +21,7 @@ define('GameEvent', ['Player'], function (Player) {
         this.currentSlot;
         this.players = [];
 
+        this.playState = PLAY_STATE.movingToTable;
     };
 
     GameEvent.prototype.getCurrentSlot = function () {
@@ -232,7 +232,7 @@ define('GameEvent', ['Player'], function (Player) {
         oShuffleBtn.appendChild(oContent);
         oShuffleBtn.onclick = function (oEvent) {
             var i, aDistributedCards;
-            nPlayState = PLAY_STATE.movingToTable;
+            this.playState = PLAY_STATE.movingToTable;
             this.result = '';
             this.callbacks.renderResult(this.result);
             this.players[0].clearTable();
@@ -425,7 +425,7 @@ define('GameEvent', ['Player'], function (Player) {
     GameEvent.prototype.doTurn = function () {
 
         var i;
-        switch (nPlayState) {
+        switch (this.playState) {
         case PLAY_STATE.movingToTable:
 
             if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
@@ -464,7 +464,7 @@ define('GameEvent', ['Player'], function (Player) {
                 }
             }
 
-            nPlayState = PLAY_STATE.checkingTable;
+            this.playState = PLAY_STATE.checkingTable;
 
             break;
 
@@ -500,7 +500,7 @@ define('GameEvent', ['Player'], function (Player) {
             }
 
             this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
-            nPlayState = PLAY_STATE.movingToTable;
+            this.playState = PLAY_STATE.movingToTable;
 
             break;
         default:
