@@ -12,14 +12,12 @@ define('Player', function () {
 
     };
 
-    Player.prototype.makePlayerView = function (nPlayerIndex, oPlayAreaView, fnOnNameChanged) {
-        var nPlayer,
-            oPlayerView,
+    Player.prototype.makePlayerView = function (nPlayer, oPlayAreaView, fnOnNameChanged) {
+        var oPlayerView,
             oPlayerTableView,
             oPlayerHandView,
             oPlayerNameView;
 
-        nPlayer = nPlayerIndex + 1;
         oPlayerView = document.createElement('div');
         oPlayerView.setAttribute('class', 'player');
         oPlayerView.setAttribute('id', 'player' + nPlayer);
@@ -41,7 +39,7 @@ define('Player', function () {
         oPlayerNameView = document.createElement('input');
         oPlayerNameView.setAttribute('class', 'name');
         oPlayerNameView.setAttribute('id', 'name' + nPlayer);
-        oPlayerNameView.setAttribute('ref-id', nPlayerIndex);
+        oPlayerNameView.setAttribute('ref-id', nPlayer);
         oPlayerNameView.value = this.getName();
         oPlayerNameView.onchange = fnOnNameChanged;
 

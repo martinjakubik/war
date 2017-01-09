@@ -132,7 +132,7 @@ define('GameEvent', ['Player'], function (Player) {
     // TODO: move this method to Player class
     GameEvent.prototype.renderPlayerTable = function (nPlayer, aPlayerTable) {
 
-        var i, oPlayerTableView = document.getElementById('table' + (nPlayer + 1));
+        var i, oPlayerTableView = document.getElementById('table' + nPlayer);
         var nWidth = window.innerWidth;
         var nTableWidth = aPlayerTable.length * this.cardWidth;
 
@@ -167,7 +167,7 @@ define('GameEvent', ['Player'], function (Player) {
     GameEvent.prototype.renderPlayerHand = function (nPlayer, aPlayerCards) {
 
         var i, oPlayAreaView = document.getElementById('playArea'),
-            oPlayerHandView = document.getElementById('hand' + (nPlayer + 1)),
+            oPlayerHandView = document.getElementById('hand' + nPlayer),
             bStackCard = null,
             bShowCardFace = false;
 
@@ -182,7 +182,7 @@ define('GameEvent', ['Player'], function (Player) {
 
         if (!oPlayerHandView) {
             this.players[nPlayer].makePlayerView(nPlayer, oPlayAreaView, fnOnPlayerNameChanged);
-            oPlayerHandView = document.getElementById('hand' + (nPlayer + 1));
+            oPlayerHandView = document.getElementById('hand' + nPlayer);
         }
 
         // clears view of all cards
@@ -262,7 +262,7 @@ define('GameEvent', ['Player'], function (Player) {
             return aShuffledPlayerNames[nPlayer];
         }
 
-        return 'Player' + (nPlayer + 1);
+        return 'Player' + nPlayer;
     };
 
     /**
@@ -278,7 +278,7 @@ define('GameEvent', ['Player'], function (Player) {
         }
     };
 
-    GameEvent.prototype.keepPlayer1AndWaitForPlayer2 = function () {
+    GameEvent.prototype.keepPlayer0AndWaitForPlayer1 = function () {
 
         var oDatabase = firebase.database();
         var oReferenceGameAllSlots = oDatabase.ref('game/slots');
@@ -290,60 +290,60 @@ define('GameEvent', ['Player'], function (Player) {
 
         var nInitialNumPlayers = 1;
 
-        // makes player 1
+        // makes player 0
         this.players[0].setName(this.getRandomPlayerName(0, this.playerNames));
 
-        // adds player 1 to game
+        // adds player 0 to game
         this.initializeGameEvent(nInitialNumPlayers);
 
-        // clears player 2 and waits for new player 2
+        // clears player 1 and waits for new player 1
         oReferenceGameSlot.set({
-            player1: {
+            player0: {
                 name: this.players[0].getName(),
                 hand: this.players[0].getHand()
             },
-            player2: null,
+            player1: null,
             restOfCards: this.restOfCards
         });
 
-        // renders player 1
+        // renders player 0
         var oPlayAreaView = document.getElementById('playArea');
         this.players[0].makePlayerView(0, oPlayAreaView);
         this.renderCards();
 
         // adds waiting message
-        this.result = 'waiting for player 2';
+        this.result = 'waiting for player 1';
         this.callbacks.renderResult(this.result);
 
-        // stores a reference to the remote player 2
-        var oReferencePlayer2 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
+        // stores a reference to the remote player 1
+        var oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
         var oReferenceRestOfCards = oDatabase.ref('game/slots/list/' + this.slotNumber + '/restOfCards');
 
-        // listens for arrival of player 2
-        oReferencePlayer2.on('value', function (snapshot) {
+        // listens for arrival of player 1
+        oReferencePlayer1.on('value', function (snapshot) {
             var oPlayerValue = snapshot.val();
 
-            // checks if a remote player 2 just joined and if there is no
-            // player 2 yet
+            // checks if a remote player 1 just joined and if there is no
+            // player 1 yet
             if (oPlayerValue && !this.players[1]) {
-                // gets player 2
-                this.players.push(new Player(oReferencePlayer2));
+                // gets player 1
+                this.players.push(new Player(oReferencePlayer1));
                 this.players[1].setName(oPlayerValue.name);
                 this.players[1].setHand(oPlayerValue.hand);
 
-                // adds player 2 to game
+                // adds player 1 to game
                 this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
                 this.restOfCards = [];
 
                 // renderPlayerTable.call(this, 1, this.players[1].getTable());
 
-                // renders player 2
+                // renders player 1
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[1].makePlayerView(1, oPlayAreaView);
                 this.renderCards();
 
-                // removes the listener that detects a new remote player 2
-                // oReferencePlayer2.off();
+                // removes the listener that detects a new remote player 1
+                // oReferencePlayer1.off();
 
                 // shows play button
                 var oPlayBtn = document.getElementById('play');
@@ -362,8 +362,8 @@ define('GameEvent', ['Player'], function (Player) {
         // if don't wait button is pressed, removes listener for second player
         var dontWaitPressed = function () {
 
-            // removes the listener that detects a new remote player 2
-            oReferencePlayer2.off();
+            // removes the listener that detects a new remote player 1
+            oReferencePlayer1.off();
 
             // shows play button
             var oPlayBtn = document.getElementById('play');
@@ -377,8 +377,8 @@ define('GameEvent', ['Player'], function (Player) {
             this.result = '';
             this.callbacks.renderResult(this.result);
 
-            // makes player 2
-            this.players.push(new Player(oReferencePlayer2));
+            // makes player 1
+            this.players.push(new Player(oReferencePlayer1));
             this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
 
             // distributes cards again if it wasn't done
@@ -389,10 +389,10 @@ define('GameEvent', ['Player'], function (Player) {
                 this.initializeGameEvent(1);
             }
 
-            // adds player 2 to game
+            // adds player 1 to game
             this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
 
-            // renders player 2
+            // renders player 1
             var oPlayAreaView = document.getElementById('playArea');
             this.players[1].makePlayerView(1, oPlayAreaView);
             this.renderCards();
@@ -400,8 +400,8 @@ define('GameEvent', ['Player'], function (Player) {
             // removes rest of cards
             oReferenceRestOfCards.remove();
 
-            // stores player 2
-            oReferencePlayer2.set({
+            // stores player 1
+            oReferencePlayer1.set({
                 name: this.players[1].getName(),
                 hand: this.players[1].getHand()
             });
@@ -527,7 +527,7 @@ define('GameEvent', ['Player'], function (Player) {
         var i;
 
         for (i = 0; i < this.players.length; i++) {
-            makePlayerView.call(this, oPlayAreaView, i);
+            this.players[i].makePlayerView(i, oPlayAreaView);
         }
 
         var oPlayBtn = document.createElement('button');
@@ -549,7 +549,7 @@ define('GameEvent', ['Player'], function (Player) {
         document.body.insertBefore(oResultView, null);
     };
 
-    GameEvent.prototype.isGameFinished = function (aPlayer1Cards, aPlayer2Cards) {
+    GameEvent.prototype.isGameFinished = function (aPlayer0Cards, aPlayer1Cards) {
 
         var i, nOtherPlayer;
 
@@ -603,17 +603,17 @@ define('GameEvent', ['Player'], function (Player) {
             this.slotNumber = oGameSlotNumber ? oGameSlotNumber.value : 0;
 
             // stores remote references to players and to the rest of the cards
+            var oReferencePlayer0 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player0');
             var oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
-            var oReferencePlayer2 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
             var oReferenceRestOfCards = oDatabase.ref('game/slots/list/' + this.slotNumber + '/restOfCards');
 
-            // checks if player 1 or player 2 have joined
+            // checks if player 0 or player 1 have joined
+            var bIsPlayer0SlotFull = false;
             var bIsPlayer1SlotFull = false;
-            var bIsPlayer2SlotFull = false;
 
             if (aGameSlots && aGameSlots.length > this.slotNumber && aGameSlots[this.slotNumber]) {
+                bIsPlayer0SlotFull = aGameSlots[this.slotNumber].player0 ? true : false;
                 bIsPlayer1SlotFull = aGameSlots[this.slotNumber].player1 ? true : false;
-                bIsPlayer2SlotFull = aGameSlots[this.slotNumber].player2 ? true : false;
             }
 
             // clears the list of players
@@ -621,43 +621,43 @@ define('GameEvent', ['Player'], function (Player) {
                 this.players.pop();
             }
 
-            if (!bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
+            if (!bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
-                this.players.push(new Player(oReferencePlayer1));
+                this.players.push(new Player(oReferencePlayer0));
 
-                // keeps player 1 waits for player 2
-                this.keepPlayer1AndWaitForPlayer2();
+                // keeps player 0 waits for player 1
+                this.keepPlayer0AndWaitForPlayer1();
 
-            } else if (bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
+            } else if (bIsPlayer0SlotFull && bIsPlayer1SlotFull) {
 
                 // moves to next slot
                 this.slotNumber = (this.slotNumber + 1) % this.maxNumberOfSlots;
 
                 // updates remote references after the slot number changed
+                oReferencePlayer0 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player0');
                 oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
-                oReferencePlayer2 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player2');
                 oReferenceRestOfCards = oDatabase.ref('game/slots/list/' + this.slotNumber + '/restOfCards');
 
-                this.players.push(new Player(oReferencePlayer1));
+                this.players.push(new Player(oReferencePlayer0));
 
-                // keeps player 1 waits for player 2
-                this.keepPlayer1AndWaitForPlayer2();
+                // keeps player 0 waits for player 1
+                this.keepPlayer0AndWaitForPlayer1();
 
-            } else if (bIsPlayer1SlotFull && !bIsPlayer2SlotFull) {
+            } else if (bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
-                this.players.push(new Player(oReferencePlayer1));
+                this.players.push(new Player(oReferencePlayer0));
 
-                // keeps player 1
-                this.players[0].setName(aGameSlots[this.slotNumber].player1.name);
-                this.players[0].setHand(aGameSlots[this.slotNumber].player1.hand);
+                // keeps player 0
+                this.players[0].setName(aGameSlots[this.slotNumber].player0.name);
+                this.players[0].setHand(aGameSlots[this.slotNumber].player0.hand);
 
-                // renders player 1
+                // renders player 0
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[0].makePlayerView(0, oPlayAreaView);
                 this.renderCards();
 
-                // makes player 2
-                this.players.push(new Player(oReferencePlayer2));
+                // makes player 1
+                this.players.push(new Player(oReferencePlayer1));
                 this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
 
                 // distributes cards again if it wasn't done
@@ -668,10 +668,10 @@ define('GameEvent', ['Player'], function (Player) {
                     this.initializeGameEvent(1);
                 }
 
-                // adds player 2 to game
+                // adds player 1 to game
                 this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
 
-                // renders player 2
+                // renders player 1
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[1].makePlayerView(1, oPlayAreaView);
                 this.renderCards();
@@ -679,8 +679,8 @@ define('GameEvent', ['Player'], function (Player) {
                 // removes rest of cards
                 oReferenceRestOfCards.remove();
 
-                // stores player 2
-                oReferencePlayer2.set({
+                // stores player 1
+                oReferencePlayer1.set({
                     name: this.players[1].getName(),
                     hand: this.players[1].getHand()
                 });
@@ -689,20 +689,20 @@ define('GameEvent', ['Player'], function (Player) {
                 var oPlayBtn = document.getElementById('play');
                 oPlayBtn.style.display = 'block';
 
-            } else if (!bIsPlayer1SlotFull && bIsPlayer2SlotFull) {
+            } else if (!bIsPlayer0SlotFull && bIsPlayer1SlotFull) {
 
-                this.players.push(new Player(oReferencePlayer1));
+                this.players.push(new Player(oReferencePlayer0));
 
-                // keeps player 2
+                // keeps player 1
                 this.players[0].setName(this.getRandomPlayerName(0, this.playerNames));
 
-                // renders player 2
+                // renders player 1
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[1].makePlayerView(1, oPlayAreaView);
                 this.renderCards();
 
-                // makes player 1
-                this.players[1].setName(aGameSlots[this.slotNumber].player2.name);
+                // makes player 0
+                this.players[1].setName(aGameSlots[this.slotNumber].player1.name);
 
                 // distributes cards again if it wasn't done
                 if (!this.restOfCards) {
@@ -712,10 +712,10 @@ define('GameEvent', ['Player'], function (Player) {
                     this.initializeGameEvent(1);
                 }
 
-                // adds player 1 and 2 to game
+                // adds player 0 and 2 to game
                 this.addPlayerToGameEvent(0, 0, [this.restOfCards, null]);
 
-                // renders player 1
+                // renders player 0
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[0].makePlayerView(0, oPlayAreaView);
                 this.renderCards();
@@ -723,7 +723,7 @@ define('GameEvent', ['Player'], function (Player) {
                 // removes rest of cards
                 oReferenceRestOfCards.remove();
 
-                oReferencePlayer1.set({
+                oReferencePlayer0.set({
                     name: this.players[0].getName(),
                     hand: this.players[0].getHand()
                 });
@@ -738,28 +738,28 @@ define('GameEvent', ['Player'], function (Player) {
                 value: this.slotNumber
             });
 
-            // listens for changes to player 2's cards
-            this.oReferencePlayer2 = oDatabase.ref('/game/slots/list/' + this.slotNumber + '/player2');
-            this.oReferencePlayer2.on('value', function (snapshot) {
-                var oPlayer2Value = snapshot.val();
+            // listens for changes to player 1's cards
+            this.oReferencePlayer1 = oDatabase.ref('/game/slots/list/' + this.slotNumber + '/player1');
+            this.oReferencePlayer1.on('value', function (snapshot) {
+                var oPlayer1Value = snapshot.val();
 
-                if (oPlayer2Value) {
-                    var oPlayer2HandValue = oPlayer2Value.hand;
+                if (oPlayer1Value) {
+                    var oPlayer1HandValue = oPlayer1Value.hand;
 
-                    if (oPlayer2HandValue && this.players[1]) {
+                    if (oPlayer1HandValue && this.players[1]) {
                         this.players[1].setHand(
-                            oPlayer2HandValue
+                            oPlayer1HandValue
                         );
                         this.renderCards();
                     }
 
-                    var oPlayer2TableValue = oPlayer2Value.table || [];
-                    if (oPlayer2TableValue && this.players[1]) {
+                    var oPlayer1TableValue = oPlayer1Value.table || [];
+                    if (oPlayer1TableValue && this.players[1]) {
                         this.players[1].setTable(
-                            oPlayer2TableValue
+                            oPlayer1TableValue
                         );
 
-                        if (oPlayer2TableValue.length < 1) {
+                        if (oPlayer1TableValue.length < 1) {
                             this.players[0].clearTable();
                         }
 
@@ -769,38 +769,38 @@ define('GameEvent', ['Player'], function (Player) {
 
             }.bind(this));
 
-            // listens if player 2's hand changed
-            // this.oReferencePlayer2Hand = oDatabase.ref('/game/slots/list/' + this.slotNumber + '/player2/hand');
-            // this.oReferencePlayer2Hand.on('value', function (snapshot) {
-            //     var oPlayer2HandValue = snapshot.val();
+            // listens if player 1's hand changed
+            // this.oReferencePlayer1Hand = oDatabase.ref('/game/slots/list/' + this.slotNumber + '/player1/hand');
+            // this.oReferencePlayer1Hand.on('value', function (snapshot) {
+            //     var oPlayer1HandValue = snapshot.val();
             //
             //     // checks if we have a value of the hand in the remote
-            //     // reference, and checks if player 2 has already been created
+            //     // reference, and checks if player 1 has already been created
             //     // (it is possible that this is the start of the game and
-            //     // player 2 is just joining... which is why we are seeing their
+            //     // player 1 is just joining... which is why we are seeing their
             //     // hand change)
-            //     if (oPlayer2HandValue && this.players[1]) {
+            //     if (oPlayer1HandValue && this.players[1]) {
             //         this.players[1].setHand(
-            //             oPlayer2HandValue
+            //             oPlayer1HandValue
             //         );
             //         this.renderCards();
             //     }
             // }.bind(this));
 
-            // listens if player 2's table changed
-            // this.oReferencePlayer2Table = oDatabase.ref('/game/slots/list/' + this.slotNumber + '/player2/table');
-            // this.oReferencePlayer2Table.on('value', function (snapshot) {
-            //     var oPlayer2TableValue = snapshot.val();
+            // listens if player 1's table changed
+            // this.oReferencePlayer1Table = oDatabase.ref('/game/slots/list/' + this.slotNumber + '/player1/table');
+            // this.oReferencePlayer1Table.on('value', function (snapshot) {
+            //     var oPlayer1TableValue = snapshot.val();
             //
             //     // checks if we have a value of the table in the remote
-            //     // reference, and checks if player 2 has already been created
-            //     // (player 2 should exist already, because this is a change in
+            //     // reference, and checks if player 1 has already been created
+            //     // (player 1 should exist already, because this is a change in
             //     // their table... that only happens after the game has started;
             //     // so we can probably assume that this.players[1] exists, but
             //     // we check it anyway)
-            //     if (oPlayer2TableValue && this.players[1]) {
+            //     if (oPlayer1TableValue && this.players[1]) {
             //         this.players[1].setTable(
-            //             oPlayer2TableValue
+            //             oPlayer1TableValue
             //         );
             //         this.renderCards();
             //     }
