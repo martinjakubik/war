@@ -428,7 +428,27 @@ define('GameEvent', ['Player'], function (Player) {
      */
     GameEvent.prototype.doTurn = function () {
 
-        var i;
+        var i,
+            bAllTablesEmpty = true;
+
+        // checks if the tables are all empty;
+        // we need to do this in case of remote games when cards have simply
+        // synchronized to the remote cards without checking what was actually
+        // happening in the game
+        for (i = 0; i < this.players.length; i++) {
+            if (this.players[i].getTable().length > 0) {
+                bAllTablesEmpty = false;
+                break;
+            }
+        }
+
+        // resets game state to moving to table if all tables are empty
+        if (bAllTablesEmpty) {
+            this.playState = PLAY_STATE.movingToTable;
+        } else {
+            this.playState = PLAY_STATE.checkingTable;
+        }
+
         switch (this.playState) {
         case PLAY_STATE.movingToTable:
 
