@@ -314,7 +314,7 @@ define('GameEvent', ['Player'], function (Player) {
         this.renderCards();
 
         // adds waiting message
-        this.result = 'waiting for player 1';
+        this.result = 'waiting for player 2';
         this.callbacks.renderResult(this.result);
 
         // stores a reference to the remote player 1
