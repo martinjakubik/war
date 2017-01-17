@@ -75,11 +75,9 @@ define('Player', function () {
     };
 
     Player.prototype.putCardOnTable = function () {
+
         this.table.push(this.hand[0]);
         this.hand.splice(0, 1);
-
-        var oDatabase = firebase.database();
-        var oRefGameSlots = oDatabase.ref('game/slots');
 
         this.updateRemoteReference();
     };
