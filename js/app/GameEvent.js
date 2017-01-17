@@ -22,8 +22,6 @@ define('GameEvent', ['Player'], function (Player) {
         this.players = [];
 
         this.playState = PLAY_STATE.movingToTable;
-
-        this.remotePlayerGame = false;
     };
 
     GameEvent.prototype.getCurrentSlot = function () {
@@ -328,8 +326,6 @@ define('GameEvent', ['Player'], function (Player) {
             // checks if a remote player 1 just joined and if there is no
             // player 1 yet
             if (oPlayerValue && !this.players[1]) {
-
-                this.remotePlayerGame = true;
 
                 // gets player 1
                 this.players.push(new Player(oReferencePlayer1));
@@ -715,7 +711,7 @@ define('GameEvent', ['Player'], function (Player) {
             this.oReferencePlayer0.on('value', function (snapshot) {
                 var oPlayer0Value = snapshot.val();
 
-                if (this.remotePlayerGame && oPlayer0Value) {
+                if (oPlayer0Value) {
                     var oPlayer0HandValue = oPlayer0Value.hand;
                     var oPlayer0TableValue = oPlayer0Value.table || [];
 
@@ -741,7 +737,7 @@ define('GameEvent', ['Player'], function (Player) {
             this.oReferencePlayer1.on('value', function (snapshot) {
                 var oPlayer1Value = snapshot.val();
 
-                if (this.remotePlayerGame && oPlayer1Value) {
+                if (oPlayer1Value) {
                     var oPlayer1HandValue = oPlayer1Value.hand;
                     var oPlayer1TableValue = oPlayer1Value.table || [];
 
