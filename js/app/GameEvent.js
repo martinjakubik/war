@@ -316,11 +316,11 @@ define('GameEvent', ['Player'], function (Player) {
         this.callbacks.renderResult(this.result);
 
         // stores a reference to the remote player 1
-        var oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
+        this.oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
         var oReferenceRestOfCards = oDatabase.ref('game/slots/list/' + this.slotNumber + '/restOfCards');
 
         // listens for arrival of player 1
-        oReferencePlayer1.on('value', function (snapshot) {
+        this.oReferencePlayer1.on('value', function (snapshot) {
             var oPlayerValue = snapshot.val();
 
             // checks if a remote player 1 just joined and if there is no
@@ -328,7 +328,7 @@ define('GameEvent', ['Player'], function (Player) {
             if (oPlayerValue && !this.players[1]) {
 
                 // gets player 1
-                this.players.push(new Player(oReferencePlayer1));
+                this.players.push(new Player(this.oReferencePlayer1));
                 this.players[1].setName(oPlayerValue.name);
                 this.players[1].setHand(oPlayerValue.hand);
 
@@ -342,9 +342,6 @@ define('GameEvent', ['Player'], function (Player) {
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[1].makePlayerView(1, oPlayAreaView);
                 this.renderCards();
-
-                // removes the listener that detects a new remote player 1
-                // oReferencePlayer1.off();
 
                 // shows play button
                 var oPlayBtn = document.getElementById('play');
@@ -363,8 +360,9 @@ define('GameEvent', ['Player'], function (Player) {
         // if don't wait button is pressed, removes listener for second player
         var dontWaitPressed = function () {
 
-            // removes the listener that detects a new remote player 1
-            oReferencePlayer1.off();
+            // removes the listeners that detect changes to remote players
+            this.oReferencePlayer0.off();
+            this.oReferencePlayer1.off();
 
             // shows play button
             var oPlayBtn = document.getElementById('play');
@@ -379,7 +377,7 @@ define('GameEvent', ['Player'], function (Player) {
             this.callbacks.renderResult(this.result);
 
             // makes player 1
-            this.players.push(new Player(oReferencePlayer1));
+            this.players.push(new Player(this.oReferencePlayer1));
             this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
 
             // distributes cards again if it wasn't done
@@ -402,7 +400,7 @@ define('GameEvent', ['Player'], function (Player) {
             oReferenceRestOfCards.remove();
 
             // stores player 1
-            oReferencePlayer1.set({
+            this.oReferencePlayer1.set({
                 name: this.players[1].getName(),
                 hand: this.players[1].getHand()
             });
@@ -609,8 +607,8 @@ define('GameEvent', ['Player'], function (Player) {
             this.slotNumber = oGameSlotNumber ? oGameSlotNumber.value : 0;
 
             // stores remote references to players and to the rest of the cards
-            var oReferencePlayer0 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player0');
-            var oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
+            this.oReferencePlayer0 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player0');
+            this.oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
             var oReferenceRestOfCards = oDatabase.ref('game/slots/list/' + this.slotNumber + '/restOfCards');
 
             // checks if player 0 or player 1 have joined
@@ -629,7 +627,7 @@ define('GameEvent', ['Player'], function (Player) {
 
             if (!bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
-                this.players.push(new Player(oReferencePlayer0));
+                this.players.push(new Player(this.oReferencePlayer0));
 
                 // keeps player 0 waits for player 1
                 this.keepPlayer0AndWaitForPlayer1();
@@ -640,18 +638,18 @@ define('GameEvent', ['Player'], function (Player) {
                 this.slotNumber = (this.slotNumber + 1) % this.maxNumberOfSlots;
 
                 // updates remote references after the slot number changed
-                oReferencePlayer0 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player0');
-                oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
+                this.oReferencePlayer0 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player0');
+                this.oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
                 oReferenceRestOfCards = oDatabase.ref('game/slots/list/' + this.slotNumber + '/restOfCards');
 
-                this.players.push(new Player(oReferencePlayer0));
+                this.players.push(new Player(this.oReferencePlayer0));
 
                 // keeps player 0 waits for player 1
                 this.keepPlayer0AndWaitForPlayer1();
 
             } else if (bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
-                this.players.push(new Player(oReferencePlayer0));
+                this.players.push(new Player(this.oReferencePlayer0));
 
                 // keeps player 0
                 this.players[0].setName(aGameSlots[this.slotNumber].player0.name);
@@ -663,7 +661,7 @@ define('GameEvent', ['Player'], function (Player) {
                 this.renderCards();
 
                 // makes player 1
-                this.players.push(new Player(oReferencePlayer1));
+                this.players.push(new Player(this.oReferencePlayer1));
                 this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
 
                 // distributes cards again if it wasn't done
@@ -686,7 +684,7 @@ define('GameEvent', ['Player'], function (Player) {
                 oReferenceRestOfCards.remove();
 
                 // stores player 1
-                oReferencePlayer1.set({
+                this.oReferencePlayer1.set({
                     name: this.players[1].getName(),
                     hand: this.players[1].getHand()
                 });
