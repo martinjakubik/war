@@ -12,32 +12,6 @@ require(['Player', 'GameEvent'], function (Player, GameEvent) {
         }
     };
 
-    var removeClass = function (oView, sClass) {
-        var sCurrentClasses = oView.getAttribute('class');
-        var nStartIndex = sCurrentClasses.indexOf(sClass);
-        var nEndIndex = nStartIndex + sClass.length;
-        var sUpdatedClasses;
-
-        if (nStartIndex > 0 && nEndIndex <= sCurrentClasses.length) {
-            sUpdatedClasses = (sCurrentClasses.substr(0, nStartIndex) + ' ' +
-                sCurrentClasses.substr(nEndIndex)).trim();
-            oView.setAttribute('class', sUpdatedClasses);
-        }
-    };
-
-    var finishedMovingToTableListener = function (oEvent) {
-        switch (oEvent.type) {
-          case 'animationend':
-              var oElement = oEvent.target;
-
-              // removes moving to table flag
-              removeClass(oElement, 'movingToTable');
-              break;
-          default:
-
-        }
-    };
-
     var preventZoom = function(e) {
         var t2 = e.timeStamp;
         var t1 = e.currentTarget.dataset.lastTouch || t2;
@@ -129,8 +103,7 @@ require(['Player', 'GameEvent'], function (Player, GameEvent) {
         oGameBox.cardWidth,
         {
             renderResult: oGameBox.renderResult,
-            preventZoom: preventZoom,
-            finishedMovingToTableListener: finishedMovingToTableListener
+            preventZoom: preventZoom
         }
     );
     oGameEvent.start();

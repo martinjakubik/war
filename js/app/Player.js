@@ -1,49 +1,17 @@
 /*global define */
-define('Player', function () {
+define('Player', ['Tools'], function (Tools) {
     'use strict';
 
-    var Player = function (oRemoteReference) {
+    var Player = function (nPlayerNum, oRemoteReference, nCardWidth) {
 
+        this.playerNum = nPlayerNum;
         this.remoteReference = oRemoteReference || null;
+        this.cardWidth = nCardWidth;
 
         this.name = '';
         this.hand = [];
         this.table = [];
 
-    };
-
-    Player.prototype.makePlayerView = function (nPlayer, oPlayAreaView, fnOnNameChanged) {
-        var oPlayerView,
-            oPlayerTableView,
-            oPlayerHandView,
-            oPlayerNameView;
-
-        oPlayerView = document.createElement('div');
-        oPlayerView.setAttribute('class', 'player');
-        oPlayerView.setAttribute('id', 'player' + nPlayer);
-
-        oPlayAreaView.insertBefore(oPlayerView, null);
-
-        oPlayerTableView = document.createElement('div');
-        oPlayerTableView.setAttribute('class', 'table');
-        oPlayerTableView.setAttribute('id', 'table' + nPlayer);
-
-        oPlayerView.insertBefore(oPlayerTableView, null);
-
-        oPlayerHandView = document.createElement('div');
-        oPlayerHandView.setAttribute('class', 'hand');
-        oPlayerHandView.setAttribute('id', 'hand' + nPlayer);
-
-        oPlayerView.insertBefore(oPlayerHandView, null);
-
-        oPlayerNameView = document.createElement('input');
-        oPlayerNameView.setAttribute('class', 'name');
-        oPlayerNameView.setAttribute('id', 'name' + nPlayer);
-        oPlayerNameView.setAttribute('ref-id', nPlayer);
-        oPlayerNameView.value = this.getName();
-        oPlayerNameView.onchange = fnOnNameChanged;
-
-        oPlayerView.insertBefore(oPlayerNameView, null);
     };
 
     Player.prototype.getName = function () {
@@ -72,6 +40,161 @@ define('Player', function () {
 
     Player.prototype.getNumberCards = function () {
         return this.hand.length;
+    };
+
+    Player.prototype.makePlayerView = function (oPlayAreaView, fnOnNameChanged) {
+        var oPlayerView,
+            oPlayerTableView,
+            oPlayerHandView,
+            oPlayerNameView;
+
+        oPlayerView = document.createElement('div');
+        oPlayerView.setAttribute('class', 'player');
+        oPlayerView.setAttribute('id', 'player' + this.playerNum);
+
+        oPlayAreaView.insertBefore(oPlayerView, null);
+
+        oPlayerTableView = document.createElement('div');
+        oPlayerTableView.setAttribute('class', 'table');
+        oPlayerTableView.setAttribute('id', 'table' + this.playerNum);
+
+        oPlayerView.insertBefore(oPlayerTableView, null);
+
+        oPlayerHandView = document.createElement('div');
+        oPlayerHandView.setAttribute('class', 'hand');
+        oPlayerHandView.setAttribute('id', 'hand' + this.playerNum);
+
+        oPlayerView.insertBefore(oPlayerHandView, null);
+
+        oPlayerNameView = document.createElement('input');
+        oPlayerNameView.setAttribute('class', 'name');
+        oPlayerNameView.setAttribute('id', 'name' + this.playerNum);
+        oPlayerNameView.setAttribute('ref-id', this.playerNum);
+        oPlayerNameView.value = this.getName();
+        oPlayerNameView.onchange = fnOnNameChanged;
+
+        oPlayerView.insertBefore(oPlayerNameView, null);
+    };
+
+    /**
+    * renders the cards in a player's table
+    */
+    Player.prototype.renderTable = function () {
+
+        var i, oPlayerTableView = document.getElementById('table' + this.playerNum);
+        var nWidth = window.innerWidth;
+        var nTableWidth = this.table.length * this.cardWidth;
+
+        // clears view of all cards
+        while (oPlayerTableView.firstChild) {
+            oPlayerTableView.removeChild(oPlayerTableView.firstChild);
+        }
+
+        // counts how many cards to stack depending on how wide the screen is
+        var nNumStackedCards = 0, bStackCard = false;
+        while (nTableWidth >= 0.105 * nWidth) {
+            nNumStackedCards++;
+            nTableWidth = (this.table.length - nNumStackedCards) * this.cardWidth;
+        }
+
+        // redraws the whole table
+        var bShowCardFace = false,
+            bMoving = false;
+        for (i = 0; i < this.table.length; i++) {
+            bStackCard = (i < nNumStackedCards && i !== this.table.length - 1);
+            bShowCardFace = i % 2 === 0;
+            bMoving = i === (this.table.length - 1);
+            this.addCardToView(oPlayerTableView, this.table[i], 0, true, bStackCard, bShowCardFace, bMoving);
+        }
+    };
+
+    /**
+     * renders the cards in a player's hand
+     */
+    Player.prototype.renderHand = function () {
+
+        var i, oPlayAreaView = document.getElementById('playArea'),
+            oPlayerHandView = document.getElementById('hand' + this.playerNum),
+            bStackCard = null,
+            bShowCardFace = false;
+
+        var fnOnPlayerNameChanged = function (oEvent) {
+            var nRefId, sValue = '';
+            if (oEvent && oEvent.target) {
+                nRefId = oEvent.target.getAttribute('ref-id');
+                sValue = oEvent.target.value;
+            }
+            this.players[nRefId].setName(sValue);
+        }.bind(this);
+
+        if (!oPlayerHandView) {
+            this.makePlayerView(oPlayAreaView, fnOnPlayerNameChanged);
+            oPlayerHandView = document.getElementById('hand' + this.playerNum);
+        }
+
+        // clears view of all cards
+        while (oPlayerHandView.firstChild) {
+            oPlayerHandView.removeChild(oPlayerHandView.firstChild);
+        }
+
+        // redraws the whole hand
+        for (i = 0; i < this.hand.length; i++) {
+            this.addCardToView(oPlayerHandView, this.hand[i], i, (i === this.hand.length - 1), bStackCard, bShowCardFace);
+        }
+    };
+
+    /**
+    * adds the given card to the given view
+    */
+    Player.prototype.addCardToView = function (oView, oCard, nCardPosition, bLastCard, bStackCard, bShowCardFace, bMoving) {
+
+        var oCardView = document.createElement('div');
+
+        // decides if card should be shown as stacked to save space
+        if (bStackCard) {
+            oCardView.setAttribute('class', 'card' + ' stackedCard');
+        } else if (nCardPosition < 1 || bLastCard) {
+            oCardView.setAttribute('class', 'card');
+        } else {
+            oCardView.setAttribute('class', 'card' + ' stackedCard');
+        }
+
+        // sets the card to show back or face
+        if (bShowCardFace === false) {
+            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' showBack');
+        } else {
+            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' showFace');
+        }
+
+        // uses a class to flag that the card should be animated
+        // (ie. moving to the table)
+        if (bMoving) {
+            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' movingToTable');
+            oCardView.addEventListener('animationend', this.finishedMovingToTableListener, false);
+        }
+
+        // sets the card's id as suit+value
+        oCardView.setAttribute('id', 'card' + oCard.value + '-' + oCard.suit);
+
+        var oCardFaceView = document.createElement('div');
+        oCardFaceView.setAttribute('class', 'content');
+
+        oCardView.insertBefore(oCardFaceView, null);
+
+        oView.insertBefore(oCardView, null);
+    };
+
+    Player.prototype.finishedMovingToTableListener = function (oEvent) {
+        switch (oEvent.type) {
+          case 'animationend':
+              var oElement = oEvent.target;
+
+              // removes moving to table flag
+              Tools.removeClass(oElement, 'movingToTable');
+              break;
+          default:
+
+        }
     };
 
     Player.prototype.putCardOnTable = function () {

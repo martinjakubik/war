@@ -8,7 +8,6 @@ define('GameEvent', ['Player'], function (Player) {
         checkingTable: 1
     };
 
-
     var GameEvent = function (nNumPlayers, aCards, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
 
         this.numPlayers = nNumPlayers;
@@ -86,124 +85,13 @@ define('GameEvent', ['Player'], function (Player) {
     };
 
     /**
-    * adds the given card to the given view
-    */
-    GameEvent.prototype.addCardToView = function (oView, oCard, nCardPosition, bLastCard, bStackCard, bShowCardFace, bMoving) {
-
-        var oCardView = document.createElement('div');
-
-        // decides if card should be shown as stacked to save space
-        if (bStackCard) {
-            oCardView.setAttribute('class', 'card' + ' stackedCard');
-        } else if (nCardPosition < 1 || bLastCard) {
-            oCardView.setAttribute('class', 'card');
-        } else {
-            oCardView.setAttribute('class', 'card' + ' stackedCard');
-        }
-
-        // sets the card to show back or face
-        if (bShowCardFace === false) {
-            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' showBack');
-        } else {
-            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' showFace');
-        }
-
-        // uses a class to flag that the card should be animated
-        // (ie. moving to the table)
-        if (bMoving) {
-            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' movingToTable');
-            oCardView.addEventListener('animationend', this.callbacks.finishedMovingToTableListener, false);
-        }
-
-        // sets the card's id as suit+value
-        oCardView.setAttribute('id', 'card' + oCard.value + '-' + oCard.suit);
-
-        var oCardFaceView = document.createElement('div');
-        oCardFaceView.setAttribute('class', 'content');
-
-        oCardView.insertBefore(oCardFaceView, null);
-
-        oView.insertBefore(oCardView, null);
-    };
-
-    /**
-    * renders the cards in a player's table
-    */
-    // TODO: move this method to Player class
-    GameEvent.prototype.renderPlayerTable = function (nPlayer, aPlayerTable) {
-
-        var i, oPlayerTableView = document.getElementById('table' + nPlayer);
-        var nWidth = window.innerWidth;
-        var nTableWidth = aPlayerTable.length * this.cardWidth;
-
-        // clears view of all cards
-        while (oPlayerTableView.firstChild) {
-            oPlayerTableView.removeChild(oPlayerTableView.firstChild);
-        }
-
-        // counts how many cards to stack depending on how wide the screen is
-        var nNumStackedCards = 0, bStackCard = false;
-        while (nTableWidth >= 0.105 * nWidth) {
-            nNumStackedCards++;
-            nTableWidth = (aPlayerTable.length - nNumStackedCards) * this.cardWidth;
-        }
-
-        // redraws the whole table
-        var bShowCardFace = false,
-            bMoving = false;
-        for (i = 0; i < aPlayerTable.length; i++) {
-            bStackCard = (i < nNumStackedCards && i !== aPlayerTable.length - 1);
-            bShowCardFace = i % 2 === 0;
-            bMoving = i === (aPlayerTable.length - 1);
-            this.addCardToView(oPlayerTableView, aPlayerTable[i], 0, true, bStackCard, bShowCardFace, bMoving);
-        }
-
-    };
-
-    /**
-     * renders the cards in a player's hand
-     */
-     // TODO: move this method to Player class
-    GameEvent.prototype.renderPlayerHand = function (nPlayer, aPlayerCards) {
-
-        var i, oPlayAreaView = document.getElementById('playArea'),
-            oPlayerHandView = document.getElementById('hand' + nPlayer),
-            bStackCard = null,
-            bShowCardFace = false;
-
-        var fnOnPlayerNameChanged = function (oEvent) {
-            var nRefId, sValue = '';
-            if (oEvent && oEvent.target) {
-                nRefId = oEvent.target.getAttribute('ref-id');
-                sValue = oEvent.target.value;
-            }
-            this.players[nRefId].setName(sValue);
-        }.bind(this);
-
-        if (!oPlayerHandView) {
-            this.players[nPlayer].makePlayerView(nPlayer, oPlayAreaView, fnOnPlayerNameChanged);
-            oPlayerHandView = document.getElementById('hand' + nPlayer);
-        }
-
-        // clears view of all cards
-        while (oPlayerHandView.firstChild) {
-            oPlayerHandView.removeChild(oPlayerHandView.firstChild);
-        }
-
-        // redraws the whole hand
-        for (i = 0; i < aPlayerCards.length; i++) {
-            this.addCardToView(oPlayerHandView, aPlayerCards[i], i, (i === aPlayerCards.length - 1), bStackCard, bShowCardFace);
-        }
-    };
-
-    /**
     * renders all the cards
     */
     GameEvent.prototype.renderCards = function () {
         var i;
         for (i = 0; i < this.players.length; i++) {
-            this.renderPlayerTable(i, this.players[i].getTable());
-            this.renderPlayerHand(i, this.players[i].getHand());
+            this.players[i].renderTable();
+            this.players[i].renderHand();
         }
     };
 
@@ -308,7 +196,7 @@ define('GameEvent', ['Player'], function (Player) {
 
         // renders player 0
         var oPlayAreaView = document.getElementById('playArea');
-        this.players[0].makePlayerView(0, oPlayAreaView);
+        this.players[0].makePlayerView(oPlayAreaView);
         this.renderCards();
 
         // adds waiting message
@@ -328,7 +216,7 @@ define('GameEvent', ['Player'], function (Player) {
             if (oPlayerValue && !this.players[1]) {
 
                 // gets player 1
-                this.players.push(new Player(this.oReferencePlayer1));
+                this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
                 this.players[1].setName(oPlayerValue.name);
                 this.players[1].setHand(oPlayerValue.hand);
 
@@ -336,11 +224,9 @@ define('GameEvent', ['Player'], function (Player) {
                 this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
                 this.restOfCards = [];
 
-                // renderPlayerTable.call(this, 1, this.players[1].getTable());
-
                 // renders player 1
                 var oPlayAreaView = document.getElementById('playArea');
-                this.players[1].makePlayerView(1, oPlayAreaView);
+                this.players[1].makePlayerView(oPlayAreaView);
                 this.renderCards();
 
                 // shows play button
@@ -377,7 +263,7 @@ define('GameEvent', ['Player'], function (Player) {
             this.callbacks.renderResult(this.result);
 
             // makes player 1
-            this.players.push(new Player(this.oReferencePlayer1));
+            this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
             this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
 
             // distributes cards again if it wasn't done
@@ -393,7 +279,7 @@ define('GameEvent', ['Player'], function (Player) {
 
             // renders player 1
             var oPlayAreaView = document.getElementById('playArea');
-            this.players[1].makePlayerView(1, oPlayAreaView);
+            this.players[1].makePlayerView(oPlayAreaView);
             this.renderCards();
 
             // removes rest of cards
@@ -543,7 +429,7 @@ define('GameEvent', ['Player'], function (Player) {
         var i;
 
         for (i = 0; i < this.players.length; i++) {
-            this.players[i].makePlayerView(i, oPlayAreaView);
+            this.players[i].makePlayerView(oPlayAreaView);
         }
 
         var oPlayBtn = document.createElement('button');
@@ -639,7 +525,7 @@ define('GameEvent', ['Player'], function (Player) {
 
             if (!bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
-                this.players.push(new Player(this.oReferencePlayer0));
+                this.players.push(new Player(0, this.oReferencePlayer0, this.cardWidth));
 
                 // keeps player 0 waits for player 1
                 this.keepPlayer0AndWaitForPlayer1();
@@ -654,14 +540,14 @@ define('GameEvent', ['Player'], function (Player) {
                 this.oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
                 oReferenceRestOfCards = oDatabase.ref('game/slots/list/' + this.slotNumber + '/restOfCards');
 
-                this.players.push(new Player(this.oReferencePlayer0));
+                this.players.push(new Player(0, this.oReferencePlayer0, this.cardWidth));
 
                 // keeps player 0 waits for player 1
                 this.keepPlayer0AndWaitForPlayer1();
 
             } else if (bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
-                this.players.push(new Player(this.oReferencePlayer0));
+                this.players.push(new Player(0, this.oReferencePlayer0, this.cardWidth));
 
                 // keeps player 0
                 this.players[0].setName(aGameSlots[this.slotNumber].player0.name);
@@ -669,11 +555,11 @@ define('GameEvent', ['Player'], function (Player) {
 
                 // renders player 0
                 var oPlayAreaView = document.getElementById('playArea');
-                this.players[0].makePlayerView(0, oPlayAreaView);
+                this.players[0].makePlayerView(oPlayAreaView);
                 this.renderCards();
 
                 // makes player 1
-                this.players.push(new Player(this.oReferencePlayer1));
+                this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
                 this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
 
                 // distributes cards again if it wasn't done
@@ -689,7 +575,7 @@ define('GameEvent', ['Player'], function (Player) {
 
                 // renders player 1
                 var oPlayAreaView = document.getElementById('playArea');
-                this.players[1].makePlayerView(1, oPlayAreaView);
+                this.players[1].makePlayerView(oPlayAreaView);
                 this.renderCards();
 
                 // removes rest of cards
@@ -729,7 +615,7 @@ define('GameEvent', ['Player'], function (Player) {
                         this.players[0].setHand(
                             oPlayer0HandValue
                         );
-                        this.renderPlayerHand(0, this.players[0].getHand());
+                        this.players[0].renderHand();
                     }
 
                     if (oPlayer0TableValue && this.players[0]) {
@@ -737,7 +623,7 @@ define('GameEvent', ['Player'], function (Player) {
                             oPlayer0TableValue
                         );
 
-                        this.renderPlayerTable(0, this.players[0].getTable());
+                        this.players[0].renderTable();
                     }
                 }
             }.bind(this));
@@ -755,7 +641,7 @@ define('GameEvent', ['Player'], function (Player) {
                         this.players[1].setHand(
                             oPlayer1HandValue
                         );
-                        this.renderPlayerHand(1, this.players[1].getHand());
+                        this.players[1].renderHand();
                     }
 
                     if (oPlayer1TableValue && this.players[1]) {
@@ -763,7 +649,7 @@ define('GameEvent', ['Player'], function (Player) {
                             oPlayer1TableValue
                         );
 
-                        this.renderPlayerTable(1, this.players[1].getTable());
+                        this.players[1].renderTable();
                     }
                 }
             }.bind(this));
