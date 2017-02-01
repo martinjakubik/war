@@ -90,8 +90,8 @@ define('GameEvent', ['Player'], function (Player) {
     GameEvent.prototype.renderCards = function () {
         var i;
         for (i = 0; i < this.players.length; i++) {
-            this.players[i].renderTable();
-            this.players[i].renderHand();
+            this.players[i].renderTable(this.doTurn.bind(this));
+            this.players[i].renderHand(this.doTurn.bind(this));
         }
     };
 
