@@ -172,10 +172,6 @@ define('GameEvent', ['Player'], function (Player) {
         var oReferenceGameAllSlots = oDatabase.ref('game/slots');
         var oReferenceGameSlot = oDatabase.ref('game/slots/list/' + this.slotNumber);
 
-        // hides play button
-        var oPlayBtn = document.getElementById('play');
-        oPlayBtn.style.display = 'none';
-
         var nInitialNumPlayers = 1;
 
         // makes player 0
@@ -229,10 +225,6 @@ define('GameEvent', ['Player'], function (Player) {
                 this.players[1].makePlayerView(oPlayAreaView);
                 this.renderCards();
 
-                // shows play button
-                var oPlayBtn = document.getElementById('play');
-                oPlayBtn.style.display = 'block';
-
                 // hides don't wait button
                 var oDontWaitBtn = document.getElementById('dontWait');
                 oDontWaitBtn.style.display = 'none';
@@ -249,10 +241,6 @@ define('GameEvent', ['Player'], function (Player) {
             // removes the listeners that detect changes to remote players
             this.oReferencePlayer0.off();
             this.oReferencePlayer1.off();
-
-            // shows play button
-            var oPlayBtn = document.getElementById('play');
-            oPlayBtn.style.display = 'block';
 
             // hides don't wait button
             var oDontWaitBtn = document.getElementById('dontWait');
@@ -432,18 +420,6 @@ define('GameEvent', ['Player'], function (Player) {
             this.players[i].makePlayerView(oPlayAreaView);
         }
 
-        var oPlayBtn = document.createElement('button');
-        var oContent = document.createTextNode('Play');
-        oPlayBtn.setAttribute('class', 'button');
-        oPlayBtn.setAttribute('id', 'play');
-        oPlayBtn.appendChild(oContent);
-        oPlayBtn.addEventListener('touchstart', this.callbacks.preventZoom);
-        oPlayBtn.onclick = playPressed.bind(this, this.numPlayers);
-        document.body.insertBefore(oPlayBtn, null);
-
-        // hides play button
-        oPlayBtn.style.display = 'none';
-
         var oResultView = document.createElement('div');
         oResultView.setAttribute('class', 'result');
         oResultView.setAttribute('id', 'result');
@@ -587,10 +563,6 @@ define('GameEvent', ['Player'], function (Player) {
                     hand: this.players[1].getHand()
                 });
 
-                // shows play button
-                var oPlayBtn = document.getElementById('play');
-                oPlayBtn.style.display = 'block';
-
             } else if (!bIsPlayer0SlotFull && bIsPlayer1SlotFull) {
 
                 // TODO: implement the case when player 1 has somehow joined
@@ -615,7 +587,7 @@ define('GameEvent', ['Player'], function (Player) {
                         this.players[0].setHand(
                             oPlayer0HandValue
                         );
-                        this.players[0].renderHand();
+                        this.players[0].renderHand(this.doTurn.bind(this));
                     }
 
                     if (oPlayer0TableValue && this.players[0]) {
@@ -623,7 +595,7 @@ define('GameEvent', ['Player'], function (Player) {
                             oPlayer0TableValue
                         );
 
-                        this.players[0].renderTable();
+                        this.players[0].renderTable(this.doTurn.bind(this));
                     }
                 }
             }.bind(this));
@@ -641,7 +613,7 @@ define('GameEvent', ['Player'], function (Player) {
                         this.players[1].setHand(
                             oPlayer1HandValue
                         );
-                        this.players[1].renderHand();
+                        this.players[1].renderHand(this.doTurn.bind(this));
                     }
 
                     if (oPlayer1TableValue && this.players[1]) {
@@ -649,7 +621,7 @@ define('GameEvent', ['Player'], function (Player) {
                             oPlayer1TableValue
                         );
 
-                        this.players[1].renderTable();
+                        this.players[1].renderTable(this.doTurn.bind(this));
                     }
                 }
             }.bind(this));
