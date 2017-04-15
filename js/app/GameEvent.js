@@ -1,5 +1,5 @@
 /*global define */
-define('GameEvent', ['Player'], function (Player) {
+define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
 
     'use strict';
 
@@ -71,20 +71,6 @@ define('GameEvent', ['Player'], function (Player) {
     };
 
     /**
-    * shuffles a set of things
-    */
-    GameEvent.prototype.shuffle = function (aThings) {
-        var i, n, aShuffledThings = [];
-
-        while (aThings.length > 0) {
-            n = Math.floor(Math.random() * aThings.length);
-            aShuffledThings.push(aThings.splice(n, 1)[0]);
-        }
-
-        return aShuffledThings;
-    };
-
-    /**
     * renders all the cards
     */
     GameEvent.prototype.renderCards = function () {
@@ -125,7 +111,7 @@ define('GameEvent', ['Player'], function (Player) {
             this.callbacks.renderResult(this.result);
             this.players[0].clearTable();
             this.players[1].clearTable();
-            this.shuffledCards = this.shuffle(this.shuffledCards);
+            this.shuffledCards = Tools.shuffle(this.shuffledCards);
             aDistributedCards = distribute(this.shuffledCards, this.players.length);
             for (i = 0; i < this.players.length; i++) {
                 this.players[i].setHand(aDistributedCards[i]);
@@ -144,7 +130,7 @@ define('GameEvent', ['Player'], function (Player) {
             aCopyOfPlayerNames.push(aPlayerNames[i]);
         }
 
-        var aShuffledPlayerNames = this.shuffle(aCopyOfPlayerNames);
+        var aShuffledPlayerNames = Tools.shuffle(aCopyOfPlayerNames);
 
         if (nPlayer >= 0 && nPlayer < aShuffledPlayerNames.length) {
             return aShuffledPlayerNames[nPlayer];
@@ -449,7 +435,7 @@ define('GameEvent', ['Player'], function (Player) {
     GameEvent.prototype.start = function () {
 
         this.makeView();
-        this.shuffledCards = this.shuffle(this.cards);
+        this.shuffledCards = Tools.shuffle(this.cards);
         this.renderCards();
 
         var oDatabase = firebase.database();

@@ -18,5 +18,19 @@ define('Tools', function () {
         }
     };
 
+    /**
+    * shuffles a set of things
+    */
+    Tools.shuffle = function (aThings) {
+        var i, n, aShuffledThings = [];
+
+        while (aThings.length > 0) {
+            n = Math.floor(Math.random() * aThings.length);
+            aShuffledThings.push(aThings.splice(n, 1)[0]);
+        }
+
+        return aShuffledThings;
+    };
+
     return Tools;
 });
