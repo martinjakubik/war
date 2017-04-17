@@ -277,10 +277,6 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
 
     };
 
-    var playPressed = function () {
-        this.doTurn();
-    };
-
     /**
      * Moves cards to the table or moves the table cards to the hand of the
      * player that won the turn.
