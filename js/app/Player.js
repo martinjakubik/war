@@ -12,6 +12,8 @@ define('Player', ['Tools'], function (Tools) {
         this.hand = [];
         this.table = [];
 
+        this.canPlayAnotherCard = true;
+
     };
 
     Player.prototype.getName = function () {
@@ -20,6 +22,14 @@ define('Player', ['Tools'], function (Tools) {
 
     Player.prototype.setName = function (sName) {
         this.name = sName;
+    };
+
+    Player.prototype.getCanPlayAnotherCard = function () {
+        return this.canPlayAnotherCard;
+    };
+
+    Player.prototype.setCanPlayAnotherCard = function (bCanPlayAnotherCard) {
+        this.canPlayAnotherCard = bCanPlayAnotherCard;
     };
 
     Player.prototype.getHand = function () {
@@ -84,7 +94,7 @@ define('Player', ['Tools'], function (Tools) {
         var i, oPlayerTableView = document.getElementById('table' + this.playerNum);
         var nWidth = window.innerWidth;
         var nTableWidth = this.table.length * this.cardWidth,
-            fnOnTap = null;
+            fnOnTapUpdateGame = null;
 
         // clears view of all cards
         while (oPlayerTableView.firstChild) {
@@ -105,8 +115,8 @@ define('Player', ['Tools'], function (Tools) {
             bStackCard = (i < nNumStackedCards && i !== this.table.length - 1);
             bShowCardFace = i % 2 === 0;
             bMoving = i === (this.table.length - 1);
-            fnOnTap = (i === (this.table.length - 1)) ? fnCardTapped : null;
-            this.addCardToView(oPlayerTableView, this.table[i], 0, true, bStackCard, bShowCardFace, bMoving, fnOnTap);
+            fnOnTapUpdateGame = (i === (this.table.length - 1)) ? fnCardTapped : null;
+            this.addCardToView(oPlayerTableView, this.table[i], 0, true, bStackCard, bShowCardFace, bMoving, fnOnTapUpdateGame);
         }
     };
 
@@ -120,7 +130,7 @@ define('Player', ['Tools'], function (Tools) {
             bStackCard = null,
             bShowCardFace = false,
             bMoving = false,
-            fnOnTap = null;
+            fnOnTapUpdateGame = null;
 
         var fnOnPlayerNameChanged = function (oEvent) {
             var nRefId, sValue = '';
@@ -143,15 +153,15 @@ define('Player', ['Tools'], function (Tools) {
 
         // redraws the whole hand
         for (i = 0; i < this.hand.length; i++) {
-            fnOnTap = (i === 0) ? fnCardTapped : null;
-            this.addCardToView(oPlayerHandView, this.hand[i], i, (i === this.hand.length - 1), bStackCard, bShowCardFace, bMoving, fnOnTap);
+            fnOnTapUpdateGame = (i === 0) ? fnCardTapped : null;
+            this.addCardToView(oPlayerHandView, this.hand[i], i, (i === this.hand.length - 1), bStackCard, bShowCardFace, bMoving, fnOnTapUpdateGame);
         }
     };
 
     /**
     * adds the given card to the given view
     */
-    Player.prototype.addCardToView = function (oView, oCard, nCardPosition, bLastCard, bStackCard, bShowCardFace, bMoving, fnOnTap) {
+    Player.prototype.addCardToView = function (oView, oCard, nCardPosition, bLastCard, bStackCard, bShowCardFace, bMoving, fnOnTapUpdateGame) {
 
         var oCardView = document.createElement('div');
 
@@ -178,10 +188,15 @@ define('Player', ['Tools'], function (Tools) {
             oCardView.addEventListener('animationend', this.finishedMovingToTableListener, false);
         }
 
+        var fnOnTap = function() {
+            this.putCardOnTable.call(this);
+            if (fnOnTapUpdateGame) {
+                fnOnTapUpdateGame.call();
+            }
+        }.bind(this);
+
         // makes the card react to a tap
-        if (fnOnTap) {
-            oCardView.onclick = fnOnTap;
-        }
+        oCardView.onclick = fnOnTap;
 
         // sets the card's id as suit+value
         oCardView.setAttribute('id', 'card' + oCard.value + '-' + oCard.suit);
@@ -209,10 +224,12 @@ define('Player', ['Tools'], function (Tools) {
 
     Player.prototype.putCardOnTable = function () {
 
-        this.table.push(this.hand[0]);
-        this.hand.splice(0, 1);
+        if (this.getCanPlayAnotherCard() === true) {
+            this.table.push(this.hand[0]);
+            this.hand.splice(0, 1);
 
-        this.updateRemoteReference();
+            this.updateRemoteReference();
+        }
     };
 
     Player.prototype.moveTableToHand = function (aTable) {
@@ -247,7 +264,10 @@ define('Player', ['Tools'], function (Tools) {
     };
 
     Player.prototype.getTableCard = function () {
-        return this.table[this.table.length - 1];
+        if (this.table.length > 0) {
+            return this.table[this.table.length - 1];
+        }
+        return null;
     };
 
     Player.prototype.updateRemoteReference = function () {

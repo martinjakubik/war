@@ -287,16 +287,6 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         var i,
             bAllTablesEmpty = true;
 
-        // checks if even or odd number of cards on the table;
-        // we need to do this in case of remote games when cards have simply
-        // synchronized to the remote cards without checking what was actually
-        // happening in the game
-        if (this.players[0].getTable().length % 2 === 0) {
-            this.playState = PLAY_STATE.movingToTable;
-        } else {
-            this.playState = PLAY_STATE.checkingTable;
-        }
-
         switch (this.playState) {
         case PLAY_STATE.movingToTable:
 
@@ -304,39 +294,47 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                 return;
             }
 
+            // checks if both players have a card on the table
+            var bAllPlayersHaveCardOnTable = true;
             for (i = 0; i < this.numPlayers; i++) {
-                if (i < this.players.length) {
-                    this.players[i].putCardOnTable();
+                if (this.players[i].getTableCard()) {
+                    this.players[i].setCanPlayAnotherCard(false);
+                } else {
+                    this.players[i].setCanPlayAnotherCard(true);
+                    bAllPlayersHaveCardOnTable = false;
                 }
             }
 
-            if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
-                switch (this.players[0].getTableCard().value) {
-                case 1:
-                    this.hamsterSound.play();
-                    break;
-                case 2:
-                    this.rabbitSound.play();
-                    break;
-                case 3:
-                    this.meowSound.play();
-                    break;
-                case 4:
-                    this.barkSound.play();
-                    break;
-                case 5:
-                    this.tigerSound.play();
-                    break;
-                case 6:
-                    this.elephantSound.play();
-                    break;
-                default:
-                    this.barkSound.play();
-                    break;
-                }
-            }
+            if (bAllPlayersHaveCardOnTable) {
+                this.playState = PLAY_STATE.checkingTable;
 
-            this.playState = PLAY_STATE.checkingTable;
+                if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
+                    switch (this.players[0].getTableCard().value) {
+                        case 1:
+                        this.hamsterSound.play();
+                        break;
+                        case 2:
+                        this.rabbitSound.play();
+                        break;
+                        case 3:
+                        this.meowSound.play();
+                        break;
+                        case 4:
+                        this.barkSound.play();
+                        break;
+                        case 5:
+                        this.tigerSound.play();
+                        break;
+                        case 6:
+                        this.elephantSound.play();
+                        break;
+                        default:
+                        this.barkSound.play();
+                        break;
+                    }
+                }
+
+            }
 
             break;
 
@@ -366,6 +364,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                 // if game is not over, all players add a face-down card to the table
                 for (i = 0; i < this.numPlayers; i++) {
                     if (i < this.players.length) {
+                        this.players[i].setCanPlayAnotherCard(true);
                         this.players[i].putCardOnTable();
                     }
                 }
@@ -565,6 +564,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                     var oPlayer0HandValue = oPlayer0Value.hand;
                     var oPlayer0TableValue = oPlayer0Value.table || [];
 
+                    // sets player 0's hand
                     if (oPlayer0HandValue && this.players[0]) {
                         this.players[0].setHand(
                             oPlayer0HandValue
@@ -572,11 +572,11 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                         this.players[0].renderHand(this.doTurn.bind(this));
                     }
 
+                    // sets player 0's table
                     if (oPlayer0TableValue && this.players[0]) {
                         this.players[0].setTable(
                             oPlayer0TableValue
                         );
-
                         this.players[0].renderTable(this.doTurn.bind(this));
                     }
                 }
@@ -591,6 +591,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                     var oPlayer1HandValue = oPlayer1Value.hand;
                     var oPlayer1TableValue = oPlayer1Value.table || [];
 
+                    // sets player 1's hand
                     if (oPlayer1HandValue && this.players[1]) {
                         this.players[1].setHand(
                             oPlayer1HandValue
@@ -598,11 +599,11 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                         this.players[1].renderHand(this.doTurn.bind(this));
                     }
 
+                    // sets player 1's table
                     if (oPlayer1TableValue && this.players[1]) {
                         this.players[1].setTable(
                             oPlayer1TableValue
                         );
-
                         this.players[1].renderTable(this.doTurn.bind(this));
                     }
                 }
