@@ -123,17 +123,19 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         this.result = '';
     };
 
-    GameEvent.prototype.getRandomPlayerName = function (nPlayer, aPlayerNames) {
+    GameEvent.prototype.getRandomPlayerName = function (nPlayer, aPlayerNames, sNotThisName) {
 
         var i, aCopyOfPlayerNames = [];
         for (i = 0; i < aPlayerNames.length; i++) {
-            aCopyOfPlayerNames.push(aPlayerNames[i]);
+            if (aPlayerNames[i] !== sNotThisName) {
+                aCopyOfPlayerNames.push(aPlayerNames[i]);
+            }
         }
 
         var aShuffledPlayerNames = Tools.shuffle(aCopyOfPlayerNames);
 
-        if (nPlayer >= 0 && nPlayer < aShuffledPlayerNames.length) {
-            return aShuffledPlayerNames[nPlayer];
+        if (aShuffledPlayerNames.length > 0) {
+            return aShuffledPlayerNames[0];
         }
 
         return 'Player' + nPlayer;
@@ -238,7 +240,8 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
 
             // makes player 1
             this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
-            this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
+            var sNotThisName = this.players[0] ? this.players[0].getName() : '';
+            this.players[1].setName(this.getRandomPlayerName(1, this.playerNames, sNotThisName));
 
             // distributes cards again if it wasn't done
             if (!this.restOfCards) {
@@ -517,7 +520,8 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
 
                 // makes player 1
                 this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
-                this.players[1].setName(this.getRandomPlayerName(1, this.playerNames));
+                var sNotThisName = this.players[0] ? this.players[0].getName() : '';
+                this.players[1].setName(this.getRandomPlayerName(1, this.playerNames, sNotThisName));
 
                 // distributes cards again if it wasn't done
                 if (!this.restOfCards) {
