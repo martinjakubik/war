@@ -181,7 +181,6 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         // renders player 0
         var oPlayAreaView = document.getElementById('playArea');
         this.players[0].makePlayerView(oPlayAreaView);
-        this.renderCards();
 
         // adds waiting message
         this.result = 'waiting for player 2';
@@ -257,7 +256,8 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
             // renders player 1
             var oPlayAreaView = document.getElementById('playArea');
             this.players[1].makePlayerView(oPlayAreaView);
-            this.renderCards();
+            this.players[1].renderTable();
+            this.players[1].renderHand();
 
             // removes rest of cards
             oReferenceRestOfCards.remove();
