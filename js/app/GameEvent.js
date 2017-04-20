@@ -207,10 +207,17 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                 this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
                 this.restOfCards = [];
 
+                // lets player 1 play
+                this.players[1].setCanPlayAnotherCard(true);
+
                 // renders player 1
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[1].makePlayerView(oPlayAreaView);
-                this.renderCards();
+                this.players[1].renderHand(this.doTurn.bind(this));
+                this.players[1].renderTable(this.doTurn.bind(this));
+
+                // lets player 0 play
+                this.players[0].setCanPlayAnotherCard(true);
 
                 // hides don't wait button
                 var oDontWaitBtn = document.getElementById('dontWait');
@@ -229,14 +236,6 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
             this.oReferencePlayer0.off();
             this.oReferencePlayer1.off();
 
-            // hides don't wait button
-            var oDontWaitBtn = document.getElementById('dontWait');
-            oDontWaitBtn.style.display = 'none';
-
-            // clears waiting message
-            this.result = '';
-            this.callbacks.renderResult(this.result);
-
             // makes player 1
             this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
             var sNotThisName = this.players[0] ? this.players[0].getName() : '';
@@ -253,11 +252,25 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
             // adds player 1 to game
             this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
 
+            // lets player 1 play
+            this.players[1].setCanPlayAnotherCard(true);
+
             // renders player 1
             var oPlayAreaView = document.getElementById('playArea');
             this.players[1].makePlayerView(oPlayAreaView);
-            this.players[1].renderTable();
-            this.players[1].renderHand();
+            this.players[1].renderTable(this.doTurn.bind(this));
+            this.players[1].renderHand(this.doTurn.bind(this));
+
+            // lets player 0 play
+            this.players[0].setCanPlayAnotherCard(true);
+
+            // hides don't wait button
+            var oDontWaitBtn = document.getElementById('dontWait');
+            oDontWaitBtn.style.display = 'none';
+
+            // clears waiting message
+            this.result = '';
+            this.callbacks.renderResult(this.result);
 
             // removes rest of cards
             oReferenceRestOfCards.remove();
@@ -516,7 +529,11 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                 // renders player 0
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[0].makePlayerView(oPlayAreaView);
-                this.renderCards();
+                this.players[0].renderHand(this.doTurn.bind(this));
+                this.players[0].renderTable(this.doTurn.bind(this));
+
+                // lets player 0 play
+                this.players[0].setCanPlayAnotherCard(true);
 
                 // makes player 1
                 this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));

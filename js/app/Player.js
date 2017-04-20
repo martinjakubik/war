@@ -12,7 +12,7 @@ define('Player', ['Tools'], function (Tools) {
         this.hand = [];
         this.table = [];
 
-        this.canPlayAnotherCard = true;
+        this.canPlayAnotherCard = false;
 
     };
 
@@ -153,7 +153,7 @@ define('Player', ['Tools'], function (Tools) {
 
         // redraws the whole hand
         for (i = 0; i < this.hand.length; i++) {
-            fnOnTapUpdateGame = (i === 0) ? fnCardTapped : null;
+            fnOnTapUpdateGame = (i === 0 && this.getCanPlayAnotherCard() === true) ? fnCardTapped : null;
             this.addCardToView(oPlayerHandView, this.hand[i], i, (i === this.hand.length - 1), bStackCard, bShowCardFace, bMoving, fnOnTapUpdateGame);
         }
     };
@@ -188,15 +188,18 @@ define('Player', ['Tools'], function (Tools) {
             oCardView.addEventListener('animationend', this.finishedMovingToTableListener, false);
         }
 
-        var fnOnTap = function() {
-            this.putCardOnTable.call(this);
-            if (fnOnTapUpdateGame) {
+        var fnOnTap;
+        if (fnOnTapUpdateGame) {
+            fnOnTap = function() {
+                this.putCardOnTable.call(this);
                 fnOnTapUpdateGame.call();
-            }
-        }.bind(this);
+            }.bind(this);
 
-        // makes the card react to a tap
-        oCardView.onclick = fnOnTap;
+            // makes the card react to a tap
+            oCardView.onclick = fnOnTap;
+        } else {
+            delete oCardView.onclick;
+        }
 
         // sets the card's id as suit+value
         oCardView.setAttribute('id', 'card' + oCard.value + '-' + oCard.suit);
