@@ -76,8 +76,8 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
     GameEvent.prototype.renderCards = function () {
         var i;
         for (i = 0; i < this.players.length; i++) {
-            this.players[i].renderTable(this.doTurn.bind(this));
-            this.players[i].renderHand(this.doTurn.bind(this));
+            this.players[i].renderTable();
+            this.players[i].renderHand();
         }
     };
 
@@ -202,6 +202,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                 this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
                 this.players[1].setName(oPlayerValue.name);
                 this.players[1].setHand(oPlayerValue.hand);
+                this.players[1].setCardOnClick(this.doTurn.bind(this));
 
                 // adds player 1 to game
                 this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
@@ -213,8 +214,8 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                 // renders player 1
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[1].makePlayerView(oPlayAreaView);
-                this.players[1].renderHand(this.doTurn.bind(this));
-                this.players[1].renderTable(this.doTurn.bind(this));
+                this.players[1].renderHand();
+                this.players[1].renderTable();
 
                 // lets player 0 play
                 this.players[0].setCanPlayAnotherCard(true);
@@ -258,11 +259,15 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
             // renders player 1
             var oPlayAreaView = document.getElementById('playArea');
             this.players[1].makePlayerView(oPlayAreaView);
-            this.players[1].renderTable(this.doTurn.bind(this));
-            this.players[1].renderHand(this.doTurn.bind(this));
+            this.players[1].setCardOnClick(this.doTurn.bind(this));
+            this.players[1].renderTable();
+            this.players[1].renderHand();
 
             // lets player 0 play
             this.players[0].setCanPlayAnotherCard(true);
+            this.players[0].setCardOnClick(this.doTurn.bind(this));
+            this.players[0].renderTable();
+            this.players[0].renderHand();
 
             // hides don't wait button
             var oDontWaitBtn = document.getElementById('dontWait');
@@ -301,24 +306,16 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
     GameEvent.prototype.doTurn = function () {
 
         var i,
-            bAllTablesEmpty = true;
+            bAllTablesEmpty = true,
+            bAllPlayersHaveCardOnTable;
+
+        bAllPlayersHaveCardOnTable = this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
 
         switch (this.playState) {
         case PLAY_STATE.movingToTable:
 
             if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
                 return;
-            }
-
-            // checks if both players have a card on the table
-            var bAllPlayersHaveCardOnTable = true;
-            for (i = 0; i < this.numPlayers; i++) {
-                if (this.players[i].getTableCard()) {
-                    this.players[i].setCanPlayAnotherCard(false);
-                } else {
-                    this.players[i].setCanPlayAnotherCard(true);
-                    bAllPlayersHaveCardOnTable = false;
-                }
             }
 
             if (bAllPlayersHaveCardOnTable) {
@@ -389,12 +386,32 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
             this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
             this.playState = PLAY_STATE.movingToTable;
 
+            this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
+
             break;
         default:
             break;
         }
 
         this.renderCards();
+    };
+
+    // checks if all players have a card on the table
+    GameEvent.prototype.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable = function () {
+
+        var i,
+            bAllPlayersHaveCardOnTable = true;
+
+        for (i = 0; i < this.numPlayers; i++) {
+            if (this.players[i].getTableCard()) {
+                this.players[i].setCanPlayAnotherCard(false);
+            } else {
+                this.players[i].setCanPlayAnotherCard(true);
+                bAllPlayersHaveCardOnTable = false;
+            }
+        }
+
+        return bAllPlayersHaveCardOnTable;
     };
 
     GameEvent.prototype.makeView = function () {
@@ -529,8 +546,9 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                 // renders player 0
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[0].makePlayerView(oPlayAreaView);
-                this.players[0].renderHand(this.doTurn.bind(this));
-                this.players[0].renderTable(this.doTurn.bind(this));
+                this.players[0].setCardOnClick(this.doTurn.bind(this));
+                this.players[0].renderHand();
+                this.players[0].renderTable();
 
                 // lets player 0 play
                 this.players[0].setCanPlayAnotherCard(true);
@@ -590,7 +608,8 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                         this.players[0].setHand(
                             oPlayer0HandValue
                         );
-                        this.players[0].renderHand(this.doTurn.bind(this));
+                        this.players[0].setCardOnClick(this.doTurn.bind(this));
+                        this.players[0].renderHand();
                     }
 
                     // sets player 0's table
@@ -598,7 +617,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                         this.players[0].setTable(
                             oPlayer0TableValue
                         );
-                        this.players[0].renderTable(this.doTurn.bind(this));
+                        this.players[0].renderTable();
                     }
                 }
             }.bind(this));
@@ -617,7 +636,8 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                         this.players[1].setHand(
                             oPlayer1HandValue
                         );
-                        this.players[1].renderHand(this.doTurn.bind(this));
+                        this.players[1].setCardOnClick(this.doTurn.bind(this));
+                        this.players[1].renderHand();
                     }
 
                     // sets player 1's table
@@ -625,7 +645,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                         this.players[1].setTable(
                             oPlayer1TableValue
                         );
-                        this.players[1].renderTable(this.doTurn.bind(this));
+                        this.players[1].renderTable();
                     }
                 }
             }.bind(this));

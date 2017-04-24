@@ -14,6 +14,7 @@ define('Player', ['Tools'], function (Tools) {
 
         this.canPlayAnotherCard = false;
 
+        this.cardOnClick = null;
     };
 
     Player.prototype.getName = function () {
@@ -48,11 +49,20 @@ define('Player', ['Tools'], function (Tools) {
         this.table = aCards;
     };
 
+    Player.prototype.getCardOnClick = function () {
+        return this.cardOnClick;
+    };
+
+    Player.prototype.setCardOnClick = function (fnCardOnClick) {
+        this.cardOnClick = fnCardOnClick;
+    };
+
     Player.prototype.getNumberCards = function () {
         return this.hand.length;
     };
 
     Player.prototype.makePlayerView = function (oPlayAreaView, fnOnNameChanged) {
+
         var oPlayerView,
             oPlayerTableView,
             oPlayerHandView,
@@ -89,7 +99,7 @@ define('Player', ['Tools'], function (Tools) {
     /**
     * renders the cards in a player's table
     */
-    Player.prototype.renderTable = function (fnCardTapped) {
+    Player.prototype.renderTable = function () {
 
         var i, oPlayerTableView = document.getElementById('table' + this.playerNum);
         var nWidth = window.innerWidth;
@@ -115,7 +125,7 @@ define('Player', ['Tools'], function (Tools) {
             bStackCard = (i < nNumStackedCards && i !== this.table.length - 1);
             bShowCardFace = i % 2 === 0;
             bMoving = i === (this.table.length - 1);
-            fnOnTapUpdateGame = (i === (this.table.length - 1)) ? fnCardTapped : null;
+            fnOnTapUpdateGame = (i === (this.table.length - 1)) ? this.getCardOnClick() : null;
             this.addCardToView(oPlayerTableView, this.table[i], 0, true, bStackCard, bShowCardFace, bMoving, fnOnTapUpdateGame);
         }
     };
@@ -123,7 +133,7 @@ define('Player', ['Tools'], function (Tools) {
     /**
      * renders the cards in a player's hand
      */
-    Player.prototype.renderHand = function (fnCardTapped) {
+    Player.prototype.renderHand = function () {
 
         var i, oPlayAreaView = document.getElementById('playArea'),
             oPlayerHandView = document.getElementById('hand' + this.playerNum),
@@ -153,7 +163,7 @@ define('Player', ['Tools'], function (Tools) {
 
         // redraws the whole hand
         for (i = 0; i < this.hand.length; i++) {
-            fnOnTapUpdateGame = (i === 0 && this.getCanPlayAnotherCard() === true) ? fnCardTapped : null;
+            fnOnTapUpdateGame = (i === 0 && this.getCanPlayAnotherCard() === true) ? this.getCardOnClick() : null;
             this.addCardToView(oPlayerHandView, this.hand[i], i, (i === this.hand.length - 1), bStackCard, bShowCardFace, bMoving, fnOnTapUpdateGame);
         }
     };
@@ -190,6 +200,7 @@ define('Player', ['Tools'], function (Tools) {
 
         var fnOnTap;
         if (fnOnTapUpdateGame) {
+
             fnOnTap = function() {
                 this.putCardOnTable.call(this);
                 fnOnTapUpdateGame.call();
@@ -197,6 +208,7 @@ define('Player', ['Tools'], function (Tools) {
 
             // makes the card react to a tap
             oCardView.onclick = fnOnTap;
+
         } else {
             delete oCardView.onclick;
         }
@@ -213,6 +225,7 @@ define('Player', ['Tools'], function (Tools) {
     };
 
     Player.prototype.finishedMovingToTableListener = function (oEvent) {
+
         switch (oEvent.type) {
           case 'animationend':
               var oElement = oEvent.target;
@@ -267,6 +280,7 @@ define('Player', ['Tools'], function (Tools) {
     };
 
     Player.prototype.getTableCard = function () {
+
         if (this.table.length > 0) {
             return this.table[this.table.length - 1];
         }
@@ -274,11 +288,37 @@ define('Player', ['Tools'], function (Tools) {
     };
 
     Player.prototype.updateRemoteReference = function () {
+
         this.remoteReference.set({
             name: this.getName(),
             hand: this.getHand(),
             table: this.getTable()
         });
+    };
+
+    /**
+    *
+    */
+    Player.prototype.addOnTapToTopCardInHand = function () {
+        this.setCanPlayAnotherCard(true);
+    };
+
+    /**
+    *
+    */
+    Player.prototype.removeOnTapFromTopCardInHand = function () {
+    };
+
+    /**
+    *
+    */
+    Player.prototype.addOnTapToTopCardOnTable = function () {
+    };
+
+    /**
+     *
+     */
+    Player.prototype.removeOnTapFromTopCardOnTable = function () {
     };
 
     return Player;
