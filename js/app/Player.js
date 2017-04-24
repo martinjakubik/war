@@ -244,6 +244,9 @@ define('Player', ['Tools'], function (Tools) {
             this.table.push(this.hand[0]);
             this.hand.splice(0, 1);
 
+            this.renderHand();
+            this.renderTable();
+
             this.updateRemoteReference();
         }
     };

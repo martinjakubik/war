@@ -388,12 +388,13 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
 
             this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
 
+            this.renderCards();
+
             break;
         default:
             break;
         }
 
-        this.renderCards();
     };
 
     // checks if all players have a card on the table
