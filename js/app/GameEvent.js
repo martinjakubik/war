@@ -154,6 +154,41 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         }
     };
 
+    GameEvent.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (oPlayerValue) {
+
+        // gets player 1
+        this.players[1].setName(oPlayerValue.name);
+        this.players[1].setHand(oPlayerValue.hand);
+        this.players[1].setCardOnClick(this.doTurn.bind(this));
+
+        // adds player 1 to game
+        this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
+        this.restOfCards = [];
+
+        // lets player 1 play
+        this.players[1].setCanPlayAnotherCard(true);
+
+        // renders player 1
+        var oPlayAreaView = document.getElementById('playArea');
+        this.players[1].makePlayerView(oPlayAreaView);
+        this.players[1].renderHand();
+        this.players[1].renderTable();
+
+        // lets player 0 play
+        this.players[0].setCanPlayAnotherCard(true);
+        this.players[0].setCardOnClick(this.doTurn.bind(this));
+        this.players[0].renderTable();
+        this.players[0].renderHand();
+
+        // hides don't wait button
+        var oDontWaitBtn = document.getElementById('dontWait');
+        oDontWaitBtn.style.display = 'none';
+
+        // clears waiting message
+        this.result = '';
+        this.callbacks.renderResult(this.result);
+    };
+
     GameEvent.prototype.keepPlayer0AndWaitForPlayer1 = function () {
 
         var oDatabase = firebase.database();
@@ -197,36 +232,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
             // checks if a remote player 1 just joined and if there is no
             // player 1 yet
             if (oPlayerValue && !this.players[1]) {
-
-                // gets player 1
-                this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
-                this.players[1].setName(oPlayerValue.name);
-                this.players[1].setHand(oPlayerValue.hand);
-                this.players[1].setCardOnClick(this.doTurn.bind(this));
-
-                // adds player 1 to game
-                this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
-                this.restOfCards = [];
-
-                // lets player 1 play
-                this.players[1].setCanPlayAnotherCard(true);
-
-                // renders player 1
-                var oPlayAreaView = document.getElementById('playArea');
-                this.players[1].makePlayerView(oPlayAreaView);
-                this.players[1].renderHand();
-                this.players[1].renderTable();
-
-                // lets player 0 play
-                this.players[0].setCanPlayAnotherCard(true);
-
-                // hides don't wait button
-                var oDontWaitBtn = document.getElementById('dontWait');
-                oDontWaitBtn.style.display = 'none';
-
-                // clears waiting message
-                this.result = '';
-                this.callbacks.renderResult(this.result);
+                this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oPlayerValue);
             }
         }.bind(this));
 
@@ -250,32 +256,8 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                 this.initializeGameEvent(1);
             }
 
-            // adds player 1 to game
-            this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
-
-            // lets player 1 play
-            this.players[1].setCanPlayAnotherCard(true);
-
-            // renders player 1
-            var oPlayAreaView = document.getElementById('playArea');
-            this.players[1].makePlayerView(oPlayAreaView);
-            this.players[1].setCardOnClick(this.doTurn.bind(this));
-            this.players[1].renderTable();
-            this.players[1].renderHand();
-
-            // lets player 0 play
-            this.players[0].setCanPlayAnotherCard(true);
-            this.players[0].setCardOnClick(this.doTurn.bind(this));
-            this.players[0].renderTable();
-            this.players[0].renderHand();
-
-            // hides don't wait button
-            var oDontWaitBtn = document.getElementById('dontWait');
-            oDontWaitBtn.style.display = 'none';
-
-            // clears waiting message
-            this.result = '';
-            this.callbacks.renderResult(this.result);
+            var oPlayerValue = this.players[1];
+            this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oPlayerValue);
 
             // removes rest of cards
             oReferenceRestOfCards.remove();
