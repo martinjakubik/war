@@ -202,7 +202,9 @@ define('Player', ['Tools'], function (Tools) {
         if (fnOnTapUpdateGame) {
 
             fnOnTap = function() {
-                this.putCardOnTable.call(this);
+                if (this.getCanPlayAnotherCard() === true) {
+                    this.putCardOnTable.call(this);
+                }
                 fnOnTapUpdateGame.call();
             }.bind(this);
 
@@ -240,15 +242,13 @@ define('Player', ['Tools'], function (Tools) {
 
     Player.prototype.putCardOnTable = function () {
 
-        if (this.getCanPlayAnotherCard() === true) {
-            this.table.push(this.hand[0]);
-            this.hand.splice(0, 1);
+        this.table.push(this.hand[0]);
+        this.hand.splice(0, 1);
 
-            this.renderHand();
-            this.renderTable();
+        this.renderHand();
+        this.renderTable();
 
-            this.updateRemoteReference();
-        }
+        this.updateRemoteReference();
     };
 
     Player.prototype.moveTableToHand = function (aTable) {
