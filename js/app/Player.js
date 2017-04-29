@@ -163,7 +163,7 @@ define('Player', ['Tools'], function (Tools) {
 
         // redraws the whole hand
         for (i = 0; i < this.hand.length; i++) {
-            fnOnTapUpdateGame = (i === 0 && this.getCanPlayAnotherCard() === true) ? this.getCardOnClick() : null;
+            fnOnTapUpdateGame = (i === 0) ? this.getCardOnClick() : null;
             this.addCardToView(oPlayerHandView, this.hand[i], i, (i === this.hand.length - 1), bStackCard, bShowCardFace, bMoving, fnOnTapUpdateGame);
         }
     };

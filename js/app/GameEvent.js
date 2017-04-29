@@ -180,6 +180,8 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         this.players[0].renderTable();
         this.players[0].renderHand();
 
+        this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
+
         // hides don't wait button
         var oDontWaitBtn = document.getElementById('dontWait');
         oDontWaitBtn.style.display = 'none';
@@ -287,11 +289,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
      */
     GameEvent.prototype.doTurn = function () {
 
-        var i,
-            bAllTablesEmpty = true,
-            bAllPlayersHaveCardOnTable;
-
-        bAllPlayersHaveCardOnTable = this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
+        var i;
 
         switch (this.playState) {
         case PLAY_STATE.movingToTable:
@@ -300,7 +298,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                 return;
             }
 
-            if (bAllPlayersHaveCardOnTable) {
+            if (this.allPlayersHaveCardOnTable) {
                 this.playState = PLAY_STATE.checkingTable;
 
                 if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
@@ -368,8 +366,6 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
             this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
             this.playState = PLAY_STATE.movingToTable;
 
-            this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
-
             this.renderCards();
 
             break;
@@ -377,24 +373,25 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
             break;
         }
 
+        this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
+
     };
 
     // checks if all players have a card on the table
     GameEvent.prototype.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable = function () {
 
-        var i,
-            bAllPlayersHaveCardOnTable = true;
+        var i;
+
+        this.allPlayersHaveCardOnTable = true;
 
         for (i = 0; i < this.numPlayers; i++) {
             if (this.players[i].getTableCard()) {
                 this.players[i].setCanPlayAnotherCard(false);
             } else {
                 this.players[i].setCanPlayAnotherCard(true);
-                bAllPlayersHaveCardOnTable = false;
+                this.allPlayersHaveCardOnTable = false;
             }
         }
-
-        return bAllPlayersHaveCardOnTable;
     };
 
     GameEvent.prototype.makeView = function () {
