@@ -1,6 +1,6 @@
 /*global require */
 /*global Audio: false */
-require(['Player', 'GameEvent'], function (Player, GameEvent) {
+require(['Player', 'GamePlay'], function (Player, GamePlay) {
 
     'use strict';
 
@@ -95,7 +95,7 @@ require(['Player', 'GameEvent'], function (Player, GameEvent) {
 
     var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck', 'jackal' ];
 
-    var oGameEvent = new GameEvent(
+    var oGamePlay = new GamePlay(
         nNumPlayers,
         aCards,
         aPlayerNames,
@@ -106,6 +106,6 @@ require(['Player', 'GameEvent'], function (Player, GameEvent) {
             preventZoom: preventZoom
         }
     );
-    oGameEvent.start();
+    oGamePlay.start();
 
 });

@@ -1,5 +1,5 @@
 /*global define */
-define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
+define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
     'use strict';
 
@@ -8,7 +8,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         checkingTable: 1
     };
 
-    var GameEvent = function (nNumPlayers, aCards, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
+    var GamePlay = function (nNumPlayers, aCards, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
 
         this.numPlayers = nNumPlayers;
         this.cards = aCards;
@@ -23,19 +23,19 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         this.playState = PLAY_STATE.movingToTable;
     };
 
-    GameEvent.prototype.getCurrentSlot = function () {
+    GamePlay.prototype.getCurrentSlot = function () {
         return this.currentSlot;
     };
 
-    GameEvent.prototype.setCurrentSlot = function (nCurrentSlot) {
+    GamePlay.prototype.setCurrentSlot = function (nCurrentSlot) {
         this.currentSlot = nCurrentSlot;
     };
 
-    GameEvent.prototype.getPlayers = function () {
+    GamePlay.prototype.getPlayers = function () {
         return this.players;
     };
 
-    GameEvent.prototype.setPlayers = function (aPlayers) {
+    GamePlay.prototype.setPlayers = function (aPlayers) {
         this.players = aPlayers;
     };
 
@@ -48,7 +48,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
      *      form of an array of player arrays, each player
      *      array containing cards
      */
-    GameEvent.prototype.distribute = function (aCards) {
+    GamePlay.prototype.distribute = function (aCards) {
 
         var i, j, oCard;
         var aDistributedCards = [];
@@ -73,7 +73,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
     /**
     * renders all the cards
     */
-    GameEvent.prototype.renderCards = function () {
+    GamePlay.prototype.renderCards = function () {
         var i;
         for (i = 0; i < this.players.length; i++) {
             this.players[i].renderTable();
@@ -84,7 +84,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
     /**
      * initializes a game; makes players and cards and distributes them
      */
-    GameEvent.prototype.initializeGameEvent = function (aCards) {
+    GamePlay.prototype.initializeGamePlay = function (aCards) {
 
         var nNumPlayersAmongWhomToDistributeCards = this.numPlayers > 1 ? this.numPlayers : 2;
         var aDistributedCards = this.distribute(this.shuffledCards, nNumPlayersAmongWhomToDistributeCards);
@@ -123,7 +123,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         this.result = '';
     };
 
-    GameEvent.prototype.getRandomPlayerName = function (nPlayer, aPlayerNames, sNotThisName) {
+    GamePlay.prototype.getRandomPlayerName = function (nPlayer, aPlayerNames, sNotThisName) {
 
         var i, aCopyOfPlayerNames = [];
         for (i = 0; i < aPlayerNames.length; i++) {
@@ -144,7 +144,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
     /**
      * adds players to a game
      */
-    GameEvent.prototype.addPlayerToGameEvent = function (nFirstPlayer, nLastPlayer, aDistributedCards) {
+    GamePlay.prototype.addPlayerToGamePlay = function (nFirstPlayer, nLastPlayer, aDistributedCards) {
 
         var i;
         for (i = nFirstPlayer; i <= nLastPlayer; i++) {
@@ -154,15 +154,15 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         }
     };
 
-    GameEvent.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (oPlayerValue) {
+    GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (oPlayerValue) {
 
         // gets player 1
         this.players[1].setName(oPlayerValue.name);
         this.players[1].setHand(oPlayerValue.hand);
-        this.players[1].setCardOnClick(this.doTurn.bind(this));
+        this.players[1].setCardOnClick(this.updateGame.bind(this));
 
         // adds player 1 to game
-        this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
+        this.addPlayerToGamePlay(1, 1, [null, this.restOfCards]);
         this.restOfCards = [];
 
         // lets player 1 play
@@ -176,7 +176,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
 
         // lets player 0 play
         this.players[0].setCanPlayAnotherCard(true);
-        this.players[0].setCardOnClick(this.doTurn.bind(this));
+        this.players[0].setCardOnClick(this.updateGame.bind(this));
         this.players[0].renderTable();
         this.players[0].renderHand();
 
@@ -191,7 +191,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         this.callbacks.renderResult(this.result);
     };
 
-    GameEvent.prototype.keepPlayer0AndWaitForPlayer1 = function () {
+    GamePlay.prototype.keepPlayer0AndWaitForPlayer1 = function () {
 
         var oDatabase = firebase.database();
         var oReferenceGameAllSlots = oDatabase.ref('game/slots');
@@ -203,7 +203,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         this.players[0].setName(this.getRandomPlayerName(0, this.playerNames));
 
         // adds player 0 to game
-        this.initializeGameEvent(nInitialNumPlayers);
+        this.initializeGamePlay(nInitialNumPlayers);
 
         // clears player 1 and waits for new player 1
         oReferenceGameSlot.set({
@@ -255,7 +255,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                 this.restOfCards = aGameSlots[this.slotNumber].restOfCards;
             }
             if (!this.restOfCards) {
-                this.initializeGameEvent(1);
+                this.initializeGamePlay(1);
             }
 
             var oPlayerValue = this.players[1];
@@ -287,9 +287,11 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
      * player that won the turn.
      * Or adds another card to the table in case of a tie.
      */
-    GameEvent.prototype.doTurn = function () {
+    GamePlay.prototype.updateGame = function () {
 
         var i;
+
+        this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
 
         switch (this.playState) {
         case PLAY_STATE.movingToTable:
@@ -373,12 +375,10 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
             break;
         }
 
-        this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
-
     };
 
     // checks if all players have a card on the table
-    GameEvent.prototype.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable = function () {
+    GamePlay.prototype.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable = function () {
 
         var i;
 
@@ -394,7 +394,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         }
     };
 
-    GameEvent.prototype.makeView = function () {
+    GamePlay.prototype.makeView = function () {
 
         var oGameView = document.createElement('div');
         oGameView.setAttribute('class', 'game');
@@ -421,7 +421,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         document.body.insertBefore(oResultView, null);
     };
 
-    GameEvent.prototype.isGameFinished = function (aPlayer0Cards, aPlayer1Cards) {
+    GamePlay.prototype.isGameFinished = function (aPlayer0Cards, aPlayer1Cards) {
 
         var i, nOtherPlayer;
 
@@ -440,7 +440,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
         return false;
     };
 
-    GameEvent.prototype.start = function () {
+    GamePlay.prototype.start = function () {
 
         this.makeView();
         this.shuffledCards = Tools.shuffle(this.cards);
@@ -526,7 +526,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                 // renders player 0
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[0].makePlayerView(oPlayAreaView);
-                this.players[0].setCardOnClick(this.doTurn.bind(this));
+                this.players[0].setCardOnClick(this.updateGame.bind(this));
                 this.players[0].renderHand();
                 this.players[0].renderTable();
 
@@ -543,11 +543,11 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                     this.restOfCards = aGameSlots[this.slotNumber].restOfCards;
                 }
                 if (!this.restOfCards) {
-                    this.initializeGameEvent(1);
+                    this.initializeGamePlay(1);
                 }
 
                 // adds player 1 to game
-                this.addPlayerToGameEvent(1, 1, [null, this.restOfCards]);
+                this.addPlayerToGamePlay(1, 1, [null, this.restOfCards]);
 
                 // renders player 1
                 var oPlayAreaView = document.getElementById('playArea');
@@ -588,7 +588,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                         this.players[0].setHand(
                             oPlayer0HandValue
                         );
-                        this.players[0].setCardOnClick(this.doTurn.bind(this));
+                        this.players[0].setCardOnClick(this.updateGame.bind(this));
                         this.players[0].renderHand();
                     }
 
@@ -616,7 +616,7 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
                         this.players[1].setHand(
                             oPlayer1HandValue
                         );
-                        this.players[1].setCardOnClick(this.doTurn.bind(this));
+                        this.players[1].setCardOnClick(this.updateGame.bind(this));
                         this.players[1].renderHand();
                     }
 
@@ -641,5 +641,5 @@ define('GameEvent', ['Player', 'Tools'], function (Player, Tools) {
 
     };
 
-    return GameEvent;
+    return GamePlay;
 });
