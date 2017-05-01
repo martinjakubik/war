@@ -11,10 +11,10 @@ define('Player', ['Tools'], function (Tools) {
         this.name = '';
         this.hand = [];
         this.table = [];
+    };
 
-        this.canPlayAnotherCard = false;
-
-        this.cardOnClick = null;
+    Player.prototype.getPlayerNum = function () {
+        return this.playerNum;
     };
 
     Player.prototype.getName = function () {
@@ -23,14 +23,6 @@ define('Player', ['Tools'], function (Tools) {
 
     Player.prototype.setName = function (sName) {
         this.name = sName;
-    };
-
-    Player.prototype.getCanPlayAnotherCard = function () {
-        return this.canPlayAnotherCard;
-    };
-
-    Player.prototype.setCanPlayAnotherCard = function (bCanPlayAnotherCard) {
-        this.canPlayAnotherCard = bCanPlayAnotherCard;
     };
 
     Player.prototype.getHand = function () {
@@ -47,14 +39,6 @@ define('Player', ['Tools'], function (Tools) {
 
     Player.prototype.setTable = function (aCards) {
         this.table = aCards;
-    };
-
-    Player.prototype.getCardOnClick = function () {
-        return this.cardOnClick;
-    };
-
-    Player.prototype.setCardOnClick = function (fnCardOnClick) {
-        this.cardOnClick = fnCardOnClick;
     };
 
     Player.prototype.getNumberCards = function () {
@@ -125,8 +109,7 @@ define('Player', ['Tools'], function (Tools) {
             bStackCard = (i < nNumStackedCards && i !== this.table.length - 1);
             bShowCardFace = i % 2 === 0;
             bMoving = i === (this.table.length - 1);
-            fnOnTapUpdateGame = (i === (this.table.length - 1)) ? this.getCardOnClick() : null;
-            this.addCardToView(oPlayerTableView, this.table[i], 0, true, bStackCard, bShowCardFace, bMoving, fnOnTapUpdateGame);
+            this.addCardToView(oPlayerTableView, this.table[i], 0, true, bStackCard, bShowCardFace, bMoving);
         }
     };
 
@@ -163,8 +146,7 @@ define('Player', ['Tools'], function (Tools) {
 
         // redraws the whole hand
         for (i = 0; i < this.hand.length; i++) {
-            fnOnTapUpdateGame = (i === 0) ? this.getCardOnClick() : null;
-            this.addCardToView(oPlayerHandView, this.hand[i], i, (i === this.hand.length - 1), bStackCard, bShowCardFace, bMoving, fnOnTapUpdateGame);
+            this.addCardToView(oPlayerHandView, this.hand[i], i, (i === this.hand.length - 1), bStackCard, bShowCardFace, bMoving);
         }
     };
 
@@ -198,22 +180,7 @@ define('Player', ['Tools'], function (Tools) {
             oCardView.addEventListener('animationend', this.finishedMovingToTableListener, false);
         }
 
-        var fnOnTap;
-        if (fnOnTapUpdateGame) {
-
-            fnOnTap = function() {
-                if (this.getCanPlayAnotherCard() === true) {
-                    this.putCardOnTable.call(this);
-                }
-                fnOnTapUpdateGame.call();
-            }.bind(this);
-
-            // makes the card react to a tap
-            oCardView.onclick = fnOnTap;
-
-        } else {
-            delete oCardView.onclick;
-        }
+        oCardView.onclick = this.onTapTopCardInHand;
 
         // sets the card's id as suit+value
         oCardView.setAttribute('id', 'card' + oCard.value + '-' + oCard.suit);
@@ -300,21 +267,70 @@ define('Player', ['Tools'], function (Tools) {
     };
 
     /**
-    *
-    */
-    Player.prototype.addOnTapToTopCardInHand = function () {
-        this.setCanPlayAnotherCard(true);
+     * finds a card view for a given card Id
+     */
+     var findCardViewForId = function (sCardId) {
+
+        var i;
+        var oCardView = null;
+
+        var oCardView = document.getElementById('card' + sCardId);
+
+        if (oCardView) {
+            return oCardView;
+        }
+
+        return oCardView;
     };
 
     /**
-    *
-    */
+     * wiggles a card
+     */
+    Player.prototype.wiggleCardInHand = function () {
+
+        var oCard = this.getHand()[0];
+        var sCardId = oCard.value + '-' + oCard.suit;
+
+        var oCardView = findCardViewForId(sCardId);
+
+        oCardView.setAttribute('class', oCardView.getAttribute('class') + ' wiggling');
+        oCardView.addEventListener('animationend', this.finishedWigglingListener, false);
+
+    };
+
+    /**
+     * stops wiggling a card
+     */
+    Player.prototype.finishedWigglingListener = function (oEvent) {
+
+        switch (oEvent.type) {
+          case 'animationend':
+              var oElement = oEvent.target;
+
+              // removes moving to table flag
+              Tools.removeClass(oElement, 'wiggling');
+              break;
+          default:
+
+        }
+    };
+
+    /**
+     *
+     */
+    Player.prototype.addOnTapToTopCardInHand = function (fnOnTap) {
+        this.onTapTopCardInHand = fnOnTap;
+    };
+
+    /**
+     *
+     */
     Player.prototype.removeOnTapFromTopCardInHand = function () {
     };
 
     /**
-    *
-    */
+     *
+     */
     Player.prototype.addOnTapToTopCardOnTable = function () {
     };
 

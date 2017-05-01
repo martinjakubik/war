@@ -3,11 +3,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
     'use strict';
 
-    var PLAY_STATE = {
-        movingToTable: 0,
-        checkingTable: 1
-    };
-
     var GamePlay = function (nNumPlayers, aCards, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
 
         this.numPlayers = nNumPlayers;
@@ -19,8 +14,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         this.currentSlot;
         this.players = [];
-
-        this.playState = PLAY_STATE.movingToTable;
     };
 
     GamePlay.prototype.getCurrentSlot = function () {
@@ -106,7 +99,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         oShuffleBtn.appendChild(oContent);
         oShuffleBtn.onclick = function (oEvent) {
             var i, aDistributedCards;
-            this.playState = PLAY_STATE.movingToTable;
             this.result = '';
             this.callbacks.renderResult(this.result);
             this.players[0].clearTable();
@@ -123,6 +115,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         this.result = '';
     };
 
+    // TODO: moves to Tools or GameBox
     GamePlay.prototype.getRandomPlayerName = function (nPlayer, aPlayerNames, sNotThisName) {
 
         var i, aCopyOfPlayerNames = [];
@@ -159,14 +152,11 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         // gets player 1
         this.players[1].setName(oPlayerValue.name);
         this.players[1].setHand(oPlayerValue.hand);
-        this.players[1].setCardOnClick(this.updateGame.bind(this));
+        this.players[1].addOnTapToTopCardInHand(this.playerTappedCardInHand.bind(this));
 
         // adds player 1 to game
         this.addPlayerToGamePlay(1, 1, [null, this.restOfCards]);
         this.restOfCards = [];
-
-        // lets player 1 play
-        this.players[1].setCanPlayAnotherCard(true);
 
         // renders player 1
         var oPlayAreaView = document.getElementById('playArea');
@@ -175,8 +165,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         this.players[1].renderTable();
 
         // lets player 0 play
-        this.players[0].setCanPlayAnotherCard(true);
-        this.players[0].setCardOnClick(this.updateGame.bind(this));
+        this.players[0].addOnTapToTopCardInHand(this.playerTappedCardInHand.bind(this));
         this.players[0].renderTable();
         this.players[0].renderHand();
 
@@ -247,6 +236,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
             // makes player 1
             this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
+            this.players[1].addOnTapToTopCardInHand(this.playerTappedCardInHand.bind(this));
             var sNotThisName = this.players[0] ? this.players[0].getName() : '';
             this.players[1].setName(this.getRandomPlayerName(1, this.playerNames, sNotThisName));
 
@@ -293,47 +283,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
 
-        switch (this.playState) {
-        case PLAY_STATE.movingToTable:
-
-            if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
-                return;
-            }
-
-            if (this.allPlayersHaveCardOnTable) {
-                this.playState = PLAY_STATE.checkingTable;
-
-                if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
-                    switch (this.players[0].getTableCard().value) {
-                        case 1:
-                        this.hamsterSound.play();
-                        break;
-                        case 2:
-                        this.rabbitSound.play();
-                        break;
-                        case 3:
-                        this.meowSound.play();
-                        break;
-                        case 4:
-                        this.barkSound.play();
-                        break;
-                        case 5:
-                        this.tigerSound.play();
-                        break;
-                        case 6:
-                        this.elephantSound.play();
-                        break;
-                        default:
-                        this.barkSound.play();
-                        break;
-                    }
-                }
-
-            }
-
-            break;
-
-        case PLAY_STATE.checkingTable:
+        // decides what to do if all players have played
+        if (this.allPlayersHaveCardOnTable) {
 
             // checks if player 0's card is higher than player 1's
             if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
@@ -359,25 +310,61 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 // if game is not over, all players add a face-down card to the table
                 for (i = 0; i < this.numPlayers; i++) {
                     if (i < this.players.length) {
-                        this.players[i].setCanPlayAnotherCard(true);
                         this.players[i].putCardOnTable();
                     }
                 }
             }
 
             this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
-            this.playState = PLAY_STATE.movingToTable;
 
             this.renderCards();
 
-            break;
-        default:
-            break;
-        }
+        } else {
 
+            // assumes that some players still don't have a card on the table
+
+            if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
+                return;
+            }
+
+            if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
+                this.playWarSound(this.players[0].getTableCard().value);
+            }
+        }
     };
 
-    // checks if all players have a card on the table
+    /**
+     * plays a sound if there's a war
+     */
+    GamePlay.prototype.playWarSound = function (nCardValue) {
+        switch (nCardValue) {
+            case 1:
+            this.hamsterSound.play();
+            break;
+            case 2:
+            this.rabbitSound.play();
+            break;
+            case 3:
+            this.meowSound.play();
+            break;
+            case 4:
+            this.barkSound.play();
+            break;
+            case 5:
+            this.tigerSound.play();
+            break;
+            case 6:
+            this.elephantSound.play();
+            break;
+            default:
+            this.barkSound.play();
+            break;
+        }
+    };
+
+    /**
+     * checks if all players have a card on the table
+     */
     GamePlay.prototype.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable = function () {
 
         var i;
@@ -385,15 +372,63 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         this.allPlayersHaveCardOnTable = true;
 
         for (i = 0; i < this.numPlayers; i++) {
-            if (this.players[i].getTableCard()) {
-                this.players[i].setCanPlayAnotherCard(false);
-            } else {
-                this.players[i].setCanPlayAnotherCard(true);
+            if (!this.players[i] || !this.players[i].getTableCard()) {
                 this.allPlayersHaveCardOnTable = false;
             }
         }
     };
 
+    /**
+     * finds a player given the Id of a player view
+     */
+    GamePlay.prototype.findPlayerForPlayerViewId = function (sPlayerViewId) {
+        var oPlayer = null;
+
+        var i;
+
+        for (i = 0; i < this.players.length ; i++) {
+            if ('player' + this.players[i].getPlayerNum() === sPlayerViewId) {
+                oPlayer = this.players[i];
+                break;
+            }
+        }
+
+        return oPlayer;
+    };
+
+    /**
+     * reacts to a player tapping a card in their hand
+     */
+    GamePlay.prototype.playerTappedCardInHand = function (oEvent) {
+
+        var oTarget = oEvent.currentTarget;
+
+        var oPlayerView = (oTarget && oTarget.parentNode) ? oTarget.parentNode.parentNode : null;
+        var sPlayerViewId = null;
+        var oPlayer = null;
+        var i;
+
+        if (oPlayerView) {
+            sPlayerViewId = oPlayerView.getAttribute('id');
+            if (sPlayerViewId) {
+                oPlayer = this.findPlayerForPlayerViewId(sPlayerViewId);
+            }
+        }
+
+        if (oPlayer) {
+            // checks if the player already has a card on the table
+            if (oPlayer.getTableCard()) {
+                // does nothing
+                oPlayer.wiggleCardInHand();
+            } else {
+                oPlayer.putCardOnTable();
+                this.updateGame();
+            }
+        }
+    };
+
+    // makes the initial view
+    // TODO: move this to GameBox
     GamePlay.prototype.makeView = function () {
 
         var oGameView = document.createElement('div');
@@ -421,6 +456,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         document.body.insertBefore(oResultView, null);
     };
 
+    // checks if one player has won
     GamePlay.prototype.isGameFinished = function (aPlayer0Cards, aPlayer1Cards) {
 
         var i, nOtherPlayer;
@@ -440,6 +476,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         return false;
     };
 
+    // starts a game
     GamePlay.prototype.start = function () {
 
         this.makeView();
@@ -496,6 +533,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             if (!bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
                 this.players.push(new Player(0, this.oReferencePlayer0, this.cardWidth));
+                this.players[0].addOnTapToTopCardInHand(this.playerTappedCardInHand.bind(this));
 
                 // keeps player 0 waits for player 1
                 this.keepPlayer0AndWaitForPlayer1();
@@ -511,6 +549,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 oReferenceRestOfCards = oDatabase.ref('game/slots/list/' + this.slotNumber + '/restOfCards');
 
                 this.players.push(new Player(0, this.oReferencePlayer0, this.cardWidth));
+                this.players[0].addOnTapToTopCardInHand(this.playerTappedCardInHand.bind(this));
 
                 // keeps player 0 waits for player 1
                 this.keepPlayer0AndWaitForPlayer1();
@@ -518,6 +557,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             } else if (bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
                 this.players.push(new Player(0, this.oReferencePlayer0, this.cardWidth));
+                this.players[0].addOnTapToTopCardInHand(this.playerTappedCardInHand.bind(this));
 
                 // keeps player 0
                 this.players[0].setName(aGameSlots[this.slotNumber].player0.name);
@@ -526,15 +566,12 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 // renders player 0
                 var oPlayAreaView = document.getElementById('playArea');
                 this.players[0].makePlayerView(oPlayAreaView);
-                this.players[0].setCardOnClick(this.updateGame.bind(this));
                 this.players[0].renderHand();
                 this.players[0].renderTable();
 
-                // lets player 0 play
-                this.players[0].setCanPlayAnotherCard(true);
-
                 // makes player 1
                 this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
+                this.players[1].addOnTapToTopCardInHand(this.playerTappedCardInHand.bind(this));
                 var sNotThisName = this.players[0] ? this.players[0].getName() : '';
                 this.players[1].setName(this.getRandomPlayerName(1, this.playerNames, sNotThisName));
 
@@ -588,7 +625,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                         this.players[0].setHand(
                             oPlayer0HandValue
                         );
-                        this.players[0].setCardOnClick(this.updateGame.bind(this));
                         this.players[0].renderHand();
                     }
 
@@ -616,7 +652,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                         this.players[1].setHand(
                             oPlayer1HandValue
                         );
-                        this.players[1].setCardOnClick(this.updateGame.bind(this));
                         this.players[1].renderHand();
                     }
 

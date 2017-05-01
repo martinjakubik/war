@@ -76,10 +76,41 @@ body {
     }
 }
 
+@keyframes wiggling {
+    0% {
+        transform: translateX(0);
+    }
+
+    15% {
+        transform: translateX(10px);
+    }
+
+    37% {
+        transform: translateX(-20px);
+    }
+
+    59% {
+        transform: translateX(20px);
+    }
+
+    81% {
+        transform: translateX(-10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
 .table>.card.movingToTable {
     animation-duration: 200ms;
     animation-timing-function: cubic-bezier(.17,.03,.95,.3);
     animation-name: moveToTable;
+}
+
+.hand>.card.wiggling {
+    animation-duration: 200ms;
+    animation-name: wiggling;
 }
 
 .card {
