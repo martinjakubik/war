@@ -3,6 +3,9 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
     'use strict';
 
+    var WAITING_TO_GATHER_CARDS = 0;
+    var WAITING_TO_FILL_TABLE = 1;
+
     var GamePlay = function (nNumPlayers, aCards, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
 
         this.numPlayers = nNumPlayers;
@@ -14,6 +17,10 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         this.currentSlot;
         this.players = [];
+
+        this.allPlayersJoined = false;
+
+        this.state = WAITING_TO_FILL_TABLE;
     };
 
     GamePlay.prototype.getCurrentSlot = function () {
@@ -169,7 +176,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         this.players[0].renderTable();
         this.players[0].renderHand();
 
-        this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
+        this.updateIfAllPlayersHaveCardOnTable();
 
         // hides don't wait button
         var oDontWaitBtn = document.getElementById('dontWait');
@@ -178,6 +185,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         // clears waiting message
         this.result = '';
         this.callbacks.renderResult(this.result);
+
+        this.allPlayersJoined = true;
     };
 
     GamePlay.prototype.keepPlayer0AndWaitForPlayer1 = function () {
@@ -273,6 +282,22 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
+     * Ends the game or adds another card to the table in case of a tie.
+     */
+    GamePlay.prototype.checkTable = function () {
+
+        if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
+            return;
+        }
+
+        if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
+            this.playWarSound(this.players[0].getTableCard().value);
+        } else {
+            this.state = WAITING_TO_GATHER_CARDS;
+        }
+    };
+
+    /**
      * Moves cards to the table or moves the table cards to the hand of the
      * player that won the turn.
      * Or adds another card to the table in case of a tie.
@@ -281,10 +306,10 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         var i;
 
-        this.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable();
+        this.updateIfAllPlayersHaveCardOnTable();
 
         // decides what to do if all players have played
-        if (this.allPlayersHaveCardOnTable) {
+        if (this.allPlayersHaveCardOnTable && this.state === WAITING_TO_GATHER_CARDS) {
 
             // checks if player 0's card is higher than player 1's
             if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
@@ -317,19 +342,10 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
             this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
 
+            this.state = WAITING_TO_FILL_TABLE;
+
             this.renderCards();
 
-        } else {
-
-            // assumes that some players still don't have a card on the table
-
-            if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
-                return;
-            }
-
-            if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
-                this.playWarSound(this.players[0].getTableCard().value);
-            }
         }
     };
 
@@ -365,7 +381,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     /**
      * checks if all players have a card on the table
      */
-    GamePlay.prototype.updateCanPlayerPlayAndCheckIfAllPlayersHaveCardOnTable = function () {
+    GamePlay.prototype.updateIfAllPlayersHaveCardOnTable = function () {
 
         var i;
 
@@ -415,15 +431,24 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             }
         }
 
-        if (oPlayer) {
+        if (oPlayer && this.allPlayersJoined) {
             // checks if the player already has a card on the table
             if (oPlayer.getTableCard()) {
                 // does nothing
                 oPlayer.wiggleCardInHand();
             } else {
                 oPlayer.putCardOnTable();
+
+                this.updateIfAllPlayersHaveCardOnTable();
+                if (this.allPlayersHaveCardOnTable) {
+                    this.checkTable();
+                }
+
                 this.updateGame();
             }
+        } else {
+            // does nothing
+            oPlayer.wiggleCardInHand();
         }
     };
 
