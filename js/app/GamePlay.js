@@ -5,6 +5,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
     var WAITING_TO_GATHER_CARDS = 0;
     var WAITING_TO_FILL_TABLE = 1;
+    var WAITING_FOR_FACE_DOWN_WAR_CARD = 2;
 
     var GamePlay = function (nNumPlayers, aCards, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
 
@@ -176,8 +177,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         this.players[0].renderTable();
         this.players[0].renderHand();
 
-        this.updateIfAllPlayersHaveCardOnTable();
-
         // hides don't wait button
         var oDontWaitBtn = document.getElementById('dontWait');
         oDontWaitBtn.style.display = 'none';
@@ -282,7 +281,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
-     * Ends the game or adds another card to the table in case of a tie.
+     * Checks table to see if the game is, if it's a war, or if it's time to
+     * gather cards.
      */
     GamePlay.prototype.checkTable = function () {
 
@@ -292,6 +292,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
             this.playWarSound(this.players[0].getTableCard().value);
+            this.state = WAITING_FOR_FACE_DOWN_WAR_CARD;
         } else {
             this.state = WAITING_TO_GATHER_CARDS;
         }
@@ -302,14 +303,12 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
      * player that won the turn.
      * Or adds another card to the table in case of a tie.
      */
-    GamePlay.prototype.updateGame = function () {
+    GamePlay.prototype.gatherCards = function () {
 
         var i;
 
-        this.updateIfAllPlayersHaveCardOnTable();
-
         // decides what to do if all players have played
-        if (this.allPlayersHaveCardOnTable && this.state === WAITING_TO_GATHER_CARDS) {
+        if (this.allPlayersHaveSameNumberOfCardsOnTable && this.state === WAITING_TO_GATHER_CARDS) {
 
             // checks if player 0's card is higher than player 1's
             if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
@@ -326,18 +325,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
                 // updates the loser's cards
                 this.players[0].updateRemoteReference();
-            } else if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
-                // players' cards are the same
-                // first checks if game is over (ie. in a 2-player game, if a player ran out of cards)
-                if (this.isGameFinished(this.players[0].getHand(), this.players[1].getHand())) {
-                    return;
-                }
-                // if game is not over, all players add a face-down card to the table
-                for (i = 0; i < this.numPlayers; i++) {
-                    if (i < this.players.length) {
-                        this.players[i].putCardOnTable();
-                    }
-                }
             }
 
             this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
@@ -385,13 +372,36 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         var i;
 
-        this.allPlayersHaveCardOnTable = true;
+        this.allPlayersHaveSameNumberOfCardsOnTable = true;
 
         for (i = 0; i < this.numPlayers; i++) {
             if (!this.players[i] || !this.players[i].getTableCard()) {
-                this.allPlayersHaveCardOnTable = false;
+                this.allPlayersHaveSameNumberOfCardsOnTable = false;
             }
         }
+    };
+
+    /**
+     * checks if all players have a card on the table
+     */
+    GamePlay.prototype.doAllPlayersHaveSameNumberOfCardsOnTable = function () {
+
+        var i;
+        var nNumCards = (this.players &&
+            this.players.length > 0 &&
+            this.players[0].getTable()) ? this.players[0].getTable().length : -1;
+
+        this.allPlayersHaveSameNumberOfCardsOnTable = true;
+
+        for (i = 0; i < this.numPlayers; i++) {
+            if (!(this.players[i])
+                || !(this.players[i].getTable())
+                || !(this.players[i].getTable().length === nNumCards)) {
+                this.allPlayersHaveSameNumberOfCardsOnTable = false;
+            }
+        }
+
+        return this.allPlayersHaveSameNumberOfCardsOnTable;
     };
 
     /**
@@ -417,6 +427,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
      */
     GamePlay.prototype.playerTappedCardInHand = function (oEvent) {
 
+        // gets the player and the player view
         var oTarget = oEvent.currentTarget;
 
         var oPlayerView = (oTarget && oTarget.parentNode) ? oTarget.parentNode.parentNode : null;
@@ -431,20 +442,40 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             }
         }
 
+        // checks if the tap is a legitimate move in the game
         if (oPlayer && this.allPlayersJoined) {
-            // checks if the player already has a card on the table
-            if (oPlayer.getTableCard()) {
-                // does nothing
-                oPlayer.wiggleCardInHand();
-            } else {
-                oPlayer.putCardOnTable();
 
-                this.updateIfAllPlayersHaveCardOnTable();
-                if (this.allPlayersHaveCardOnTable) {
-                    this.checkTable();
-                }
+            switch (this.state) {
+                case WAITING_TO_FILL_TABLE:
+                    // checks if the player already has a card on the table
+                    if (oPlayer.getTable() && oPlayer.getTable().length % 2 === 1) {
+                        // does nothing
+                        oPlayer.wiggleCardInHand();
+                    } else {
+                        oPlayer.putCardOnTable();
 
-                this.updateGame();
+                        this.doAllPlayersHaveSameNumberOfCardsOnTable();
+                        if (this.allPlayersHaveSameNumberOfCardsOnTable) {
+                            this.checkTable();
+                        }
+                    }
+                    break;
+                case WAITING_FOR_FACE_DOWN_WAR_CARD:
+                    // checks if player only has a face-up card on table
+                    if (oPlayer.getTable() && oPlayer.getTable().length % 2 === 1) {
+                        oPlayer.putCardOnTable();
+                    } else {
+                        oPlayer.wiggleCardInHand();
+                    }
+                    if (this.doAllPlayersHaveSameNumberOfCardsOnTable()) {
+                        this.state = WAITING_TO_FILL_TABLE;
+                    }
+                    break;
+                case WAITING_TO_GATHER_CARDS:
+                    this.gatherCards();
+                    break;
+                default:
+                    break;
             }
         } else {
             // does nothing
