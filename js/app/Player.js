@@ -294,14 +294,15 @@ define('Player', ['Tools'], function (Tools) {
      */
     Player.prototype.wiggleCardInHand = function () {
 
-        var oCard = this.getHand()[0];
-        var sCardId = oCard.value + '-' + oCard.suit;
+        var oCard = this.getHand() ? this.getHand()[0] : null;
+        if (oCard) {
+            var sCardId = oCard.value + '-' + oCard.suit;
 
-        var oCardView = findCardViewForId(sCardId);
+            var oCardView = findCardViewForId(sCardId);
 
-        Tools.addClass(oCardView, 'wiggling');
-        oCardView.addEventListener('animationend', this.finishedWigglingListener, false);
-
+            Tools.addClass(oCardView, 'wiggling');
+            oCardView.addEventListener('animationend', this.finishedWigglingListener, false);
+        }
     };
 
     /**
