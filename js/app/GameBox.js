@@ -19,6 +19,30 @@ require(['GamePlay', 'Player', 'Tools'], function (GamePlay, Player, Tools) {
 
     };
 
+    /**
+     * makes the initial view
+     */
+    GameBox.makeView = function () {
+
+        var oGameView = document.createElement('div');
+        Tools.setClass(oGameView, 'game');
+        oGameView.setAttribute('id', 'game');
+
+        document.body.insertBefore(oGameView, null);
+
+        var oPlayAreaView = document.createElement('div');
+        Tools.setClass(oPlayAreaView, 'playArea');
+        oPlayAreaView.setAttribute('id', 'playArea');
+
+        oGameView.insertBefore(oPlayAreaView, null);
+
+        var oResultView = document.createElement('div');
+        Tools.setClass(oResultView, 'result');
+        oResultView.setAttribute('id', 'result');
+
+        document.body.insertBefore(oResultView, null);
+    };
+
     GameBox.getRandomPlayerName = function (nPlayer, aPlayerNames, sNotThisName) {
 
         var i, aCopyOfPlayerNames = [];
@@ -37,7 +61,7 @@ require(['GamePlay', 'Player', 'Tools'], function (GamePlay, Player, Tools) {
         return 'Player' + nPlayer;
     };
 
-    GameBox.prototype.renderResult = function (sResult) {
+    GameBox.renderResult = function (sResult) {
         var oResultView = document.getElementById('result');
 
         var oContent = document.createTextNode(sResult ? sResult : '');
@@ -76,30 +100,6 @@ require(['GamePlay', 'Player', 'Tools'], function (GamePlay, Player, Tools) {
         return aCards;
     };
 
-    /**
-     * makes the initial view
-     */
-    GameBox.prototype.makeView = function () {
-
-        var oGameView = document.createElement('div');
-        Tools.setClass(oGameView, 'game');
-        oGameView.setAttribute('id', 'game');
-
-        document.body.insertBefore(oGameView, null);
-
-        var oPlayAreaView = document.createElement('div');
-        Tools.setClass(oPlayAreaView, 'playArea');
-        oPlayAreaView.setAttribute('id', 'playArea');
-
-        oGameView.insertBefore(oPlayAreaView, null);
-
-        var oResultView = document.createElement('div');
-        Tools.setClass(oResultView, 'result');
-        oResultView.setAttribute('id', 'result');
-
-        document.body.insertBefore(oResultView, null);
-    };
-
     var nNumPlayers = 2;
 
     var oGameBox = new GameBox();
@@ -115,7 +115,7 @@ require(['GamePlay', 'Player', 'Tools'], function (GamePlay, Player, Tools) {
 
     var aCards = oGameBox.makeCards(aBatawafCardValues);
 
-    oGameBox.makeView();
+    GameBox.makeView();
 
     var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck', 'jackal' ];
 
@@ -126,7 +126,7 @@ require(['GamePlay', 'Player', 'Tools'], function (GamePlay, Player, Tools) {
         oGameBox.maxNumberOfSlots,
         oGameBox.cardWidth,
         {
-            renderResult: oGameBox.renderResult,
+            renderResult: GameBox.renderResult,
             getRandomPlayerName: GameBox.getRandomPlayerName
         }
     );
