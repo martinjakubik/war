@@ -124,25 +124,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         this.result = '';
     };
 
-    // TODO: moves to Tools or GameBox
-    GamePlay.prototype.getRandomPlayerName = function (nPlayer, aPlayerNames, sNotThisName) {
-
-        var i, aCopyOfPlayerNames = [];
-        for (i = 0; i < aPlayerNames.length; i++) {
-            if (aPlayerNames[i] !== sNotThisName) {
-                aCopyOfPlayerNames.push(aPlayerNames[i]);
-            }
-        }
-
-        var aShuffledPlayerNames = Tools.shuffle(aCopyOfPlayerNames);
-
-        if (aShuffledPlayerNames.length > 0) {
-            return aShuffledPlayerNames[0];
-        }
-
-        return 'Player' + nPlayer;
-    };
-
     /**
      * adds players to a game
      */
@@ -198,7 +179,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         var nInitialNumPlayers = 1;
 
         // makes player 0
-        this.players[0].setName(this.getRandomPlayerName(0, this.playerNames));
+        this.players[0].setName(this.callbacks.getRandomPlayerName(0, this.playerNames));
 
         // adds player 0 to game
         this.initializeGamePlay(nInitialNumPlayers);
@@ -247,7 +228,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
             this.players[1].addOnTapToTopCardInHand(this.localPlayerTappedCardInHand.bind(this));
             var sNotThisName = this.players[0] ? this.players[0].getName() : '';
-            this.players[1].setName(this.getRandomPlayerName(1, this.playerNames, sNotThisName));
+            this.players[1].setName(this.callbacks.getRandomPlayerName(1, this.playerNames, sNotThisName));
 
             // distributes cards again if it wasn't done
             if (!this.restOfCards) {
@@ -481,35 +462,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         }
     };
 
-    // makes the initial view
-    // TODO: move this to GameBox
-    GamePlay.prototype.makeView = function () {
-
-        var oGameView = document.createElement('div');
-        oGameView.setAttribute('class', 'game');
-        oGameView.setAttribute('id', 'game');
-
-        document.body.insertBefore(oGameView, null);
-
-        var oPlayAreaView = document.createElement('div');
-        oPlayAreaView.setAttribute('class', 'playArea');
-        oPlayAreaView.setAttribute('id', 'playArea');
-
-        oGameView.insertBefore(oPlayAreaView, null);
-
-        var i;
-
-        for (i = 0; i < this.players.length; i++) {
-            this.players[i].makePlayerView(oPlayAreaView);
-        }
-
-        var oResultView = document.createElement('div');
-        oResultView.setAttribute('class', 'result');
-        oResultView.setAttribute('id', 'result');
-
-        document.body.insertBefore(oResultView, null);
-    };
-
     // checks if one player has won
     GamePlay.prototype.isGameFinished = function (aPlayer0Cards, aPlayer1Cards) {
 
@@ -534,7 +486,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     // starts a game
     GamePlay.prototype.start = function () {
 
-        this.makeView();
         this.shuffledCards = Tools.shuffle(this.cards);
         this.renderCards();
 
@@ -628,7 +579,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
                 this.players[1].addOnTapToTopCardInHand(this.localPlayerTappedCardInHand.bind(this));
                 var sNotThisName = this.players[0] ? this.players[0].getName() : '';
-                this.players[1].setName(this.getRandomPlayerName(1, this.playerNames, sNotThisName));
+                this.players[1].setName(this.callbacks.getRandomPlayerName(1, this.playerNames, sNotThisName));
 
                 // distributes cards again if it wasn't done
                 if (!this.restOfCards) {

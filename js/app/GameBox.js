@@ -1,30 +1,8 @@
 /*global require */
 /*global Audio: false */
-require(['Player', 'GamePlay'], function (Player, GamePlay) {
+require(['GamePlay', 'Player', 'Tools'], function (GamePlay, Player, Tools) {
 
     'use strict';
-
-    // TODO: move to tools
-    var addClass = function (oView, sClass) {
-        var sClasses = oView.getAttribute('class');
-
-        if (sClasses.indexOf(sClass) < 0) {
-            oView.setAttribute('class', oView.getAttribute('class', + ' ' + sClass));
-        }
-    };
-
-    var preventZoom = function(e) {
-        var t2 = e.timeStamp;
-        var t1 = e.currentTarget.dataset.lastTouch || t2;
-        var dt = t2 - t1;
-        var fingers = e.touches.length;
-        e.currentTarget.dataset.lastTouch = t2;
-
-        if (!dt || dt > 500 || fingers > 1) return; // not double-tap
-
-        e.preventDefault();
-        e.target.click();
-    }
 
     var GameBox = function () {
 
@@ -39,6 +17,24 @@ require(['Player', 'GamePlay'], function (Player, GamePlay) {
         this.maxNumberOfSlots = MAX_NUMBER_OF_SLOTS;
         this.cardWidth = CARD_WIDTH;
 
+    };
+
+    GameBox.getRandomPlayerName = function (nPlayer, aPlayerNames, sNotThisName) {
+
+        var i, aCopyOfPlayerNames = [];
+        for (i = 0; i < aPlayerNames.length; i++) {
+            if (aPlayerNames[i] !== sNotThisName) {
+                aCopyOfPlayerNames.push(aPlayerNames[i]);
+            }
+        }
+
+        var aShuffledPlayerNames = Tools.shuffle(aCopyOfPlayerNames);
+
+        if (aShuffledPlayerNames.length > 0) {
+            return aShuffledPlayerNames[0];
+        }
+
+        return 'Player' + nPlayer;
     };
 
     GameBox.prototype.renderResult = function (sResult) {
@@ -80,6 +76,30 @@ require(['Player', 'GamePlay'], function (Player, GamePlay) {
         return aCards;
     };
 
+    /**
+     * makes the initial view
+     */
+    GameBox.prototype.makeView = function () {
+
+        var oGameView = document.createElement('div');
+        oGameView.setAttribute('class', 'game');
+        oGameView.setAttribute('id', 'game');
+
+        document.body.insertBefore(oGameView, null);
+
+        var oPlayAreaView = document.createElement('div');
+        oPlayAreaView.setAttribute('class', 'playArea');
+        oPlayAreaView.setAttribute('id', 'playArea');
+
+        oGameView.insertBefore(oPlayAreaView, null);
+
+        var oResultView = document.createElement('div');
+        oResultView.setAttribute('class', 'result');
+        oResultView.setAttribute('id', 'result');
+
+        document.body.insertBefore(oResultView, null);
+    };
+
     var nNumPlayers = 2;
 
     var oGameBox = new GameBox();
@@ -92,7 +112,10 @@ require(['Player', 'GamePlay'], function (Player, GamePlay) {
       4, 5, 1, 3, 5, 2,
       6, 1, 2, 2, 3, 5
     ];
+
     var aCards = oGameBox.makeCards(aBatawafCardValues);
+
+    oGameBox.makeView();
 
     var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck', 'jackal' ];
 
@@ -104,7 +127,7 @@ require(['Player', 'GamePlay'], function (Player, GamePlay) {
         oGameBox.cardWidth,
         {
             renderResult: oGameBox.renderResult,
-            preventZoom: preventZoom
+            getRandomPlayerName: GameBox.getRandomPlayerName
         }
     );
     oGamePlay.start();
