@@ -103,7 +103,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         var oShuffleBtn = document.createElement('button');
         var oContent = document.createTextNode('Shuffle');
-        oShuffleBtn.setAttribute('class', 'button');
+        Tools.setClass(oShuffleBtn, 'button');
         oShuffleBtn.setAttribute('id', 'shuffle');
         oShuffleBtn.appendChild(oContent);
         oShuffleBtn.onclick = function (oEvent) {
@@ -254,7 +254,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         // makes don't wait button
         var oDontWaitBtn = document.createElement('button');
         var oContent = document.createTextNode('Don\'t wait');
-        oDontWaitBtn.setAttribute('class', 'button');
+        Tools.setClass(oDontWaitBtn, 'button');
         oDontWaitBtn.setAttribute('id', 'dontWait');
         oDontWaitBtn.appendChild(oContent);
         oDontWaitBtn.onclick = dontWaitPressed.bind(this, oDontWaitBtn);

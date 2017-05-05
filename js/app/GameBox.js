@@ -82,19 +82,19 @@ require(['GamePlay', 'Player', 'Tools'], function (GamePlay, Player, Tools) {
     GameBox.prototype.makeView = function () {
 
         var oGameView = document.createElement('div');
-        oGameView.setAttribute('class', 'game');
+        Tools.setClass(oGameView, 'game');
         oGameView.setAttribute('id', 'game');
 
         document.body.insertBefore(oGameView, null);
 
         var oPlayAreaView = document.createElement('div');
-        oPlayAreaView.setAttribute('class', 'playArea');
+        Tools.setClass(oPlayAreaView, 'playArea');
         oPlayAreaView.setAttribute('id', 'playArea');
 
         oGameView.insertBefore(oPlayAreaView, null);
 
         var oResultView = document.createElement('div');
-        oResultView.setAttribute('class', 'result');
+        Tools.setClass(oResultView, 'result');
         oResultView.setAttribute('id', 'result');
 
         document.body.insertBefore(oResultView, null);

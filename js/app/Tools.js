@@ -5,13 +5,16 @@ define('Tools', function () {
     var Tools = function () {
     };
 
-    // TODO: use this method instead of doing it manually
     Tools.addClass = function (oView, sClass) {
         var sClasses = oView.getAttribute('class');
 
         if (sClasses.indexOf(sClass) < 0) {
-            oView.setAttribute('class', oView.getAttribute('class', + ' ' + sClass));
+            oView.setAttribute('class', oView.getAttribute('class') + ' ' + sClass);
         }
+    };
+
+    Tools.setClass = function (oView, sClass) {
+        oView.setAttribute('class', sClass);
     };
 
     Tools.removeClass = function (oView, sClass) {

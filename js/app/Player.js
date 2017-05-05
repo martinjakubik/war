@@ -55,25 +55,25 @@ define('Player', ['Tools'], function (Tools) {
             oPlayerNameView;
 
         oPlayerView = document.createElement('div');
-        oPlayerView.setAttribute('class', 'player');
+        Tools.setClass(oPlayerView, 'player');
         oPlayerView.setAttribute('id', 'player' + this.playerNum);
 
         oPlayAreaView.insertBefore(oPlayerView, null);
 
         oPlayerTableView = document.createElement('div');
-        oPlayerTableView.setAttribute('class', 'table');
+        Tools.setClass(oPlayerTableView, 'table');
         oPlayerTableView.setAttribute('id', 'table' + this.playerNum);
 
         oPlayerView.insertBefore(oPlayerTableView, null);
 
         oPlayerHandView = document.createElement('div');
-        oPlayerHandView.setAttribute('class', 'hand');
+        Tools.setClass(oPlayerHandView, 'hand');
         oPlayerHandView.setAttribute('id', 'hand' + this.playerNum);
 
         oPlayerView.insertBefore(oPlayerHandView, null);
 
         oPlayerNameView = document.createElement('input');
-        oPlayerNameView.setAttribute('class', 'name');
+        Tools.setClass(oPlayerNameView, 'name');
         oPlayerNameView.setAttribute('id', 'name' + this.playerNum);
         oPlayerNameView.setAttribute('ref-id', this.playerNum);
         oPlayerNameView.value = this.getName();
@@ -161,24 +161,26 @@ define('Player', ['Tools'], function (Tools) {
 
         // decides if card should be shown as stacked to save space
         if (bStackCard) {
-            oCardView.setAttribute('class', 'card' + ' stackedCard');
+            Tools.setClass(oCardView, 'stackedCard');
         } else if (nCardPosition < 1 || bLastCard) {
-            oCardView.setAttribute('class', 'card');
+            Tools.setClass(oCardView, 'card');
         } else {
-            oCardView.setAttribute('class', 'card' + ' stackedCard');
+            Tools.setClass(oCardView, 'card');
+            Tools.addClass(oCardView, 'stackedCard');
         }
 
         // sets the card to show back or face
         if (bShowCardFace === false) {
-            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' showBack');
+            Tools.addClass(oCardView, 'showBack');
         } else {
-            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' showFace');
+            Tools.addClass(oCardView, 'showFace');
         }
 
         // uses a class to flag that the card should be animated
         // (ie. moving to the table)
         if (bMoving) {
-            oCardView.setAttribute('class', oCardView.getAttribute('class') + ' movingToTable');
+            Tools.addClass(oCardView, 'movingToTable');
+
             oCardView.addEventListener('animationend', this.finishedMovingToTableListener, false);
         }
 
@@ -188,7 +190,7 @@ define('Player', ['Tools'], function (Tools) {
         oCardView.setAttribute('id', 'card' + oCard.value + '-' + oCard.suit);
 
         var oCardFaceView = document.createElement('div');
-        oCardFaceView.setAttribute('class', 'content');
+        Tools.setClass(oCardFaceView, 'content');
 
         oCardView.insertBefore(oCardFaceView, null);
 
@@ -297,7 +299,7 @@ define('Player', ['Tools'], function (Tools) {
 
         var oCardView = findCardViewForId(sCardId);
 
-        oCardView.setAttribute('class', oCardView.getAttribute('class') + ' wiggling');
+        Tools.addClass(oCardView, 'wiggling');
         oCardView.addEventListener('animationend', this.finishedWigglingListener, false);
 
     };
