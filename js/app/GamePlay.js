@@ -6,6 +6,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     var WAITING_TO_GATHER_CARDS = 0;
     var WAITING_TO_FILL_TABLE = 1;
     var WAITING_FOR_FACE_DOWN_WAR_CARD = 2;
+    var GAME_OVER = 3;
 
     var GamePlay = function (nNumPlayers, aCards, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
 
@@ -368,22 +369,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     /**
      * checks if all players have a card on the table
      */
-    GamePlay.prototype.updateIfAllPlayersHaveCardOnTable = function () {
-
-        var i;
-
-        this.allPlayersHaveSameNumberOfCardsOnTable = true;
-
-        for (i = 0; i < this.numPlayers; i++) {
-            if (!this.players[i] || !this.players[i].getTableCard()) {
-                this.allPlayersHaveSameNumberOfCardsOnTable = false;
-            }
-        }
-    };
-
-    /**
-     * checks if all players have a card on the table
-     */
     GamePlay.prototype.doAllPlayersHaveSameNumberOfCardsOnTable = function () {
 
         var i;
@@ -443,7 +428,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         }
 
         // checks if the tap is a legitimate move in the game
-        if (oPlayer && this.allPlayersJoined) {
+        if (oPlayer && this.allPlayersJoined && this.state !== GAME_OVER) {
 
             switch (this.state) {
                 case WAITING_TO_FILL_TABLE:
@@ -470,6 +455,10 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                     if (this.doAllPlayersHaveSameNumberOfCardsOnTable()) {
                         this.state = WAITING_TO_FILL_TABLE;
                     }
+
+                    // checks if any player ran out of cards
+                    this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
+
                     break;
                 case WAITING_TO_GATHER_CARDS:
                     this.gatherCards();
@@ -526,6 +515,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 }
                 this.result = this.players[nOtherPlayer].getName() + ' wins';
                 this.callbacks.renderResult(this.result);
+                this.state = GAME_OVER;
                 return true;
             }
         }

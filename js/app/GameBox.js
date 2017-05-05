@@ -4,6 +4,7 @@ require(['Player', 'GamePlay'], function (Player, GamePlay) {
 
     'use strict';
 
+    // TODO: move to tools
     var addClass = function (oView, sClass) {
         var sClasses = oView.getAttribute('class');
 
