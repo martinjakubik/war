@@ -446,6 +446,14 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                         this.state = WAITING_TO_FILL_TABLE;
                     }
 
+                    // TODO: ABSOLUTELY this could be too early to check if game
+                    // finished
+                    //
+                    // ex. if player added last card to battle, and that card
+                    // wins the battle, then he will lose game here, when it
+                    // should continue
+                    // Fix this brute force loss ABSOLUTELY
+
                     // checks if any player ran out of cards
                     this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
 
