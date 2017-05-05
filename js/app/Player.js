@@ -2,6 +2,8 @@
 define('Player', ['Tools'], function (Tools) {
     'use strict';
 
+    var cardFlipSound = new Audio('../resources/cardflip.wav');
+
     var Player = function (nPlayerNum, oRemoteReference, nCardWidth) {
 
         this.playerNum = nPlayerNum;
@@ -216,6 +218,8 @@ define('Player', ['Tools'], function (Tools) {
         this.renderTable();
 
         this.updateRemoteReference();
+
+        cardFlipSound.play();
     };
 
     Player.prototype.moveTableToHand = function (aTable) {
