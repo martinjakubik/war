@@ -84,185 +84,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
-     * initializes a game; makes players and cards and distributes them
-     */
-    GamePlay.prototype.initializeGamePlay = function (aCards) {
-
-        var nNumPlayersAmongWhomToDistributeCards = this.numPlayers > 1 ? this.numPlayers : 2;
-        var aDistributedCards = this.distribute(this.shuffledCards, nNumPlayersAmongWhomToDistributeCards);
-
-        var i;
-        for (i = 0; i < this.numPlayers; i++) {
-            if (i < this.players.length) {
-                this.players[i].setHand(aDistributedCards[i]);
-            }
-        }
-        if (aDistributedCards.length > i - 1) {
-            this.restOfCards = aDistributedCards[i - 1];
-        }
-
-        var oShuffleBtn = document.createElement('button');
-        var oContent = document.createTextNode('Shuffle');
-        Tools.setClass(oShuffleBtn, 'button');
-        oShuffleBtn.setAttribute('id', 'shuffle');
-        oShuffleBtn.appendChild(oContent);
-        oShuffleBtn.onclick = function (oEvent) {
-            var i, aDistributedCards;
-            this.result = '';
-            this.callbacks.renderResult(this.result);
-            this.players[0].clearTable();
-            this.players[1].clearTable();
-            this.shuffledCards = Tools.shuffle(this.shuffledCards);
-            aDistributedCards = distribute(this.shuffledCards, this.players.length);
-            for (i = 0; i < this.players.length; i++) {
-                this.players[i].setHand(aDistributedCards[i]);
-            }
-            this.renderCards();
-        }.bind(this);
-        // document.body.insertBefore(oShuffleBtn, null);
-
-        this.result = '';
-    };
-
-    /**
-     * adds players to a game
-     */
-    GamePlay.prototype.addPlayerToGamePlay = function (nFirstPlayer, nLastPlayer, aDistributedCards) {
-
-        var i;
-        for (i = nFirstPlayer; i <= nLastPlayer; i++) {
-            if (i < this.players.length) {
-                this.players[i].setHand(aDistributedCards[i]);
-            }
-        }
-    };
-
-    GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (oPlayerValue) {
-
-        // gets player 1
-        this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
-        this.players[1].setName(oPlayerValue.name);
-        this.players[1].setHand(oPlayerValue.hand);
-
-        // adds player 1 to game
-        this.addPlayerToGamePlay(1, 1, [null, this.restOfCards]);
-        this.restOfCards = [];
-
-        // renders player 1
-        var oPlayAreaView = document.getElementById('playArea');
-        this.players[1].makePlayerView(oPlayAreaView);
-        this.players[1].renderHand();
-        this.players[1].renderTable();
-
-        // lets player 0 play
-        this.players[0].addOnTapToTopCardInHand(this.localPlayerTappedCardInHand.bind(this));
-        this.players[0].renderTable();
-        this.players[0].renderHand();
-
-        // hides don't wait button
-        var oDontWaitBtn = document.getElementById('dontWait');
-        oDontWaitBtn.style.display = 'none';
-
-        // clears waiting message
-        this.result = '';
-        this.callbacks.renderResult(this.result);
-
-        this.allPlayersJoined = true;
-    };
-
-    GamePlay.prototype.keepPlayer0AndWaitForPlayer1 = function () {
-
-        var oDatabase = firebase.database();
-        var oReferenceGameAllSlots = oDatabase.ref('game/slots');
-        var oReferenceGameSlot = oDatabase.ref('game/slots/list/' + this.slotNumber);
-
-        var nInitialNumPlayers = 1;
-
-        // makes player 0
-        this.players[0].setName(this.callbacks.getRandomPlayerName(0, this.playerNames));
-
-        // adds player 0 to game
-        this.initializeGamePlay(nInitialNumPlayers);
-
-        // clears player 1 and waits for new player 1
-        oReferenceGameSlot.set({
-            player0: {
-                name: this.players[0].getName(),
-                hand: this.players[0].getHand()
-            },
-            player1: null,
-            restOfCards: this.restOfCards
-        });
-
-        // renders player 0
-        var oPlayAreaView = document.getElementById('playArea');
-        this.players[0].makePlayerView(oPlayAreaView);
-
-        // adds waiting message
-        this.result = 'waiting for player 2';
-        this.callbacks.renderResult(this.result);
-
-        // stores a reference to the remote player 1
-        this.oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
-        var oReferenceRestOfCards = oDatabase.ref('game/slots/list/' + this.slotNumber + '/restOfCards');
-
-        // listens for arrival of player 1
-        this.oReferencePlayer1.on('value', function (snapshot) {
-            var oPlayerValue = snapshot.val();
-
-            // checks if a remote player 1 just joined and if there is no
-            // player 1 yet
-            if (oPlayerValue && !this.players[1]) {
-                this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oPlayerValue);
-            }
-        }.bind(this));
-
-        // if don't wait button is pressed, removes listener for second player
-        var dontWaitPressed = function () {
-
-            // removes the listeners that detect changes to remote players
-            this.oReferencePlayer0.off();
-            this.oReferencePlayer1.off();
-
-            // makes player 1
-            this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
-            this.players[1].addOnTapToTopCardInHand(this.localPlayerTappedCardInHand.bind(this));
-            var sNotThisName = this.players[0] ? this.players[0].getName() : '';
-            this.players[1].setName(this.callbacks.getRandomPlayerName(1, this.playerNames, sNotThisName));
-
-            // distributes cards again if it wasn't done
-            if (!this.restOfCards) {
-                this.restOfCards = aGameSlots[this.slotNumber].restOfCards;
-            }
-            if (!this.restOfCards) {
-                this.initializeGamePlay(1);
-            }
-
-            var oPlayerValue = this.players[1];
-            this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oPlayerValue);
-
-            // removes rest of cards
-            oReferenceRestOfCards.remove();
-
-            // stores player 1
-            this.oReferencePlayer1.set({
-                name: this.players[1].getName(),
-                hand: this.players[1].getHand()
-            });
-        };
-
-        // makes don't wait button
-        var oDontWaitBtn = document.createElement('button');
-        var oContent = document.createTextNode('Don\'t wait');
-        Tools.setClass(oDontWaitBtn, 'button');
-        oDontWaitBtn.setAttribute('id', 'dontWait');
-        oDontWaitBtn.appendChild(oContent);
-        oDontWaitBtn.onclick = dontWaitPressed.bind(this, oDontWaitBtn);
-        document.body.insertBefore(oDontWaitBtn, null);
-
-    };
-
-    /**
      * Checks table to see if the game is, if it's a war, or if it's time to
      * gather cards.
      */
@@ -489,6 +310,185 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             }
         }
         return false;
+    };
+
+    /**
+     * initializes a game; makes players and cards and distributes them
+     */
+    GamePlay.prototype.initializeGamePlay = function (aCards) {
+
+        var nNumPlayersAmongWhomToDistributeCards = this.numPlayers > 1 ? this.numPlayers : 2;
+        var aDistributedCards = this.distribute(this.shuffledCards, nNumPlayersAmongWhomToDistributeCards);
+
+        var i;
+        for (i = 0; i < this.numPlayers; i++) {
+            if (i < this.players.length) {
+                this.players[i].setHand(aDistributedCards[i]);
+            }
+        }
+        if (aDistributedCards.length > i - 1) {
+            this.restOfCards = aDistributedCards[i - 1];
+        }
+
+        var oShuffleBtn = document.createElement('button');
+        var oContent = document.createTextNode('Shuffle');
+        Tools.setClass(oShuffleBtn, 'button');
+        oShuffleBtn.setAttribute('id', 'shuffle');
+        oShuffleBtn.appendChild(oContent);
+        oShuffleBtn.onclick = function (oEvent) {
+            var i, aDistributedCards;
+            this.result = '';
+            this.callbacks.renderResult(this.result);
+            this.players[0].clearTable();
+            this.players[1].clearTable();
+            this.shuffledCards = Tools.shuffle(this.shuffledCards);
+            aDistributedCards = distribute(this.shuffledCards, this.players.length);
+            for (i = 0; i < this.players.length; i++) {
+                this.players[i].setHand(aDistributedCards[i]);
+            }
+            this.renderCards();
+        }.bind(this);
+        // document.body.insertBefore(oShuffleBtn, null);
+
+        this.result = '';
+    };
+
+    /**
+     * adds players to a game
+     */
+    GamePlay.prototype.addPlayerToGamePlay = function (nFirstPlayer, nLastPlayer, aDistributedCards) {
+
+        var i;
+        for (i = nFirstPlayer; i <= nLastPlayer; i++) {
+            if (i < this.players.length) {
+                this.players[i].setHand(aDistributedCards[i]);
+            }
+        }
+    };
+
+    GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (oPlayerValue) {
+
+        // gets player 1
+        this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
+        this.players[1].setName(oPlayerValue.name);
+        this.players[1].setHand(oPlayerValue.hand);
+
+        // adds player 1 to game
+        this.addPlayerToGamePlay(1, 1, [null, this.restOfCards]);
+        this.restOfCards = [];
+
+        // renders player 1
+        var oPlayAreaView = document.getElementById('playArea');
+        this.players[1].makePlayerView(oPlayAreaView);
+        this.players[1].renderHand();
+        this.players[1].renderTable();
+
+        // lets player 0 play
+        this.players[0].addOnTapToTopCardInHand(this.localPlayerTappedCardInHand.bind(this));
+        this.players[0].renderTable();
+        this.players[0].renderHand();
+
+        // hides don't wait button
+        var oDontWaitBtn = document.getElementById('dontWait');
+        oDontWaitBtn.style.display = 'none';
+
+        // clears waiting message
+        this.result = '';
+        this.callbacks.renderResult(this.result);
+
+        this.allPlayersJoined = true;
+    };
+
+    GamePlay.prototype.keepPlayer0AndWaitForPlayer1 = function () {
+
+        var oDatabase = firebase.database();
+        var oReferenceGameAllSlots = oDatabase.ref('game/slots');
+        var oReferenceGameSlot = oDatabase.ref('game/slots/list/' + this.slotNumber);
+
+        var nInitialNumPlayers = 1;
+
+        // makes player 0
+        this.players[0].setName(this.callbacks.getRandomPlayerName(0, this.playerNames));
+
+        // adds player 0 to game
+        this.initializeGamePlay(nInitialNumPlayers);
+
+        // clears player 1 and waits for new player 1
+        oReferenceGameSlot.set({
+            player0: {
+                name: this.players[0].getName(),
+                hand: this.players[0].getHand()
+            },
+            player1: null,
+            restOfCards: this.restOfCards
+        });
+
+        // renders player 0
+        var oPlayAreaView = document.getElementById('playArea');
+        this.players[0].makePlayerView(oPlayAreaView);
+
+        // adds waiting message
+        this.result = 'waiting for player 2';
+        this.callbacks.renderResult(this.result);
+
+        // stores a reference to the remote player 1
+        this.oReferencePlayer1 = oDatabase.ref('game/slots/list/' + this.slotNumber + '/player1');
+        var oReferenceRestOfCards = oDatabase.ref('game/slots/list/' + this.slotNumber + '/restOfCards');
+
+        // listens for arrival of player 1
+        this.oReferencePlayer1.on('value', function (snapshot) {
+            var oPlayerValue = snapshot.val();
+
+            // checks if a remote player 1 just joined and if there is no
+            // player 1 yet
+            if (oPlayerValue && !this.players[1]) {
+                this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oPlayerValue);
+            }
+        }.bind(this));
+
+        // if don't wait button is pressed, removes listener for second player
+        var dontWaitPressed = function () {
+
+            // removes the listeners that detect changes to remote players
+            this.oReferencePlayer0.off();
+            this.oReferencePlayer1.off();
+
+            // makes player 1
+            this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
+            this.players[1].addOnTapToTopCardInHand(this.localPlayerTappedCardInHand.bind(this));
+            var sNotThisName = this.players[0] ? this.players[0].getName() : '';
+            this.players[1].setName(this.callbacks.getRandomPlayerName(1, this.playerNames, sNotThisName));
+
+            // distributes cards again if it wasn't done
+            if (!this.restOfCards) {
+                this.restOfCards = aGameSlots[this.slotNumber].restOfCards;
+            }
+            if (!this.restOfCards) {
+                this.initializeGamePlay(1);
+            }
+
+            var oPlayerValue = this.players[1];
+            this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oPlayerValue);
+
+            // removes rest of cards
+            oReferenceRestOfCards.remove();
+
+            // stores player 1
+            this.oReferencePlayer1.set({
+                name: this.players[1].getName(),
+                hand: this.players[1].getHand()
+            });
+        };
+
+        // makes don't wait button
+        var oDontWaitBtn = document.createElement('button');
+        var oContent = document.createTextNode('Don\'t wait');
+        Tools.setClass(oDontWaitBtn, 'button');
+        oDontWaitBtn.setAttribute('id', 'dontWait');
+        oDontWaitBtn.appendChild(oContent);
+        oDontWaitBtn.onclick = dontWaitPressed.bind(this, oDontWaitBtn);
+        document.body.insertBefore(oDontWaitBtn, null);
+
     };
 
     // starts a game
