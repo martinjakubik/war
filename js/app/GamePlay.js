@@ -140,9 +140,9 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (oPlayerValue) {
 
         // gets player 1
+        this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
         this.players[1].setName(oPlayerValue.name);
         this.players[1].setHand(oPlayerValue.hand);
-        this.players[1].addOnTapToTopCardInHand(this.localPlayerTappedCardInHand.bind(this));
 
         // adds player 1 to game
         this.addPlayerToGamePlay(1, 1, [null, this.restOfCards]);
@@ -571,9 +571,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             } else if (bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
                 this.players.push(new Player(0, this.oReferencePlayer0, this.cardWidth));
-                this.players[0].addOnTapToTopCardInHand(this.localPlayerTappedCardInHand.bind(this));
 
-                // keeps player 0
+                // keeps remote player 0
                 this.players[0].setName(aGameSlots[this.slotNumber].player0.name);
                 this.players[0].setHand(aGameSlots[this.slotNumber].player0.hand);
 
@@ -583,11 +582,13 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 this.players[0].renderHand();
                 this.players[0].renderTable();
 
-                // makes player 1
+                // makes local player 1
                 this.players.push(new Player(1, this.oReferencePlayer1, this.cardWidth));
                 this.players[1].addOnTapToTopCardInHand(this.localPlayerTappedCardInHand.bind(this));
                 var sNotThisName = this.players[0] ? this.players[0].getName() : '';
                 this.players[1].setName(this.callbacks.getRandomPlayerName(1, this.playerNames, sNotThisName));
+
+                this.allPlayersJoined = true;
 
                 // distributes cards again if it wasn't done
                 if (!this.restOfCards) {
@@ -649,6 +650,39 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                         );
                         this.players[0].renderTable();
                     }
+
+                    switch (this.state) {
+                        case WAITING_TO_FILL_TABLE:
+                            // checks if the player already has a card on the table
+                            if (this.players[0].getTable() && this.players[0].getTable().length % 2 === 1) {
+                                // does nothing
+                            } else {
+                                this.doAllPlayersHaveSameNumberOfCardsOnTable();
+                                if (this.allPlayersHaveSameNumberOfCardsOnTable) {
+                                    this.checkTable();
+                                }
+                            }
+                            break;
+                        case WAITING_FOR_FACE_DOWN_WAR_CARD:
+                            if (this.doAllPlayersHaveSameNumberOfCardsOnTable()) {
+                                this.state = WAITING_TO_FILL_TABLE;
+                            }
+
+                            // TODO: ABSOLUTELY this could be too early to check if game
+                            // finished
+                            //
+                            // ex. if player added last card to battle, and that card
+                            // wins the battle, then he will lose game here, when it
+                            // should continue
+                            // Fix this brute force loss ABSOLUTELY
+
+                            // checks if any player ran out of cards
+                            this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
+
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }.bind(this));
 
@@ -676,6 +710,40 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                         );
                         this.players[1].renderTable();
                     }
+
+                    switch (this.state) {
+                        case WAITING_TO_FILL_TABLE:
+                            // checks if the player already has a card on the table
+                            if (this.players[1].getTable() && this.players[1].getTable().length % 2 === 1) {
+                                // does nothing
+                            } else {
+                                this.doAllPlayersHaveSameNumberOfCardsOnTable();
+                                if (this.allPlayersHaveSameNumberOfCardsOnTable) {
+                                    this.checkTable();
+                                }
+                            }
+                            break;
+                        case WAITING_FOR_FACE_DOWN_WAR_CARD:
+                            if (this.doAllPlayersHaveSameNumberOfCardsOnTable()) {
+                                this.state = WAITING_TO_FILL_TABLE;
+                            }
+
+                            // TODO: ABSOLUTELY this could be too early to check if game
+                            // finished
+                            //
+                            // ex. if player added last card to battle, and that card
+                            // wins the battle, then he will lose game here, when it
+                            // should continue
+                            // Fix this brute force loss ABSOLUTELY
+
+                            // checks if any player ran out of cards
+                            this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
+
+                            break;
+                        default:
+                            break;
+                    }
+
                 }
             }.bind(this));
 
