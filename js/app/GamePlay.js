@@ -223,19 +223,19 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
      * updates the game based on current state and an event
      *
      * @param oPlayer a player on whom the event happened
-     * @param bLocalEvent true if the event happened in the local UI
+     * @param bIsLocalEvent true if the event happened in the local UI
      */
-    GamePlay.prototype.updateGamePlay = function (oPlayer, bLocalEvent) {
+    GamePlay.prototype.updateGamePlay = function (oPlayer, bIsLocalEvent) {
         switch (this.state) {
             case WAITING_TO_FILL_TABLE:
                 // checks if the player already has a card on the table
                 if (oPlayer.getTable() && oPlayer.getTable().length % 2 === 1) {
                     // does nothing
-                    if (bLocalEvent) {
+                    if (bIsLocalEvent) {
                         oPlayer.wiggleCardInHand();
                     }
                 } else {
-                    if (bLocalEvent) {
+                    if (bIsLocalEvent) {
                         oPlayer.putCardOnTable();
                     }
 
@@ -246,7 +246,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 }
                 break;
             case WAITING_FOR_FACE_DOWN_WAR_CARD:
-                if (bLocalEvent) {
+                if (bIsLocalEvent) {
                     // checks if player only has a face-up card on table
                     if (oPlayer.getTable() && oPlayer.getTable().length % 2 === 1) {
                         oPlayer.putCardOnTable();
@@ -271,7 +271,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
                 break;
             case WAITING_TO_GATHER_CARDS:
-                if (bLocalEvent) {
+                if (bIsLocalEvent) {
                     this.gatherCards();
                 }
                 break;
@@ -287,7 +287,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         // gets the player and the player view
         var oTarget = oEvent.currentTarget;
-        var bLocalEvent = true;
+        var bIsLocalEvent = true;
 
         var oPlayerView = (oTarget && oTarget.parentNode) ? oTarget.parentNode.parentNode : null;
         var sPlayerViewId = null;
@@ -300,22 +300,22 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             }
         }
 
-        this.playerTappedCardInHand(oPlayer, bLocalEvent);
+        this.playerTappedCardInHand(oPlayer, bIsLocalEvent);
     };
 
     /**
      * reacts to a player tapping a card in their hand
      *
      * @param oPlayer a player on whom the event happened
-     * @param bLocalEvent true if the event happened in the local UI
+     * @param bIsLocalEvent true if the event happened in the local UI
      */
-    GamePlay.prototype.playerTappedCardInHand = function (oPlayer, bLocalEvent) {
+    GamePlay.prototype.playerTappedCardInHand = function (oPlayer, bIsLocalEvent) {
 
         var i;
 
         // checks if the tap is a legitimate move in the game
         if (oPlayer && this.allPlayersJoined && this.state !== GAME_OVER) {
-            this.updateGamePlay.call(this, oPlayer, bLocalEvent);
+            this.updateGamePlay.call(this, oPlayer, bIsLocalEvent);
         } else {
             // does nothing
             oPlayer.wiggleCardInHand();
@@ -556,6 +556,50 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
+     * sets up the handlers for events from one remote player;
+     * gets hand and table from remote database and updates local player
+     *
+     * @param oGamePlay an instance of a game
+     * @param oDatabase reference to the remote database
+     * @param nPlayerNum player number
+     */
+    GamePlay.prototype.setUpRemotePlayerEventHandler = function (oGamePlay, oDatabase, nPlayerNum) {
+        oGamePlay.playerReference[nPlayerNum] = oDatabase.ref('/game/slots/list/' + oGamePlay.slotNumber + '/player' + nPlayerNum);
+        oGamePlay.playerReference[nPlayerNum].on('value', function (snapshot) {
+
+            var oPlayerValue = snapshot.val();
+            var bIsLocalEvent = false;
+
+            if (oPlayerValue) {
+                var oPlayerHandValue = oPlayerValue.hand;
+                var oPlayerTableValue = oPlayerValue.table || [];
+
+                var oTempPlayer = new Player(nPlayerNum, null, -1);
+
+                // sets player's hand
+                if (oPlayerHandValue && oGamePlay.players[nPlayerNum]) {
+                    oGamePlay.players[nPlayerNum].setHand(
+                        oPlayerHandValue
+                    );
+                    oGamePlay.players[nPlayerNum].renderHand();
+                    oTempPlayer.setHand(oPlayerHandValue);
+                }
+
+                // sets player's table
+                if (oPlayerTableValue && oGamePlay.players[nPlayerNum]) {
+                    oGamePlay.players[nPlayerNum].setTable(
+                        oPlayerTableValue
+                    );
+                    oGamePlay.players[nPlayerNum].renderTable();
+                    oTempPlayer.setTable(oPlayerTableValue);
+                }
+
+                oGamePlay.updateGamePlay.call(oGamePlay, oTempPlayer, bIsLocalEvent);
+            }
+        });
+    };
+
+    /**
      * sets up the handlers for events from the remote players;
      * checks remote database and stores players in a game slot
      *
@@ -682,71 +726,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             value: oGamePlay.slotNumber
         });
 
-        oGamePlay.playerReference[0] = oDatabase.ref('/game/slots/list/' + oGamePlay.slotNumber + '/player0');
-        oGamePlay.playerReference[0].on('value', function (snapshot) {
-            var oPlayerValue = snapshot.val();
-            var bLocalEvent = false;
-
-            if (oPlayerValue) {
-                var oPlayerHandValue = oPlayerValue.hand;
-                var oPlayerTableValue = oPlayerValue.table || [];
-
-                var oTempPlayer = new Player(0, null, -1);
-
-                // sets player's hand
-                if (oPlayerHandValue && oGamePlay.players[0]) {
-                    oGamePlay.players[0].setHand(
-                        oPlayerHandValue
-                    );
-                    oGamePlay.players[0].renderHand();
-                    oTempPlayer.setHand(oPlayerHandValue);
-                }
-
-                // sets player's table
-                if (oPlayerTableValue && oGamePlay.players[0]) {
-                    oGamePlay.players[0].setTable(
-                        oPlayerTableValue
-                    );
-                    oGamePlay.players[0].renderTable();
-                    oTempPlayer.setTable(oPlayerTableValue);
-                }
-
-                oGamePlay.updateGamePlay.call(oGamePlay, oTempPlayer, bLocalEvent);
-            }
-        });
-
-        oGamePlay.playerReference[1] = oDatabase.ref('/game/slots/list/' + oGamePlay.slotNumber + '/player1');
-        oGamePlay.playerReference[1].on('value', function (snapshot) {
-            var oPlayerValue = snapshot.val();
-            var bLocalEvent = false;
-
-            if (oPlayerValue) {
-                var oPlayerHandValue = oPlayerValue.hand;
-                var oPlayerTableValue = oPlayerValue.table || [];
-
-                var oTempPlayer = new Player(1, null, -1);
-
-                // sets player's hand
-                if (oPlayerHandValue && oGamePlay.players[1]) {
-                    oGamePlay.players[1].setHand(
-                        oPlayerHandValue
-                    );
-                    oGamePlay.players[1].renderHand();
-                    oTempPlayer.setHand(oPlayerHandValue);
-                }
-
-                // sets player's table
-                if (oPlayerTableValue && oGamePlay.players[1]) {
-                    oGamePlay.players[1].setTable(
-                        oPlayerTableValue
-                    );
-                    oGamePlay.players[1].renderTable();
-                    oTempPlayer.setTable(oPlayerTableValue);
-                }
-
-                oGamePlay.updateGamePlay.call(oGamePlay, oTempPlayer, bLocalEvent);
-            }
-        });
+        oGamePlay.setUpRemotePlayerEventHandler(oGamePlay, oDatabase, 0);
+        oGamePlay.setUpRemotePlayerEventHandler(oGamePlay, oDatabase, 1);
     };
 
     // starts a game
