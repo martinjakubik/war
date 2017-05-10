@@ -93,9 +93,19 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             return;
         }
 
-        if (this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
+        if (!this.players[0].getTableCard()
+            || !this.players[1].getTableCard()) {
+
+            this.state = WAITING_TO_FILL_TABLE;
+
+        } else if (this.players[0].getTableCard()
+            && this.players[1].getTableCard()
+            && this.players[0].getTableCard().value === this.players[1].getTableCard().value) {
+
             this.playWarSound(this.players[0].getTableCard().value);
+
             this.state = WAITING_FOR_FACE_DOWN_WAR_CARD;
+
         } else {
             this.state = WAITING_TO_GATHER_CARDS;
         }
@@ -210,12 +220,74 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
+     * updates the game based on current state and an event
+     *
+     * @param oPlayer a player on whom the event happened
+     * @param bLocalEvent true if the event happened in the local UI
+     */
+    GamePlay.prototype.updateGamePlay = function (oPlayer, bLocalEvent) {
+        switch (this.state) {
+            case WAITING_TO_FILL_TABLE:
+                // checks if the player already has a card on the table
+                if (oPlayer.getTable() && oPlayer.getTable().length % 2 === 1) {
+                    // does nothing
+                    if (bLocalEvent) {
+                        oPlayer.wiggleCardInHand();
+                    }
+                } else {
+                    if (bLocalEvent) {
+                        oPlayer.putCardOnTable();
+                    }
+
+                    this.doAllPlayersHaveSameNumberOfCardsOnTable();
+                    if (this.allPlayersHaveSameNumberOfCardsOnTable) {
+                        this.checkTable();
+                    }
+                }
+                break;
+            case WAITING_FOR_FACE_DOWN_WAR_CARD:
+                if (bLocalEvent) {
+                    // checks if player only has a face-up card on table
+                    if (oPlayer.getTable() && oPlayer.getTable().length % 2 === 1) {
+                        oPlayer.putCardOnTable();
+                    } else {
+                        oPlayer.wiggleCardInHand();
+                    }
+                }
+                if (this.doAllPlayersHaveSameNumberOfCardsOnTable()) {
+                    this.state = WAITING_TO_FILL_TABLE;
+                }
+
+                // TODO: ABSOLUTELY this could be too early to check if game
+                // finished
+                //
+                // ex. if player added last card to battle, and that card
+                // wins the battle, then he will lose game here, when it
+                // should continue
+                // Fix this brute force loss ABSOLUTELY
+
+                // checks if any player ran out of cards
+                this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
+
+                break;
+            case WAITING_TO_GATHER_CARDS:
+                if (bLocalEvent) {
+                    this.gatherCards();
+                }
+                break;
+            default:
+                break;
+        }
+    };
+
+    /**
      * reacts to a player tapping a card in their hand
      */
     GamePlay.prototype.localPlayerTappedCardInHand = function (oEvent) {
 
         // gets the player and the player view
         var oTarget = oEvent.currentTarget;
+        var bLocalEvent = true;
 
         var oPlayerView = (oTarget && oTarget.parentNode) ? oTarget.parentNode.parentNode : null;
         var sPlayerViewId = null;
@@ -228,63 +300,22 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             }
         }
 
-        this.playerTappedCardInHand(oPlayer);
+        this.playerTappedCardInHand(oPlayer, bLocalEvent);
     };
 
     /**
      * reacts to a player tapping a card in their hand
+     *
+     * @param oPlayer a player on whom the event happened
+     * @param bLocalEvent true if the event happened in the local UI
      */
-    GamePlay.prototype.playerTappedCardInHand = function (oPlayer) {
+    GamePlay.prototype.playerTappedCardInHand = function (oPlayer, bLocalEvent) {
 
         var i;
 
         // checks if the tap is a legitimate move in the game
         if (oPlayer && this.allPlayersJoined && this.state !== GAME_OVER) {
-
-            switch (this.state) {
-                case WAITING_TO_FILL_TABLE:
-                    // checks if the player already has a card on the table
-                    if (oPlayer.getTable() && oPlayer.getTable().length % 2 === 1) {
-                        // does nothing
-                        oPlayer.wiggleCardInHand();
-                    } else {
-                        oPlayer.putCardOnTable();
-
-                        this.doAllPlayersHaveSameNumberOfCardsOnTable();
-                        if (this.allPlayersHaveSameNumberOfCardsOnTable) {
-                            this.checkTable();
-                        }
-                    }
-                    break;
-                case WAITING_FOR_FACE_DOWN_WAR_CARD:
-                    // checks if player only has a face-up card on table
-                    if (oPlayer.getTable() && oPlayer.getTable().length % 2 === 1) {
-                        oPlayer.putCardOnTable();
-                    } else {
-                        oPlayer.wiggleCardInHand();
-                    }
-                    if (this.doAllPlayersHaveSameNumberOfCardsOnTable()) {
-                        this.state = WAITING_TO_FILL_TABLE;
-                    }
-
-                    // TODO: ABSOLUTELY this could be too early to check if game
-                    // finished
-                    //
-                    // ex. if player added last card to battle, and that card
-                    // wins the battle, then he will lose game here, when it
-                    // should continue
-                    // Fix this brute force loss ABSOLUTELY
-
-                    // checks if any player ran out of cards
-                    this.isGameFinished(this.players[0].getHand(), this.players[1].getHand());
-
-                    break;
-                case WAITING_TO_GATHER_CARDS:
-                    this.gatherCards();
-                    break;
-                default:
-                    break;
-            }
+            this.updateGamePlay.call(this, oPlayer, bLocalEvent);
         } else {
             // does nothing
             oPlayer.wiggleCardInHand();
@@ -410,8 +441,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
      */
     GamePlay.prototype.makeLocalPlayer = function(nPlayerNum, aPlayers, oPlayerRef, fnLocalPlayerTappedCardInHand) {
 
-        aPlayers.push(new Player(0, oPlayerRef, this.cardWidth));
-        aPlayers[0].addOnTapToTopCardInHand(fnLocalPlayerTappedCardInHand.bind(this));
+        aPlayers.push(new Player(nPlayerNum, oPlayerRef, this.cardWidth));
+        aPlayers[nPlayerNum].addOnTapToTopCardInHand(fnLocalPlayerTappedCardInHand.bind(this));
 
     };
 
@@ -578,24 +609,25 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         if (!bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
-            // finds new slot; makes player 0
-            oGamePlay.makeLocalPlayer(0, this.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
+            // finds new slot; makes local player 0
+            oGamePlay.makeLocalPlayer(0, oGamePlay.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
 
             // keeps player 0 waits for player 1
             oGamePlay.keepPlayer0AndWaitForPlayer1();
 
         } else if (bIsPlayer0SlotFull && bIsPlayer1SlotFull) {
 
-            // takes next slot, even if it is full; makes player 0
+            // takes next slot, even if it is full; makes local player 0
             oGamePlay.moveToNextGameSlot(oDatabase);
-            oGamePlay.makeLocalPlayer(0, this.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
+            oGamePlay.makeLocalPlayer(0, oGamePlay.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
 
             // keeps player 0 waits for player 1
             oGamePlay.keepPlayer0AndWaitForPlayer1();
 
         } else if (bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
-            oGamePlay.players.push(new Player(0, oGamePlay.playerReference[0], oGamePlay.cardWidth));
+            // finds new slot; makes local player 0
+            oGamePlay.makeLocalPlayer(0, oGamePlay.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
 
             // keeps remote player 0
             oGamePlay.players[0].setName(aGameSlots[oGamePlay.slotNumber].player0.name);
@@ -608,8 +640,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             oGamePlay.players[0].renderTable();
 
             // makes local player 1
-            oGamePlay.players.push(new Player(1, oGamePlay.playerReference[1], oGamePlay.cardWidth));
-            oGamePlay.players[1].addOnTapToTopCardInHand(oGamePlay.localPlayerTappedCardInHand);
+            oGamePlay.makeLocalPlayer(1, oGamePlay.players, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
             var sNotThisName = oGamePlay.players[0] ? oGamePlay.players[0].getName() : '';
             oGamePlay.players[1].setName(oGamePlay.callbacks.getRandomPlayerName(1, oGamePlay.playerNames, sNotThisName));
 
@@ -651,69 +682,71 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             value: oGamePlay.slotNumber
         });
 
-        // listens for changes to each player's cards
-        var i;
-        for (i = 0; i < oGamePlay.numPlayers ; i++) {
+        oGamePlay.playerReference[0] = oDatabase.ref('/game/slots/list/' + oGamePlay.slotNumber + '/player0');
+        oGamePlay.playerReference[0].on('value', function (snapshot) {
+            var oPlayerValue = snapshot.val();
+            var bLocalEvent = false;
 
-            oGamePlay.playerReference[i] = oDatabase.ref('/game/slots/list/' + oGamePlay.slotNumber + '/player' + i);
-            oGamePlay.playerReference[i].on('value', function (snapshot) {
-                var oPlayerValue = snapshot.val();
+            if (oPlayerValue) {
+                var oPlayerHandValue = oPlayerValue.hand;
+                var oPlayerTableValue = oPlayerValue.table || [];
 
-                if (oPlayerValue) {
-                    var oPlayerHandValue = oPlayerValue.hand;
-                    var oPlayerTableValue = oPlayerValue.table || [];
+                var oTempPlayer = new Player(0, null, -1);
 
-                    // sets player 0's hand
-                    if (oPlayerHandValue && oGamePlay.players[i]) {
-                        oGamePlay.players[i].setHand(
-                            oPlayerHandValue
-                        );
-                        oGamePlay.players[i].renderHand();
-                    }
-
-                    // sets player 0's table
-                    if (oPlayerTableValue && oGamePlay.players[i]) {
-                        oGamePlay.players[i].setTable(
-                            oPlayerTableValue
-                        );
-                        oGamePlay.players[i].renderTable();
-                    }
-
-                    switch (oGamePlay.state) {
-                        case WAITING_TO_FILL_TABLE:
-                        // checks if the player already has a card on the table
-                        if (oGamePlay.players[i].getTable() && oGamePlay.players[i].getTable().length % 2 === 1) {
-                            // does nothing
-                        } else {
-                            oGamePlay.doAllPlayersHaveSameNumberOfCardsOnTable();
-                            if (oGamePlay.allPlayersHaveSameNumberOfCardsOnTable) {
-                                oGamePlay.checkTable();
-                            }
-                        }
-                        break;
-                        case WAITING_FOR_FACE_DOWN_WAR_CARD:
-                        if (oGamePlay.doAllPlayersHaveSameNumberOfCardsOnTable()) {
-                            oGamePlay.state = WAITING_TO_FILL_TABLE;
-                        }
-
-                        // TODO: ABSOLUTELY this could be too early to check if game
-                        // finished
-                        //
-                        // ex. if player added last card to battle, and that card
-                        // wins the battle, then he will lose game here, when it
-                        // should continue
-                        // Fix this brute force loss ABSOLUTELY
-
-                        // checks if any player ran out of cards
-                        oGamePlay.isGameFinished(oGamePlay.players[0].getHand(), oGamePlay.players[1].getHand());
-
-                        break;
-                        default:
-                        break;
-                    }
+                // sets player's hand
+                if (oPlayerHandValue && oGamePlay.players[0]) {
+                    oGamePlay.players[0].setHand(
+                        oPlayerHandValue
+                    );
+                    oGamePlay.players[0].renderHand();
+                    oTempPlayer.setHand(oPlayerHandValue);
                 }
-            });
-        }
+
+                // sets player's table
+                if (oPlayerTableValue && oGamePlay.players[0]) {
+                    oGamePlay.players[0].setTable(
+                        oPlayerTableValue
+                    );
+                    oGamePlay.players[0].renderTable();
+                    oTempPlayer.setTable(oPlayerTableValue);
+                }
+
+                oGamePlay.updateGamePlay.call(oGamePlay, oTempPlayer, bLocalEvent);
+            }
+        });
+
+        oGamePlay.playerReference[1] = oDatabase.ref('/game/slots/list/' + oGamePlay.slotNumber + '/player1');
+        oGamePlay.playerReference[1].on('value', function (snapshot) {
+            var oPlayerValue = snapshot.val();
+            var bLocalEvent = false;
+
+            if (oPlayerValue) {
+                var oPlayerHandValue = oPlayerValue.hand;
+                var oPlayerTableValue = oPlayerValue.table || [];
+
+                var oTempPlayer = new Player(1, null, -1);
+
+                // sets player's hand
+                if (oPlayerHandValue && oGamePlay.players[1]) {
+                    oGamePlay.players[1].setHand(
+                        oPlayerHandValue
+                    );
+                    oGamePlay.players[1].renderHand();
+                    oTempPlayer.setHand(oPlayerHandValue);
+                }
+
+                // sets player's table
+                if (oPlayerTableValue && oGamePlay.players[1]) {
+                    oGamePlay.players[1].setTable(
+                        oPlayerTableValue
+                    );
+                    oGamePlay.players[1].renderTable();
+                    oTempPlayer.setTable(oPlayerTableValue);
+                }
+
+                oGamePlay.updateGamePlay.call(oGamePlay, oTempPlayer, bLocalEvent);
+            }
+        });
     };
 
     // starts a game
