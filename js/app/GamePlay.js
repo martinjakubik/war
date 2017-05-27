@@ -23,6 +23,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         this.allPlayersJoined = false;
 
         this.state = WAITING_TO_FILL_TABLE;
+
+        this.numMoves = 0;
     };
 
     GamePlay.prototype.getCurrentSlot = function () {
@@ -123,18 +125,35 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         // decides what to do if all players have played
         if (this.allPlayersHaveSameNumberOfCardsOnTable && this.state === WAITING_TO_GATHER_CARDS) {
 
-            // checks if player 0's card is higher than player 1's
+            // checks if player 0 won the hand
             if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
-                // moves everyone's cards to the winner's hand
-                this.players[0].moveTableToHand();
-                this.players[0].moveTableToHand(this.players[1].getTable());
+
+                // checks if this is a ninth move
+                if (this.numMoves % 9 === 0) {
+                    // moves everyone's cards to the winner's hand, player 1 first
+                    this.players[0].moveTableToHand(this.players[1].getTable());
+                    this.players[0].moveTableToHand();
+                } else {
+                    // moves everyone's cards to the winner's hand, player 0 first
+                    this.players[0].moveTableToHand();
+                    this.players[0].moveTableToHand(this.players[1].getTable());
+                }
 
                 // updates the loser's cards
                 this.players[1].updateRemoteReference();
             } else if (this.players[0].getTableCard().value < this.players[1].getTableCard().value) {
-                // player 1's card is higher than player 0's
-                this.players[1].moveTableToHand();
-                this.players[1].moveTableToHand(this.players[0].getTable());
+                // player 1 won the hand
+
+                // checks if this is a ninth move
+                if (this.numMoves % 9 === 0) {
+                    // moves everyone's cards to the winner's hand, player 0 first
+                    this.players[1].moveTableToHand(this.players[0].getTable());
+                    this.players[1].moveTableToHand();
+                } else {
+                    // moves everyone's cards to the winner's hand, player 1 first
+                    this.players[1].moveTableToHand();
+                    this.players[1].moveTableToHand(this.players[0].getTable());
+                }
 
                 // updates the loser's cards
                 this.players[0].updateRemoteReference();
@@ -273,6 +292,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             case WAITING_TO_GATHER_CARDS:
                 if (bIsLocalEvent) {
                     this.gatherCards();
+                    this.numMoves++;
                 }
                 break;
             default:
@@ -756,6 +776,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         this.tigerSound = new Audio('../resources/tiger-growl.wav');
         this.elephantSound = new Audio('../resources/elephant.wav');
 
+        this.numMoves = 0;
     };
 
     return GamePlay;
