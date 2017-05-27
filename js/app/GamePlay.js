@@ -563,7 +563,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
      * @param oDatabase reference to the remote database
      * @param nPlayerNum player number
      */
-    GamePlay.prototype.setUpRemotePlayerEventHandler = function (oGamePlay, oDatabase, nPlayerNum) {
+    GamePlay.prototype.setUpLocalHandlerForRemotePlayerEvents = function (oGamePlay, oDatabase, nPlayerNum) {
         oGamePlay.playerReference[nPlayerNum] = oDatabase.ref('/game/slots/list/' + oGamePlay.slotNumber + '/player' + nPlayerNum);
         oGamePlay.playerReference[nPlayerNum].on('value', function (snapshot) {
 
@@ -607,7 +607,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
      * @param oDatabase reference to the remote database
      * @param oGameSlots the object containing all the game slots
      */
-    GamePlay.prototype.setUpRemoteEventHandlers = function (oGamePlay, oDatabase, oGameSlots) {
+    GamePlay.prototype.setUpLocalHandlersForRemoteEvents = function (oGamePlay, oDatabase, oGameSlots) {
 
         // gets a reference to the game slots
         var oReferenceGameAllSlots = oDatabase.ref('game/slots');
@@ -726,8 +726,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             value: oGamePlay.slotNumber
         });
 
-        oGamePlay.setUpRemotePlayerEventHandler(oGamePlay, oDatabase, 0);
-        oGamePlay.setUpRemotePlayerEventHandler(oGamePlay, oDatabase, 1);
+        oGamePlay.setUpLocalHandlerForRemotePlayerEvents(oGamePlay, oDatabase, 0);
+        oGamePlay.setUpLocalHandlerForRemotePlayerEvents(oGamePlay, oDatabase, 1);
     };
 
     // starts a game
@@ -745,7 +745,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             // gets game slot object from remote database
             var oGameSlots = snapshot.val();
 
-            this.setUpRemoteEventHandlers(this, oDatabase, oGameSlots);
+            this.setUpLocalHandlersForRemoteEvents(this, oDatabase, oGameSlots);
 
         }.bind(this));
 
