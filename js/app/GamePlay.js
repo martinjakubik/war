@@ -685,6 +685,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             oGamePlay.moveToNextGameSlot(oDatabase);
             oGamePlay.makeLocalPlayer(0, oGamePlay.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
 
+            document.cookie = "isPlayer0Local=true";
+            
             // keeps player 0 waits for player 1
             oGamePlay.keepPlayer0AndWaitForPlayer1();
 
