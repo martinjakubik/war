@@ -537,13 +537,14 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         // if don't wait button is pressed, removes listener for second player
         var dontWaitPressed = function () {
 
+            var oGamePlay = this;
+
             // removes the listeners that detect changes to remote players
             this.playerReference[0].off();
             this.playerReference[1].off();
 
             // makes player 1
-            this.players.push(new Player(1, this.playerReference[1], this.cardWidth));
-            this.players[1].addOnTapToTopCardInHand(this.localPlayerTappedCardInHand.bind(this));
+            oGamePlay.makeLocalPlayer(1, oGamePlay.players, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
             var sNotThisName = this.players[0] ? this.players[0].getName() : '';
             this.players[1].setName(this.callbacks.getRandomPlayerName(1, this.playerNames, sNotThisName));
 
@@ -578,7 +579,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         Tools.setClass(oDontWaitBtn, 'button');
         oDontWaitBtn.setAttribute('id', 'dontWait');
         oDontWaitBtn.appendChild(oContent);
-        oDontWaitBtn.onclick = dontWaitPressed.bind(this, oDontWaitBtn);
+        oDontWaitBtn.onclick = dontWaitPressed.bind(this);
         document.body.insertBefore(oDontWaitBtn, null);
 
     };
