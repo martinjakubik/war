@@ -5,6 +5,19 @@ define('Tools', function () {
     var Tools = function () {
     };
 
+    Tools.generateID = function () {
+        var sUuid;
+
+        var fnS4 = function () {
+            var n = Math.floor(Math.random() * 9999);
+            return n;
+        }
+
+        var sUuid = fnS4() + '-' + fnS4();
+
+        return sUuid;
+    };
+
     Tools.addClass = function (oView, sClass) {
         var sClasses = oView.getAttribute('class');
 

@@ -497,11 +497,15 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         // adds player 0 to game
         this.initializeGamePlay(nInitialNumPlayers);
 
-        // clears player 1 and waits for new player 1
+        // creates player 0's browser session Id
+        var sSessionId = GamePlay.makeNewBrowserSessionId();
+
+        // stores remote player 0, clears player 1 and waits for new player 1
         oReferenceGameSlot.set({
             player0: {
                 name: this.players[0].getName(),
-                hand: this.players[0].getHand()
+                hand: this.players[0].getHand(),
+                sessionId: sSessionId
             },
             player1: null,
             restOfCards: this.restOfCards
@@ -620,6 +624,37 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
+     * makes a new ID for the browser session (ie. this is the first player to
+     * join)
+     *
+     * @return the new session ID
+     */
+    GamePlay.makeNewBrowserSessionId = function (oGameRef) {
+
+        var sKey = 'sessionId';
+        var sValue = Tools.generateID();
+        sessionStorage.setItem(sKey, sValue);
+
+        return sValue;
+    };
+
+    /**
+     * gets the browser session Id; created a new on if none exists
+     *
+     * @return the sessionId
+     */
+    GamePlay.getBrowserSessionId = function () {
+
+        var sKey = 'sessionId';
+        var sValue = sessionStorage.getItem(sKey);
+        if (!sValue) {
+            sValue = GamePlay.makeNewBrowserSessionId();
+        }
+
+        return sValue;
+    };
+
+    /**
      * sets up the handlers for events from the remote players;
      * checks remote database and stores players in a game slot
      *
@@ -627,7 +662,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
      * @param oDatabase reference to the remote database
      * @param oGameSlots the object containing all the game slots
      */
-    GamePlay.prototype.setUpLocalHandlersForRemoteEvents = function (oGamePlay, oDatabase, oGameSlots) {
+    GamePlay.prototype.setUpLocalPlayers = function (oGamePlay, oDatabase, oGameSlots) {
 
         // gets a reference to the game slots
         var oReferenceGameAllSlots = oDatabase.ref('game/slots');
@@ -685,8 +720,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             oGamePlay.moveToNextGameSlot(oDatabase);
             oGamePlay.makeLocalPlayer(0, oGamePlay.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
 
-            document.cookie = "isPlayer0Local=true";
-            
             // keeps player 0 waits for player 1
             oGamePlay.keepPlayer0AndWaitForPlayer1();
 
@@ -731,10 +764,14 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             // removes rest of cards
             oReferenceRestOfCards.remove();
 
+            // gets or creates player 1's browser session Id
+            var sSessionId = GamePlay.getBrowserSessionId();
+
             // stores player 1
             this.playerReference[1].set({
                 name: oGamePlay.players[1].getName(),
-                hand: oGamePlay.players[1].getHand()
+                hand: oGamePlay.players[1].getHand(),
+                sessionId: sSessionId
             });
 
         } else if (!bIsPlayer0SlotFull && bIsPlayer1SlotFull) {
@@ -767,7 +804,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             // gets game slot object from remote database
             var oGameSlots = snapshot.val();
 
-            this.setUpLocalHandlersForRemoteEvents(this, oDatabase, oGameSlots);
+            this.setUpLocalPlayers(this, oDatabase, oGameSlots);
 
         }.bind(this));
 
