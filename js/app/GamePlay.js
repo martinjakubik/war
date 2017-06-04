@@ -561,10 +561,14 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             // removes rest of cards
             oReferenceRestOfCards.remove();
 
+            // get or creates player 1's browser session Id
+            var sSessionId = GamePlay.getBrowserSessionId();
+
             // stores player 1
             this.playerReference[1].set({
                 name: this.players[1].getName(),
-                hand: this.players[1].getHand()
+                hand: this.players[1].getHand(),
+                sessionId: sSessionId
             });
         };
 
