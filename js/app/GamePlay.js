@@ -86,6 +86,16 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
+    * hides the Don't Wait button
+    */
+    GamePlay.hideDontWaitButton = function () {
+        var oDontWaitBtn = document.getElementById('dontWait');
+        if (oDontWaitBtn) {
+            oDontWaitBtn.style.display = 'none';
+        }
+    };
+
+    /**
      * Checks table to see if the game is, if it's a war, or if it's time to
      * gather cards.
      */
@@ -368,6 +378,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
      */
     GamePlay.prototype.initializeGamePlay = function (aCards) {
 
+        // distributes the cards to the local players
         var nNumPlayersAmongWhomToDistributeCards = this.numPlayers > 1 ? this.numPlayers : 2;
         var aDistributedCards = this.distribute(this.shuffledCards, nNumPlayersAmongWhomToDistributeCards);
 
@@ -377,6 +388,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 this.players[i].setHand(aDistributedCards[i]);
             }
         }
+
+        // keeps the rest of the cards for other players
         if (aDistributedCards.length > i - 1) {
             this.restOfCards = aDistributedCards[i - 1];
         }
@@ -417,16 +430,25 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         }
     };
 
-    GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (oPlayerValue) {
+    GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (aGameSlots) {
 
-        // gets player 1
-        this.players.push(new Player(1, this.playerReference[1], this.cardWidth));
-        this.players[1].setName(oPlayerValue.name);
-        this.players[1].setHand(oPlayerValue.hand);
+        var oGamePlay = this;
+
+        // distributes cards again if it wasn't done
+        if (!oGamePlay.restOfCards) {
+            oGamePlay.restOfCards = aGameSlots[oGamePlay.slotNumber].restOfCards;
+        }
+        if (!oGamePlay.restOfCards) {
+            oGamePlay.initializeGamePlay(1);
+        }
+
+        // makes local player 1
+        oGamePlay.makeLocalPlayer(1, oGamePlay.players, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
+        var sNotThisName = oGamePlay.players[0] ? oGamePlay.players[0].getName() : '';
+        oGamePlay.players[1].setName(oGamePlay.callbacks.getRandomPlayerName(1, oGamePlay.playerNames, sNotThisName));
 
         // adds player 1 to game
         this.addPlayerToGamePlay(1, 1, [null, this.restOfCards]);
-        this.restOfCards = [];
 
         // renders player 1
         var oPlayAreaView = document.getElementById('playArea');
@@ -439,9 +461,15 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         this.players[0].renderTable();
         this.players[0].renderHand();
 
+        // stores player 1
+        this.playerReference[1].set({
+            name: oGamePlay.players[1].getName(),
+            hand: oGamePlay.players[1].getHand(),
+            sessionId: oGamePlay.players[1].getSessionId()
+        });
+
         // hides don't wait button
-        var oDontWaitBtn = document.getElementById('dontWait');
-        oDontWaitBtn.style.display = 'none';
+        GamePlay.hideDontWaitButton();
 
         // clears waiting message
         this.result = '';
@@ -459,9 +487,12 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
      * @param fnLocalPlayerTappedCardInHand handler for when local player taps
      *          card in hand
      */
-    GamePlay.prototype.makeLocalPlayer = function(nPlayerNum, aPlayers, oPlayerRef, fnLocalPlayerTappedCardInHand) {
+    GamePlay.prototype.makeLocalPlayer = function(nPlayerNum, aPlayers, oPlayerRef, fnLocalPlayerTappedCardInHand, sSessionId) {
 
-        aPlayers.push(new Player(nPlayerNum, oPlayerRef, this.cardWidth));
+        // gets or creates player's browser session Id
+        var sSessionId = GamePlay.getBrowserSessionId();
+
+        aPlayers.push(new Player(nPlayerNum, oPlayerRef, this.cardWidth, sSessionId));
         aPlayers[nPlayerNum].addOnTapToTopCardInHand(fnLocalPlayerTappedCardInHand.bind(this));
 
     };
@@ -483,22 +514,27 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
     };
 
-    GamePlay.prototype.keepPlayer0AndWaitForPlayer1 = function () {
+    /**
+     *
+     */
+    GamePlay.prototype.keepPlayer0AndWaitForPlayer1 = function (aGameSlots) {
+
+        var oGamePlay = this;
 
         var oDatabase = firebase.database();
-        var oReferenceGameAllSlots = oDatabase.ref('game/slots');
         var oReferenceGameSlot = oDatabase.ref('game/slots/list/' + this.slotNumber);
 
         var nInitialNumPlayers = 1;
 
-        // makes player 0
+        // gets player 0's browser session Id
+        var sSessionId = GamePlay.makeNewBrowserSessionId();
+
+        // makes local player 0
+        oGamePlay.makeLocalPlayer(0, oGamePlay.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
         this.players[0].setName(this.callbacks.getRandomPlayerName(0, this.playerNames));
 
         // adds player 0 to game
         this.initializeGamePlay(nInitialNumPlayers);
-
-        // creates player 0's browser session Id
-        var sSessionId = GamePlay.makeNewBrowserSessionId();
 
         // stores remote player 0, clears player 1 and waits for new player 1
         oReferenceGameSlot.set({
@@ -535,7 +571,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         }.bind(this));
 
         // if don't wait button is pressed, removes listener for second player
-        var dontWaitPressed = function () {
+        var dontWaitPressed = function (aGameSlots) {
 
             var oGamePlay = this;
 
@@ -543,34 +579,10 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             this.playerReference[0].off();
             this.playerReference[1].off();
 
-            // makes player 1
-            oGamePlay.makeLocalPlayer(1, oGamePlay.players, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
-            var sNotThisName = this.players[0] ? this.players[0].getName() : '';
-            this.players[1].setName(this.callbacks.getRandomPlayerName(1, this.playerNames, sNotThisName));
-
-            // distributes cards again if it wasn't done
-            if (!this.restOfCards) {
-                this.restOfCards = aGameSlots[this.slotNumber].restOfCards;
-            }
-            if (!this.restOfCards) {
-                this.initializeGamePlay(1);
-            }
-
-            var oPlayerValue = this.players[1];
-            this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oPlayerValue);
+            this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots);
 
             // removes rest of cards
             oReferenceRestOfCards.remove();
-
-            // get or creates player 1's browser session Id
-            var sSessionId = GamePlay.getBrowserSessionId();
-
-            // stores player 1
-            this.playerReference[1].set({
-                name: this.players[1].getName(),
-                hand: this.players[1].getHand(),
-                sessionId: sSessionId
-            });
         };
 
         // makes don't wait button
@@ -579,7 +591,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         Tools.setClass(oDontWaitBtn, 'button');
         oDontWaitBtn.setAttribute('id', 'dontWait');
         oDontWaitBtn.appendChild(oContent);
-        oDontWaitBtn.onclick = dontWaitPressed.bind(this);
+        oDontWaitBtn.onclick = dontWaitPressed.bind(this, aGameSlots);
         document.body.insertBefore(oDontWaitBtn, null);
 
     };
@@ -603,6 +615,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 var oPlayerHandValue = oPlayerValue.hand;
                 var oPlayerTableValue = oPlayerValue.table || [];
 
+                // creates a temporary player so we can pass a non-null object
+                // to the updateGamePlay method (this does nothing)
                 var oTempPlayer = new Player(nPlayerNum, null, -1);
 
                 // sets player's hand
@@ -713,22 +727,22 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         if (!bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
-            // finds new slot; makes local player 0
-            oGamePlay.makeLocalPlayer(0, oGamePlay.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
-
-            // keeps player 0 waits for player 1
-            oGamePlay.keepPlayer0AndWaitForPlayer1();
+            // found a new slot; keeps local player 0 waits for player 1
+            oGamePlay.keepPlayer0AndWaitForPlayer1(aGameSlots);
 
         } else if (bIsPlayer0SlotFull && bIsPlayer1SlotFull) {
 
             // takes next slot, even if it is full; makes local player 0
             oGamePlay.moveToNextGameSlot(oDatabase);
-            oGamePlay.makeLocalPlayer(0, oGamePlay.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
 
-            // keeps player 0 waits for player 1
-            oGamePlay.keepPlayer0AndWaitForPlayer1();
+            // keeps local player 0 waits for player 1
+            oGamePlay.keepPlayer0AndWaitForPlayer1(aGameSlots);
 
         } else if (bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
+
+            // creates or gets a session Id; we don't know if this is the same
+            // session or not
+            var sSessionId = GamePlay.getBrowserSessionId();
 
             // finds new slot; makes local player 0
             oGamePlay.makeLocalPlayer(0, oGamePlay.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
@@ -743,41 +757,10 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             oGamePlay.players[0].renderHand();
             oGamePlay.players[0].renderTable();
 
-            // makes local player 1
-            oGamePlay.makeLocalPlayer(1, oGamePlay.players, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
-            var sNotThisName = oGamePlay.players[0] ? oGamePlay.players[0].getName() : '';
-            oGamePlay.players[1].setName(oGamePlay.callbacks.getRandomPlayerName(1, oGamePlay.playerNames, sNotThisName));
-
-            oGamePlay.allPlayersJoined = true;
-
-            // distributes cards again if it wasn't done
-            if (!oGamePlay.restOfCards) {
-                oGamePlay.restOfCards = aGameSlots[oGamePlay.slotNumber].restOfCards;
-            }
-            if (!oGamePlay.restOfCards) {
-                oGamePlay.initializeGamePlay(1);
-            }
-
-            // adds player 1 to game
-            oGamePlay.addPlayerToGamePlay(1, 1, [null, oGamePlay.restOfCards]);
-
-            // renders player 1
-            var oPlayAreaView = document.getElementById('playArea');
-            oGamePlay.players[1].makePlayerView(oPlayAreaView);
-            oGamePlay.renderCards();
+            oGamePlay.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots);
 
             // removes rest of cards
             oReferenceRestOfCards.remove();
-
-            // gets or creates player 1's browser session Id
-            var sSessionId = GamePlay.getBrowserSessionId();
-
-            // stores player 1
-            this.playerReference[1].set({
-                name: oGamePlay.players[1].getName(),
-                hand: oGamePlay.players[1].getHand(),
-                sessionId: sSessionId
-            });
 
         } else if (!bIsPlayer0SlotFull && bIsPlayer1SlotFull) {
 

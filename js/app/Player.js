@@ -4,11 +4,12 @@ define('Player', ['Tools'], function (Tools) {
 
     var cardFlipSound = new Audio('../resources/cardflip.wav');
 
-    var Player = function (nPlayerNum, oRemoteReference, nCardWidth) {
+    var Player = function (nPlayerNum, oRemoteReference, nCardWidth, sSessionId) {
 
         this.playerNum = nPlayerNum;
         this.remoteReference = oRemoteReference || null;
         this.cardWidth = nCardWidth;
+        this.sessionId = sSessionId;
 
         this.name = '';
         this.hand = [];
@@ -41,6 +42,14 @@ define('Player', ['Tools'], function (Tools) {
 
     Player.prototype.setTable = function (aCards) {
         this.table = aCards;
+    };
+
+    Player.prototype.getSessionId = function () {
+        return this.sessionId;
+    };
+
+    Player.prototype.setSessionId = function (sSessionId) {
+        this.sessionId = sSessionId;
     };
 
     Player.prototype.getNumberCards = function () {
@@ -268,7 +277,8 @@ define('Player', ['Tools'], function (Tools) {
         this.remoteReference.set({
             name: this.getName(),
             hand: this.getHand(),
-            table: this.getTable()
+            table: this.getTable(),
+            sessionId: this.getSessionId()
         });
     };
 
