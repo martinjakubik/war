@@ -339,23 +339,5 @@ define('Player', ['Tools'], function (Tools) {
         this.onTapTopCardInHand = fnOnTap;
     };
 
-    /**
-     *
-     */
-    Player.prototype.removeOnTapFromTopCardInHand = function () {
-    };
-
-    /**
-     *
-     */
-    Player.prototype.addOnTapToTopCardOnTable = function () {
-    };
-
-    /**
-     *
-     */
-    Player.prototype.removeOnTapFromTopCardOnTable = function () {
-    };
-
     return Player;
 });

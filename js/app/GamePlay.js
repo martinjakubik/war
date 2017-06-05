@@ -44,37 +44,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
-     * distributes the cards to the current number of players
-     *
-     * @param aCards an array of cards
-     *
-     * @return the cards distributed between players; in the
-     *      form of an array of player arrays, each player
-     *      array containing cards
-     */
-    GamePlay.prototype.distribute = function (aCards) {
-
-        var i, j, oCard;
-        var aDistributedCards = [];
-
-        for (i = 0; i < aCards.length; i++) {
-            oCard = aCards[i];
-
-            for (j = 0; j < this.numPlayers; j++) {
-                if (i % this.numPlayers === j) {
-                    if (!aDistributedCards[j]) {
-                        aDistributedCards[j] = [];
-                    }
-                    aDistributedCards[j].push(oCard);
-                    break;
-                }
-            }
-        }
-
-        return aDistributedCards;
-    };
-
-    /**
     * renders all the cards
     */
     GamePlay.prototype.renderCards = function () {
@@ -93,6 +62,24 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         if (oDontWaitBtn) {
             oDontWaitBtn.style.display = 'none';
         }
+    };
+
+    /**
+     * finds a player given the Id of a player view
+     */
+    GamePlay.prototype.findPlayerForPlayerViewId = function (sPlayerViewId) {
+        var oPlayer = null;
+
+        var i;
+
+        for (i = 0; i < this.players.length ; i++) {
+            if ('player' + this.players[i].getPlayerNum() === sPlayerViewId) {
+                oPlayer = this.players[i];
+                break;
+            }
+        }
+
+        return oPlayer;
     };
 
     /**
@@ -231,21 +218,26 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
-     * finds a player given the Id of a player view
+     * checks if one player has won
      */
-    GamePlay.prototype.findPlayerForPlayerViewId = function (sPlayerViewId) {
-        var oPlayer = null;
+    GamePlay.prototype.isGameFinished = function (aPlayer0Cards, aPlayer1Cards) {
 
-        var i;
+        var i, nOtherPlayer;
 
-        for (i = 0; i < this.players.length ; i++) {
-            if ('player' + this.players[i].getPlayerNum() === sPlayerViewId) {
-                oPlayer = this.players[i];
-                break;
+        for (i = 0; i < this.players.length; i++) {
+            if (this.players[i].hand.length === 0) {
+                if (i === 0) {
+                    nOtherPlayer = 1;
+                } else if (i === 1) {
+                    nOtherPlayer = 0;
+                }
+                this.result = this.players[nOtherPlayer].getName() + ' wins';
+                this.callbacks.renderResult(this.result);
+                this.state = GAME_OVER;
+                return true;
             }
         }
-
-        return oPlayer;
+        return false;
     };
 
     /**
@@ -352,27 +344,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         }
     };
 
-    // checks if one player has won
-    GamePlay.prototype.isGameFinished = function (aPlayer0Cards, aPlayer1Cards) {
-
-        var i, nOtherPlayer;
-
-        for (i = 0; i < this.players.length; i++) {
-            if (this.players[i].hand.length === 0) {
-                if (i === 0) {
-                    nOtherPlayer = 1;
-                } else if (i === 1) {
-                    nOtherPlayer = 0;
-                }
-                this.result = this.players[nOtherPlayer].getName() + ' wins';
-                this.callbacks.renderResult(this.result);
-                this.state = GAME_OVER;
-                return true;
-            }
-        }
-        return false;
-    };
-
     /**
      * initializes a game; makes players and cards and distributes them
      */
@@ -462,12 +433,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         this.players[0].renderHand();
 
         // stores player 1
-        // var sSessionId = oGamePlay.players[1].getSessionId();
-        // this.playerReference[1].set({
-        //     name: oGamePlay.players[1].getName(),
-        //     hand: oGamePlay.players[1].getHand(),
-        //     sessionId: sSessionId
-        // });
         oGamePlay.players[1].updateRemoteReference();
 
         // hides don't wait button
@@ -789,7 +754,40 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         oGamePlay.setUpLocalHandlerForRemotePlayerEvents(oGamePlay, oDatabase, 1);
     };
 
-    // starts a game
+    /**
+     * distributes the cards to the current number of players
+     *
+     * @param aCards an array of cards
+     *
+     * @return the cards distributed between players; in the
+     *      form of an array of player arrays, each player
+     *      array containing cards
+     */
+    GamePlay.prototype.distribute = function (aCards) {
+
+        var i, j, oCard;
+        var aDistributedCards = [];
+
+        for (i = 0; i < aCards.length; i++) {
+            oCard = aCards[i];
+
+            for (j = 0; j < this.numPlayers; j++) {
+                if (i % this.numPlayers === j) {
+                    if (!aDistributedCards[j]) {
+                        aDistributedCards[j] = [];
+                    }
+                    aDistributedCards[j].push(oCard);
+                    break;
+                }
+            }
+        }
+
+        return aDistributedCards;
+    };
+
+    /**
+     * starts a game
+     */
     GamePlay.prototype.start = function () {
 
         this.shuffledCards = Tools.shuffle(this.cards);
