@@ -1,5 +1,6 @@
 .DS_Store
 .ftpauth
+.firebaserc
 node_modules
 public
 
