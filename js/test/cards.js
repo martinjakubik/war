@@ -1,3 +1,7 @@
+var aBatawafCardValues_short_all = [
+  6, 5, 4, 3, 2, 1
+];
+
 var aBatawafCardValues_short_repeats = [
   6, 3, 6, 2, 6, 2
 ];
