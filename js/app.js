@@ -5,7 +5,7 @@ requirejs.config({
     baseUrl: '../js/app',
     paths: {
         lib: '../lib',
-        Player: '../lib/Player'
+        Player: '../lib/flook/js/Player'
     }
 });
 
