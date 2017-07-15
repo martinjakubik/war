@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "devDependencies": {
     "grunt": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
+	"grunt-contrib-copy": "^1.0.0",
+	"grunt-dev-update": "^2.2.0",
     "grunt-ftp": "^2.1.0",
     "grunt-ftp-push": "^1.0.0",
-    "load-grunt-tasks": "^3.5.0"
+    "load-grunt-tasks": "^3.5.0",
+	"flook": "^1.0.1"
   }
 }

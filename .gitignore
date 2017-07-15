@@ -3,3 +3,5 @@
 Gruntfile.js
 node_modules
 public
+
+js/lib/*.js

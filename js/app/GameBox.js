@@ -1,6 +1,6 @@
 /*global require */
 /*global Audio: false */
-require(['GamePlay', 'Player', 'Tools'], function (GamePlay, Player, Tools) {
+requirejs(['GamePlay', 'Tools'], function (GamePlay, Tools) {
 
     'use strict';
 

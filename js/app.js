@@ -4,9 +4,10 @@
 requirejs.config({
     baseUrl: '../js/app',
     paths: {
-        lib: '../js/lib'
+        lib: '../lib',
+        Player: '../lib/Player'
     }
 });
 
 // starts loading the main app file
-requirejs(['GameBox']);    
+requirejs(['GameBox']);
