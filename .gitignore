@@ -1,7 +1,8 @@
 .DS_Store
 .ftpauth
-Gruntfile.js
 node_modules
 public
 
 js/lib
+
+grunttasks/ftpPut.js

@@ -1,0 +1,15 @@
+module.exports = function (grunt) {
+    grunt.config('ftpPut', {
+        options: {
+            host: 'myhost',
+            user: 'user',
+            pass: 'pass'
+        },
+        upload: {
+            files: [
+                {'path/on/host/': 'js/app/file1.js'},
+                {'path/on/host/': 'js/app/file2.js'}
+            ]
+        }
+    });
+};
