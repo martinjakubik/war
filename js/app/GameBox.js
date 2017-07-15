@@ -104,7 +104,7 @@ require(['GamePlay', 'Player', 'Tools'], function (GamePlay, Player, Tools) {
 
     var oGameBox = new GameBox();
 
-    var aBatawafCardValues = [
+    var aBatanimalCardValues = [
       6, 3, 5, 5, 1, 6,
       4, 2, 4, 3, 1, 3,
       5, 6, 2, 4, 6, 3,
@@ -113,7 +113,7 @@ require(['GamePlay', 'Player', 'Tools'], function (GamePlay, Player, Tools) {
       6, 1, 2, 2, 3, 5
     ];
 
-    var aCards = oGameBox.makeCards(aBatawafCardValues);
+    var aCards = oGameBox.makeCards(aBatanimalCardValues);
 
     GameBox.makeView();
 

@@ -146,8 +146,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             // checks if player 0 won the hand
             if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
 
-                // checks if this is a ninth move
-                if (this.numMoves % 9 === 0) {
+                // every five moves, randomly switches order of the gathered cards
+                if (this.numMoves % 5 === 0 && Math.random() > 0.5) {
                     // moves everyone's cards to the winner's hand, player 1 first
                     this.players[0].moveTableToHand(this.players[1].getTable());
                     this.players[0].moveTableToHand();
@@ -162,8 +162,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             } else if (this.players[0].getTableCard().value < this.players[1].getTableCard().value) {
                 // player 1 won the hand
 
-                // checks if this is a ninth move
-                if (this.numMoves % 9 === 0) {
+                // every five moves, randomly switches order of the gathered cards
+                if (this.numMoves % 5 === 0 && Math.random()) {
                     // moves everyone's cards to the winner's hand, player 0 first
                     this.players[1].moveTableToHand(this.players[0].getTable());
                     this.players[1].moveTableToHand();
