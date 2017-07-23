@@ -2,7 +2,7 @@
   "name": "war",
   "version": "0.1.0",
   "devDependencies": {
-    "flook": "^1.0.8",
+    "flook": "^1.0.13",
     "grunt": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-dev-update": "^2.2.0",

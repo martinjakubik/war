@@ -18,7 +18,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         this.callbacks = oCallbacks;
 
         this.currentSlot;
-        this.players = [];
+        this.playerControllers = [];
 
         this.allPlayersJoined = false;
 
@@ -36,11 +36,11 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     GamePlay.prototype.getPlayers = function () {
-        return this.players;
+        return this.playerControllers;
     };
 
     GamePlay.prototype.setPlayers = function (aPlayers) {
-        this.players = aPlayers;
+        this.playerControllers = aPlayers;
     };
 
     /**
@@ -48,9 +48,9 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     */
     GamePlay.prototype.renderCards = function () {
         var i;
-        for (i = 0; i < this.players.length; i++) {
-            this.players[i].renderTable();
-            this.players[i].renderHand();
+        for (i = 0; i < this.playerControllers.length; i++) {
+            this.playerControllers[i].renderTable();
+            this.playerControllers[i].renderHand();
         }
     };
 
@@ -72,9 +72,9 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         var i;
 
-        for (i = 0; i < this.players.length ; i++) {
-            if ('player' + this.players[i].getPlayerNum() === sPlayerViewId) {
-                oPlayer = this.players[i];
+        for (i = 0; i < this.playerControllers.length ; i++) {
+            if ('player' + this.playerControllers[i].getPlayerNum() === sPlayerViewId) {
+                oPlayer = this.playerControllers[i];
                 break;
             }
         }
@@ -83,15 +83,14 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
-     * Checks table to see if the game is, if it's a war, or if it's time to
-     * gather cards.
+     * Checks table to see if it's a war, or if it's time to gather cards.
      */
-    GamePlay.prototype.checkTable = function () {
+    GamePlay.prototype.updateGameStateBasedOnTable = function () {
 
 
-        if (this.players.length > 1
-            && this.players[0].getHand()
-            && this.players[1].getHand()) {
+        if (this.playerControllers.length > 1
+            && this.playerControllers[0].getHand()
+            && this.playerControllers[1].getHand()) {
 
             if (this.isGameFinished()) {
                 return;
@@ -100,26 +99,26 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         if (this.doAllPlayersHaveSameNumberOfCardsOnTable()) {
 
-            if (!this.players[0].getTableCard()
-                || !this.players[1].getTableCard()) {
+            if (!this.playerControllers[0].getTableCard()
+                || !this.playerControllers[1].getTableCard()) {
 
                 // checks if the players have no cards on the table
                 this.state = WAITING_TO_FILL_TABLE;
 
-            } else if (GamePlay.doesPlayerHaveCardOnTableFaceDown(this.players[0])) {
+            } else if (GamePlay.doesPlayerHaveCardOnTableFaceDown(this.playerControllers[0])) {
 
                 // checks if the players both have face down cards (in war)
                 this.state = WAITING_TO_FILL_TABLE;
 
-            } else if (GamePlay.doesPlayerHaveCardOnTableFaceUp(this.players[0])
-                && this.players[0].getTableCard()
-                && this.players[1].getTableCard()
-                && this.players[0].getTableCard().value
-                === this.players[1].getTableCard().value) {
+            } else if (GamePlay.doesPlayerHaveCardOnTableFaceUp(this.playerControllers[0])
+                && this.playerControllers[0].getTableCard()
+                && this.playerControllers[1].getTableCard()
+                && this.playerControllers[0].getTableCard().value
+                === this.playerControllers[1].getTableCard().value) {
 
                 // checks if both players have the same face-up card (starts
                 // war)
-                this.playWarSound(this.players[0].getTableCard().value);
+                this.playWarSound(this.playerControllers[0].getTableCard().value);
 
                 this.state = WAITING_FOR_FACE_DOWN_WAR_CARD;
 
@@ -144,37 +143,37 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         if (this.doAllPlayersHaveSameNumberOfCardsOnTable() && this.state === WAITING_TO_GATHER_CARDS) {
 
             // checks if player 0 won the hand
-            if (this.players[0].getTableCard().value > this.players[1].getTableCard().value) {
+            if (this.playerControllers[0].getTableCard().value > this.playerControllers[1].getTableCard().value) {
 
                 // every five moves, randomly switches order of the gathered cards
                 if (this.numMoves % 5 === 0 && Math.random() > 0.5) {
                     // moves everyone's cards to the winner's hand, player 1 first
-                    this.players[0].moveTableToHand(this.players[1].getTable());
-                    this.players[0].moveTableToHand();
+                    this.playerControllers[0].moveTableToHand(this.playerControllers[1].getTable());
+                    this.playerControllers[0].moveTableToHand();
                 } else {
                     // moves everyone's cards to the winner's hand, player 0 first
-                    this.players[0].moveTableToHand();
-                    this.players[0].moveTableToHand(this.players[1].getTable());
+                    this.playerControllers[0].moveTableToHand();
+                    this.playerControllers[0].moveTableToHand(this.playerControllers[1].getTable());
                 }
 
                 // updates the loser's cards
-                this.players[1].updateRemoteReference();
-            } else if (this.players[0].getTableCard().value < this.players[1].getTableCard().value) {
+                this.playerControllers[1].updateRemoteReference();
+            } else if (this.playerControllers[0].getTableCard().value < this.playerControllers[1].getTableCard().value) {
                 // player 1 won the hand
 
                 // every five moves, randomly switches order of the gathered cards
                 if (this.numMoves % 5 === 0 && Math.random()) {
                     // moves everyone's cards to the winner's hand, player 0 first
-                    this.players[1].moveTableToHand(this.players[0].getTable());
-                    this.players[1].moveTableToHand();
+                    this.playerControllers[1].moveTableToHand(this.playerControllers[0].getTable());
+                    this.playerControllers[1].moveTableToHand();
                 } else {
                     // moves everyone's cards to the winner's hand, player 1 first
-                    this.players[1].moveTableToHand();
-                    this.players[1].moveTableToHand(this.players[0].getTable());
+                    this.playerControllers[1].moveTableToHand();
+                    this.playerControllers[1].moveTableToHand(this.playerControllers[0].getTable());
                 }
 
                 // updates the loser's cards
-                this.players[0].updateRemoteReference();
+                this.playerControllers[0].updateRemoteReference();
             }
 
             this.isGameFinished();
@@ -221,16 +220,16 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     GamePlay.prototype.doAllPlayersHaveSameNumberOfCardsOnTable = function () {
 
         var i;
-        var nNumCards = (this.players &&
-            this.players.length > 0 &&
-            this.players[0].getTable()) ? this.players[0].getTable().length : -1;
+        var nNumCards = (this.playerControllers &&
+            this.playerControllers.length > 0 &&
+            this.playerControllers[0].getTable()) ? this.playerControllers[0].getTable().length : -1;
 
         var bAllPlayersHaveSameNumberOfCardsOnTable = true;
 
         for (i = 0; i < this.numPlayers; i++) {
-            if (!(this.players[i])
-                || !(this.players[i].getTable())
-                || !(this.players[i].getTable().length === nNumCards)) {
+            if (!(this.playerControllers[i])
+                || !(this.playerControllers[i].getTable())
+                || !(this.playerControllers[i].getTable().length === nNumCards)) {
                 bAllPlayersHaveSameNumberOfCardsOnTable = false;
                 break;
             }
@@ -246,10 +245,10 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         var i, nOtherPlayer;
 
-        for (i = 0; i < this.players.length; i++) {
+        for (i = 0; i < this.playerControllers.length; i++) {
 
             // checks if the player's hand is empty
-            if (this.players[i].hand.length === 0) {
+            if (this.playerControllers[i].hand.length === 0) {
 
                 if (i === 0) {
                     nOtherPlayer = 1;
@@ -258,9 +257,9 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 }
 
                 // checks if the same player's table loses to the other player
-                if (this.players[i].getTableCard().value < this.players[nOtherPlayer].getTableCard().value) {
+                if (this.playerControllers[i].getTableCard().value < this.playerControllers[nOtherPlayer].getTableCard().value) {
 
-                    this.result = this.players[nOtherPlayer].getName() + ' wins';
+                    this.result = this.playerControllers[nOtherPlayer].getName() + ' wins';
                     this.callbacks.renderResult(this.result);
                     this.state = GAME_OVER;
                     return true;
@@ -299,17 +298,17 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     }
 
     /**
-     * updates the game based on current state and an event
+     * updates the game when player wants to play a card, based on current state
      *
-     * @param oPlayer a player on whom the event happened
+     * @param oPlayer a player controller on whom the event happened
      * @param bIsLocalEvent true if the event happened in the local UI
      */
-    GamePlay.prototype.updateGamePlay = function (oPlayer, bIsLocalEvent) {
+    GamePlay.prototype.playerWantsToPlayACard = function (oPlayer, bIsLocalEvent) {
         switch (this.state) {
             case WAITING_TO_FILL_TABLE:
                 // checks if the player already has a face-up card on the table
                 if (GamePlay.doesPlayerHaveCardOnTableFaceUp(oPlayer)) {
-                    // does nothing
+                    // wiggles the card
                     if (bIsLocalEvent) {
                         oPlayer.wiggleCardInHand();
                     }
@@ -349,7 +348,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 break;
         }
 
-        this.checkTable();
+        this.updateGameStateBasedOnTable();
 
     };
 
@@ -389,7 +388,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         // checks if the tap is a legitimate move in the game
         if (oPlayer && this.allPlayersJoined && this.state !== GAME_OVER) {
-            this.updateGamePlay.call(this, oPlayer, bIsLocalEvent);
+            this.playerWantsToPlayACard.call(this, oPlayer, bIsLocalEvent);
         } else {
             // does nothing
             oPlayer.wiggleCardInHand();
@@ -407,8 +406,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         var i;
         for (i = 0; i < this.numPlayers; i++) {
-            if (i < this.players.length) {
-                this.players[i].setHand(aDistributedCards[i]);
+            if (i < this.playerControllers.length) {
+                this.playerControllers[i].setHand(aDistributedCards[i]);
             }
         }
 
@@ -426,12 +425,12 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             var i, aDistributedCards;
             this.result = '';
             this.callbacks.renderResult(this.result);
-            this.players[0].clearTable();
-            this.players[1].clearTable();
+            this.playerControllers[0].clearTable();
+            this.playerControllers[1].clearTable();
             this.shuffledCards = Tools.shuffle(this.shuffledCards);
-            aDistributedCards = distribute(this.shuffledCards, this.players.length);
-            for (i = 0; i < this.players.length; i++) {
-                this.players[i].setHand(aDistributedCards[i]);
+            aDistributedCards = distribute(this.shuffledCards, this.playerControllers.length);
+            for (i = 0; i < this.playerControllers.length; i++) {
+                this.playerControllers[i].setHand(aDistributedCards[i]);
             }
             this.renderCards();
         }.bind(this);
@@ -447,13 +446,20 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         var i;
         for (i = nFirstPlayer; i <= nLastPlayer; i++) {
-            if (i < this.players.length) {
-                this.players[i].setHand(aDistributedCards[i]);
+            if (i < this.playerControllers.length) {
+                this.playerControllers[i].setHand(aDistributedCards[i]);
             }
         }
     };
 
-    GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (aGameSlots) {
+    /**
+    * adds player 1 to the game
+    *
+    * @param aGameSlots list of game slots
+    * @param sSessionId the ID of the current browser session
+    * @param bIsRemote true if player1 is a remote player
+    */
+    GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (aGameSlots, bIsRemote) {
 
         var oGamePlay = this;
 
@@ -465,27 +471,27 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             oGamePlay.initializeGamePlay(1);
         }
 
-        // makes local player 1
-        oGamePlay.makeLocalPlayer(1, oGamePlay.players, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay));
-        var sNotThisName = oGamePlay.players[0] ? oGamePlay.players[0].getName() : '';
-        oGamePlay.players[1].setName(oGamePlay.callbacks.getRandomPlayerName(1, oGamePlay.playerNames, sNotThisName));
+        // makes player 1 controller
+        oGamePlay.makePlayerController(1, oGamePlay.playerControllers, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), bIsRemote);
+        var sNotThisName = oGamePlay.playerControllers[0] ? oGamePlay.playerControllers[0].getName() : '';
+        oGamePlay.playerControllers[1].setName(oGamePlay.callbacks.getRandomPlayerName(1, oGamePlay.playerNames, sNotThisName));
 
         // adds player 1 to game
         this.addPlayerToGamePlay(1, 1, [null, this.restOfCards]);
 
         // renders player 1
         var oPlayAreaView = document.getElementById('playArea');
-        this.players[1].makePlayerView(oPlayAreaView);
-        this.players[1].renderHand();
-        this.players[1].renderTable();
+        this.playerControllers[1].makePlayerView(oPlayAreaView);
+        this.playerControllers[1].renderHand();
+        this.playerControllers[1].renderTable();
 
         // lets player 0 play
-        this.players[0].addOnTapToTopCardInHand(this.localPlayerTappedCardInHand.bind(this));
-        this.players[0].renderTable();
-        this.players[0].renderHand();
+        this.playerControllers[0].setOnTapCardInHand(this.localPlayerTappedCardInHand.bind(this));
+        this.playerControllers[0].renderTable();
+        this.playerControllers[0].renderHand();
 
         // stores player 1
-        oGamePlay.players[1].updateRemoteReference();
+        oGamePlay.playerControllers[1].updateRemoteReference();
 
         // hides don't wait button
         GamePlay.hideDontWaitButton();
@@ -498,22 +504,23 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
-     * makes a local Player
+     * makes a Player controller to manager a player locally
      *
      * @param nPlayerNum player number
      * @param aPlayers the list of players to add the player to
      * @param oPlayerRef a reference to the remote player
-     * @param fnLocalPlayerTappedCardInHand handler for when local player taps
+     * @param fnLocalPlayerWantsToPlayCard handler for when local player taps
      *          card in hand
      * @param sSessionId the ID of the current browser session
+     * @param bIsRemote if the player is remote
      */
-    GamePlay.prototype.makeLocalPlayer = function(nPlayerNum, aPlayers, oPlayerRef, fnLocalPlayerTappedCardInHand, sSessionId) {
+    GamePlay.prototype.makePlayerController = function(nPlayerNum, aPlayers, oPlayerRef, fnLocalPlayerWantsToPlayCard, sSessionId, bIsRemote) {
 
         // gets or creates player's browser session Id
         sSessionId = sSessionId ? sSessionId : GamePlay.getBrowserSessionId();
 
-        aPlayers.push(new Player(nPlayerNum, oPlayerRef, this.cardWidth, sSessionId));
-        aPlayers[nPlayerNum].addOnTapToTopCardInHand(fnLocalPlayerTappedCardInHand.bind(this));
+        aPlayers.push(new Player(nPlayerNum, oPlayerRef, this.cardWidth, sSessionId, bIsRemote));
+        aPlayers[nPlayerNum].setOnTapCardInHand(fnLocalPlayerWantsToPlayCard.bind(this));
 
     };
 
@@ -549,9 +556,11 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         // gets player 0's browser session Id
         var sSessionId = GamePlay.makeNewBrowserSessionId();
 
-        // makes local player 0
-        oGamePlay.makeLocalPlayer(0, oGamePlay.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId);
-        this.players[0].setName(this.callbacks.getRandomPlayerName(0, this.playerNames));
+        var bIsRemote = false;
+
+        // makes player 0 controller
+        oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bIsRemote);
+        this.playerControllers[0].setName(this.callbacks.getRandomPlayerName(0, this.playerNames));
 
         // adds player 0 to game
         this.initializeGamePlay(nInitialNumPlayers);
@@ -559,8 +568,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         // stores remote player 0, clears player 1 and waits for new player 1
         oReferenceGameSlot.set({
             player0: {
-                name: this.players[0].getName(),
-                hand: this.players[0].getHand(),
+                name: this.playerControllers[0].getName(),
+                hand: this.playerControllers[0].getHand(),
                 sessionId: sSessionId
             },
             player1: null,
@@ -569,7 +578,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         // renders player 0
         var oPlayAreaView = document.getElementById('playArea');
-        this.players[0].makePlayerView(oPlayAreaView);
+        this.playerControllers[0].makePlayerView(oPlayAreaView);
 
         // adds waiting message
         this.result = 'waiting for player 2';
@@ -585,7 +594,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
             // checks if a remote player 1 just joined and if there is no
             // player 1 yet
-            if (oPlayerValue && !this.players[1]) {
+            if (oPlayerValue && !this.playerControllers[1]) {
                 this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oPlayerValue);
             }
         }.bind(this));
@@ -634,29 +643,29 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 var oPlayerHandValue = oPlayerValue.hand;
                 var oPlayerTableValue = oPlayerValue.table || [];
 
-                // creates a temporary player so we can pass a non-null object
-                // to the updateGamePlay method (this does nothing)
-                var oTempPlayer = new Player(0, null, -1);
+                // recreates a remote player controller to pass to the
+                // playerWantsToPlayACard method
+                var oRemotePlayer = new Player(0, null, -1);
 
                 // sets player's hand
-                if (oPlayerHandValue && oGamePlay.players[0]) {
-                    oGamePlay.players[0].setHand(
+                if (oPlayerHandValue && oGamePlay.playerControllers[0]) {
+                    oGamePlay.playerControllers[0].setHand(
                         oPlayerHandValue
                     );
-                    oGamePlay.players[0].renderHand();
-                    oTempPlayer.setHand(oPlayerHandValue);
+                    oGamePlay.playerControllers[0].renderHand();
+                    oRemotePlayer.setHand(oPlayerHandValue);
                 }
 
                 // sets player's table
-                if (oPlayerTableValue && oGamePlay.players[0]) {
-                    oGamePlay.players[0].setTable(
+                if (oPlayerTableValue && oGamePlay.playerControllers[0]) {
+                    oGamePlay.playerControllers[0].setTable(
                         oPlayerTableValue
                     );
-                    oGamePlay.players[0].renderTable();
-                    oTempPlayer.setTable(oPlayerTableValue);
+                    oGamePlay.playerControllers[0].renderTable();
+                    oRemotePlayer.setTable(oPlayerTableValue);
                 }
 
-                oGamePlay.updateGamePlay.call(oGamePlay, oTempPlayer, bIsLocalEvent);
+                oGamePlay.playerWantsToPlayACard.call(oGamePlay, oRemotePlayer, bIsLocalEvent);
             }
         });
 
@@ -670,29 +679,29 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                 var oPlayerHandValue = oPlayerValue.hand;
                 var oPlayerTableValue = oPlayerValue.table || [];
 
-                // creates a temporary player so we can pass a non-null object
-                // to the updateGamePlay method (this does nothing)
-                var oTempPlayer = new Player(1, null, -1);
+                // recreates a remote player controller to pass to the
+                // playerWantsToPlayACard method
+                var oRemotePlayer = new Player(1, null, -1);
 
                 // sets player's hand
-                if (oPlayerHandValue && oGamePlay.players[1]) {
-                    oGamePlay.players[1].setHand(
+                if (oPlayerHandValue && oGamePlay.playerControllers[1]) {
+                    oGamePlay.playerControllers[1].setHand(
                         oPlayerHandValue
                     );
-                    oGamePlay.players[1].renderHand();
-                    oTempPlayer.setHand(oPlayerHandValue);
+                    oGamePlay.playerControllers[1].renderHand();
+                    oRemotePlayer.setHand(oPlayerHandValue);
                 }
 
                 // sets player's table
-                if (oPlayerTableValue && oGamePlay.players[1]) {
-                    oGamePlay.players[1].setTable(
+                if (oPlayerTableValue && oGamePlay.playerControllers[1]) {
+                    oGamePlay.playerControllers[1].setTable(
                         oPlayerTableValue
                     );
-                    oGamePlay.players[1].renderTable();
-                    oTempPlayer.setTable(oPlayerTableValue);
+                    oGamePlay.playerControllers[1].renderTable();
+                    oRemotePlayer.setTable(oPlayerTableValue);
                 }
 
-                oGamePlay.updateGamePlay.call(oGamePlay, oTempPlayer, bIsLocalEvent);
+                oGamePlay.playerWantsToPlayACard.call(oGamePlay, oRemotePlayer, bIsLocalEvent);
             }
         });
     };
@@ -776,8 +785,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         }
 
         // clears the list of players
-        while (oGamePlay.players.length > 0) {
-            oGamePlay.players.pop();
+        while (oGamePlay.playerControllers.length > 0) {
+            oGamePlay.playerControllers.pop();
         }
 
         if (!bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
@@ -787,7 +796,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         } else if (bIsPlayer0SlotFull && bIsPlayer1SlotFull) {
 
-            // takes next slot, even if it is full; makes local player 0
+            // takes next slot, even if it is full; makes player 0 controller
             oGamePlay.moveToNextGameSlot(oDatabase);
 
             // keeps local player 0 waits for player 1
@@ -799,29 +808,33 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             // session or not
             var sSessionId = GamePlay.getBrowserSessionId();
 
+            var bPlayer0IsRemote = false,
+                bPlayer1IsRemote = false;
+
             // checks if the player0 already has a different session ID (this is
             // the case if the player is from a different browser)
             if (aGameSlots && aGameSlots.length > 0 && aGameSlots[oGamePlay.slotNumber]) {
                 if (aGameSlots[oGamePlay.slotNumber].player0 &&
                      aGameSlots[oGamePlay.slotNumber].player0.sessionId) {
                          sSessionId = aGameSlots[oGamePlay.slotNumber].player0.sessionId;
+                         bPlayer1IsRemote = true;
                      }
             }
 
-            // finds new slot; makes local player 0
-            oGamePlay.makeLocalPlayer(0, oGamePlay.players, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId);
+            // finds new slot; makes player 0 controller
+            oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bPlayer0IsRemote);
 
             // keeps remote player 0
-            oGamePlay.players[0].setName(aGameSlots[oGamePlay.slotNumber].player0.name);
-            oGamePlay.players[0].setHand(aGameSlots[oGamePlay.slotNumber].player0.hand);
+            oGamePlay.playerControllers[0].setName(aGameSlots[oGamePlay.slotNumber].player0.name);
+            oGamePlay.playerControllers[0].setHand(aGameSlots[oGamePlay.slotNumber].player0.hand);
 
             // renders player 0
             var oPlayAreaView = document.getElementById('playArea');
-            oGamePlay.players[0].makePlayerView(oPlayAreaView);
-            oGamePlay.players[0].renderHand();
-            oGamePlay.players[0].renderTable();
+            oGamePlay.playerControllers[0].makePlayerView(oPlayAreaView);
+            oGamePlay.playerControllers[0].renderHand();
+            oGamePlay.playerControllers[0].renderTable();
 
-            oGamePlay.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots);
+            oGamePlay.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots, bPlayer1IsRemote);
 
             // removes rest of cards
             oReferenceRestOfCards.remove();
