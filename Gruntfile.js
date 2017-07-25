@@ -22,22 +22,22 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: ['node_modules/flook/js/*.js'],
-                    dest: 'js/lib/flook/js/',
+                    src: ['node_modules/kierki/js/*.js'],
+                    dest: 'js/lib/kierki/js/',
                     filter: 'isFile'
                 },
                 {
                     expand: true,
                     flatten: true,
-                    src: ['node_modules/flook/css/*.css'],
-                    dest: 'js/lib/flook/css/',
+                    src: ['node_modules/kierki/css/*.css'],
+                    dest: 'js/lib/kierki/css/',
                     filter: 'isFile'
                 },
                 {
                     expand: true,
                     flatten: true,
-                    src: ['node_modules/flook/resources/*.wav'],
-                    dest: 'js/lib/flook/resources/',
+                    src: ['node_modules/kierki/resources/*.wav'],
+                    dest: 'js/lib/kierki/resources/',
                     filter: 'isFile'
                 }],
             },
