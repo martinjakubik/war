@@ -7,7 +7,7 @@
     "grunt-dev-update": "^2.2.0",
     "grunt-ftp": "^2.1.0",
     "grunt-ftp-push": "^1.0.0",
-    "kierki": "^1.0.5",
+    "kierki": "^1.0.6",
     "load-grunt-tasks": "^3.5.0"
   }
 }
