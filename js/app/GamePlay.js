@@ -627,83 +627,53 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
     /**
      * sets up the handlers for events from the remote players;
-     * gets hand and table from remote database and updates local players
+     * gets hand and table from remote database and updates player controllers
      *
      * @param oGamePlay an instance of a game
      * @param oDatabase reference to the remote database
      */
-    GamePlay.prototype.setUpLocalHandlerForRemotePlayerEvents = function (oGamePlay, oDatabase) {
-        oGamePlay.playerReference[0] = oDatabase.ref('/game/slots/list/' + oGamePlay.slotNumber + '/player' + 0);
-        oGamePlay.playerReference[0].on('value', function (snapshot) {
+    GamePlay.prototype.setUpHandlerForRemotePlayerEvents = function (oGamePlay, oDatabase) {
+        var nPlayerNumber = 0;
+        for (nPlayerNumber = 0; nPlayerNumber < 2; nPlayerNumber++) {
 
-            var oPlayerValue = snapshot.val();
-            var bIsLocalEvent = false;
+            oGamePlay.playerReference[nPlayerNumber] = oDatabase.ref('/game/slots/list/' + oGamePlay.slotNumber + '/player' + nPlayerNumber);
+            oGamePlay.playerReference[nPlayerNumber].on('value', function (snapshot) {
 
-            if (oPlayerValue) {
-                var oPlayerHandValue = oPlayerValue.hand;
-                var oPlayerTableValue = oPlayerValue.table || [];
+                var nEventPlayerNumber = snapshot.key.substring(6);
 
-                // recreates a remote player controller to pass to the
-                // playerWantsToPlayACard method
-                var oRemotePlayer = new Player(0, null, -1);
+                var oPlayerValue = snapshot.val();
+                var bIsLocalEvent = false;
 
-                // sets player's hand
-                if (oPlayerHandValue && oGamePlay.playerControllers[0]) {
-                    oGamePlay.playerControllers[0].setHand(
-                        oPlayerHandValue
-                    );
-                    oGamePlay.playerControllers[0].renderHand();
-                    oRemotePlayer.setHand(oPlayerHandValue);
+                if (oPlayerValue) {
+                    var oPlayerHandValue = oPlayerValue.hand;
+                    var oPlayerTableValue = oPlayerValue.table || [];
+
+                    // recreates a remote player controller to pass to the
+                    // playerWantsToPlayACard method
+                    var oRemotePlayer = new Player(nEventPlayerNumber, null, -1);
+
+                    // sets player's hand
+                    if (oPlayerHandValue && oGamePlay.playerControllers[nEventPlayerNumber]) {
+                        oGamePlay.playerControllers[nEventPlayerNumber].setHand(
+                            oPlayerHandValue
+                        );
+                        oGamePlay.playerControllers[nEventPlayerNumber].renderHand();
+                        oRemotePlayer.setHand(oPlayerHandValue);
+                    }
+
+                    // sets player's table
+                    if (oPlayerTableValue && oGamePlay.playerControllers[nEventPlayerNumber]) {
+                        oGamePlay.playerControllers[nEventPlayerNumber].setTable(
+                            oPlayerTableValue
+                        );
+                        oGamePlay.playerControllers[nEventPlayerNumber].renderTable();
+                        oRemotePlayer.setTable(oPlayerTableValue);
+                    }
+
+                    oGamePlay.playerWantsToPlayACard.call(oGamePlay, oRemotePlayer, bIsLocalEvent);
                 }
-
-                // sets player's table
-                if (oPlayerTableValue && oGamePlay.playerControllers[0]) {
-                    oGamePlay.playerControllers[0].setTable(
-                        oPlayerTableValue
-                    );
-                    oGamePlay.playerControllers[0].renderTable();
-                    oRemotePlayer.setTable(oPlayerTableValue);
-                }
-
-                oGamePlay.playerWantsToPlayACard.call(oGamePlay, oRemotePlayer, bIsLocalEvent);
-            }
-        });
-
-        oGamePlay.playerReference[1] = oDatabase.ref('/game/slots/list/' + oGamePlay.slotNumber + '/player' + 1);
-        oGamePlay.playerReference[1].on('value', function (snapshot) {
-
-            var oPlayerValue = snapshot.val();
-            var bIsLocalEvent = false;
-
-            if (oPlayerValue) {
-                var oPlayerHandValue = oPlayerValue.hand;
-                var oPlayerTableValue = oPlayerValue.table || [];
-
-                // recreates a remote player controller to pass to the
-                // playerWantsToPlayACard method
-                var oRemotePlayer = new Player(1, null, -1);
-
-                // sets player's hand
-                if (oPlayerHandValue && oGamePlay.playerControllers[1]) {
-                    oGamePlay.playerControllers[1].setHand(
-                        oPlayerHandValue
-                    );
-                    oGamePlay.playerControllers[1].renderHand();
-                    oRemotePlayer.setHand(oPlayerHandValue);
-                }
-
-                // sets player's table
-                if (oPlayerTableValue && oGamePlay.playerControllers[1]) {
-                    oGamePlay.playerControllers[1].setTable(
-                        oPlayerTableValue
-                    );
-                    oGamePlay.playerControllers[1].renderTable();
-                    oRemotePlayer.setTable(oPlayerTableValue);
-                }
-
-                oGamePlay.playerWantsToPlayACard.call(oGamePlay, oRemotePlayer, bIsLocalEvent);
-            }
-        });
+            });
+        }
     };
 
     /**
@@ -850,8 +820,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             value: oGamePlay.slotNumber
         });
 
-        oGamePlay.setUpLocalHandlerForRemotePlayerEvents(oGamePlay, oDatabase);
-        oGamePlay.setUpLocalHandlerForRemotePlayerEvents(oGamePlay, oDatabase);
+        oGamePlay.setUpHandlerForRemotePlayerEvents(oGamePlay, oDatabase);
+        oGamePlay.setUpHandlerForRemotePlayerEvents(oGamePlay, oDatabase);
     };
 
     /**
