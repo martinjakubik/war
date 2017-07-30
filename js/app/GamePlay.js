@@ -746,17 +746,17 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
             // session or not
             var sSessionId = GameSession.getBrowserSessionId();
 
-            var bPlayer0IsLocal = true,
-                bPlayer1IsLocal = true;
+            var bIsPlayer0Local = true,
+                bIsPlayer1Local = true;
 
             // checks if the player0 already has a different session ID (this is
             // the case if the player is from a different browser)
             var oPlayersWhoAreLocal = GameSession.whoIsLocal(oGameSlot);
-            bPlayer0IsLocal = (oPlayersWhoAreLocal.player0 === true);
-            bPlayer1IsLocal = (oPlayersWhoAreLocal.player1 === true);
+            bIsPlayer0Local = (oPlayersWhoAreLocal.player0 === true);
+            bIsPlayer1Local = (oPlayersWhoAreLocal.player1 === true);
 
             // makes controller for player 0
-            oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bPlayer0IsLocal);
+            oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bIsPlayer0Local);
 
             // keeps remote player 0
             if (oGameSlot) {
@@ -769,7 +769,7 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
                 oGamePlay.playerControllers[0].renderHand();
                 oGamePlay.playerControllers[0].renderTable();
 
-                oGamePlay.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots, bPlayer1IsLocal);
+                oGamePlay.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots, bIsPlayer1Local);
 
                 // removes rest of cards
                 oReferenceRestOfCards.remove();
