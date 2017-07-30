@@ -6,7 +6,8 @@ requirejs.config({
     paths: {
         lib: '../lib',
         Player: '../lib/kierki/js/Player',
-        Tools: '../lib/kierki/js/Tools'
+        Tools: '../lib/kierki/js/Tools',
+        GameSession: '../lib/kierki/js/GameSession'
     }
 });
 

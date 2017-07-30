@@ -1,5 +1,5 @@
 /*global define */
-define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
+define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, GameSession) {
 
     'use strict';
 
@@ -505,7 +505,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     GamePlay.prototype.makePlayerController = function(nPlayerNum, aPlayers, oPlayerRef, fnLocalPlayerWantsToPlayCard, sSessionId, bIsRemote) {
 
         // gets or creates player's browser session Id
-        sSessionId = sSessionId ? sSessionId : GamePlay.getBrowserSessionId();
+        sSessionId = sSessionId ? sSessionId : GameSession.getBrowserSessionId();
 
         aPlayers.push(new Player(nPlayerNum, oPlayerRef, this.cardWidth, sSessionId, bIsRemote));
         aPlayers[nPlayerNum].setOnTapCardInHand(fnLocalPlayerWantsToPlayCard.bind(this));
@@ -540,7 +540,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         var oReferenceGameSlot = oDatabase.ref('game/slots/list/' + this.slotNumber);
 
         // makes a session Id for player 0
-        var sSessionId = GamePlay.makeNewBrowserSessionId();
+        var sSessionId = GameSession.makeNewBrowserSessionId();
 
         var bIsRemote = false;
 
@@ -665,79 +665,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
-     * makes a new ID for the browser session (ie. this is the first player to
-     * join)
-     *
-     * @return the new session ID
-     */
-    GamePlay.makeNewBrowserSessionId = function (oGameRef) {
-
-        var sKey = 'sessionId';
-        var sValue = Tools.generateID();
-        sessionStorage.setItem(sKey, sValue);
-
-        return sValue;
-    };
-
-    /**
-     * gets the browser session Id; creates a new on if none exists
-     *
-     * @return the sessionId
-     */
-    GamePlay.getBrowserSessionId = function () {
-
-        var sKey = 'sessionId';
-        var sValue = sessionStorage.getItem(sKey);
-        if (!sValue) {
-            sValue = GamePlay.makeNewBrowserSessionId();
-        }
-
-        return sValue;
-    };
-
-    /**
-     * checks which players in the given game slot are local (player 0, player 1
-     * or both)
-     *
-     * @param oGameSlot a game slot
-     *
-     * @return {
-     *             player0: true if local,
-     *             player1: true if local
-     *         }}
-     */
-    GamePlay.whoIsLocal = function (oGameSlot) {
-
-        var sSessionId = GamePlay.getBrowserSessionId(),
-            sPlayer0SessionId = -1,
-            sPlayer1SessionId = -1;
-
-        var oIsLocal = {
-            player0: true,
-            player1: true
-        };
-
-        if (oGameSlot) {
-
-            if (oGameSlot.player0 && oGameSlot.player0.sessionId) {
-                     sPlayer0SessionId = oGameSlot.player0.sessionId;
-                     if (sSessionId === sPlayer0SessionId) {
-                         oIsLocal.player0 = true;
-                     }
-                 }
-
-            if (oGameSlot.player1 && oGameSlot.player1.sessionId) {
-                     sPlayer1SessionId = oGameSlot.player1.sessionId;
-                     if (sSessionId === sPlayer1SessionId) {
-                         oIsLocal.player1 = true;
-                     }
-                 }
-        }
-
-        return oIsLocal;
-    };
-
-    /**
      * checks remote database and stores players in a game slot, then sets up
      * the remote players;
      *
@@ -817,14 +744,14 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
             // creates or gets a session Id; we don't know if this is the same
             // session or not
-            var sSessionId = GamePlay.getBrowserSessionId();
+            var sSessionId = GameSession.getBrowserSessionId();
 
             var bPlayer0IsRemote = false,
                 bPlayer1IsRemote = false;
 
             // checks if the player0 already has a different session ID (this is
             // the case if the player is from a different browser)
-            var oPlayersWhoAreLocal = GamePlay.whoIsLocal(oGameSlot);
+            var oPlayersWhoAreLocal = GameSession.whoIsLocal(oGameSlot);
             bPlayer0IsRemote = !(oPlayersWhoAreLocal.player0 === true);
             bPlayer1IsRemote = !(oPlayersWhoAreLocal.player1 === true);
 
