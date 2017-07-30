@@ -396,14 +396,16 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
-     * initializes a game; makes players and cards and distributes them
+     * distributes the current cards to the player controllers that are
+     * available
      */
-    GamePlay.prototype.initializeGamePlay = function (aCards) {
+    GamePlay.prototype.distributeCardsToAvailablePlayers = function () {
 
         // distributes the cards to the local players
         var nNumPlayersAmongWhomToDistributeCards = this.numPlayers > 1 ? this.numPlayers : 2;
         var aDistributedCards = this.distribute(this.shuffledCards, nNumPlayersAmongWhomToDistributeCards);
 
+        // distributes cards to the player controllers that have been created
         var i;
         for (i = 0; i < this.numPlayers; i++) {
             if (i < this.playerControllers.length) {
@@ -415,26 +417,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         if (aDistributedCards.length > i - 1) {
             this.restOfCards = aDistributedCards[i - 1];
         }
-
-        var oShuffleBtn = document.createElement('button');
-        var oContent = document.createTextNode('Shuffle');
-        Tools.setClass(oShuffleBtn, 'button');
-        oShuffleBtn.setAttribute('id', 'shuffle');
-        oShuffleBtn.appendChild(oContent);
-        oShuffleBtn.onclick = function (oEvent) {
-            var i, aDistributedCards;
-            this.result = '';
-            this.callbacks.renderResult(this.result);
-            this.playerControllers[0].clearTable();
-            this.playerControllers[1].clearTable();
-            this.shuffledCards = Tools.shuffle(this.shuffledCards);
-            aDistributedCards = distribute(this.shuffledCards, this.playerControllers.length);
-            for (i = 0; i < this.playerControllers.length; i++) {
-                this.playerControllers[i].setHand(aDistributedCards[i]);
-            }
-            this.renderCards();
-        }.bind(this);
-        // document.body.insertBefore(oShuffleBtn, null);
 
         this.result = '';
     };
@@ -468,7 +450,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             oGamePlay.restOfCards = aGameSlots[oGamePlay.slotNumber].restOfCards;
         }
         if (!oGamePlay.restOfCards) {
-            oGamePlay.initializeGamePlay(1);
+            oGamePlay.distributeCardsToAvailablePlayers();
         }
 
         // makes player 1 controller
@@ -551,9 +533,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         var oDatabase = firebase.database();
         var oReferenceGameSlot = oDatabase.ref('game/slots/list/' + this.slotNumber);
 
-        var nInitialNumPlayers = 1;
-
-        // gets player 0's browser session Id
+        // makes a session Id for player 0
         var sSessionId = GamePlay.makeNewBrowserSessionId();
 
         var bIsRemote = false;
@@ -562,8 +542,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bIsRemote);
         this.playerControllers[0].setName(this.callbacks.getRandomPlayerName(0, this.playerNames));
 
-        // adds player 0 to game
-        this.initializeGamePlay(nInitialNumPlayers);
+        // distributes cards to player 0
+        this.distributeCardsToAvailablePlayers();
 
         // stores remote player 0, clears player 1 and waits for new player 1
         oReferenceGameSlot.set({
@@ -694,7 +674,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
-     * gets the browser session Id; created a new on if none exists
+     * gets the browser session Id; creates a new on if none exists
      *
      * @return the sessionId
      */
@@ -710,14 +690,14 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
-     * sets up the handlers for events from the remote players;
-     * checks remote database and stores players in a game slot
+     * checks remote database and stores players in a game slot, then sets up
+     * the remote players;
      *
      * @param oGamePlay an instance of a game
      * @param oDatabase reference to the remote database
      * @param oGameSlots the object containing all the game slots
      */
-    GamePlay.prototype.setUpLocalPlayers = function (oGamePlay, oDatabase, oGameSlots) {
+    GamePlay.prototype.setUpRemoteGameSlot = function (oGamePlay, oDatabase, oGameSlots) {
 
         // gets a reference to the game slots
         var oReferenceGameAllSlots = oDatabase.ref('game/slots');
@@ -793,7 +773,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
                      }
             }
 
-            // finds new slot; makes player 0 controller
+            // finds new slot; makes controller for player 0
             oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bPlayer0IsRemote);
 
             // keeps remote player 0
@@ -874,7 +854,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             // gets game slot object from remote database
             var oGameSlots = snapshot.val();
 
-            this.setUpLocalPlayers(this, oDatabase, oGameSlots);
+            this.setUpRemoteGameSlot(this, oDatabase, oGameSlots);
 
         }.bind(this));
 
