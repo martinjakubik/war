@@ -423,14 +423,14 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
     /**
      * adds players to a game
+     *
+     * @param nPlayer the player number
+     * @param aCards the cards for the player's hand
      */
-    GamePlay.prototype.addPlayerToGamePlay = function (nFirstPlayer, nLastPlayer, aDistributedCards) {
+    GamePlay.prototype.setPlayerCards = function (nPlayer, aCards) {
 
-        var i;
-        for (i = nFirstPlayer; i <= nLastPlayer; i++) {
-            if (i < this.playerControllers.length) {
-                this.playerControllers[i].setHand(aDistributedCards[i]);
-            }
+        if (nPlayer < this.playerControllers.length) {
+            this.playerControllers[nPlayer].setHand(aCards);
         }
     };
 
@@ -445,21 +445,27 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         var oGamePlay = this;
 
-        // distributes cards again if it wasn't done
+        // gets the rest of the cards to give to player 1
+        // (there may be no cards locally if the browser was refreshed)
         if (!oGamePlay.restOfCards) {
             oGamePlay.restOfCards = aGameSlots[oGamePlay.slotNumber].restOfCards;
         }
+
+        // if for some reason the rest of cards was not stored remotely either,
+        // re-distributes the cards
         if (!oGamePlay.restOfCards) {
             oGamePlay.distributeCardsToAvailablePlayers();
         }
 
         // makes player 1 controller
         oGamePlay.makePlayerController(1, oGamePlay.playerControllers, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), bIsRemote);
+
+        // chooses a player ame
         var sNotThisName = oGamePlay.playerControllers[0] ? oGamePlay.playerControllers[0].getName() : '';
         oGamePlay.playerControllers[1].setName(oGamePlay.callbacks.getRandomPlayerName(1, oGamePlay.playerNames, sNotThisName));
 
-        // adds player 1 to game
-        this.addPlayerToGamePlay(1, 1, [null, this.restOfCards]);
+        // sets player 1's cards
+        this.setPlayerCards(1, this.restOfCards);
 
         // renders player 1
         var oPlayAreaView = document.getElementById('playArea');
