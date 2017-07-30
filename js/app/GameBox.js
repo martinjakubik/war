@@ -115,6 +115,15 @@ requirejs(['GamePlay', 'Tools'], function (GamePlay, Tools) {
 
     var aCards = oGameBox.makeCards(aBatanimalCardValues);
 
+    var aSounds = {
+         hamsterSound: new Audio('../resources/hamster-wheel.wav'),
+          rabbitSound: new Audio('../resources/rabbit-crunch.wav'),
+            meowSound: new Audio('../resources/kitten-meow.wav'),
+            barkSound: new Audio('../resources/small-dog-bark.wav'),
+           tigerSound: new Audio('../resources/tiger-growl.wav'),
+        elephantSound: new Audio('../resources/elephant.wav')
+    }
+
     GameBox.makeView();
 
     var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck', 'jackal' ];
@@ -122,6 +131,7 @@ requirejs(['GamePlay', 'Tools'], function (GamePlay, Tools) {
     var oGamePlay = new GamePlay(
         nNumPlayers,
         aCards,
+        aSounds,
         aPlayerNames,
         oGameBox.maxNumberOfSlots,
         oGameBox.cardWidth,

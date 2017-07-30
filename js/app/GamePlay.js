@@ -8,10 +8,11 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     var WAITING_FOR_FACE_DOWN_WAR_CARD = 2;
     var GAME_OVER = 3;
 
-    var GamePlay = function (nNumPlayers, aCards, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
+    var GamePlay = function (nNumPlayers, aCards, aSounds, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
 
         this.numPlayers = nNumPlayers;
         this.cards = aCards;
+        this.sounds = aSounds;
         this.playerNames = aPlayerNames;
         this.maxNumberOfSlots = nMaxNumberOfSlots;
         this.cardWidth = nCardWidth;
@@ -191,25 +192,25 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     GamePlay.prototype.playWarSound = function (nCardValue) {
         switch (nCardValue) {
             case 1:
-            this.hamsterSound.play();
+            this.sounds.hamsterSound.play();
             break;
             case 2:
-            this.rabbitSound.play();
+            this.sounds.rabbitSound.play();
             break;
             case 3:
-            this.meowSound.play();
+            this.sounds.meowSound.play();
             break;
             case 4:
-            this.barkSound.play();
+            this.sounds.barkSound.play();
             break;
             case 5:
-            this.tigerSound.play();
+            this.sounds.tigerSound.play();
             break;
             case 6:
-            this.elephantSound.play();
+            this.sounds.elephantSound.play();
             break;
             default:
-            this.barkSound.play();
+            this.sounds.barkSound.play();
             break;
         }
     };
@@ -863,13 +864,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             this.setUpRemoteGameSlot(this, oDatabase, oGameSlots);
 
         }.bind(this));
-
-        this.hamsterSound = new Audio('../resources/hamster-wheel.wav');
-        this.rabbitSound = new Audio('../resources/rabbit-crunch.wav');
-        this.meowSound = new Audio('../resources/kitten-meow.wav');
-        this.barkSound = new Audio('../resources/small-dog-bark.wav');
-        this.tigerSound = new Audio('../resources/tiger-growl.wav');
-        this.elephantSound = new Audio('../resources/elephant.wav');
 
         this.numMoves = 0;
     };
