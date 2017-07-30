@@ -358,8 +358,6 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
      */
     GamePlay.prototype.localPlayerTappedCardInHand = function (oEvent) {
 
-        var bIsLocalEvent = true;
-
         // gets the player and the player view
         var oTarget = oEvent.currentTarget;
 
@@ -373,6 +371,8 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
                 oPlayer = this.findPlayerForPlayerViewId(sPlayerViewId);
             }
         }
+
+        var bIsLocalEvent = oPlayer ? oPlayer.isLocal : true;
 
         this.playerTappedCardInHand(oPlayer, bIsLocalEvent);
     };
@@ -388,7 +388,7 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
         var i;
 
         // checks if the tap is a legitimate move in the game
-        if (oPlayer && this.allPlayersJoined && this.state !== GAME_OVER) {
+        if (oPlayer && bIsLocalEvent && this.allPlayersJoined && this.state !== GAME_OVER) {
             this.playerWantsToPlayACard.call(this, oPlayer, bIsLocalEvent);
         } else {
             // does nothing
@@ -438,17 +438,17 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
     /**
     * adds player 1 to the game
     *
-    * @param aGameSlots list of game slots
+    * @param oGameSlot a game slot
     * @param bIsLocal true if player1 is a local player
     */
-    GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (aGameSlots, bIsLocal) {
+    GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (oGameSlot, bIsLocal) {
 
         var oGamePlay = this;
 
         // gets the rest of the cards to give to player 1
         // (there may be no cards locally if the browser was refreshed)
         if (!oGamePlay.restOfCards) {
-            oGamePlay.restOfCards = aGameSlots[oGamePlay.slotNumber].restOfCards;
+            oGamePlay.restOfCards = oGameSlot ? oGameSlot.restOfCards : null;
         }
 
         // if for some reason the rest of cards was not stored remotely either,
@@ -457,8 +457,10 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
             oGamePlay.distributeCardsToAvailablePlayers();
         }
 
+        var sSessionId = null;
+
         // makes player 1 controller
-        oGamePlay.makePlayerController(1, oGamePlay.playerControllers, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), bIsLocal);
+        oGamePlay.makePlayerController(1, oGamePlay.playerControllers, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bIsLocal);
 
         // chooses a player name
         var sNotThisName = oGamePlay.playerControllers[0] ? oGamePlay.playerControllers[0].getName() : '';
@@ -530,9 +532,11 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
     };
 
     /**
+     * sets up a callback to wait for player 1
      *
+     * @param oGameSlot a game slot
      */
-    GamePlay.prototype.keepPlayer0AndWaitForPlayer1 = function (aGameSlots) {
+    GamePlay.prototype.keepPlayer0AndWaitForPlayer1 = function (oGameSlot) {
 
         var oGamePlay = this;
 
@@ -578,23 +582,28 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
         this.playerReference[1].on('value', function (snapshot) {
             var oPlayerValue = snapshot.val();
 
+            // assumes this is only called by a remote event (not true, because
+            // it's called once when first set up locally)
+            var bIsPlayer1Local = false;
+
             // checks if a remote player 1 just joined and if there is no
             // player 1 yet
             if (oPlayerValue && !this.playerControllers[1]) {
-                this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots);
+                this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oGameSlot, bIsPlayer1Local);
             }
         }.bind(this));
 
         // if don't wait button is pressed, removes listener for second player
-        var dontWaitPressed = function (aGameSlots) {
+        var dontWaitPressed = function (oGameSlot) {
 
             var oGamePlay = this;
+            var bIsPlayer1Local = true;
 
             // removes the listeners that detect changes to remote players
             this.playerReference[0].off();
             this.playerReference[1].off();
 
-            this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots);
+            this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oGameSlot, bIsPlayer1Local);
 
             // removes rest of cards
             oReferenceRestOfCards.remove();
@@ -606,7 +615,7 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
         Tools.setClass(oDontWaitBtn, 'button');
         oDontWaitBtn.setAttribute('id', 'dontWait');
         oDontWaitBtn.appendChild(oContent);
-        oDontWaitBtn.onclick = dontWaitPressed.bind(this, aGameSlots);
+        oDontWaitBtn.onclick = dontWaitPressed.bind(this, oGameSlot);
         document.body.insertBefore(oDontWaitBtn, null);
 
     };
@@ -703,6 +712,10 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
             oGameSlot = aGameSlots[oGamePlay.slotNumber];
         }
 
+        if (!oGameSlot) {
+            return false;
+        }
+
         // stores remote references to players and to the rest of the cards
         oGamePlay.playerReference = [];
         oGamePlay.playerReference.push(oDatabase.ref('game/slots/list/' + oGamePlay.slotNumber + '/player0'));
@@ -712,10 +725,6 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
         // checks if player 0 or player 1 have joined
         var bIsPlayer0SlotFull = false;
         var bIsPlayer1SlotFull = false;
-
-        if (!oGameSlot) {
-            return false;
-        }
 
         bIsPlayer0SlotFull = oGameSlot.player0 ? true : false;
         bIsPlayer1SlotFull = oGameSlot.player1 ? true : false;
@@ -728,7 +737,7 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
         if (!bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
             // found a new slot; keeps local player 0 waits for player 1
-            oGamePlay.keepPlayer0AndWaitForPlayer1(aGameSlots);
+            oGamePlay.keepPlayer0AndWaitForPlayer1(oGameSlot);
 
         } else if (bIsPlayer0SlotFull && bIsPlayer1SlotFull) {
 
@@ -736,7 +745,7 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
             oGamePlay.moveToNextGameSlot(oDatabase);
 
             // keeps local player 0 waits for player 1
-            oGamePlay.keepPlayer0AndWaitForPlayer1(aGameSlots);
+            oGamePlay.keepPlayer0AndWaitForPlayer1(oGameSlot);
 
         } else if (bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
@@ -769,7 +778,7 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
                 oGamePlay.playerControllers[0].renderHand();
                 oGamePlay.playerControllers[0].renderTable();
 
-                oGamePlay.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots, bIsPlayer1Local);
+                oGamePlay.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oGameSlot, bIsPlayer1Local);
 
                 // removes rest of cards
                 oReferenceRestOfCards.remove();
