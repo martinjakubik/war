@@ -639,6 +639,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             oGamePlay.playerReference[nPlayerNumber] = oDatabase.ref('/game/slots/list/' + oGamePlay.slotNumber + '/player' + nPlayerNumber);
             oGamePlay.playerReference[nPlayerNumber].on('value', function (snapshot) {
 
+                // gets the player number from the snapshot key, which is
+                // something like "player1"
                 var nPlayerNumberFromEvent = snapshot.key.substring(6);
 
                 var oPlayerValue = snapshot.val();
