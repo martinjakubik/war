@@ -460,7 +460,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         // makes player 1 controller
         oGamePlay.makePlayerController(1, oGamePlay.playerControllers, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), bIsRemote);
 
-        // chooses a player ame
+        // chooses a player name
         var sNotThisName = oGamePlay.playerControllers[0] ? oGamePlay.playerControllers[0].getName() : '';
         oGamePlay.playerControllers[1].setName(oGamePlay.callbacks.getRandomPlayerName(1, oGamePlay.playerNames, sNotThisName));
 
@@ -696,12 +696,56 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     };
 
     /**
+     * checks which players in the given game slot are local (player 0, player 1
+     * or both)
+     *
+     * @param oGameSlot a game slot
+     *
+     * @return {
+     *             player0: true if local,
+     *             player1: true if local
+     *         }}
+     */
+    GamePlay.whoIsLocal = function (oGameSlot) {
+
+        var sSessionId = GamePlay.getBrowserSessionId(),
+            sPlayer0SessionId = -1,
+            sPlayer1SessionId = -1;
+
+        var oIsLocal = {
+            player0: true,
+            player1: true
+        };
+
+        if (oGameSlot) {
+
+            if (oGameSlot.player0 && oGameSlot.player0.sessionId) {
+                     sPlayer0SessionId = oGameSlot.player0.sessionId;
+                     if (sSessionId === sPlayer0SessionId) {
+                         oIsLocal.player0 = true;
+                     }
+                 }
+
+            if (oGameSlot.player1 && oGameSlot.player1.sessionId) {
+                     sPlayer1SessionId = oGameSlot.player1.sessionId;
+                     if (sSessionId === sPlayer1SessionId) {
+                         oIsLocal.player1 = true;
+                     }
+                 }
+        }
+
+        return oIsLocal;
+    };
+
+    /**
      * checks remote database and stores players in a game slot, then sets up
      * the remote players;
      *
      * @param oGamePlay an instance of a game
      * @param oDatabase reference to the remote database
      * @param oGameSlots the object containing all the game slots
+     *
+     * @return false if could not set up the game slot; true otherwise
      */
     GamePlay.prototype.setUpRemoteGameSlot = function (oGamePlay, oDatabase, oGameSlots) {
 
@@ -727,6 +771,11 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         // if the max number is reached
         oGamePlay.slotNumber = oGameSlotNumber ? oGameSlotNumber.value : 0;
 
+        var oGameSlot = null;
+        if (aGameSlots && aGameSlots.length > oGamePlay.slotNumber && aGameSlots[oGamePlay.slotNumber]) {
+            oGameSlot = aGameSlots[oGamePlay.slotNumber];
+        }
+
         // stores remote references to players and to the rest of the cards
         oGamePlay.playerReference = [];
         oGamePlay.playerReference.push(oDatabase.ref('game/slots/list/' + oGamePlay.slotNumber + '/player0'));
@@ -737,10 +786,12 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
         var bIsPlayer0SlotFull = false;
         var bIsPlayer1SlotFull = false;
 
-        if (aGameSlots && aGameSlots.length > oGamePlay.slotNumber && aGameSlots[oGamePlay.slotNumber]) {
-            bIsPlayer0SlotFull = aGameSlots[oGamePlay.slotNumber].player0 ? true : false;
-            bIsPlayer1SlotFull = aGameSlots[oGamePlay.slotNumber].player1 ? true : false;
+        if (!oGameSlot) {
+            return false;
         }
+
+        bIsPlayer0SlotFull = oGameSlot.player0 ? true : false;
+        bIsPlayer1SlotFull = oGameSlot.player1 ? true : false;
 
         // clears the list of players
         while (oGamePlay.playerControllers.length > 0) {
@@ -762,6 +813,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         } else if (bIsPlayer0SlotFull && !bIsPlayer1SlotFull) {
 
+            // joins another player in the slot - there is only one player in it
+
             // creates or gets a session Id; we don't know if this is the same
             // session or not
             var sSessionId = GamePlay.getBrowserSessionId();
@@ -771,31 +824,29 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
             // checks if the player0 already has a different session ID (this is
             // the case if the player is from a different browser)
-            if (aGameSlots && aGameSlots.length > 0 && aGameSlots[oGamePlay.slotNumber]) {
-                if (aGameSlots[oGamePlay.slotNumber].player0 &&
-                     aGameSlots[oGamePlay.slotNumber].player0.sessionId) {
-                         sSessionId = aGameSlots[oGamePlay.slotNumber].player0.sessionId;
-                         bPlayer1IsRemote = true;
-                     }
-            }
+            var oPlayersWhoAreLocal = GamePlay.whoIsLocal(oGameSlot);
+            bPlayer0IsRemote = !(oPlayersWhoAreLocal.player0 === true);
+            bPlayer1IsRemote = !(oPlayersWhoAreLocal.player1 === true);
 
-            // finds new slot; makes controller for player 0
+            // makes controller for player 0
             oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bPlayer0IsRemote);
 
             // keeps remote player 0
-            oGamePlay.playerControllers[0].setName(aGameSlots[oGamePlay.slotNumber].player0.name);
-            oGamePlay.playerControllers[0].setHand(aGameSlots[oGamePlay.slotNumber].player0.hand);
+            if (oGameSlot) {
+                oGamePlay.playerControllers[0].setName(oGameSlot.player0.name);
+                oGamePlay.playerControllers[0].setHand(oGameSlot.player0.hand);
 
-            // renders player 0
-            var oPlayAreaView = document.getElementById('playArea');
-            oGamePlay.playerControllers[0].makePlayerView(oPlayAreaView);
-            oGamePlay.playerControllers[0].renderHand();
-            oGamePlay.playerControllers[0].renderTable();
+                // renders player 0
+                var oPlayAreaView = document.getElementById('playArea');
+                oGamePlay.playerControllers[0].makePlayerView(oPlayAreaView);
+                oGamePlay.playerControllers[0].renderHand();
+                oGamePlay.playerControllers[0].renderTable();
 
-            oGamePlay.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots, bPlayer1IsRemote);
+                oGamePlay.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots, bPlayer1IsRemote);
 
-            // removes rest of cards
-            oReferenceRestOfCards.remove();
+                // removes rest of cards
+                oReferenceRestOfCards.remove();
+            }
 
         } else if (!bIsPlayer0SlotFull && bIsPlayer1SlotFull) {
 
@@ -810,6 +861,8 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         oGamePlay.setUpHandlerForRemotePlayerEvents(oGamePlay, oDatabase);
         oGamePlay.setUpHandlerForRemotePlayerEvents(oGamePlay, oDatabase);
+
+        return true;
     };
 
     /**
@@ -853,6 +906,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
 
         var oDatabase = firebase.database();
         var oReferenceGameAllSlots = oDatabase.ref('game/slots');
+        var bIsSetUpGameSlotOk = false;
 
         // checks remote database and stores players in a game slot
         oReferenceGameAllSlots.once('value', function (snapshot) {
@@ -860,7 +914,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             // gets game slot object from remote database
             var oGameSlots = snapshot.val();
 
-            this.setUpRemoteGameSlot(this, oDatabase, oGameSlots);
+            bIsSetUpGameSlotOk = this.setUpRemoteGameSlot(this, oDatabase, oGameSlots);
 
         }.bind(this));
 
