@@ -439,7 +439,6 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
     * adds player 1 to the game
     *
     * @param aGameSlots list of game slots
-    * @param sSessionId the ID of the current browser session
     * @param bIsRemote true if player1 is a remote player
     */
     GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (aGameSlots, bIsRemote) {
@@ -582,7 +581,7 @@ define('GamePlay', ['Player', 'Tools'], function (Player, Tools) {
             // checks if a remote player 1 just joined and if there is no
             // player 1 yet
             if (oPlayerValue && !this.playerControllers[1]) {
-                this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(oPlayerValue);
+                this.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots);
             }
         }.bind(this));
 
