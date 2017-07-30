@@ -439,9 +439,9 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
     * adds player 1 to the game
     *
     * @param aGameSlots list of game slots
-    * @param bIsRemote true if player1 is a remote player
+    * @param bIsLocal true if player1 is a local player
     */
-    GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (aGameSlots, bIsRemote) {
+    GamePlay.prototype.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo = function (aGameSlots, bIsLocal) {
 
         var oGamePlay = this;
 
@@ -458,7 +458,7 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
         }
 
         // makes player 1 controller
-        oGamePlay.makePlayerController(1, oGamePlay.playerControllers, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), bIsRemote);
+        oGamePlay.makePlayerController(1, oGamePlay.playerControllers, oGamePlay.playerReference[1], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), bIsLocal);
 
         // chooses a player name
         var sNotThisName = oGamePlay.playerControllers[0] ? oGamePlay.playerControllers[0].getName() : '';
@@ -500,14 +500,14 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
      * @param fnLocalPlayerWantsToPlayCard handler for when local player taps
      *          card in hand
      * @param sSessionId the ID of the current browser session
-     * @param bIsRemote if the player is remote
+     * @param bIsLocal if the player is local
      */
-    GamePlay.prototype.makePlayerController = function(nPlayerNum, aPlayers, oPlayerRef, fnLocalPlayerWantsToPlayCard, sSessionId, bIsRemote) {
+    GamePlay.prototype.makePlayerController = function(nPlayerNum, aPlayers, oPlayerRef, fnLocalPlayerWantsToPlayCard, sSessionId, bIsLocal) {
 
         // gets or creates player's browser session Id
         sSessionId = sSessionId ? sSessionId : GameSession.getBrowserSessionId();
 
-        aPlayers.push(new Player(nPlayerNum, oPlayerRef, this.cardWidth, sSessionId, bIsRemote));
+        aPlayers.push(new Player(nPlayerNum, oPlayerRef, this.cardWidth, sSessionId, bIsLocal));
         aPlayers[nPlayerNum].setOnTapCardInHand(fnLocalPlayerWantsToPlayCard.bind(this));
 
     };
@@ -542,10 +542,10 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
         // makes a session Id for player 0
         var sSessionId = GameSession.makeNewBrowserSessionId();
 
-        var bIsRemote = false;
+        var bIsLocal = true;
 
         // makes player 0 controller
-        oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bIsRemote);
+        oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bIsLocal);
         this.playerControllers[0].setName(this.callbacks.getRandomPlayerName(0, this.playerNames));
 
         // distributes cards to player 0
@@ -746,17 +746,17 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
             // session or not
             var sSessionId = GameSession.getBrowserSessionId();
 
-            var bPlayer0IsRemote = false,
-                bPlayer1IsRemote = false;
+            var bPlayer0IsLocal = true,
+                bPlayer1IsLocal = true;
 
             // checks if the player0 already has a different session ID (this is
             // the case if the player is from a different browser)
             var oPlayersWhoAreLocal = GameSession.whoIsLocal(oGameSlot);
-            bPlayer0IsRemote = !(oPlayersWhoAreLocal.player0 === true);
-            bPlayer1IsRemote = !(oPlayersWhoAreLocal.player1 === true);
+            bPlayer0IsLocal = (oPlayersWhoAreLocal.player0 === true);
+            bPlayer1IsLocal = (oPlayersWhoAreLocal.player1 === true);
 
             // makes controller for player 0
-            oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bPlayer0IsRemote);
+            oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sSessionId, bPlayer0IsLocal);
 
             // keeps remote player 0
             if (oGameSlot) {
@@ -769,7 +769,7 @@ define('GamePlay', ['Player', 'Tools', 'GameSession'], function (Player, Tools, 
                 oGamePlay.playerControllers[0].renderHand();
                 oGamePlay.playerControllers[0].renderTable();
 
-                oGamePlay.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots, bPlayer1IsRemote);
+                oGamePlay.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(aGameSlots, bPlayer1IsLocal);
 
                 // removes rest of cards
                 oReferenceRestOfCards.remove();
