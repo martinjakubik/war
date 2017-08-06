@@ -5,6 +5,7 @@ requirejs.config({
     baseUrl: '../js/app',
     paths: {
         lib: '../lib',
+        GamePlay: '../lib/kierki/js/GamePlay',
         Player: '../lib/kierki/js/Player',
         Tools: '../lib/kierki/js/Tools',
         GameSession: '../lib/kierki/js/GameSession'

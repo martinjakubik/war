@@ -1,6 +1,6 @@
 /*global require */
 /*global Audio: false */
-requirejs(['GamePlay', 'Tools'], function (GamePlay, Tools) {
+requirejs(['WarGamePlay', 'Tools'], function (WarGamePlay, Tools) {
 
     'use strict';
 
@@ -128,7 +128,7 @@ requirejs(['GamePlay', 'Tools'], function (GamePlay, Tools) {
 
     var aPlayerNames = [ 'cat', 'dog', 'cow', 'pig', 'horse', 'skunk', 'ferret', 'duck', 'jackal' ];
 
-    var oGamePlay = new GamePlay(
+    var oWarGamePlay = new WarGamePlay(
         nNumPlayers,
         aCards,
         aSounds,
@@ -140,6 +140,6 @@ requirejs(['GamePlay', 'Tools'], function (GamePlay, Tools) {
             getRandomPlayerName: GameBox.getRandomPlayerName
         }
     );
-    oGamePlay.start();
+    oWarGamePlay.start();
 
 });
