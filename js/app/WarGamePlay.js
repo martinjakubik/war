@@ -18,19 +18,41 @@ define('WarGamePlay', ['GamePlay', 'Player', 'Tools', 'GameSession'], function (
     WarGamePlay.prototype = Object.create(GamePlay.prototype);
 
     /**
+     * Indicates who won the hand, based on the two players' cards.
+     *
+     * @param aPlayerControllers an array of players
+     *
+     * @return number of the player who won, or -1 if it's a tie
+     */
+    WarGamePlay.prototype.whoWonTheHand = function (aPlayerControllers) {
+
+        var nWinningPlayer = -1;
+
+        if (aPlayerControllers[0].getTableCard().value > this.playerControllers[1].getTableCard().value) {
+            nWinningPlayer = 0;
+        } else if (aPlayerControllers[0].getTableCard().value < aPlayerControllers[1].getTableCard().value) {
+            nWinningPlayer = 1;
+        }
+
+        return nWinningPlayer;
+    };
+
+    /**
      * Moves cards to the table or moves the table cards to the hand of the
      * player that won the turn.
      * Or waits for more cards on the table in case of a tie.
      */
     WarGamePlay.prototype.gatherCards = function () {
 
-        var i;
+        var nWinningPlayer = -1;
 
         // decides what to do if all players have played
         if (this.doAllPlayersHaveSameNumberOfCardsOnTable() && this.state === WAITING_TO_GATHER_CARDS) {
 
+            nWinningPlayer = this.whoWonTheHand(this.playerControllers);
+
             // checks if player 0 won the hand
-            if (this.playerControllers[0].getTableCard().value > this.playerControllers[1].getTableCard().value) {
+            if (nWinningPlayer === 0) {
 
                 // every five moves, randomly switches order of the gathered cards
                 if (this.numMoves % 5 === 0 && Math.random() > 0.5) {
@@ -45,7 +67,8 @@ define('WarGamePlay', ['GamePlay', 'Player', 'Tools', 'GameSession'], function (
 
                 // updates the loser's cards
                 this.playerControllers[1].updateRemoteReference();
-            } else if (this.playerControllers[0].getTableCard().value < this.playerControllers[1].getTableCard().value) {
+
+            } else if (nWinningPlayer === 1) {
                 // player 1 won the hand
 
                 // every five moves, randomly switches order of the gathered cards
