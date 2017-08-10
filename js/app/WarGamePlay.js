@@ -38,64 +38,6 @@ define('WarGamePlay', ['GamePlay', 'Player', 'Tools', 'GameSession'], function (
     };
 
     /**
-     * Moves cards to the table or moves the table cards to the hand of the
-     * player that won the turn.
-     * Or waits for more cards on the table in case of a tie.
-     */
-    WarGamePlay.prototype.gatherCards = function () {
-
-        var nWinningPlayer = -1;
-
-        // decides what to do if all players have played
-        if (this.doAllPlayersHaveSameNumberOfCardsOnTable() && this.state === WAITING_TO_GATHER_CARDS) {
-
-            nWinningPlayer = this.whoWonTheHand(this.playerControllers);
-
-            // checks if player 0 won the hand
-            if (nWinningPlayer === 0) {
-
-                // every five moves, randomly switches order of the gathered cards
-                if (this.numMoves % 5 === 0 && Math.random() > 0.5) {
-                    // moves everyone's cards to the winner's hand, player 1 first
-                    this.playerControllers[0].moveTableToHand(this.playerControllers[1].getTable());
-                    this.playerControllers[0].moveTableToHand();
-                } else {
-                    // moves everyone's cards to the winner's hand, player 0 first
-                    this.playerControllers[0].moveTableToHand();
-                    this.playerControllers[0].moveTableToHand(this.playerControllers[1].getTable());
-                }
-
-                // updates the loser's cards
-                this.playerControllers[1].updateRemoteReference();
-
-            } else if (nWinningPlayer === 1) {
-                // player 1 won the hand
-
-                // every five moves, randomly switches order of the gathered cards
-                if (this.numMoves % 5 === 0 && Math.random()) {
-                    // moves everyone's cards to the winner's hand, player 0 first
-                    this.playerControllers[1].moveTableToHand(this.playerControllers[0].getTable());
-                    this.playerControllers[1].moveTableToHand();
-                } else {
-                    // moves everyone's cards to the winner's hand, player 1 first
-                    this.playerControllers[1].moveTableToHand();
-                    this.playerControllers[1].moveTableToHand(this.playerControllers[0].getTable());
-                }
-
-                // updates the loser's cards
-                this.playerControllers[0].updateRemoteReference();
-            }
-
-            this.isGameFinished();
-
-            this.state = WAITING_TO_FILL_TABLE;
-
-            this.renderCards();
-
-        }
-    };
-
-    /**
      * checks if one player has won
      */
     WarGamePlay.prototype.isGameFinished = function () {
