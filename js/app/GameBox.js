@@ -118,8 +118,8 @@ requirejs(['WarGamePlay', 'Tools'], function (WarGamePlay, Tools) {
     var aSounds = {
          hamsterSound: new Audio('../resources/hamster-wheel.wav'),
           rabbitSound: new Audio('../resources/rabbit-crunch.wav'),
-            meowSound: new Audio('../resources/kitten-meow.wav'),
-            barkSound: new Audio('../resources/small-dog-bark.wav'),
+            meowSound: new Audio('../resources/cat-meow.wav'),
+            barkSound: new Audio('../resources/dog-bark.wav'),
            tigerSound: new Audio('../resources/tiger-growl.wav'),
         elephantSound: new Audio('../resources/elephant.wav')
     }
