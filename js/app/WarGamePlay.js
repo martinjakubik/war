@@ -3,11 +3,6 @@ define('WarGamePlay', ['GamePlay', 'Player', 'Tools', 'GameSession'], function (
 
     'use strict';
 
-    var WAITING_TO_GATHER_CARDS = 0;
-    var WAITING_TO_FILL_TABLE = 1;
-    var WAITING_FOR_FACE_DOWN_WAR_CARD = 2;
-    var GAME_OVER = 3;
-
     var WarGamePlay = function (nNumPlayers, aCards, aSounds, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
 
         GamePlay.call(this, nNumPlayers, aCards, aSounds, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks);
