@@ -71,7 +71,7 @@ requirejs(['WarGamePlay', 'Tools'], function (WarGamePlay, Tools) {
         oResultView.appendChild(oContent);
     };
 
-    GameBox.prototype.makeCards = function (aCardValues) {
+    GameBox.prototype.makeCards = function (aCardValues, bAddSkunk) {
         var aCards = [];
 
         var aSuitLetters = ['a', 'b', 'c', 'd', 'e', 'f'];
@@ -92,10 +92,12 @@ requirejs(['WarGamePlay', 'Tools'], function (WarGamePlay, Tools) {
         }
 
         // adds skunk
-        aCards.push({
-            value: 14,
-            suit: 'a'
-        });
+        if (bAddSkunk === true) {
+            aCards.push({
+                value: 14,
+                suit: 'a'
+            });
+        }
 
         return aCards;
     };
@@ -105,15 +107,17 @@ requirejs(['WarGamePlay', 'Tools'], function (WarGamePlay, Tools) {
     var oGameBox = new GameBox();
 
     var aBatanimalCardValues = [
-      6, 3, 5, 5, 1, 6,
-      4, 2, 4, 3, 1, 3,
-      5, 6, 2, 4, 6, 3,
-      4, 4, 6, 1, 2, 1,
-      4, 5, 1, 3, 5, 2,
-      6, 1, 2, 2, 3, 5
+        6, 3, 5, 5, 1, 6,
+        4, 2, 4, 3, 1, 3,
+        5, 6, 2, 4, 6, 3,
+        4, 4, 6, 1, 2, 1,
+        4, 5, 1, 3, 5, 2,
+        6, 1, 2, 2, 3, 5
     ];
 
-    var aCards = oGameBox.makeCards(aBatanimalCardValues);
+    var bAddSkunk = true;
+
+    var aCards = oGameBox.makeCards(aBatanimalCardValues, bAddSkunk);
 
     var aSounds = {
          hamsterSound: new Audio('../resources/hamster-wheel.wav'),
@@ -140,6 +144,9 @@ requirejs(['WarGamePlay', 'Tools'], function (WarGamePlay, Tools) {
             getRandomPlayerName: GameBox.getRandomPlayerName
         }
     );
-    oWarGamePlay.start();
+
+    var bShuffleCards = true;
+
+    oWarGamePlay.start(bShuffleCards);
 
 });
