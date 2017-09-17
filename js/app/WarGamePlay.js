@@ -13,13 +13,13 @@ define('WarGamePlay', ['GamePlay', 'Player', 'Tools', 'GameSession'], function (
     WarGamePlay.prototype = Object.create(GamePlay.prototype);
 
     /**
-     * Indicates who has the winnig card on the table, based on the two players'
-     * cards.
+     * Indicates who has the winning card on the table, based on the two
+     * players' cards.
      *
      * @param aPlayerControllers a list of players
      *
      * @return number of the player whose table card is winning, or -1 if it's a
-     *          tie
+     *          tie; the first player is 0
      */
     WarGamePlay.prototype.whoseCardWins = function (aPlayerControllers) {
 
