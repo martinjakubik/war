@@ -61,6 +61,9 @@ class GameBox {
         return cards
     }
     
+    /*
+     *
+     */
     func go() {
         
         let batanimalCardValues = [

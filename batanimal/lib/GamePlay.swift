@@ -22,6 +22,9 @@ class GamePlay {
 
     }
     
+    /*
+     *
+     */
     func renderCards () {
         
         let gameTop = 80
@@ -51,6 +54,9 @@ class GamePlay {
         }
     }
 
+    /*
+     *
+     */
     func start () {
         
         renderCards()
