@@ -47,8 +47,10 @@ class GamePlay {
             let cardId:String = String(card.value) + card.suit
 
             let cardView:CardView = CardView(
+
                 id: cardId,
                 frame: CGRect(x: handLeft + i * cardSpace, y:gameTop, width:cardWidth, height:cardHeight)
+
             )
 
             i += 1
