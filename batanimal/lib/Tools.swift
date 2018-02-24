@@ -13,15 +13,15 @@ class Tools {
     /*
      * shuffles a set of things
      */
-    func shuffle (things:[AnyObject]) -> [AnyObject] {
+    class func shuffle<T> (things:[T]) -> [T] {
         
-        var shuffledThings:[AnyObject] = []
+        var shuffledThings:[T] = []
         var copyThings = things
         var n:Int
         
-        while (things.count > 0) {
+        while (copyThings.count > 0) {
             
-            n = Int(arc4random_uniform(UInt32(things.count)))
+            n = Int(arc4random_uniform(UInt32(copyThings.count)))
             shuffledThings.append(copyThings.remove(at: n))
             
         }

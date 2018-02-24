@@ -77,11 +77,16 @@ class GameBox {
         
         let cards:[Card] = makeCards(cardValues: batanimalCardValues, addSkunk: true)
         
-        var playerNames = [ "cat", "dog", "cow", "pig", "horse", "skunk", "ferret", "duck", "jackal" ]
+        let playerNames = [ "cat", "dog", "cow", "pig", "horse", "skunk", "ferret", "duck", "jackal" ]
         
-        let gamePlay = GamePlay(view:self.view, numPlayers:2, cards:cards)
+        let gamePlay = GamePlay(
+            view:self.view,
+            numPlayers:2,
+            cards:cards,
+            playerNames:playerNames
+        )
         
-        gamePlay.start()
+        gamePlay.start(shuffleCards:true)
     }
 
 }

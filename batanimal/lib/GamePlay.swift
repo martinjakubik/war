@@ -13,12 +13,15 @@ class GamePlay {
     var view:UIView
     var numPlayers:Int = 0
     var cards:[Card] = []
+    var shuffledCards:[Card] =  []
+    var playerNames:[String] = []
     
-    init(view:UIView, numPlayers:Int, cards:[Card]) {
+    init(view:UIView, numPlayers:Int, cards:[Card], playerNames:[String]) {
 
         self.view = view
         self.numPlayers = numPlayers
         self.cards = cards
+        self.playerNames = playerNames
 
     }
     
@@ -39,7 +42,7 @@ class GamePlay {
         let cardWidth = 60
         
         var i:Int = 0
-        for card in self.cards {
+        for card in self.shuffledCards {
             
             let cardId:String = String(card.value) + card.suit
 
@@ -57,8 +60,18 @@ class GamePlay {
     /*
      *
      */
-    func start () {
+    func start (shuffleCards:Bool) {
         
+        if shuffleCards {
+
+            self.shuffledCards = Tools.shuffle(things: self.cards)
+
+        } else {
+
+            self.shuffledCards = self.cards
+
+        }
+
         renderCards()
 
     }
