@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		12F298379DC2EE74ADF0A82F /* Pods_batanimalTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E89094A6B7670406E2DB9FB4 /* Pods_batanimalTests.framework */; };
 		5B03125A203C976A00391F4A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B031259203C976A00391F4A /* AppDelegate.swift */; };
 		5B03125C203C976A00391F4A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B03125B203C976A00391F4A /* ViewController.swift */; };
 		5B03125F203C976A00391F4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B03125D203C976A00391F4A /* Main.storyboard */; };
@@ -55,10 +56,14 @@
 		5B4BA807203F41EF00F60CD8 /* card-batanimo-6f.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA7E1203F41EF00F60CD8 /* card-batanimo-6f.png */; };
 		5B4BA808203F41EF00F60CD8 /* card-batanimo-14a.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA7E2203F41EF00F60CD8 /* card-batanimo-14a.png */; };
 		5B4BA80A2041963000F60CD8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4BA8092041963000F60CD8 /* Player.swift */; };
+		5B4BA80C2042055100F60CD8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA80B2042055100F60CD8 /* GoogleService-Info.plist */; };
+		5B4BA80E2043333E00F60CD8 /* GameSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4BA80D2043333E00F60CD8 /* GameSlot.swift */; };
 		5B98E38C203DCA0000BE085B /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B98E38B203DCA0000BE085B /* background.png */; };
 		5B98E38F203DE85F00BE085B /* GameBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E38E203DE85E00BE085B /* GameBox.swift */; };
 		5B98E395203DE95A00BE085B /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E394203DE95A00BE085B /* Tools.swift */; };
 		5B98E397203DED3600BE085B /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E396203DED3600BE085B /* Card.swift */; };
+		705703AD8331986EE0DB90D7 /* Pods_batanimal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39530A1500D0FD8395BE9A8F /* Pods_batanimal.framework */; };
+		A8270A2A73908090BEB1B144 /* Pods_batanimalUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EFEA85FF300AEBDCD538F24 /* Pods_batanimalUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +84,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0EFEA85FF300AEBDCD538F24 /* Pods_batanimalUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_batanimalUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		39530A1500D0FD8395BE9A8F /* Pods_batanimal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_batanimal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		59DCC68A04C056F0B8A910C0 /* Pods-batanimalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-batanimalTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-batanimalTests/Pods-batanimalTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5B031256203C976A00391F4A /* batanimal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = batanimal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B031259203C976A00391F4A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5B03125B203C976A00391F4A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -133,10 +141,18 @@
 		5B4BA7E1203F41EF00F60CD8 /* card-batanimo-6f.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-6f.png"; path = "resources/card-batanimo-6f.png"; sourceTree = "<group>"; };
 		5B4BA7E2203F41EF00F60CD8 /* card-batanimo-14a.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-14a.png"; path = "resources/card-batanimo-14a.png"; sourceTree = "<group>"; };
 		5B4BA8092041963000F60CD8 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		5B4BA80B2042055100F60CD8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5B4BA80D2043333E00F60CD8 /* GameSlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSlot.swift; sourceTree = "<group>"; };
 		5B98E38B203DCA0000BE085B /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = resources/background.png; sourceTree = "<group>"; };
 		5B98E38E203DE85E00BE085B /* GameBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBox.swift; sourceTree = "<group>"; };
 		5B98E394203DE95A00BE085B /* Tools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tools.swift; sourceTree = "<group>"; };
 		5B98E396203DED3600BE085B /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		5F654EEFFB81C6F97F9FF55F /* Pods-batanimal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-batanimal.debug.xcconfig"; path = "Pods/Target Support Files/Pods-batanimal/Pods-batanimal.debug.xcconfig"; sourceTree = "<group>"; };
+		60FD578397C5F5E03E3985BB /* Pods-batanimalUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-batanimalUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-batanimalUITests/Pods-batanimalUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		9C47A4CAD8D12550CE65209E /* Pods-batanimalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-batanimalTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-batanimalTests/Pods-batanimalTests.release.xcconfig"; sourceTree = "<group>"; };
+		BE99892CD6C4B44DDBB278AE /* Pods-batanimal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-batanimal.release.xcconfig"; path = "Pods/Target Support Files/Pods-batanimal/Pods-batanimal.release.xcconfig"; sourceTree = "<group>"; };
+		E89094A6B7670406E2DB9FB4 /* Pods_batanimalTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_batanimalTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA6D69DE8115D880F8603168 /* Pods-batanimalUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-batanimalUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-batanimalUITests/Pods-batanimalUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +160,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				705703AD8331986EE0DB90D7 /* Pods_batanimal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +168,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12F298379DC2EE74ADF0A82F /* Pods_batanimalTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,12 +176,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8270A2A73908090BEB1B144 /* Pods_batanimalUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5ACE1AD1761558BEFEE42BCF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5F654EEFFB81C6F97F9FF55F /* Pods-batanimal.debug.xcconfig */,
+				BE99892CD6C4B44DDBB278AE /* Pods-batanimal.release.xcconfig */,
+				59DCC68A04C056F0B8A910C0 /* Pods-batanimalTests.debug.xcconfig */,
+				9C47A4CAD8D12550CE65209E /* Pods-batanimalTests.release.xcconfig */,
+				60FD578397C5F5E03E3985BB /* Pods-batanimalUITests.debug.xcconfig */,
+				FA6D69DE8115D880F8603168 /* Pods-batanimalUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		5B03124D203C976900391F4A = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +204,8 @@
 				5B031278203C976A00391F4A /* batanimalUITests */,
 				5B031257203C976A00391F4A /* Products */,
 				5B98E38D203DCA1100BE085B /* Resources */,
+				5ACE1AD1761558BEFEE42BCF /* Pods */,
+				EDAFD825D2A74293D96F0430 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -188,6 +222,7 @@
 		5B031258203C976A00391F4A /* batanimal */ = {
 			isa = PBXGroup;
 			children = (
+				5B4BA80B2042055100F60CD8 /* GoogleService-Info.plist */,
 				5B98E391203DE8D300BE085B /* lib */,
 				5B98E390203DE87200BE085B /* app */,
 				5B031259203C976A00391F4A /* AppDelegate.swift */,
@@ -280,8 +315,19 @@
 				5B4BA7B9203F367A00F60CD8 /* GamePlay.swift */,
 				5B4BA7BB203F394C00F60CD8 /* CardView.swift */,
 				5B4BA8092041963000F60CD8 /* Player.swift */,
+				5B4BA80D2043333E00F60CD8 /* GameSlot.swift */,
 			);
 			path = lib;
+			sourceTree = "<group>";
+		};
+		EDAFD825D2A74293D96F0430 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				39530A1500D0FD8395BE9A8F /* Pods_batanimal.framework */,
+				E89094A6B7670406E2DB9FB4 /* Pods_batanimalTests.framework */,
+				0EFEA85FF300AEBDCD538F24 /* Pods_batanimalUITests.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,9 +337,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5B03127E203C976A00391F4A /* Build configuration list for PBXNativeTarget "batanimal" */;
 			buildPhases = (
+				8F44EA340B80B1C5070B999B /* [CP] Check Pods Manifest.lock */,
 				5B031252203C976900391F4A /* Sources */,
 				5B031253203C976900391F4A /* Frameworks */,
 				5B031254203C976900391F4A /* Resources */,
+				E4C5692192CBB3BE1EED8EE7 /* [CP] Embed Pods Frameworks */,
+				79BB6504625DA64100D60BB8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -308,9 +357,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5B031281203C976A00391F4A /* Build configuration list for PBXNativeTarget "batanimalTests" */;
 			buildPhases = (
+				209DE0E0EEFE15EA694A506A /* [CP] Check Pods Manifest.lock */,
 				5B031266203C976A00391F4A /* Sources */,
 				5B031267203C976A00391F4A /* Frameworks */,
 				5B031268203C976A00391F4A /* Resources */,
+				05027023BA724BEA659EAA8C /* [CP] Embed Pods Frameworks */,
+				93EC05DAF8623174D9BBF205 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -326,9 +378,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5B031284203C976A00391F4A /* Build configuration list for PBXNativeTarget "batanimalUITests" */;
 			buildPhases = (
+				08561BDB99845011721A2FAF /* [CP] Check Pods Manifest.lock */,
 				5B031271203C976A00391F4A /* Sources */,
 				5B031272203C976A00391F4A /* Frameworks */,
 				5B031273203C976A00391F4A /* Resources */,
+				EEA4B60F2EC05293418F065D /* [CP] Embed Pods Frameworks */,
+				553CA1635B00DBEC747F7606 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -401,6 +456,7 @@
 				5B4BA7E3203F41EF00F60CD8 /* card-back.png in Resources */,
 				5B4BA7E7203F41EF00F60CD8 /* card-batanimo-1d.png in Resources */,
 				5B4BA7E6203F41EF00F60CD8 /* card-batanimo-1c.png in Resources */,
+				5B4BA80C2042055100F60CD8 /* GoogleService-Info.plist in Resources */,
 				5B4BA7EF203F41EF00F60CD8 /* card-batanimo-2f.png in Resources */,
 				5B4BA7E4203F41EF00F60CD8 /* card-batanimo-1a.png in Resources */,
 				5B4BA7EA203F41EF00F60CD8 /* card-batanimo-2a.png in Resources */,
@@ -452,6 +508,162 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		05027023BA724BEA659EAA8C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-batanimalTests/Pods-batanimalTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		08561BDB99845011721A2FAF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-batanimalUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		209DE0E0EEFE15EA694A506A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-batanimalTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		553CA1635B00DBEC747F7606 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-batanimalUITests/Pods-batanimalUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		79BB6504625DA64100D60BB8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-batanimal/Pods-batanimal-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8F44EA340B80B1C5070B999B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-batanimal-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		93EC05DAF8623174D9BBF205 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-batanimalTests/Pods-batanimalTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E4C5692192CBB3BE1EED8EE7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-batanimal/Pods-batanimal-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-batanimal/Pods-batanimal-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EEA4B60F2EC05293418F065D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-batanimalUITests/Pods-batanimalUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		5B031252203C976900391F4A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -464,6 +676,7 @@
 				5B4BA80A2041963000F60CD8 /* Player.swift in Sources */,
 				5B03125A203C976A00391F4A /* AppDelegate.swift in Sources */,
 				5B98E395203DE95A00BE085B /* Tools.swift in Sources */,
+				5B4BA80E2043333E00F60CD8 /* GameSlot.swift in Sources */,
 				5B4BA7BA203F367B00F60CD8 /* GamePlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -614,6 +827,7 @@
 		};
 		5B03127F203C976A00391F4A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5F654EEFFB81C6F97F9FF55F /* Pods-batanimal.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = batanimal/Info.plist;
@@ -621,11 +835,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = floook.batanimal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		5B031280203C976A00391F4A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE99892CD6C4B44DDBB278AE /* Pods-batanimal.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = batanimal/Info.plist;
@@ -633,11 +849,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = floook.batanimal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 		5B031282203C976A00391F4A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 59DCC68A04C056F0B8A910C0 /* Pods-batanimalTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -652,6 +870,7 @@
 		};
 		5B031283203C976A00391F4A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9C47A4CAD8D12550CE65209E /* Pods-batanimalTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -666,6 +885,7 @@
 		};
 		5B031285203C976A00391F4A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 60FD578397C5F5E03E3985BB /* Pods-batanimalUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = batanimalUITests/Info.plist;
@@ -679,6 +899,7 @@
 		};
 		5B031286203C976A00391F4A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA6D69DE8115D880F8603168 /* Pods-batanimalUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = batanimalUITests/Info.plist;

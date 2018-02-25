@@ -9,4 +9,10 @@ js/lib
 grunttasks/ftpPut.js
 grunttasks/ftpPut.js.orig
 
-batanimal.xcodeproj/project.xcworkspace/xcuserdata/martin.xcuserdatad/UserInterfaceState.xcuserstate
+batanimal.xcodeproj/project.xcworkspace/xcuserdata/*
+batanimal.xcworkspace/xcuserdata/*
+
+batanimal/GoogleService-Info.plist
+
+Pods
+Podfile.lock

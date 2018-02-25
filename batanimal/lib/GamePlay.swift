@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FirebaseDatabase
+
 
 class GamePlay {
     
@@ -25,6 +27,24 @@ class GamePlay {
 
     }
     
+    func setUpRemoteGameSlot () {
+
+        let referenceToAllGameSlots = Database.database().reference().child("game/slots")
+
+        referenceToAllGameSlots.observeSingleEvent(
+
+            of: DataEventType.value,
+            with: {(snapshot) in
+
+                let gameSlots = snapshot.value as? NSDictionary
+                if let realGameSlots = gameSlots {
+
+                    print (realGameSlots.count)
+
+                }
+        })
+    }
+
     /*
      *
      */
@@ -37,9 +57,9 @@ class GamePlay {
         let handSpace = 20
         let handLeft = gameLeft + tableWidth + handSpace
         
-        let cardSpace = 8
-        let cardHeight = 80
-        let cardWidth = 60
+        let cardSpace = 4
+        let cardHeight = 148
+        let cardWidth = 98
         
         var i:Int = 0
         for card in self.shuffledCards {
@@ -75,6 +95,8 @@ class GamePlay {
         }
 
         renderCards()
+
+        setUpRemoteGameSlot()
 
     }
 }
