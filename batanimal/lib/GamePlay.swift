@@ -27,6 +27,9 @@ class GamePlay {
 
     }
     
+    /*
+     *
+     */
     func setUpRemoteGameSlot () {
 
         let referenceToAllGameSlots = Database.database().reference().child("game/slots")
