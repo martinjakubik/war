@@ -60,7 +60,7 @@ class GamePlay {
                     }
 
                     // gets the content of the current game slot
-                    if let gameSlotList = gameSlotDictionary["list"] as? [String:AnyObject] {
+                    if let gameSlotList = gameSlotDictionary["list"] as? [AnyObject] {
 
                         // self.gameSlot = gameSlotList[self.slotNumber
                         
