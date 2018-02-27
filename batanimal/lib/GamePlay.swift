@@ -17,7 +17,10 @@ class GamePlay {
     var cards:[Card] = []
     var shuffledCards:[Card] =  []
     var playerNames:[String] = []
-    
+    var slotNumber:Int = 0
+    var gameSlot:GameSlot?
+    var playerReferences:[PlayerReference] = []
+
     init(view:UIView, numPlayers:Int, cards:[Card], playerNames:[String]) {
 
         self.view = view
@@ -26,24 +29,53 @@ class GamePlay {
         self.playerNames = playerNames
 
     }
-    
+
     /*
      *
      */
     func setUpRemoteGameSlot () {
 
-        let referenceToAllGameSlots = Database.database().reference().child("game/slots")
+        let databaseReference = Database.database().reference()
+
+        let referenceToAllGameSlots = databaseReference.child("game/slots")
 
         referenceToAllGameSlots.observeSingleEvent(
 
             of: DataEventType.value,
             with: {(snapshot) in
 
-                let gameSlots = snapshot.value as? NSDictionary
-                if let realGameSlots = gameSlots {
+                if let gameSlotDictionary = snapshot.value as? [String:AnyObject] {
 
-                    print (realGameSlots.count)
+                    self.slotNumber = 0
 
+                    // gets the current game slot number
+                    if let gameSlotObject = gameSlotDictionary["lastSlot"] as? [String:AnyObject] {
+
+                        if let gameSlotStringValue = gameSlotObject["value"] as? Int {
+
+                            self.slotNumber = gameSlotStringValue
+
+                        }
+
+                    }
+
+                    // gets the content of the current game slot
+                    if let gameSlotList = gameSlotDictionary["list"] as? [String:AnyObject] {
+
+                        // self.gameSlot = gameSlotList[self.slotNumber
+                        
+                        print (gameSlotList)
+
+                    }
+
+                    for i in 0...1 {
+                        
+                        if let playerReference = Database.database().reference().child("game/slots/list" + String(self.slotNumber) + "/player" + String(i)) as? PlayerReference {
+                            
+                            self.playerReferences.append(playerReference)
+                            
+                        }
+                    }
                 }
         })
     }
