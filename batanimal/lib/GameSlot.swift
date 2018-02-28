@@ -9,5 +9,22 @@
 import Foundation
 
 class GameSlot {
-    
+
+    var players:[Player] = []
+
+    init (withDictionary slotDictionary:[String:[String:AnyObject]]) {
+
+        for (key,_) in slotDictionary {
+
+            if let playerDict = slotDictionary[key] {
+
+                let player = Player(withDictionary:playerDict)
+                players.append(player)
+
+            }
+
+        }
+
+    }
+
 }

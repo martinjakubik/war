@@ -7,3 +7,19 @@
 //
 
 import Foundation
+
+class Player {
+
+    var name:String = ""
+    var hand:[Card] = []
+    var sessionId:String = ""
+
+    init (withDictionary playerDict:[String:AnyObject]) {
+
+        name = playerDict["name"] as? String ?? ""
+        sessionId = playerDict["sessionId"] as? String ?? ""
+        
+        // hand = Card(initWith)
+
+    }
+}
