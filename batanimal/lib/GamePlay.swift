@@ -33,6 +33,49 @@ class GamePlay {
     /*
      *
      */
+    class func getLastGameSlotNumber (allGameSlots:[String:AnyObject]) -> Int {
+
+        var lastGameSlotNumber:Int = 0
+
+        // gets the current game slot number
+        if let gameSlotObject = allGameSlots["lastSlot"] as? [String:AnyObject] {
+
+            if let gameSlotStringValue = gameSlotObject["value"] as? Int {
+
+                lastGameSlotNumber = gameSlotStringValue
+
+            }
+
+        }
+
+        return lastGameSlotNumber
+
+    }
+
+    /*
+     *
+     */
+    class func getLastGameSlot (allGameSlots:[String:AnyObject]) -> GameSlot {
+
+        var lastGameSlot:GameSlot = GameSlot(withDictionary:[:])
+
+        // gets the content of the current game slot
+        if let gameSlotList = allGameSlots["list"] as? [[String:[String:AnyObject]]] {
+
+            let slotNumber = GamePlay.getLastGameSlotNumber(allGameSlots: allGameSlots)
+
+            let gameSlotDictionary = gameSlotList[slotNumber]
+            lastGameSlot = GameSlot(withDictionary:gameSlotDictionary)
+
+        }
+
+        return lastGameSlot
+
+    }
+
+    /*
+     *
+     */
     func setUpRemoteGameSlot () {
 
         let databaseReference = Database.database().reference()
@@ -46,26 +89,9 @@ class GamePlay {
 
                 if let allGameSlotDictionary = snapshot.value as? [String:AnyObject] {
 
-                    self.slotNumber = 0
+                    self.slotNumber = GamePlay.getLastGameSlotNumber(allGameSlots: allGameSlotDictionary)
 
-                    // gets the current game slot number
-                    if let gameSlotObject = allGameSlotDictionary["lastSlot"] as? [String:AnyObject] {
-
-                        if let gameSlotStringValue = gameSlotObject["value"] as? Int {
-
-                            self.slotNumber = gameSlotStringValue
-
-                        }
-
-                    }
-
-                    // gets the content of the current game slot
-                    if let gameSlotList = allGameSlotDictionary["list"] as? [[String:[String:AnyObject]]] {
-
-                        let gameSlotDictionary = gameSlotList[self.slotNumber]
-                        self.gameSlot = GameSlot(withDictionary:gameSlotDictionary)
-
-                    }
+                    self.gameSlot = GamePlay.getLastGameSlot(allGameSlots: allGameSlotDictionary)
 
                     for i in 0...1 {
                         
