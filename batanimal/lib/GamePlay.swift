@@ -19,7 +19,7 @@ class GamePlay {
     var playerNames:[String] = []
     var slotNumber:Int = 0
     var gameSlot:GameSlot?
-    var playerReferences:[PlayerReference] = []
+    var playerReferences:[DatabaseReference] = []
 
     init(view:UIView, numPlayers:Int, cards:[Card], playerNames:[String]) {
 
@@ -69,11 +69,10 @@ class GamePlay {
 
                     for i in 0...1 {
                         
-                        if let playerReference = referenceToAllGameSlots.child("list").child(String(self.slotNumber)).child("player" + String(i)) as? PlayerReference {
-                            
-                            self.playerReferences.append(playerReference)
-                            
-                        }
+                        let playerReference = referenceToAllGameSlots.child("list").child(String(self.slotNumber)).child("player" + String(i))
+
+                        self.playerReferences.append(playerReference)
+
                     }
                 }
         })
