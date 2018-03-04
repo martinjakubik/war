@@ -94,16 +94,67 @@ class GamePlay {
                     self.gameSlot = GamePlay.getLastGameSlot(allGameSlots: allGameSlotDictionary)
 
                     for i in 0...1 {
-                        
+
                         let playerReference = referenceToAllGameSlots.child("list").child(String(self.slotNumber)).child("player" + String(i))
 
                         self.playerReferences.append(playerReference)
+
+                    }
+
+                    let referenceRestOfCards = referenceToAllGameSlots.child("list").child(String(self.slotNumber)).child("restOfCards")
+
+                    let isPlayer0SlotFull:Bool
+                    let isPlayer1SlotFull:Bool
+                    if let gameSlot = self.gameSlot {
+
+                        isPlayer0SlotFull = gameSlot.players.count > 0
+                        isPlayer1SlotFull = gameSlot.players.count > 1
+
+                    } else {
+
+                        isPlayer0SlotFull = false
+                        isPlayer1SlotFull = false
+
+                    }
+
+                    if (!isPlayer0SlotFull && !isPlayer1SlotFull) {
+
+                        self.keepPlayer0AndWaitForPlayer1()
+
+                    } else if (isPlayer0SlotFull && isPlayer1SlotFull) {
+
+                        // TODO: move to next slot
+
+                        self.keepPlayer0AndWaitForPlayer1()
+
+                    } else if (isPlayer0SlotFull && !isPlayer1SlotFull) {
+
+                        let player1Value = Player(withDictionary: [:])
+                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(player1: player1Value, referenceRestOfCards: referenceRestOfCards)
+
+                    } else if (!isPlayer0SlotFull && isPlayer1SlotFull) {
+
+                        // TODO
 
                     }
                 }
         })
     }
 
+    /*
+     *
+     */
+    func keepPlayer0AndWaitForPlayer1 () {
+        
+    }
+    
+    /*
+     *
+     */
+    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (player1:Player, referenceRestOfCards:DatabaseReference) {
+        
+    }
+    
     /*
      *
      */
