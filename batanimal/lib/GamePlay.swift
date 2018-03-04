@@ -44,12 +44,12 @@ class GamePlay {
             of: DataEventType.value,
             with: {(snapshot) in
 
-                if let gameSlotDictionary = snapshot.value as? [String:AnyObject] {
+                if let allGameSlotDictionary = snapshot.value as? [String:AnyObject] {
 
                     self.slotNumber = 0
 
                     // gets the current game slot number
-                    if let gameSlotObject = gameSlotDictionary["lastSlot"] as? [String:AnyObject] {
+                    if let gameSlotObject = allGameSlotDictionary["lastSlot"] as? [String:AnyObject] {
 
                         if let gameSlotStringValue = gameSlotObject["value"] as? Int {
 
@@ -60,7 +60,7 @@ class GamePlay {
                     }
 
                     // gets the content of the current game slot
-                    if let gameSlotList = gameSlotDictionary["list"] as? [[String:[String:AnyObject]]] {
+                    if let gameSlotList = allGameSlotDictionary["list"] as? [[String:[String:AnyObject]]] {
 
                         let gameSlotDictionary = gameSlotList[self.slotNumber]
                         self.gameSlot = GameSlot(withDictionary:gameSlotDictionary)
@@ -69,7 +69,7 @@ class GamePlay {
 
                     for i in 0...1 {
                         
-                        if let playerReference = Database.database().reference().child("game/slots/list" + String(self.slotNumber) + "/player" + String(i)) as? PlayerReference {
+                        if let playerReference = referenceToAllGameSlots.child("list").child(String(self.slotNumber)).child("player" + String(i)) as? PlayerReference {
                             
                             self.playerReferences.append(playerReference)
                             
