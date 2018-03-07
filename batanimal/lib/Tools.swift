@@ -29,4 +29,22 @@ class Tools {
         return shuffledThings
     };
 
+    /*
+     * generates a readable Id
+     */
+    class func generateId () -> String {
+
+        func s4 () -> UInt32 {
+
+            let n = arc4random_uniform(9999)
+            return n
+
+        }
+        
+        let id = String(s4()) + "-" + String(s4())
+
+        return id
+
+    }
+
 }

@@ -145,7 +145,23 @@ class GamePlay {
      *
      */
     func keepPlayer0AndWaitForPlayer1 () {
+
+        let databaseReference = Database.database().reference()
+        let referenceGameSlot = databaseReference.child("game/slots").child(String(self.slotNumber))
+
+        let player0sessionId = GameSession.makeNewSessionId()
+
+        // makes player 0 controller
+        // oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sPlayer0SessionId, bIsLocal);
+        // oGamePlay.playerControllers[0].setName(this.callbacks.getRandomPlayerName(0, oGamePlay.playerNames));
         
+        // distributes cards to player 0
+        // oGamePlay.distributeCardsToAvailablePlayers();
+        
+        
+        
+        
+
     }
     
     /*

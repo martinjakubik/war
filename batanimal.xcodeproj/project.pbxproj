@@ -62,6 +62,8 @@
 		5B98E38F203DE85F00BE085B /* GameBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E38E203DE85E00BE085B /* GameBox.swift */; };
 		5B98E395203DE95A00BE085B /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E394203DE95A00BE085B /* Tools.swift */; };
 		5B98E397203DED3600BE085B /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E396203DED3600BE085B /* Card.swift */; };
+		5BC0781F20508B1B0060CEF7 /* GameSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC0781E20508B1B0060CEF7 /* GameSession.swift */; };
+		5BC0782120508EDA0060CEF7 /* WarGamePlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC0782020508EDA0060CEF7 /* WarGamePlay.swift */; };
 		705703AD8331986EE0DB90D7 /* Pods_batanimal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39530A1500D0FD8395BE9A8F /* Pods_batanimal.framework */; };
 		A8270A2A73908090BEB1B144 /* Pods_batanimalUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EFEA85FF300AEBDCD538F24 /* Pods_batanimalUITests.framework */; };
 /* End PBXBuildFile section */
@@ -147,6 +149,8 @@
 		5B98E38E203DE85E00BE085B /* GameBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBox.swift; sourceTree = "<group>"; };
 		5B98E394203DE95A00BE085B /* Tools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tools.swift; sourceTree = "<group>"; };
 		5B98E396203DED3600BE085B /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		5BC0781E20508B1B0060CEF7 /* GameSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSession.swift; sourceTree = "<group>"; };
+		5BC0782020508EDA0060CEF7 /* WarGamePlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WarGamePlay.swift; sourceTree = "<group>"; };
 		5F654EEFFB81C6F97F9FF55F /* Pods-batanimal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-batanimal.debug.xcconfig"; path = "Pods/Target Support Files/Pods-batanimal/Pods-batanimal.debug.xcconfig"; sourceTree = "<group>"; };
 		60FD578397C5F5E03E3985BB /* Pods-batanimalUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-batanimalUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-batanimalUITests/Pods-batanimalUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		9C47A4CAD8D12550CE65209E /* Pods-batanimalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-batanimalTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-batanimalTests/Pods-batanimalTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -303,6 +307,7 @@
 			isa = PBXGroup;
 			children = (
 				5B98E38E203DE85E00BE085B /* GameBox.swift */,
+				5BC0782020508EDA0060CEF7 /* WarGamePlay.swift */,
 			);
 			path = app;
 			sourceTree = "<group>";
@@ -316,6 +321,7 @@
 				5B4BA7BB203F394C00F60CD8 /* CardView.swift */,
 				5B4BA8092041963000F60CD8 /* Player.swift */,
 				5B4BA80D2043333E00F60CD8 /* GameSlot.swift */,
+				5BC0781E20508B1B0060CEF7 /* GameSession.swift */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -670,7 +676,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B4BA7BC203F394C00F60CD8 /* CardView.swift in Sources */,
+				5BC0782120508EDA0060CEF7 /* WarGamePlay.swift in Sources */,
 				5B03125C203C976A00391F4A /* ViewController.swift in Sources */,
+				5BC0781F20508B1B0060CEF7 /* GameSession.swift in Sources */,
 				5B98E38F203DE85F00BE085B /* GameBox.swift in Sources */,
 				5B98E397203DED3600BE085B /* Card.swift in Sources */,
 				5B4BA80A2041963000F60CD8 /* Player.swift in Sources */,
