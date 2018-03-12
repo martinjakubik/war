@@ -21,6 +21,15 @@ class GameBox {
     /*
      *
      */
+    func getRandomPlayerName () -> String {
+
+        return "Fox"
+
+    }
+
+    /*
+     *
+     */
     func makeCards (cardValues:[Int], addSkunk:Bool) -> [Card] {
 
         var cards:[Card] = []

@@ -11,8 +11,13 @@ import FirebaseDatabase
 
 class WarGamePlay:GamePlay {
 
-    func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool) {
-        
+    /*
+     *
+     */
+    override func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool) {
+
+        self.playerControllers.append(Player(withNumber: playerNumber, sessionId: sessionId, isLocal: isLocal))
+
     }
     
 }

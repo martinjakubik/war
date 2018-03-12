@@ -7,19 +7,47 @@
 //
 
 import Foundation
+import FirebaseDatabase
 
 class Player {
 
+    var number:Int = -1
     var name:String = ""
     var hand:[Card] = []
+    var table:[Card] = []
+//    var reference:DatabaseReference
     var sessionId:String = ""
+    var isLocal:Bool = true
 
+    /*
+     *
+     */
     init (withDictionary playerDict:[String:AnyObject]) {
 
-        name = playerDict["name"] as? String ?? ""
-        sessionId = playerDict["sessionId"] as? String ?? ""
+        self.name = playerDict["name"] as? String ?? ""
+        self.sessionId = playerDict["sessionId"] as? String ?? ""
         
-        // hand = Card(initWith)
+        self.hand = []
+        self.table = []
+        // self.reference =
+        self.sessionId = ""
+        self.isLocal = true
+
+    }
+
+    /*
+     *
+     */
+    init (withNumber number:Int, /* reference:DatabaseReference, */ sessionId:String, isLocal:Bool) {
+
+        self.number = number
+//        self.reference = reference
+        self.sessionId = sessionId
+        self.isLocal = isLocal
+
+        self.name = ""
+        self.hand = []
+        self.table = []
 
     }
 }

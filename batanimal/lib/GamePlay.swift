@@ -16,9 +16,10 @@ class GamePlay {
     var numPlayers:Int = 0
     var cards:[Card] = []
     var shuffledCards:[Card] =  []
-    var playerNames:[String] = []
     var slotNumber:Int = 0
     var gameSlot:GameSlot?
+    var playerNames:[String] = []
+    var playerControllers:[Player] = []
     var playerReferences:[DatabaseReference] = []
 
     init(view:UIView, numPlayers:Int, cards:[Card], playerNames:[String]) {
@@ -149,19 +150,23 @@ class GamePlay {
         let databaseReference = Database.database().reference()
         let referenceGameSlot = databaseReference.child("game/slots").child(String(self.slotNumber))
 
-        let player0sessionId = GameSession.makeNewSessionId()
+        let player0SessionId = GameSession.makeNewSessionId()
+        
+        let isLocal = true
 
         // makes player 0 controller
-        // oGamePlay.makePlayerController(0, oGamePlay.playerControllers, oGamePlay.playerReference[0], oGamePlay.localPlayerTappedCardInHand.bind(oGamePlay), sPlayer0SessionId, bIsLocal);
-        // oGamePlay.playerControllers[0].setName(this.callbacks.getRandomPlayerName(0, oGamePlay.playerNames));
+        self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: self.playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isLocal)
+        self.playerControllers[0].name = "Fox"
         
         // distributes cards to player 0
         // oGamePlay.distributeCardsToAvailablePlayers();
-        
-        
-        
-        
 
+        referenceGameSlot.child("player0").setValue([
+
+            "name": self.playerControllers[0].name,
+            "hand": self.playerControllers[0].hand
+
+        ] as NSDictionary)
     }
     
     /*
@@ -203,6 +208,10 @@ class GamePlay {
             
             self.view.addSubview(cardView)
         }
+    }
+
+    func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool) {
+
     }
 
     /*
