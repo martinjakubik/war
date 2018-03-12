@@ -79,7 +79,7 @@ class GameBox {
         
         let playerNames = [ "cat", "dog", "cow", "pig", "horse", "skunk", "ferret", "duck", "jackal" ]
         
-        let gamePlay = GamePlay(
+        let gamePlay = WarGamePlay(
             view:self.view,
             numPlayers:2,
             cards:cards,
