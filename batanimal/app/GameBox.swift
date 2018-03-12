@@ -9,31 +9,32 @@
 import UIKit
 
 class GameBox {
-    
+
     var view:UIView
-    
+
     init(view:UIView) {
 
         self.view = view
 
     }
-    
+
     /*
      *
      */
     func makeCards (cardValues:[Int], addSkunk:Bool) -> [Card] {
-        
+
         var cards:[Card] = []
-        
+
         var suitLetters = [ "a", "b", "c", "d", "e", "f" ]
-        
+
         var suit:Int
         var highestSuitsFoundForValue = [Int: Int]()
-        
+
         // distributes the cards into suits
         for cardValue in cardValues {
 
             suit = -1;
+
             // initializes a suit value if there isn't one
             if highestSuitsFoundForValue[cardValue] == nil {
 
@@ -47,7 +48,7 @@ class GameBox {
                 highestSuitsFoundForValue[cardValue] = highestSuitFoundForValue + 1;
 
             }
-            
+
             // adds a card using the card value and the highest suit found
             if let highestSuitFoundForValue = highestSuitsFoundForValue[cardValue] {
 
@@ -56,16 +57,17 @@ class GameBox {
                 cards.append(card)
 
             }
+
         }
-        
+
         return cards
     }
-    
+
     /*
      *
      */
     func go() {
-        
+
         let batanimalCardValues = [
             6, 3, 5, 5, 1, 6,
             4, 2, 4, 3, 1, 3,
@@ -74,19 +76,20 @@ class GameBox {
             4, 5, 1, 3, 5, 2,
             6, 1, 2, 2, 3, 5
         ];
-        
+
         let cards:[Card] = makeCards(cardValues: batanimalCardValues, addSkunk: true)
-        
+
         let playerNames = [ "cat", "dog", "cow", "pig", "horse", "skunk", "ferret", "duck", "jackal" ]
-        
+
         let gamePlay = WarGamePlay(
             view:self.view,
             numPlayers:2,
             cards:cards,
             playerNames:playerNames
         )
-        
+
         gamePlay.start(shuffleCards:true)
+
     }
 
 }
