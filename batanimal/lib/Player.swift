@@ -15,7 +15,7 @@ class Player {
     var name:String = ""
     var hand:[Card] = []
     var table:[Card] = []
-//    var reference:DatabaseReference
+    var reference:DatabaseReference?
     var sessionId:String = ""
     var isLocal:Bool = true
 
@@ -29,7 +29,6 @@ class Player {
         
         self.hand = []
         self.table = []
-        // self.reference =
         self.sessionId = ""
         self.isLocal = true
 
@@ -38,10 +37,9 @@ class Player {
     /*
      *
      */
-    init (withNumber number:Int, /* reference:DatabaseReference, */ sessionId:String, isLocal:Bool) {
+    init (withNumber number:Int, reference:DatabaseReference, sessionId:String, isLocal:Bool) {
 
         self.number = number
-//        self.reference = reference
         self.sessionId = sessionId
         self.isLocal = isLocal
 

@@ -210,7 +210,14 @@ class GamePlay {
         }
     }
 
+    /*
+     *
+     */
     func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool) {
+
+        let player:Player = Player(withNumber: playerNumber, reference: playerReference, sessionId: sessionId, isLocal: isLocal)
+
+        self.playerControllers.append(player)
 
     }
 
