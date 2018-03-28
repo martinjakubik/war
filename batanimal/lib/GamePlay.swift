@@ -20,7 +20,6 @@ class GamePlay {
     var gameSlot:GameSlot?
     var playerNames:[String] = []
     var playerControllers:[Player] = []
-    var playerReferences:[DatabaseReference] = []
 
     init(view:UIView, numPlayers:Int, cards:[Card], playerNames:[String]) {
 
@@ -93,12 +92,14 @@ class GamePlay {
                     self.slotNumber = GamePlay.getLastGameSlotNumber(allGameSlots: allGameSlotDictionary)
 
                     self.gameSlot = GamePlay.getLastGameSlot(allGameSlots: allGameSlotDictionary)
+                    
+                    var playerReferences:[DatabaseReference] = []
 
                     for i in 0...1 {
 
                         let playerReference = referenceToAllGameSlots.child("list").child(String(self.slotNumber)).child("player" + String(i))
 
-                        self.playerReferences.append(playerReference)
+                        playerReferences.append(playerReference)
 
                     }
 
@@ -120,13 +121,13 @@ class GamePlay {
 
                     if (!isPlayer0SlotFull && !isPlayer1SlotFull) {
 
-                        self.keepPlayer0AndWaitForPlayer1()
+                        self.keepPlayer0AndWaitForPlayer1(with: playerReferences, restOfCards: referenceRestOfCards)
 
                     } else if (isPlayer0SlotFull && isPlayer1SlotFull) {
 
                         // TODO: move to next slot
 
-                        self.keepPlayer0AndWaitForPlayer1()
+                        self.keepPlayer0AndWaitForPlayer1(with: playerReferences, restOfCards: referenceRestOfCards)
 
                     } else if (isPlayer0SlotFull && !isPlayer1SlotFull) {
 
@@ -145,7 +146,7 @@ class GamePlay {
     /*
      *
      */
-    func keepPlayer0AndWaitForPlayer1 () {
+    func keepPlayer0AndWaitForPlayer1 (with playerReferences:[DatabaseReference], restOfCards:DatabaseReference) {
 
         let databaseReference = Database.database().reference()
         let referenceGameSlot = databaseReference.child("game/slots").child(String(self.slotNumber))
@@ -155,7 +156,7 @@ class GamePlay {
         let isLocal = true
 
         // makes player 0 controller
-        self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: self.playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isLocal)
+        self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isLocal)
         self.playerControllers[0].name = "Fox"
         
         // distributes cards to player 0
@@ -167,6 +168,20 @@ class GamePlay {
             "hand": self.playerControllers[0].hand
 
         ] as NSDictionary)
+
+        playerReferences[1].observe(
+
+            DataEventType.value,
+            with: {(snapshot) in
+
+                if let player1Value = snapshot.value as? [String:AnyObject] {
+
+                    let player1 = Player(withDictionary: player1Value)
+
+                    self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(player1: player1, referenceRestOfCards: restOfCards)
+
+                }
+        })
     }
     
     /*
