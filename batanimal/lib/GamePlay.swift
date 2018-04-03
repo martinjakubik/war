@@ -177,6 +177,8 @@ class GamePlay {
                 if let player1Value = snapshot.value as? [String:AnyObject] {
 
                     let player1 = Player(withDictionary: player1Value)
+                    
+                    self.playerControllers.append(player1)
 
                     self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(player1: player1, referenceRestOfCards: restOfCards)
 
@@ -189,6 +191,8 @@ class GamePlay {
      */
     func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (player1:Player, referenceRestOfCards:DatabaseReference) {
         
+        // sets player 1's cards
+        // player1.setHand()
     }
     
     /*

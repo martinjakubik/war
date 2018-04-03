@@ -11,15 +11,34 @@ import Foundation
 class GameSlot {
 
     var players:[Player] = []
+    var restOfCards:[Card] = []
 
     init (withDictionary slotDictionary:[String:[String:AnyObject]]) {
 
         for (key,_) in slotDictionary {
 
-            if let playerDict = slotDictionary[key] {
+            if key.hasPrefix("player") {
 
-                let player = Player(withDictionary:playerDict)
-                players.append(player)
+                if let playerDict = slotDictionary[key] {
+
+                    let player = Player(withDictionary:playerDict)
+                    players.append(player)
+
+                }
+
+            } else if key.hasPrefix("restOfCards") {
+
+                if let restOfCardList = slotDictionary[key] {
+
+                    for cardValue in restOfCardList {
+
+                        let card:Card = Card(value: cardValue.value as! Int, suit: cardValue.value as! String)
+
+                        self.restOfCards.append(card)
+
+                    }
+
+                }
 
             }
 
