@@ -103,8 +103,6 @@ class GamePlay {
 
                     }
 
-                    let referenceRestOfCards = referenceToAllGameSlots.child("list").child(String(self.slotNumber)).child("restOfCards")
-
                     let isPlayer0SlotFull:Bool
                     let isPlayer1SlotFull:Bool
                     if let gameSlot = self.gameSlot {
@@ -121,18 +119,18 @@ class GamePlay {
 
                     if (!isPlayer0SlotFull && !isPlayer1SlotFull) {
 
-                        self.keepPlayer0AndWaitForPlayer1(with: playerReferences, restOfCards: referenceRestOfCards)
+                        self.keepPlayer0AndWaitForPlayer1(with: playerReferences)
 
                     } else if (isPlayer0SlotFull && isPlayer1SlotFull) {
 
                         // TODO: move to next slot
 
-                        self.keepPlayer0AndWaitForPlayer1(with: playerReferences, restOfCards: referenceRestOfCards)
+                        self.keepPlayer0AndWaitForPlayer1(with: playerReferences)
 
                     } else if (isPlayer0SlotFull && !isPlayer1SlotFull) {
 
                         let player1Value = Player(withDictionary: [:])
-                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(player1: player1Value, referenceRestOfCards: referenceRestOfCards)
+                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(player1: player1Value)
 
                     } else if (!isPlayer0SlotFull && isPlayer1SlotFull) {
 
@@ -146,7 +144,7 @@ class GamePlay {
     /*
      *
      */
-    func keepPlayer0AndWaitForPlayer1 (with playerReferences:[DatabaseReference], restOfCards:DatabaseReference) {
+    func keepPlayer0AndWaitForPlayer1 (with playerReferences:[DatabaseReference]) {
 
         let databaseReference = Database.database().reference()
         let referenceGameSlot = databaseReference.child("game/slots").child(String(self.slotNumber))
@@ -180,7 +178,7 @@ class GamePlay {
                     
                     self.playerControllers.append(player1)
 
-                    self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(player1: player1, referenceRestOfCards: restOfCards)
+                    self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(player1: player1)
 
                 }
         })
@@ -189,7 +187,7 @@ class GamePlay {
     /*
      *
      */
-    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (player1:Player, referenceRestOfCards:DatabaseReference) {
+    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (player1:Player) {
         
         // sets player 1's cards
         // player1.setHand()
