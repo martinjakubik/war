@@ -147,7 +147,7 @@ class GamePlay {
     func keepPlayer0AndWaitForPlayer1 (with playerReferences:[DatabaseReference]) {
 
         let databaseReference = Database.database().reference()
-        let referenceGameSlot = databaseReference.child("game/slots").child(String(self.slotNumber))
+        let referenceGameSlot = databaseReference.child("game/slots/list").child(String(self.slotNumber))
 
         let player0SessionId = GameSession.makeNewSessionId()
         
@@ -160,10 +160,18 @@ class GamePlay {
         // distributes cards to player 0
         // oGamePlay.distributeCardsToAvailablePlayers();
 
-        referenceGameSlot.child("player0").setValue([
+        referenceGameSlot.setValue([
 
-            "name": self.playerControllers[0].name,
-            "hand": self.playerControllers[0].hand
+            "player0": [
+
+                "name": self.playerControllers[0].name,
+                "hand": self.playerControllers[0].hand
+
+                ] as NSDictionary,
+
+            "player1": [:] as NSDictionary,
+            
+            "restOfCards": [] as NSArray
 
         ] as NSDictionary)
 
