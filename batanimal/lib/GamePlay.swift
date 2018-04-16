@@ -129,8 +129,7 @@ class GamePlay {
 
                     } else if (isPlayer0SlotFull && !isPlayer1SlotFull) {
 
-                        let player1Value = Player(withDictionary: [:])
-                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(player1: player1Value)
+                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(with: playerReferences)
 
                     } else if (!isPlayer0SlotFull && isPlayer1SlotFull) {
 
@@ -175,30 +174,35 @@ class GamePlay {
 
         ] as NSDictionary)
 
-        playerReferences[1].observe(
-
-            DataEventType.value,
-            with: {(snapshot) in
-
-                if let player1Value = snapshot.value as? [String:AnyObject] {
-
-                    let player1 = Player(withDictionary: player1Value)
-                    
-                    self.playerControllers.append(player1)
-
-                    self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(player1: player1)
-
-                }
-        })
     }
     
     /*
      *
      */
-    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (player1:Player) {
+    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (with playerReferences:[DatabaseReference]) {
         
-        // sets player 1's cards
-        // player1.setHand()
+        let player0SessionId = GameSession.getSessionId()
+        
+        let player1SessionId = GameSession.getSessionId()
+        
+        let isLocal = true
+        
+        // makes player 0 controller
+        self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isLocal)
+        self.playerControllers[0].name = "Fox"
+
+        // makes player 1 controller
+        self.makePlayerController(playerNumber: 1, players: self.playerControllers, playerReference: playerReferences[1], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player1SessionId, isLocal: isLocal)
+        self.playerControllers[1].name = "Turkey"
+
+        playerReferences[1].setValue([
+
+            "name": self.playerControllers[1].name,
+            "hand": self.playerControllers[1].hand
+
+            ] as NSDictionary
+        )
+
     }
     
     /*
