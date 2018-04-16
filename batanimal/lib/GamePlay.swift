@@ -16,10 +16,14 @@ class GamePlay {
     var numPlayers:Int = 0
     var cards:[Card] = []
     var shuffledCards:[Card] =  []
+    var slotIncrement:Int = 0
     var slotNumber:Int = 0
     var gameSlot:GameSlot?
     var playerNames:[String] = []
     var playerControllers:[Player] = []
+
+    let firstSlotNumber = 3
+    let maxNumberOfSlots = 3
 
     init(view:UIView, numPlayers:Int, cards:[Card], playerNames:[String]) {
 
@@ -138,6 +142,16 @@ class GamePlay {
                     }
                 }
         })
+    }
+
+    /*
+     *
+     */
+    func moveToNextGameSlot () {
+
+        self.slotIncrement = (self.slotIncrement + 1) % self.maxNumberOfSlots
+        self.slotNumber = self.firstSlotNumber + self.slotIncrement
+
     }
 
     /*
