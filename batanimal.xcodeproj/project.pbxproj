@@ -15,6 +15,7 @@
 		5B031264203C976A00391F4A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B031262203C976A00391F4A /* LaunchScreen.storyboard */; };
 		5B03126F203C976A00391F4A /* batanimalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B03126E203C976A00391F4A /* batanimalTests.swift */; };
 		5B03127A203C976A00391F4A /* batanimalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B031279203C976A00391F4A /* batanimalUITests.swift */; };
+		5B131A72209508DD00316B3D /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B131A71209508DD00316B3D /* Cards.swift */; };
 		5B4BA7BA203F367B00F60CD8 /* GamePlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4BA7B9203F367A00F60CD8 /* GamePlay.swift */; };
 		5B4BA7BC203F394C00F60CD8 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4BA7BB203F394C00F60CD8 /* CardView.swift */; };
 		5B4BA7E3203F41EF00F60CD8 /* card-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA7BD203F41EF00F60CD8 /* card-back.png */; };
@@ -102,6 +103,7 @@
 		5B031275203C976A00391F4A /* batanimalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = batanimalUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B031279203C976A00391F4A /* batanimalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = batanimalUITests.swift; sourceTree = "<group>"; };
 		5B03127B203C976A00391F4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5B131A71209508DD00316B3D /* Cards.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
 		5B4BA7B9203F367A00F60CD8 /* GamePlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePlay.swift; sourceTree = "<group>"; };
 		5B4BA7BB203F394C00F60CD8 /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		5B4BA7BD203F41EF00F60CD8 /* card-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-back.png"; path = "resources/card-back.png"; sourceTree = "<group>"; };
@@ -316,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				5B98E394203DE95A00BE085B /* Tools.swift */,
+				5B131A71209508DD00316B3D /* Cards.swift */,
 				5B98E396203DED3600BE085B /* Card.swift */,
 				5B4BA7B9203F367A00F60CD8 /* GamePlay.swift */,
 				5B4BA7BB203F394C00F60CD8 /* CardView.swift */,
@@ -678,6 +681,7 @@
 				5B4BA7BC203F394C00F60CD8 /* CardView.swift in Sources */,
 				5BC0782120508EDA0060CEF7 /* WarGamePlay.swift in Sources */,
 				5B03125C203C976A00391F4A /* ViewController.swift in Sources */,
+				5B131A72209508DD00316B3D /* Cards.swift in Sources */,
 				5BC0781F20508B1B0060CEF7 /* GameSession.swift in Sources */,
 				5B98E38F203DE85F00BE085B /* GameBox.swift in Sources */,
 				5B98E397203DED3600BE085B /* Card.swift in Sources */,

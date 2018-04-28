@@ -21,6 +21,7 @@ class GamePlay {
     var gameSlot:GameSlot?
     var playerNames:[String] = []
     var playerControllers:[Player] = []
+    var restOfCards:[Card] = []
 
     let firstSlotNumber = 3
     let maxNumberOfSlots = 3
@@ -171,20 +172,23 @@ class GamePlay {
         self.playerControllers[0].name = "Fox"
         
         // distributes cards to player 0
-        // oGamePlay.distributeCardsToAvailablePlayers();
+        distributeCardsToAvailablePlayers()
+        
+        let player0HandDictionary = Cards.getCardsAsNSDictionary(cards: self.playerControllers[0].hand)
+        let restOfCardDictionary = Cards.getCardsAsNSDictionary(cards: self.restOfCards)
 
         referenceGameSlot.setValue([
 
             "player0": [
 
                 "name": self.playerControllers[0].name,
-                "hand": self.playerControllers[0].hand
+                "hand": player0HandDictionary
 
                 ] as NSDictionary,
 
-            "player1": [:] as NSDictionary,
+//            "player1": [:] as NSDictionary,
             
-            "restOfCards": [] as NSArray
+            "restOfCards": restOfCardDictionary
 
         ] as NSDictionary)
 
@@ -262,6 +266,62 @@ class GamePlay {
 
         self.playerControllers.append(player)
 
+    }
+
+    /*
+     *
+     */
+    func distribute (cards:[Card], numPlayersAmongWhichToDistribute:Int) -> [[Card]] {
+
+        var i:Int = 0;
+        var distributedCards:[[Card]] = []
+
+        for card in cards {
+
+            for j in 0...numPlayersAmongWhichToDistribute {
+
+                if (i % numPlayersAmongWhichToDistribute == j) {
+
+                    if (distributedCards.count < j + 1) {
+
+                        distributedCards.append([])
+
+                    }
+
+                    distributedCards[j].append(card)
+                    break
+
+                }
+            }
+
+            i = i + 1
+        }
+
+        return distributedCards
+    }
+
+    /*
+     *
+     */
+    func distributeCardsToAvailablePlayers () {
+
+        // distributes the cards to the local players
+        let numPlayersAmongWhichToDistributeCards = self.numPlayers > 1 ? self.numPlayers : 2;
+        var distributedCards = distribute(cards: self.shuffledCards, numPlayersAmongWhichToDistribute: numPlayersAmongWhichToDistributeCards)
+
+        var i:Int = 0
+        for player in self.playerControllers {
+
+            player.hand = distributedCards[i]
+            i = i + 1
+
+        }
+
+        if (distributedCards.count > i - 1) {
+
+            self.restOfCards = distributedCards[i]
+
+        }
     }
 
     /*
