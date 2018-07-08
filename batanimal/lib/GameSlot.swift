@@ -13,13 +13,13 @@ class GameSlot {
     var players:[Player] = []
     var restOfCards:[Card] = []
 
-    init (withDictionary slotDictionary:[String:[String:AnyObject]]) {
+    init (withDictionary slotDictionary:[String:AnyObject]) {
 
         for (key,_) in slotDictionary {
 
             if key.hasPrefix("player") {
 
-                if let playerDict = slotDictionary[key] {
+                if let playerDict = slotDictionary[key] as? [String:AnyObject] {
 
                     let player = Player(withDictionary:playerDict)
                     players.append(player)
@@ -28,7 +28,7 @@ class GameSlot {
 
             } else if key.hasPrefix("restOfCards") {
 
-                if let restOfCardList = slotDictionary[key] {
+                if let restOfCardList = slotDictionary[key] as? [String:AnyObject] {
 
                     for cardValue in restOfCardList {
 

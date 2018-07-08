@@ -8,7 +8,7 @@
 
 import UIKit
 import FirebaseDatabase
-
+import os.log
 
 class GamePlay {
     
@@ -23,7 +23,7 @@ class GamePlay {
     var playerControllers:[Player] = []
     var restOfCards:[Card] = []
 
-    let firstSlotNumber = 3
+    let firstSlotNumber:String = "3"
     let maxNumberOfSlots = 3
 
     init(view:UIView, numPlayers:Int, cards:[Card], playerNames:[String]) {
@@ -65,15 +65,17 @@ class GamePlay {
         var lastGameSlot:GameSlot = GameSlot(withDictionary:[:])
 
         // gets the content of the current game slot
-        if let gameSlotList = allGameSlots["list"] as? [[String:[String:AnyObject]]] {
+        if let gameSlotList = allGameSlots["list"] as? [AnyObject] {
 
             let slotNumber = GamePlay.getLastGameSlotNumber(allGameSlots: allGameSlots)
 
-            let gameSlotDictionary = gameSlotList[slotNumber]
-            lastGameSlot = GameSlot(withDictionary:gameSlotDictionary)
+            if let singleSlotDictionary = gameSlotList[slotNumber] as? [String:AnyObject] {
+
+                lastGameSlot = GameSlot(withDictionary:singleSlotDictionary)
+
+            }
 
         }
-
         return lastGameSlot
 
     }
@@ -151,7 +153,13 @@ class GamePlay {
     func moveToNextGameSlot () {
 
         self.slotIncrement = (self.slotIncrement + 1) % self.maxNumberOfSlots
-        self.slotNumber = self.firstSlotNumber + self.slotIncrement
+
+        if let f:Int = Int(self.firstSlotNumber) {
+
+            let r:Int = f + self.slotIncrement
+            self.slotNumber = r
+
+        }
 
     }
 
@@ -186,7 +194,7 @@ class GamePlay {
 
                 ] as NSDictionary,
 
-//            "player1": [:] as NSDictionary,
+            "player1": [:] as NSDictionary,
             
             "restOfCards": restOfCardDictionary
 
