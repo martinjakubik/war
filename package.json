@@ -2,11 +2,11 @@
   "name": "war",
   "version": "0.1.0",
   "devDependencies": {
-    "grunt": "^1.0.1",
+    "grunt": "^1.0.3",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-dev-update": "^2.3.0",
     "grunt-ftp": "^2.1.0",
-    "kierki": "^1.1.12",
+    "kierki": "^1.2.1",
     "load-grunt-tasks": "^3.5.0"
   }
 }
