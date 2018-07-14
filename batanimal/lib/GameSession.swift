@@ -40,4 +40,22 @@ class GameSession {
         }
 
     }
+
+    /*
+     * gets the session Id; creates a new one if none exists
+     */
+    class func isLocal(player:Player) -> Bool {
+
+        let sessionId = GameSession.getSessionId()
+        
+        if (sessionId == player.sessionId) {
+
+            return true
+
+        }
+
+        return false
+
+    }
+
 }
