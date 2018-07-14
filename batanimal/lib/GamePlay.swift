@@ -17,9 +17,10 @@ class GamePlay {
     var cards:[Card] = []
     var shuffledCards:[Card] =  []
     var slotIncrement:Int = 0
-    var slotNumber:Int = 0
+    var slotKey:String = ""
     var gameSlot:GameSlot?
     var playerNames:[String] = []
+    var playerReferences:[DatabaseReference] = []
     var playerControllers:[Player] = []
     var restOfCards:[Card] = []
 
@@ -38,22 +39,22 @@ class GamePlay {
     /*
      *
      */
-    class func getLastGameSlotNumber (allGameSlots:[String:AnyObject]) -> Int {
+    class func getLastGameSlotKey (allGameSlots:[String:AnyObject]) -> String {
 
-        var lastGameSlotNumber:Int = 0
+        var lastGameSlotKey:String = "0"
 
         // gets the current game slot number
         if let gameSlotObject = allGameSlots["lastSlot"] as? [String:AnyObject] {
 
-            if let gameSlotStringValue = gameSlotObject["value"] as? Int {
+            if let gameSlotStringValue = gameSlotObject["value"] as? String {
 
-                lastGameSlotNumber = gameSlotStringValue
+                lastGameSlotKey = gameSlotStringValue
 
             }
 
         }
 
-        return lastGameSlotNumber
+        return lastGameSlotKey
 
     }
 
@@ -65,11 +66,11 @@ class GamePlay {
         var lastGameSlot:GameSlot = GameSlot(withDictionary:[:])
 
         // gets the content of the current game slot
-        if let gameSlotList = allGameSlots["list"] as? [AnyObject] {
+        if let gameSlotList = allGameSlots["list"] as? [String:AnyObject] {
 
-            let slotNumber = GamePlay.getLastGameSlotNumber(allGameSlots: allGameSlots)
+            let slotKey = GamePlay.getLastGameSlotKey(allGameSlots: allGameSlots)
 
-            if let singleSlotDictionary = gameSlotList[slotNumber] as? [String:AnyObject] {
+            if let singleSlotDictionary = gameSlotList[slotKey] as? [String:AnyObject] {
 
                 lastGameSlot = GameSlot(withDictionary:singleSlotDictionary)
 
@@ -83,28 +84,48 @@ class GamePlay {
     /*
      *
      */
+    func moveToNextGameSlot (referenceGameSlotList:DatabaseReference) {
+
+        let referenceGameSlot:DatabaseReference = referenceGameSlotList.childByAutoId()
+
+        let myGameSlot = ["player0": ["name" : "_new_" as AnyObject]]
+
+        referenceGameSlot.setValue(myGameSlot)
+
+        self.slotKey = referenceGameSlot.key
+
+        self.playerReferences.append(referenceGameSlot.child("player0"))
+        self.playerReferences.append(referenceGameSlot.child("player1"))
+
+    }
+    
+    /*
+     *
+     */
     func setUpRemoteGameSlot () {
 
         let databaseReference = Database.database().reference()
 
         let referenceToAllGameSlots = databaseReference.child("game/slots")
+        
+        let referenceGameSlotList = databaseReference.child("game/slots/list")
 
         referenceToAllGameSlots.observeSingleEvent(
 
             of: DataEventType.value,
             with: {(snapshot) in
 
-                if let allGameSlotDictionary = snapshot.value as? [String:AnyObject] {
+                if let allGameSlots = snapshot.value as? [String:AnyObject] {
 
-                    self.slotNumber = GamePlay.getLastGameSlotNumber(allGameSlots: allGameSlotDictionary)
+                    self.slotKey = GamePlay.getLastGameSlotKey(allGameSlots: allGameSlots)
 
-                    self.gameSlot = GamePlay.getLastGameSlot(allGameSlots: allGameSlotDictionary)
+                    self.gameSlot = GamePlay.getLastGameSlot(allGameSlots: allGameSlots)
                     
                     var playerReferences:[DatabaseReference] = []
 
                     for i in 0...1 {
 
-                        let playerReference = referenceToAllGameSlots.child("list").child(String(self.slotNumber)).child("player" + String(i))
+                        let playerReference = referenceToAllGameSlots.child("list").child(String(self.slotKey)).child("player" + String(i))
 
                         playerReferences.append(playerReference)
 
@@ -130,7 +151,7 @@ class GamePlay {
 
                     } else if (isPlayer0SlotFull && isPlayer1SlotFull) {
 
-                        // TODO: move to next slot
+                        self.moveToNextGameSlot(referenceGameSlotList: referenceGameSlotList)
 
                         self.keepPlayer0AndWaitForPlayer1(with: playerReferences)
 
@@ -143,24 +164,11 @@ class GamePlay {
                         // TODO
 
                     }
+
+                    referenceToAllGameSlots.child("lastSlot").setValue(["value": self.slotKey])
+
                 }
         })
-    }
-
-    /*
-     *
-     */
-    func moveToNextGameSlot () {
-
-        self.slotIncrement = (self.slotIncrement + 1) % self.maxNumberOfSlots
-
-        if let f:Int = Int(self.firstSlotNumber) {
-
-            let r:Int = f + self.slotIncrement
-            self.slotNumber = r
-
-        }
-
     }
 
     /*
@@ -169,7 +177,7 @@ class GamePlay {
     func keepPlayer0AndWaitForPlayer1 (with playerReferences:[DatabaseReference]) {
 
         let databaseReference = Database.database().reference()
-        let referenceGameSlot = databaseReference.child("game/slots/list").child(String(self.slotNumber))
+        let referenceGameSlot = databaseReference.child("game/slots/list").child(String(self.slotKey))
 
         let player0SessionId = GameSession.makeNewSessionId()
         
