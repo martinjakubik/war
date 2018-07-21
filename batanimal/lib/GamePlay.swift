@@ -108,7 +108,7 @@ class GamePlay {
 
         let referenceToAllGameSlots = databaseReference.child("game/slots")
         
-        let referenceGameSlotList = databaseReference.child("game/slots/list")
+        let referenceToGameSlotList = databaseReference.child("game/slots/list")
 
         referenceToAllGameSlots.observeSingleEvent(
 
@@ -119,6 +119,7 @@ class GamePlay {
 
                     self.slotKey = GamePlay.getLastGameSlotKey(allGameSlots: allGameSlots)
 
+                    // TODO: do we have everything we need from the remote game slot here? ie. the restofcards and stuff?
                     self.gameSlot = GamePlay.getLastGameSlot(allGameSlots: allGameSlots)
                     
                     var playerReferences:[DatabaseReference] = []
@@ -135,8 +136,8 @@ class GamePlay {
                     let isPlayer1SlotFull:Bool
                     if let gameSlot = self.gameSlot {
 
-                        isPlayer0SlotFull = gameSlot.players.count > 0
-                        isPlayer1SlotFull = gameSlot.players.count > 1
+                        isPlayer0SlotFull = gameSlot.player0 != nil
+                        isPlayer1SlotFull = gameSlot.player1 != nil
 
                     } else {
 
@@ -151,13 +152,15 @@ class GamePlay {
 
                     } else if (isPlayer0SlotFull && isPlayer1SlotFull) {
 
-                        self.moveToNextGameSlot(referenceGameSlotList: referenceGameSlotList)
+                        self.moveToNextGameSlot(referenceGameSlotList: referenceToGameSlotList)
 
                         self.keepPlayer0AndWaitForPlayer1(with: playerReferences)
 
                     } else if (isPlayer0SlotFull && !isPlayer1SlotFull) {
 
-                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(with: playerReferences)
+                        let player1Value = Player(withNumber: 1, playerDictionary: ["name":"_new_" as AnyObject])
+
+                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(with: playerReferences, player1Value: player1Value)
 
                     } else if (!isPlayer0SlotFull && isPlayer1SlotFull) {
 
@@ -190,7 +193,7 @@ class GamePlay {
         // distributes cards to player 0
         distributeCardsToAvailablePlayers()
         
-        let player0HandDictionary = Cards.getCardsAsNSDictionary(cards: self.playerControllers[0].hand)
+        let player0HandDictionary = Cards.getCardsAsNSDictionary(cards: self.playerControllers[0].getHand())
         let restOfCardDictionary = Cards.getCardsAsNSDictionary(cards: self.restOfCards)
 
         referenceGameSlot.setValue([
@@ -213,30 +216,54 @@ class GamePlay {
     /*
      *
      */
-    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (with playerReferences:[DatabaseReference]) {
+    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (with playerReferences:[DatabaseReference], player1Value:Player) {
         
         let player0SessionId = GameSession.getSessionId()
         
         let player1SessionId = GameSession.getSessionId()
         
-        let isLocal = true
+        // TODO: do we have a valid player0 from the remote slot at this point?
         
-        // makes player 0 controller
-        self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isLocal)
-        self.playerControllers[0].name = "Fox"
+        if let player0Value = self.gameSlot?.player0 {
 
-        // makes player 1 controller
-        self.makePlayerController(playerNumber: 1, players: self.playerControllers, playerReference: playerReferences[1], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player1SessionId, isLocal: isLocal)
-        self.playerControllers[1].name = "Turkey"
+            let isPlayer0Local = GameSession.isLocal(player: player0Value)
 
-        playerReferences[1].setValue([
+            // makes player 0 controller
+            self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isPlayer0Local)
+            self.playerControllers[0].name = "Fox"
 
-            "name": self.playerControllers[1].name,
-            "hand": self.playerControllers[1].hand
+            var isPlayer1Local = true
+            if player1Value.name != "_new_" {
+                isPlayer1Local = false
+            }
 
-            ] as NSDictionary
-        )
+            // makes player 1 controller
+            self.makePlayerController(playerNumber: 1, players: self.playerControllers, playerReference: playerReferences[1], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player1SessionId, isLocal: isPlayer1Local)
+            self.playerControllers[1].name = "Turkey"
+            
+            if let restOfCards = self.gameSlot?.restOfCards {
 
+                self.playerControllers[1].hand = restOfCards
+
+            }
+            
+            let player1HandDictionary = Cards.getCardsAsNSDictionary(cards: self.playerControllers[1].getHand())
+
+            playerReferences[1].setValue([
+
+                "name": self.playerControllers[1].name,
+                "hand": player1HandDictionary
+
+                ] as NSDictionary
+            )
+
+            // cleans rest of cards from remote database
+            let databaseReference = Database.database().reference()
+            let referenceGameSlot = databaseReference.child("game/slots/list").child(String(self.slotKey))
+            let referenceRestOfCards = referenceGameSlot.child("restOfCards")
+            referenceRestOfCards.removeValue()
+
+        }
     }
     
     /*
