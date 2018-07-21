@@ -10,35 +10,41 @@ import Foundation
 
 class GameSlot {
 
-    var players:[Player] = []
-    var restOfCards:[Card] = []
+    var player0:Player?
+    var player1:Player?
+    var restOfCards:[Card]? = []
 
     init (withDictionary slotDictionary:[String:AnyObject]) {
 
         for (key,_) in slotDictionary {
 
-            if key.hasPrefix("player") {
+            if key.hasPrefix("player0") {
 
                 if let playerDict = slotDictionary[key] as? [String:AnyObject] {
 
-                    let player = Player(withDictionary:playerDict)
-                    players.append(player)
+                    let player = Player(withNumber:0, playerDictionary:playerDict)
+                    player0 = player
 
                 }
 
+            } else if key.hasPrefix("player1") {
+                
+                if let playerDict = slotDictionary[key] as? [String:AnyObject] {
+                    
+                    let player = Player(withNumber:1, playerDictionary:playerDict)
+                    player1 = player
+                    
+                }
+                
             } else if key.hasPrefix("restOfCards") {
 
-                if let restOfCardList = slotDictionary[key] as? [String:AnyObject] {
+                if self.restOfCards?.isEmpty == true {
 
-                    for cardValue in restOfCardList {
-
-                        let card:Card = Card(value: cardValue.value as! Int, suit: cardValue.value as! String)
-
-                        self.restOfCards.append(card)
-
-                    }
+                    self.restOfCards = []
 
                 }
+
+                self.restOfCards = Cards.makeCardArrayFromAnyObject(cardObject: slotDictionary[key])
 
             }
 
