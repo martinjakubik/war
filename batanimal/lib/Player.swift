@@ -24,7 +24,7 @@ class Player {
     /*
      * initializes a Player from a player number and a dictionary of values
      */
-    init (withNumber number:Int, playerDictionary:[String:AnyObject], view:UIView) {
+    init (withNumber playerNumber:Int, playerDictionary:[String:AnyObject], view:UIView) {
 
         self.name = playerDictionary["name"] as? String ?? ""
         self.sessionId = playerDictionary["sessionId"] as? String ?? ""
@@ -40,6 +40,14 @@ class Player {
         self.table = playerDictionary["table"] as? [Card] ?? []
 
         self.view = view
+
+        // calculates room for each player
+        let verticalOffsetPerPlayer:CGFloat = 100
+        let playerNumberAsFloat = CGFloat(playerNumber)
+        let verticalOffset:CGFloat = verticalOffsetPerPlayer * playerNumberAsFloat
+
+        // moves the view down to make room for each player
+        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: verticalOffset)
     }
 
     /*
