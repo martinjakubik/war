@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class GameSlot {
 
@@ -22,7 +23,8 @@ class GameSlot {
 
                 if let playerDict = slotDictionary[key] as? [String:AnyObject] {
 
-                    let player = Player(withNumber:0, playerDictionary:playerDict)
+                    let player0View = UIView()
+                    let player = Player(withNumber:0, playerDictionary:playerDict, view: player0View)
                     player0 = player
 
                 }
@@ -30,8 +32,9 @@ class GameSlot {
             } else if key.hasPrefix("player1") {
                 
                 if let playerDict = slotDictionary[key] as? [String:AnyObject] {
-                    
-                    let player = Player(withNumber:1, playerDictionary:playerDict)
+
+                    let player1View = UIView()
+                    let player = Player(withNumber:1, playerDictionary:playerDict, view: player1View)
                     player1 = player
                     
                 }

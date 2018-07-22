@@ -158,7 +158,10 @@ class GamePlay {
 
                     } else if (isPlayer0SlotFull && !isPlayer1SlotFull) {
 
-                        let player1Value = Player(withNumber: 1, playerDictionary: ["name":"_new_" as AnyObject])
+                        let player1View = UIView()
+                        self.view.addSubview(player1View)
+
+                        let player1Value = Player(withNumber: 1, playerDictionary: ["name":"_new_" as AnyObject], view: player1View)
 
                         self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(with: playerReferences, player1Value: player1Value)
 
@@ -305,7 +308,10 @@ class GamePlay {
      */
     func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool) {
 
-        let player:Player = Player(withNumber: playerNumber, reference: playerReference, sessionId: sessionId, isLocal: isLocal)
+        let playerView = UIView()
+        self.view.addSubview(playerView)
+
+        let player:Player = Player(withNumber: playerNumber, reference: playerReference, sessionId: sessionId, isLocal: isLocal, view: playerView)
 
         self.playerControllers.append(player)
 
