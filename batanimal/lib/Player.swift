@@ -19,12 +19,12 @@ class Player {
     var reference:DatabaseReference?
     var sessionId:String = ""
 
-    var skView:SKView
+    var scene:GameBoxScene
     
     /*
      * initializes a Player from a player number and a dictionary of values
      */
-    init (withNumber playerNumber:Int, playerDictionary:[String:AnyObject], view:SKView) {
+    init (withNumber playerNumber:Int, playerDictionary:[String:AnyObject], scene:GameBoxScene) {
 
         self.name = playerDictionary["name"] as? String ?? ""
         self.sessionId = playerDictionary["sessionId"] as? String ?? ""
@@ -39,21 +39,14 @@ class Player {
 
         self.table = playerDictionary["table"] as? [Card] ?? []
 
-        self.skView = view
+        self.scene = scene
 
-        // calculates room for each player
-        let verticalOffsetPerPlayer:CGFloat = 100
-        let playerNumberAsFloat = CGFloat(playerNumber)
-        let verticalOffset:CGFloat = verticalOffsetPerPlayer * playerNumberAsFloat
-
-        // moves the view down to make room for each player
-        self.skView.frame = self.skView.frame.offsetBy(dx: 0, dy: verticalOffset)
     }
 
     /*
      * initializes a Player from a player number, a remote database reference and some stuff
      */
-    init (withNumber number:Int, reference:DatabaseReference, sessionId:String, isLocal:Bool, view:SKView) {
+    init (withNumber number:Int, reference:DatabaseReference, sessionId:String, isLocal:Bool, scene:GameBoxScene) {
 
         self.number = number
         self.sessionId = sessionId
@@ -62,7 +55,8 @@ class Player {
         self.hand = []
         self.table = []
 
-        self.skView = view
+        self.scene = scene
+
     }
     
     /*
@@ -103,27 +97,26 @@ class Player {
      */
     func renderSingleCard (card:Card, atPosition:Int) {
 
-        let gameTop = 80
-        let gameLeft = 20
+//        let gameTop = 80
+//        let gameLeft = 20
 
-        let tableWidth = 40
-        let handSpace = 20
-        let handLeft = gameLeft + tableWidth + handSpace
+//        let tableWidth = 40
+//        let handSpace = 20
+//        let handLeft = gameLeft + tableWidth + handSpace
 
-        let cardSpace = 4
-        let cardHeight = 148
-        let cardWidth = 98
+//        let cardSpace = 4
+//        let cardHeight = 148
+//        let cardWidth = 98
 
         let cardId:String = String(card.value) + card.suit
 
-        let cardView:CardView = CardView(
+        let cardNode:CardNode = CardNode(
 
-            id: cardId,
-            frame: CGRect(x: handLeft + atPosition * cardSpace, y:gameTop, width:cardWidth, height:cardHeight)
-            
+            id: cardId
+
         )
 
-        self.skView.addSubview(cardView)
+        self.scene.addChild(cardNode)
 
     }
 

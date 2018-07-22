@@ -14,8 +14,11 @@ class GameSlot {
     var player0:Player?
     var player1:Player?
     var restOfCards:[Card]? = []
+    var scene:GameBoxScene
 
-    init (withDictionary slotDictionary:[String:AnyObject]) {
+    init (withDictionary slotDictionary:[String:AnyObject], scene:GameBoxScene) {
+
+        self.scene = scene
 
         for (key,_) in slotDictionary {
 
@@ -23,8 +26,7 @@ class GameSlot {
 
                 if let playerDict = slotDictionary[key] as? [String:AnyObject] {
 
-                    let player0View = SKView()
-                    let player = Player(withNumber:0, playerDictionary:playerDict, view: player0View)
+                    let player = Player(withNumber:0, playerDictionary:playerDict, scene: self.scene)
                     player0 = player
 
                 }
@@ -33,8 +35,7 @@ class GameSlot {
                 
                 if let playerDict = slotDictionary[key] as? [String:AnyObject] {
 
-                    let player1View = SKView()
-                    let player = Player(withNumber:1, playerDictionary:playerDict, view: player1View)
+                    let player = Player(withNumber:1, playerDictionary:playerDict, scene: self.scene)
                     player1 = player
                     
                 }

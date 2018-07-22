@@ -94,6 +94,7 @@ class GameBox {
 
         let gamePlay = WarGamePlay(
             view:self.skView,
+            scene:self.skScene,
             numPlayers:2,
             cards:cards,
             playerNames:playerNames

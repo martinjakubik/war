@@ -27,10 +27,12 @@ class GamePlay {
     let maxNumberOfSlots = 3
 
     var skView:SKView
+    var scene:GameBoxScene
 
-    init(view:SKView, numPlayers:Int, cards:[Card], playerNames:[String]) {
+    init(view:SKView, scene:GameBoxScene, numPlayers:Int, cards:[Card], playerNames:[String]) {
 
         self.skView = view
+        self.scene = scene
         self.numPlayers = numPlayers
         self.cards = cards
         self.playerNames = playerNames
@@ -62,9 +64,9 @@ class GamePlay {
     /*
      *
      */
-    class func getLastGameSlot (allGameSlots:[String:AnyObject]) -> GameSlot {
+    func getLastGameSlot (allGameSlots:[String:AnyObject]) -> GameSlot {
 
-        var lastGameSlot:GameSlot = GameSlot(withDictionary:[:])
+        var lastGameSlot:GameSlot = GameSlot(withDictionary:[:], scene: self.scene)
 
         // gets the content of the current game slot
         if let gameSlotList = allGameSlots["list"] as? [String:AnyObject] {
@@ -73,7 +75,7 @@ class GamePlay {
 
             if let singleSlotDictionary = gameSlotList[slotKey] as? [String:AnyObject] {
 
-                lastGameSlot = GameSlot(withDictionary:singleSlotDictionary)
+                lastGameSlot = GameSlot(withDictionary:singleSlotDictionary, scene: self.scene)
 
             }
 
@@ -121,7 +123,7 @@ class GamePlay {
                     self.slotKey = GamePlay.getLastGameSlotKey(allGameSlots: allGameSlots)
 
                     // TODO: do we have everything we need from the remote game slot here? ie. the restofcards and stuff?
-                    self.gameSlot = GamePlay.getLastGameSlot(allGameSlots: allGameSlots)
+                    self.gameSlot = self.getLastGameSlot(allGameSlots: allGameSlots)
                     
                     var playerReferences:[DatabaseReference] = []
 
@@ -192,7 +194,7 @@ class GamePlay {
         self.skView.addSubview(player0View)
 
         // makes player 0 controller
-        self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isLocal, playerView: player0View)
+        self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isLocal, playerView: player0View, playerScene:self.scene)
         self.playerControllers[0].name = "Fox"
         
         // distributes cards to player 0
@@ -241,7 +243,7 @@ class GamePlay {
             self.skView.addSubview(player0View)
 
             // makes player 0 controller
-            self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isPlayer0Local, playerView: player0View)
+            self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isPlayer0Local, playerView: player0View, playerScene:self.scene)
             self.playerControllers[0].name = "Fox"
 
             // makes player 1 view
@@ -249,7 +251,7 @@ class GamePlay {
             self.skView.addSubview(player1View)
 
             // makes player 1 controller
-            self.makePlayerController(playerNumber: 1, players: self.playerControllers, playerReference: playerReferences[1], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player1SessionId, isLocal: isPlayer1Local, playerView: player1View)
+            self.makePlayerController(playerNumber: 1, players: self.playerControllers, playerReference: playerReferences[1], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player1SessionId, isLocal: isPlayer1Local, playerView: player1View, playerScene:self.scene)
             self.playerControllers[1].name = "Turkey"
             
             if let restOfCards = self.gameSlot?.restOfCards {
@@ -297,9 +299,9 @@ class GamePlay {
     /*
      *
      */
-    func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool, playerView:SKView) {
+    func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool, playerView:SKView, playerScene:GameBoxScene) {
 
-        let player:Player = Player(withNumber: playerNumber, reference: playerReference, sessionId: sessionId, isLocal: isLocal, view: playerView)
+        let player:Player = Player(withNumber: playerNumber, reference: playerReference, sessionId: sessionId, isLocal: isLocal,scene:playerScene)
 
         self.playerControllers.append(player)
 
