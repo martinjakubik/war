@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import UIKit
+import SpriteKit
 
 class GameSlot {
 
@@ -23,7 +23,7 @@ class GameSlot {
 
                 if let playerDict = slotDictionary[key] as? [String:AnyObject] {
 
-                    let player0View = UIView()
+                    let player0View = SKView()
                     let player = Player(withNumber:0, playerDictionary:playerDict, view: player0View)
                     player0 = player
 
@@ -33,7 +33,7 @@ class GameSlot {
                 
                 if let playerDict = slotDictionary[key] as? [String:AnyObject] {
 
-                    let player1View = UIView()
+                    let player1View = SKView()
                     let player = Player(withNumber:1, playerDictionary:playerDict, view: player1View)
                     player1 = player
                     

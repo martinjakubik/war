@@ -6,15 +6,15 @@
 //  Copyright © 2018 martin jakubik. All rights reserved.
 //
 
-import UIKit
+import SpriteKit
 
 class GameBox {
 
-    var view:UIView
+    var skView:SKView
 
-    init(view:UIView) {
+    init(view:SKView) {
 
-        self.view = view
+        self.skView = view
 
     }
 
@@ -91,7 +91,7 @@ class GameBox {
         let playerNames = [ "cat", "dog", "cow", "pig", "horse", "skunk", "ferret", "duck", "jackal" ]
 
         let gamePlay = WarGamePlay(
-            view:self.view,
+            view:self.skView,
             numPlayers:2,
             cards:cards,
             playerNames:playerNames

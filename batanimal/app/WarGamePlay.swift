@@ -8,14 +8,14 @@
 
 import Foundation
 import FirebaseDatabase
-import UIKit
+import SpriteKit
 
 class WarGamePlay:GamePlay {
 
     /*
      *
      */
-    override func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool, playerView:UIView) {
+    override func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool, playerView:SKView) {
 
         let player:Player = Player(withNumber: playerNumber, reference:playerReference, sessionId: sessionId, isLocal: isLocal, view: playerView)
 

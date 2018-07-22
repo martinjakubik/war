@@ -6,9 +6,9 @@
 //  Copyright © 2018 martin jakubik. All rights reserved.
 //
 
-import UIKit
 import Foundation
 import FirebaseDatabase
+import SpriteKit
 
 class Player {
 
@@ -19,12 +19,12 @@ class Player {
     var reference:DatabaseReference?
     var sessionId:String = ""
 
-    var view:UIView
+    var skView:SKView
     
     /*
      * initializes a Player from a player number and a dictionary of values
      */
-    init (withNumber playerNumber:Int, playerDictionary:[String:AnyObject], view:UIView) {
+    init (withNumber playerNumber:Int, playerDictionary:[String:AnyObject], view:SKView) {
 
         self.name = playerDictionary["name"] as? String ?? ""
         self.sessionId = playerDictionary["sessionId"] as? String ?? ""
@@ -39,7 +39,7 @@ class Player {
 
         self.table = playerDictionary["table"] as? [Card] ?? []
 
-        self.view = view
+        self.skView = view
 
         // calculates room for each player
         let verticalOffsetPerPlayer:CGFloat = 100
@@ -47,13 +47,13 @@ class Player {
         let verticalOffset:CGFloat = verticalOffsetPerPlayer * playerNumberAsFloat
 
         // moves the view down to make room for each player
-        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: verticalOffset)
+        self.skView.frame = self.skView.frame.offsetBy(dx: 0, dy: verticalOffset)
     }
 
     /*
      * initializes a Player from a player number, a remote database reference and some stuff
      */
-    init (withNumber number:Int, reference:DatabaseReference, sessionId:String, isLocal:Bool, view:UIView) {
+    init (withNumber number:Int, reference:DatabaseReference, sessionId:String, isLocal:Bool, view:SKView) {
 
         self.number = number
         self.sessionId = sessionId
@@ -62,7 +62,7 @@ class Player {
         self.hand = []
         self.table = []
 
-        self.view = view
+        self.skView = view
     }
     
     /*
@@ -123,7 +123,7 @@ class Player {
             
         )
 
-        self.view.addSubview(cardView)
+        self.skView.addSubview(cardView)
 
     }
 

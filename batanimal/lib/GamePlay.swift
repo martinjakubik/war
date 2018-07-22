@@ -6,13 +6,12 @@
 //  Copyright © 2018 martin jakubik. All rights reserved.
 //
 
-import UIKit
 import FirebaseDatabase
 import os.log
+import SpriteKit
 
 class GamePlay {
     
-    var view:UIView
     var numPlayers:Int = 0
     var cards:[Card] = []
     var shuffledCards:[Card] =  []
@@ -27,9 +26,11 @@ class GamePlay {
     let firstSlotNumber:String = "3"
     let maxNumberOfSlots = 3
 
-    init(view:UIView, numPlayers:Int, cards:[Card], playerNames:[String]) {
+    var skView:SKView
 
-        self.view = view
+    init(view:SKView, numPlayers:Int, cards:[Card], playerNames:[String]) {
+
+        self.skView = view
         self.numPlayers = numPlayers
         self.cards = cards
         self.playerNames = playerNames
@@ -158,12 +159,9 @@ class GamePlay {
 
                     } else if (isPlayer0SlotFull && !isPlayer1SlotFull) {
 
-                        let player1View = UIView()
-                        self.view.addSubview(player1View)
+                        // TODO: check here if player 1 is local
 
-                        let player1Value = Player(withNumber: 1, playerDictionary: ["name":"_new_" as AnyObject], view: player1View)
-
-                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(with: playerReferences, player1Value: player1Value)
+                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(with: playerReferences, isPlayer1Local: true)
 
                     } else if (!isPlayer0SlotFull && isPlayer1SlotFull) {
 
@@ -190,8 +188,8 @@ class GamePlay {
         let isLocal = true
 
         // makes player 0 view
-        let player0View = UIView()
-        self.view.addSubview(player0View)
+        let player0View = SKView()
+        self.skView.addSubview(player0View)
 
         // makes player 0 controller
         self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isLocal, playerView: player0View)
@@ -226,7 +224,7 @@ class GamePlay {
     /*
      *
      */
-    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (with playerReferences:[DatabaseReference], player1Value:Player) {
+    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (with playerReferences:[DatabaseReference], isPlayer1Local:Bool) {
         
         let player0SessionId = GameSession.getSessionId()
         
@@ -239,21 +237,16 @@ class GamePlay {
             let isPlayer0Local = GameSession.isLocal(player: player0Value)
 
             // makes player 0 view
-            let player0View = UIView()
-            self.view.addSubview(player0View)
+            let player0View = SKView()
+            self.skView.addSubview(player0View)
 
             // makes player 0 controller
             self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isPlayer0Local, playerView: player0View)
             self.playerControllers[0].name = "Fox"
 
-            var isPlayer1Local = true
-            if player1Value.name != "_new_" {
-                isPlayer1Local = false
-            }
-
             // makes player 1 view
-            let player1View = UIView()
-            self.view.addSubview(player1View)
+            let player1View = SKView()
+            self.skView.addSubview(player1View)
 
             // makes player 1 controller
             self.makePlayerController(playerNumber: 1, players: self.playerControllers, playerReference: playerReferences[1], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player1SessionId, isLocal: isPlayer1Local, playerView: player1View)
@@ -304,7 +297,7 @@ class GamePlay {
     /*
      *
      */
-    func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool, playerView:UIView) {
+    func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool, playerView:SKView) {
 
         let player:Player = Player(withNumber: playerNumber, reference: playerReference, sessionId: sessionId, isLocal: isLocal, view: playerView)
 
