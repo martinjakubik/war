@@ -19,7 +19,7 @@ class Player {
     var sessionId:String = ""
 
     /*
-     *
+     * initializes a Player from a player number and a dictionary of values
      */
     init (withNumber number:Int, playerDictionary:[String:AnyObject]) {
 
@@ -39,7 +39,7 @@ class Player {
     }
 
     /*
-     *
+     * initializes a Player from a player number, a remote database reference and some stuff
      */
     init (withNumber number:Int, reference:DatabaseReference, sessionId:String, isLocal:Bool) {
 
