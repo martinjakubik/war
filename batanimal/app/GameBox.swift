@@ -11,10 +11,12 @@ import SpriteKit
 class GameBox {
 
     var skView:SKView
+    var skScene:GameBoxScene
 
     init(view:SKView) {
 
         self.skView = view
+        self.skScene = GameBoxScene()
 
     }
 
