@@ -189,8 +189,12 @@ class GamePlay {
         
         let isLocal = true
 
+        // makes player 0 view
+        let player0View = UIView()
+        self.view.addSubview(player0View)
+
         // makes player 0 controller
-        self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isLocal)
+        self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isLocal, playerView: player0View)
         self.playerControllers[0].name = "Fox"
         
         // distributes cards to player 0
@@ -214,6 +218,9 @@ class GamePlay {
 
         ] as NSDictionary)
 
+        // renders cards of all players (TODO: overkill; we only need player 0)
+        renderCards()
+
     }
     
     /*
@@ -231,8 +238,12 @@ class GamePlay {
 
             let isPlayer0Local = GameSession.isLocal(player: player0Value)
 
+            // makes player 0 view
+            let player0View = UIView()
+            self.view.addSubview(player0View)
+
             // makes player 0 controller
-            self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isPlayer0Local)
+            self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isLocal: isPlayer0Local, playerView: player0View)
             self.playerControllers[0].name = "Fox"
 
             var isPlayer1Local = true
@@ -240,8 +251,12 @@ class GamePlay {
                 isPlayer1Local = false
             }
 
+            // makes player 1 view
+            let player1View = UIView()
+            self.view.addSubview(player1View)
+
             // makes player 1 controller
-            self.makePlayerController(playerNumber: 1, players: self.playerControllers, playerReference: playerReferences[1], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player1SessionId, isLocal: isPlayer1Local)
+            self.makePlayerController(playerNumber: 1, players: self.playerControllers, playerReference: playerReferences[1], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player1SessionId, isLocal: isPlayer1Local, playerView: player1View)
             self.playerControllers[1].name = "Turkey"
             
             if let restOfCards = self.gameSlot?.restOfCards {
@@ -267,49 +282,29 @@ class GamePlay {
             referenceRestOfCards.removeValue()
 
         }
+
+        // renders cards of all players (TODO: overkill; we only need player 1)
+        renderCards()
+
     }
     
     /*
      *
      */
     func renderCards () {
-        
-        let gameTop = 80
-        let gameLeft = 20
-        
-        let tableWidth = 40
-        let handSpace = 20
-        let handLeft = gameLeft + tableWidth + handSpace
-        
-        let cardSpace = 4
-        let cardHeight = 148
-        let cardWidth = 98
-        
-        var i:Int = 0
-        for card in self.shuffledCards {
-            
-            let cardId:String = String(card.value) + card.suit
 
-            let cardView:CardView = CardView(
+        for player in self.playerControllers {
 
-                id: cardId,
-                frame: CGRect(x: handLeft + i * cardSpace, y:gameTop, width:cardWidth, height:cardHeight)
+            player.renderHand()
 
-            )
-
-            i += 1
-            
-            self.view.addSubview(cardView)
         }
+
     }
 
     /*
      *
      */
-    func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool) {
-
-        let playerView = UIView()
-        self.view.addSubview(playerView)
+    func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool, playerView:UIView) {
 
         let player:Player = Player(withNumber: playerNumber, reference: playerReference, sessionId: sessionId, isLocal: isLocal, view: playerView)
 

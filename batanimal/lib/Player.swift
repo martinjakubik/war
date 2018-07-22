@@ -75,6 +75,22 @@ class Player {
     }
 
     /*
+     * renders the cards in the player's hand
+     */
+    func renderHand() {
+
+        var position = 0
+
+        for card in getHand() {
+
+            renderSingleCard(card: card, atPosition: position)
+            position = position + 1
+
+        }
+
+    }
+
+    /*
      * renders a single card
      */
     func renderSingleCard (card:Card, atPosition:Int) {

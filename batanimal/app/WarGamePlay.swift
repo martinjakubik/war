@@ -15,9 +15,8 @@ class WarGamePlay:GamePlay {
     /*
      *
      */
-    override func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool) {
+    override func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool, playerView:UIView) {
 
-        let playerView = UIView()
         let player:Player = Player(withNumber: playerNumber, reference:playerReference, sessionId: sessionId, isLocal: isLocal, view: playerView)
 
         self.playerControllers.append(player)
