@@ -16,17 +16,15 @@ class ViewController: UIViewController {
         return self.view as! SKView
 
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
 
         self.view = SKView()
-        
+
         let gameBox = GameBox(view: self.skView)
-        
-        self.skView.presentScene(gameBox.skScene)
 
         gameBox.go()
-        
+
     }
 
 }

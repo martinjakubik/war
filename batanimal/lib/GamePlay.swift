@@ -382,5 +382,7 @@ class GamePlay {
 
         setUpRemoteGameSlot()
 
+        self.skView.presentScene(self.scene)
+
     }
 }
