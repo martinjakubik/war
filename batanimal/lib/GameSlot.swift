@@ -14,9 +14,9 @@ class GameSlot {
     var player0:Player?
     var player1:Player?
     var restOfCards:[Card]? = []
-    var scene:GameBoxScene
+    var scene:SKScene
 
-    init (withDictionary slotDictionary:[String:AnyObject], scene:GameBoxScene) {
+    init (withDictionary slotDictionary:[String:AnyObject], scene:SKScene) {
 
         self.scene = scene
 

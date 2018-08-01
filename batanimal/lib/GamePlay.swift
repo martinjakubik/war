@@ -27,9 +27,9 @@ class GamePlay {
     let maxNumberOfSlots = 3
 
     var skView:SKView
-    var scene:GameBoxScene
+    var scene:SKScene
 
-    init(view:SKView, scene:GameBoxScene, numPlayers:Int, cards:[Card], playerNames:[String]) {
+    init(view:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String]) {
 
         self.skView = view
         self.scene = scene
@@ -299,7 +299,7 @@ class GamePlay {
     /*
      *
      */
-    func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool, playerView:SKView, playerScene:GameBoxScene) {
+    func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isLocal:Bool, playerView:SKView, playerScene:SKScene) {
 
         let player:Player = Player(withNumber: playerNumber, reference: playerReference, sessionId: sessionId, isLocal: isLocal,scene:playerScene)
 
@@ -377,8 +377,6 @@ class GamePlay {
             self.shuffledCards = self.cards
 
         }
-
-        renderCards()
 
         setUpRemoteGameSlot()
 

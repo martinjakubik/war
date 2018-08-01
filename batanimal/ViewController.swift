@@ -16,10 +16,23 @@ class ViewController: UIViewController {
         return self.view as! SKView
 
     }
+    
+    override func viewDidLoad() {
+        self.view = SKView()
+        
+        self.skView.showsFPS = true
+        self.skView.showsNodeCount = true
+        self.skView.ignoresSiblingOrder = true
+        
+        let skScene = SKScene(size: CGSize(width: 1024, height: 768))
+        
+        skScene.scaleMode = .resizeFill
+        
+        self.skView.presentScene(skScene)
+        
+    }
 
     override func viewWillAppear(_ animated: Bool) {
-
-        self.view = SKView()
 
         let gameBox = GameBox(view: self.skView)
 
