@@ -16,7 +16,7 @@ class GameBox {
     init(view:SKView) {
 
         self.skView = view
-        self.skScene = SKScene()
+        self.skScene = SKScene(size: self.skView.frame.size)
 
     }
 

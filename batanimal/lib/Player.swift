@@ -111,12 +111,13 @@ class Player {
         let cardId:String = String(card.value) + card.suit
         
         let cardFileName = CardNode.makeImageFilename(fromId: cardId)
-//        let cardTexture = SKTexture(imageNamed: cardFileName)
+        let cardTexture = SKTexture(imageNamed: cardFileName)
 //        let skCardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: cardWidth, height: cardHeight))
-//        skCardNode.position = CGPoint(x: handLeft + atPosition * cardSpace, y: gameTop)
 
         let skCardNode = SKSpriteNode(imageNamed: cardFileName)
-        
+        let cardPoint = CGPoint(x: handLeft + atPosition * cardSpace, y: gameTop)
+        skCardNode.position = cardPoint
+
         self.scene.addChild(skCardNode)
 
     }

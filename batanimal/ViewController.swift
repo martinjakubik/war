@@ -18,17 +18,13 @@ class ViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+
+        super.viewDidLoad()
         self.view = SKView()
-        
+
         self.skView.showsFPS = true
         self.skView.showsNodeCount = true
         self.skView.ignoresSiblingOrder = true
-        
-        let skScene = SKScene(size: CGSize(width: 1024, height: 768))
-        
-        skScene.scaleMode = .resizeFill
-        
-        self.skView.presentScene(skScene)
         
     }
 
