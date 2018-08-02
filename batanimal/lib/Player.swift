@@ -112,9 +112,8 @@ class Player {
         
         let cardFileName = CardNode.makeImageFilename(fromId: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
-//        let skCardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: cardWidth, height: cardHeight))
+        let skCardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: cardWidth, height: cardHeight))
 
-        let skCardNode = SKSpriteNode(imageNamed: cardFileName)
         let cardPoint = CGPoint(x: handLeft + atPosition * cardSpace, y: gameTop)
         skCardNode.position = cardPoint
 
