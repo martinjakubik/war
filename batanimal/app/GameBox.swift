@@ -13,6 +13,10 @@ class GameBox {
     var view:SKView
     var scene:SKScene
 
+    let gameTop:CGFloat = 80
+    let gameLeft:CGFloat = 20
+    let playerHeight:CGFloat = 120
+
     init(view:SKView) {
 
         self.view = view
@@ -97,7 +101,10 @@ class GameBox {
             scene:self.scene,
             numPlayers:2,
             cards:cards,
-            playerNames:playerNames
+            playerNames:playerNames,
+            gameTop:self.gameTop,
+            gameLeft:self.gameLeft,
+            playerHeight:self.playerHeight
         )
 
         gamePlay.start(shuffleCards:true)

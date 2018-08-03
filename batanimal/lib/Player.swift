@@ -97,12 +97,11 @@ class Player {
      */
     func renderSingleCard (card:Card, atPosition:CGFloat) {
 
-        let gameTop:CGFloat = 80.0
-        let gameLeft:CGFloat = 20
+        let playerTop:CGFloat = 0
 
         let tableWidth:CGFloat = 40
         let handSpace:CGFloat = 20
-        let handLeft:CGFloat = gameLeft + tableWidth + handSpace
+        let handLeft:CGFloat = tableWidth + handSpace
 
         let cardSpace:CGFloat = 4
         let cardHeight:CGFloat = 148
@@ -114,7 +113,7 @@ class Player {
         let cardTexture = SKTexture(imageNamed: cardFileName)
         let cardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: cardWidth, height: cardHeight))
 
-        let cardPoint = CGPoint(x: handLeft + atPosition * cardSpace, y: gameTop)
+        let cardPoint = CGPoint(x: handLeft + atPosition * cardSpace, y: playerTop)
         cardNode.position = cardPoint
 
         self.node.addChild(cardNode)

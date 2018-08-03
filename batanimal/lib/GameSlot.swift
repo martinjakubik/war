@@ -16,10 +16,16 @@ class GameSlot {
     var restOfCards:[Card]? = []
 
     var scene:SKScene
+    var gameTop:CGFloat
+    var gameLeft:CGFloat
+    var playerHeight:CGFloat
 
-    init (withDictionary slotDictionary:[String:AnyObject], scene:SKScene) {
+    init (withDictionary slotDictionary:[String:AnyObject], scene:SKScene, gameTop:CGFloat, gameLeft:CGFloat, playerHeight:CGFloat) {
 
         self.scene = scene
+        self.gameTop = gameTop
+        self.gameLeft = gameLeft
+        self.playerHeight = playerHeight
 
         for (key,_) in slotDictionary {
 
@@ -29,6 +35,7 @@ class GameSlot {
 
                     // makes player view
                     let player0Node = SKNode()
+                    player0Node.position = CGPoint(x:self.gameLeft, y:self.gameTop)
                     self.scene.addChild(player0Node)
 
                     // makes player controller
@@ -43,6 +50,7 @@ class GameSlot {
 
                     // makes player view
                     let player1Node = SKNode()
+                    player1Node.position = CGPoint(x:self.gameLeft, y:self.gameTop + self.playerHeight)
                     self.scene.addChild(player1Node)
 
                     // makes player controller

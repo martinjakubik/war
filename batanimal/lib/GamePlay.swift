@@ -28,14 +28,21 @@ class GamePlay {
 
     var topView:SKView
     var scene:SKScene
+    
+    var gameTop:CGFloat
+    var gameLeft:CGFloat
+    var playerHeight:CGFloat
 
-    init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String]) {
+    init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String], gameTop:CGFloat, gameLeft:CGFloat, playerHeight:CGFloat) {
 
         self.topView = topView
         self.scene = scene
         self.numPlayers = numPlayers
         self.cards = cards
         self.playerNames = playerNames
+        self.gameTop = gameTop
+        self.gameLeft = gameLeft
+        self.playerHeight = playerHeight
 
     }
 
@@ -66,7 +73,7 @@ class GamePlay {
      */
     func getLastGameSlot (allGameSlots:[String:AnyObject]) -> GameSlot {
 
-        var lastGameSlot:GameSlot = GameSlot(withDictionary:[:], scene: self.scene)
+        var lastGameSlot:GameSlot = GameSlot(withDictionary:[:], scene: self.scene, gameTop:self.gameTop, gameLeft:self.gameLeft, playerHeight:self.playerHeight)
 
         // gets the content of the current game slot
         if let gameSlotList = allGameSlots["list"] as? [String:AnyObject] {
@@ -75,7 +82,7 @@ class GamePlay {
 
             if let singleSlotDictionary = gameSlotList[slotKey] as? [String:AnyObject] {
 
-                lastGameSlot = GameSlot(withDictionary:singleSlotDictionary, scene: self.scene)
+                lastGameSlot = GameSlot(withDictionary:singleSlotDictionary, scene: self.scene, gameTop:self.gameTop, gameLeft:self.gameLeft, playerHeight:self.playerHeight)
 
             }
 
@@ -191,6 +198,7 @@ class GamePlay {
 
         // makes player 0 view
         let player0Node = SKNode()
+        player0Node.position = CGPoint(x: self.gameLeft, y: self.gameTop)
         self.scene.addChild(player0Node)
 
         // makes player 0 controller
@@ -240,6 +248,7 @@ class GamePlay {
 
             // makes player 0 view
             let player0Node = SKNode()
+            player0Node.position = CGPoint(x:self.gameLeft, y:self.gameTop)
             self.scene.addChild(player0Node)
 
             // makes player 0 controller
@@ -248,6 +257,7 @@ class GamePlay {
 
             // makes player 1 view
             let player1Node = SKNode()
+            player1Node.position = CGPoint(x:self.gameLeft, y:self.gameTop + self.playerHeight)
             self.scene.addChild(player1Node)
 
             // makes player 1 controller
