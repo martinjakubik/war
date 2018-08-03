@@ -14,6 +14,7 @@ class GameSlot {
     var player0:Player?
     var player1:Player?
     var restOfCards:[Card]? = []
+
     var scene:SKScene
 
     init (withDictionary slotDictionary:[String:AnyObject], scene:SKScene) {
@@ -26,20 +27,30 @@ class GameSlot {
 
                 if let playerDict = slotDictionary[key] as? [String:AnyObject] {
 
-                    let player = Player(withNumber:0, playerDictionary:playerDict, scene: self.scene)
+                    // makes player view
+                    let player0Node = SKNode()
+                    self.scene.addChild(player0Node)
+
+                    // makes player controller
+                    let player = Player(withNumber:0, playerDictionary:playerDict, node:player0Node)
                     player0 = player
 
                 }
 
             } else if key.hasPrefix("player1") {
-                
+
                 if let playerDict = slotDictionary[key] as? [String:AnyObject] {
 
-                    let player = Player(withNumber:1, playerDictionary:playerDict, scene: self.scene)
+                    // makes player view
+                    let player1Node = SKNode()
+                    self.scene.addChild(player1Node)
+
+                    // makes player controller
+                    let player = Player(withNumber:1, playerDictionary:playerDict, node:player1Node)
                     player1 = player
-                    
+
                 }
-                
+
             } else if key.hasPrefix("restOfCards") {
 
                 if self.restOfCards?.isEmpty == true {

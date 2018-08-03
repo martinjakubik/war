@@ -10,13 +10,13 @@ import SpriteKit
 
 class GameBox {
 
-    var skView:SKView
-    var skScene:SKScene
+    var view:SKView
+    var scene:SKScene
 
     init(view:SKView) {
 
-        self.skView = view
-        self.skScene = SKScene(size: self.skView.frame.size)
+        self.view = view
+        self.scene = SKScene(size: self.view.frame.size)
 
     }
 
@@ -93,8 +93,8 @@ class GameBox {
         let playerNames = [ "cat", "dog", "cow", "pig", "horse", "skunk", "ferret", "duck", "jackal" ]
 
         let gamePlay = WarGamePlay(
-            view:self.skView,
-            scene:self.skScene,
+            topView:self.view,
+            scene:self.scene,
             numPlayers:2,
             cards:cards,
             playerNames:playerNames

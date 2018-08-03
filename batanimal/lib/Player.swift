@@ -19,34 +19,34 @@ class Player {
     var reference:DatabaseReference?
     var sessionId:String = ""
 
-    var scene:SKScene
-    
+    var node:SKNode
+
     /*
      * initializes a Player from a player number and a dictionary of values
      */
-    init (withNumber playerNumber:Int, playerDictionary:[String:AnyObject], scene:SKScene) {
+    init (withNumber playerNumber:Int, playerDictionary:[String:AnyObject], node:SKNode) {
 
         self.name = playerDictionary["name"] as? String ?? ""
         self.sessionId = playerDictionary["sessionId"] as? String ?? ""
 
         if self.hand?.isEmpty == true {
-            
+
             self.hand = []
-            
+
         }
 
         self.hand = Cards.makeCardArrayFromAnyObject(cardObject: playerDictionary["hand"])
 
         self.table = playerDictionary["table"] as? [Card] ?? []
 
-        self.scene = scene
+        self.node = node
 
     }
 
     /*
      * initializes a Player from a player number, a remote database reference and some stuff
      */
-    init (withNumber number:Int, reference:DatabaseReference, sessionId:String, isLocal:Bool, scene:SKScene) {
+    init (withNumber number:Int, reference:DatabaseReference, sessionId:String, isLocal:Bool, node:SKNode) {
 
         self.number = number
         self.sessionId = sessionId
@@ -55,25 +55,25 @@ class Player {
         self.hand = []
         self.table = []
 
-        self.scene = scene
+        self.node = node
 
     }
-    
+
     /*
      * returns a hand, making sure it's not an optional type
      */
     func getHand () -> [Card] {
-        
+
         if (self.hand?.isEmpty == true) {
-            
+
             return []
-            
+
         } else {
-            
+
             return self.hand!
-            
+
         }
-        
+
     }
 
     /*
@@ -81,7 +81,7 @@ class Player {
      */
     func renderHand() {
 
-        var position = 0
+        var position:CGFloat = 0
 
         for card in getHand() {
 
@@ -95,29 +95,29 @@ class Player {
     /*
      * renders a single card
      */
-    func renderSingleCard (card:Card, atPosition:Int) {
+    func renderSingleCard (card:Card, atPosition:CGFloat) {
 
-        let gameTop = 80
-        let gameLeft = 20
-        
-        let tableWidth = 40
-        let handSpace = 20
-        let handLeft = gameLeft + tableWidth + handSpace
-        
-        let cardSpace = 4
-        let cardHeight = 148
-        let cardWidth = 98
-        
+        let gameTop:CGFloat = 80.0
+        let gameLeft:CGFloat = 20
+
+        let tableWidth:CGFloat = 40
+        let handSpace:CGFloat = 20
+        let handLeft:CGFloat = gameLeft + tableWidth + handSpace
+
+        let cardSpace:CGFloat = 4
+        let cardHeight:CGFloat = 148
+        let cardWidth:CGFloat = 98
+
         let cardId:String = String(card.value) + card.suit
-        
+
         let cardFileName = CardNode.makeImageFilename(fromId: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
-        let skCardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: cardWidth, height: cardHeight))
+        let cardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: cardWidth, height: cardHeight))
 
         let cardPoint = CGPoint(x: handLeft + atPosition * cardSpace, y: gameTop)
-        skCardNode.position = cardPoint
+        cardNode.position = cardPoint
 
-        self.scene.addChild(skCardNode)
+        self.node.addChild(cardNode)
 
     }
 
