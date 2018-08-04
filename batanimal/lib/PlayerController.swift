@@ -12,67 +12,42 @@ import SpriteKit
 
 class PlayerController {
 
-    var number:Int = -1
-    var name:String = ""
-    var hand:[Card]? = []
-    var table:[Card]? = []
+    var player:Player
     var reference:DatabaseReference?
-    var sessionId:String = ""
-
     var node:SKNode
 
     /*
-     * initializes a Player controller from a player number and a dictionary of values
+     * initializes a Player controller from a player model, a remote database reference and a sprite node
      */
-    init (withNumber playerNumber:Int, playerDictionary:[String:AnyObject], node:SKNode) {
+    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode) {
 
-        self.name = playerDictionary["name"] as? String ?? ""
-        self.sessionId = playerDictionary["sessionId"] as? String ?? ""
-
-        if self.hand?.isEmpty == true {
-
-            self.hand = []
-
-        }
-
-        self.hand = Cards.makeCardArrayFromAnyObject(cardObject: playerDictionary["hand"])
-
-        self.table = playerDictionary["table"] as? [Card] ?? []
-
+        self.player = player
+        self.reference = reference
         self.node = node
 
     }
+    
+    func getName() -> String {
 
-    /*
-     * initializes a Player controller from a player number, a remote database reference and some stuff
-     */
-    init (withNumber number:Int, reference:DatabaseReference, sessionId:String, isLocal:Bool, node:SKNode) {
+        return self.player.name
 
-        self.number = number
-        self.sessionId = sessionId
+    }
+    
+    func setName(name:String) {
 
-        self.name = ""
-        self.hand = []
-        self.table = []
-
-        self.node = node
+        self.player.name = name
 
     }
 
-    /*
-     * returns a hand, making sure it's not an optional type
-     */
-    func getHand () -> [Card] {
+    func getHand() -> [Card] {
+        
+        return self.player.getHand()
+        
+    }
+    
+    func setHand(hand:[Card]) {
 
-        if (self.hand?.isEmpty == true) {
-
-            return []
-
-        } else {
-
-            return self.hand!
-
-        }
+        self.player.hand = hand
 
     }
 

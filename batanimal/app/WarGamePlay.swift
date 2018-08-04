@@ -12,15 +12,4 @@ import SpriteKit
 
 class WarGamePlay:GamePlay {
 
-    /*
-     *
-     */
-    override func makePlayerController(playerNumber:Int, playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isPlayerLocal:Bool, playerNode:SKNode) {
-
-        let player:PlayerController = PlayerController(withNumber: playerNumber, reference:playerReference, sessionId: sessionId, isLocal: isPlayerLocal, node:playerNode)
-
-        self.playerControllers.append(player)
-
-    }
-
 }

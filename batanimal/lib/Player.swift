@@ -19,16 +19,29 @@ class Player {
     /*
      *
      */
+    init (withNumber number:Int, sessionId:String) {
+        
+        self.number = number
+        self.sessionId = sessionId
+        self.name = ""
+        self.hand = []
+        self.table = []
+        
+    }
+    
+    /*
+     *
+     */
     init (withNumber number:Int, sessionId:String, name:String, hand:[Card], table:[Card]) {
-
+        
         self.number = number
         self.sessionId = sessionId
         self.name = name
         self.hand = hand
         self.table = table
-
+        
     }
-
+    
     /*
      *
      */
@@ -48,6 +61,23 @@ class Player {
 
         self.table = playerDictionary["table"] as? [Card] ?? []
 
+    }
+
+    /*
+     * returns a hand, making sure it's not an optional type
+     */
+    func getHand () -> [Card] {
+        
+        if (self.hand?.isEmpty == true) {
+            
+            return []
+            
+        } else {
+            
+            return self.hand!
+            
+        }
+        
     }
 
 }

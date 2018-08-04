@@ -132,13 +132,11 @@ class GamePlay {
                     // TODO: do we have everything we need from the remote game slot here? ie. the restofcards and stuff?
                     self.gameSlot = self.getLastGameSlot(allGameSlots: allGameSlots)
 
-                    var playerReferences:[DatabaseReference] = []
-
                     for i in 0...1 {
 
                         let playerReference = referenceToAllGameSlots.child("list").child(String(self.slotKey)).child("player" + String(i))
 
-                        playerReferences.append(playerReference)
+                        self.playerReferences.append(playerReference)
 
                     }
 
@@ -158,19 +156,19 @@ class GamePlay {
 
                     if (!isPlayer0SlotFull && !isPlayer1SlotFull) {
 
-                        self.keepPlayer0AndWaitForPlayer1(with: playerReferences)
+                        self.keepPlayer0AndWaitForPlayer1()
 
                     } else if (isPlayer0SlotFull && isPlayer1SlotFull) {
 
                         self.moveToNextGameSlot(referenceGameSlotList: referenceToGameSlotList)
 
-                        self.keepPlayer0AndWaitForPlayer1(with: playerReferences)
+                        self.keepPlayer0AndWaitForPlayer1()
 
                     } else if (isPlayer0SlotFull && !isPlayer1SlotFull) {
 
                         // TODO: check here if player 1 is local
 
-                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(with: playerReferences, isPlayer1Local: true)
+                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(isPlayer1Local: true)
 
                     } else if (!isPlayer0SlotFull && isPlayer1SlotFull) {
 
@@ -187,14 +185,14 @@ class GamePlay {
     /*
      *
      */
-    func keepPlayer0AndWaitForPlayer1 (with playerReferences:[DatabaseReference]) {
+    func keepPlayer0AndWaitForPlayer1 () {
 
         let databaseReference = Database.database().reference()
         let referenceGameSlot = databaseReference.child("game/slots/list").child(String(self.slotKey))
 
         let player0SessionId = GameSession.makeNewSessionId()
 
-        let isLocal = true
+        let isPlayer0Local = true
 
         // makes player 0 view
         let player0Node = SKNode()
@@ -202,8 +200,10 @@ class GamePlay {
         self.scene.addChild(player0Node)
 
         // makes player 0 controller
-        self.makePlayerController(playerNumber: 0, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isPlayerLocal: isLocal, playerNode:player0Node)
-        self.playerControllers[0].name = "Fox"
+        let player0 = Player(withNumber: 0, sessionId:player0SessionId)
+        let player0Controller = PlayerController(player: player0, reference: self.playerReferences[0], isLocal: isPlayer0Local, node: player0Node)
+        self.playerControllers.append(player0Controller)
+        self.playerControllers[0].setName(name: "Fox")
 
         // distributes cards to player 0
         distributeCardsToAvailablePlayers()
@@ -215,7 +215,7 @@ class GamePlay {
 
             "player0": [
 
-                "name": self.playerControllers[0].name,
+                "name": self.playerControllers[0].getName(),
                 "hand": player0HandDictionary
 
                 ] as NSDictionary,
@@ -234,7 +234,7 @@ class GamePlay {
     /*
      *
      */
-    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (with playerReferences:[DatabaseReference], isPlayer1Local:Bool) {
+    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (isPlayer1Local:Bool) {
 
         let player0SessionId = GameSession.getSessionId()
 
@@ -252,8 +252,10 @@ class GamePlay {
             self.scene.addChild(player0Node)
 
             // makes player 0 controller
-            self.makePlayerController(playerNumber: 0, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isPlayerLocal: isPlayer0Local, playerNode:player0Node)
-            self.playerControllers[0].name = "Fox"
+            let player0 = Player(withNumber: 0, sessionId:player0SessionId)
+            let player0Controller = PlayerController(player: player0, reference: self.playerReferences[0], isLocal: isPlayer0Local, node: player0Node)
+            self.playerControllers.append(player0Controller)
+            self.playerControllers[0].setName(name: "Fox")
 
             // makes player 1 view
             let player1Node = SKNode()
@@ -261,12 +263,14 @@ class GamePlay {
             self.scene.addChild(player1Node)
 
             // makes player 1 controller
-            self.makePlayerController(playerNumber: 1, playerReference: playerReferences[1], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player1SessionId, isPlayerLocal: isPlayer1Local, playerNode:player1Node)
-            self.playerControllers[1].name = "Turkey"
+            let player1 = Player(withNumber: 1, sessionId:player1SessionId)
+            let player1Controller = PlayerController(player: player1, reference: self.playerReferences[1], isLocal: isPlayer1Local, node: player1Node)
+            self.playerControllers.append(player1Controller)
+            self.playerControllers[1].setName(name: "Turkey")
 
             if let restOfCards = self.gameSlot?.restOfCards {
 
-                self.playerControllers[1].hand = restOfCards
+                self.playerControllers[1].setHand(hand: restOfCards)
 
             }
 
@@ -274,7 +278,7 @@ class GamePlay {
 
             playerReferences[1].setValue([
 
-                "name": self.playerControllers[1].name,
+                "name": self.playerControllers[1].getName(),
                 "hand": player1HandDictionary
 
                 ] as NSDictionary
@@ -303,17 +307,6 @@ class GamePlay {
             player.renderHand()
 
         }
-
-    }
-
-    /*
-     *
-     */
-    func makePlayerController(playerNumber:Int, playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isPlayerLocal:Bool, playerNode:SKNode) {
-
-        let player:PlayerController = PlayerController(withNumber: playerNumber, reference: playerReference, sessionId: sessionId, isLocal: isPlayerLocal, node:playerNode)
-
-        self.playerControllers.append(player)
 
     }
 
@@ -359,9 +352,9 @@ class GamePlay {
         var distributedCards = distribute(cards: self.shuffledCards, numPlayersAmongWhichToDistribute: numPlayersAmongWhichToDistributeCards)
 
         var i:Int = 0
-        for player in self.playerControllers {
+        for playerController in self.playerControllers {
 
-            player.hand = distributedCards[i]
+            playerController.setHand(hand: distributedCards[i])
             i = i + 1
 
         }
