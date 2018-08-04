@@ -11,8 +11,8 @@ import SpriteKit
 
 class GameSlot {
 
-    var player0:PlayerController?
-    var player1:PlayerController?
+    var player0:Player?
+    var player1:Player?
     var restOfCards:[Card]? = []
 
     var scene:SKScene
@@ -38,8 +38,8 @@ class GameSlot {
                     player0Node.position = CGPoint(x:self.gameLeft, y:self.gameTop)
                     self.scene.addChild(player0Node)
 
-                    // makes player controller
-                    let player = PlayerController(withNumber:0, playerDictionary:playerDict, node:player0Node)
+                    // makes player model
+                    let player = Player(withNumber:0, playerDictionary:playerDict)
                     player0 = player
 
                 }
@@ -53,8 +53,8 @@ class GameSlot {
                     player1Node.position = CGPoint(x:self.gameLeft, y:self.gameTop + self.playerHeight)
                     self.scene.addChild(player1Node)
 
-                    // makes player controller
-                    let player = PlayerController(withNumber:1, playerDictionary:playerDict, node:player1Node)
+                    // makes player model
+                    let player = Player(withNumber:1, playerDictionary:playerDict)
                     player1 = player
 
                 }
