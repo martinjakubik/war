@@ -16,6 +16,7 @@
 		5B03126F203C976A00391F4A /* batanimalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B03126E203C976A00391F4A /* batanimalTests.swift */; };
 		5B03127A203C976A00391F4A /* batanimalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B031279203C976A00391F4A /* batanimalUITests.swift */; };
 		5B131A72209508DD00316B3D /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B131A71209508DD00316B3D /* Cards.swift */; };
+		5B4568992115C94100C529F8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4568982115C94100C529F8 /* Player.swift */; };
 		5B4BA7BA203F367B00F60CD8 /* GamePlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4BA7B9203F367A00F60CD8 /* GamePlay.swift */; };
 		5B4BA7E3203F41EF00F60CD8 /* card-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA7BD203F41EF00F60CD8 /* card-back.png */; };
 		5B4BA7E4203F41EF00F60CD8 /* card-batanimo-1a.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA7BE203F41EF00F60CD8 /* card-batanimo-1a.png */; };
@@ -105,6 +106,7 @@
 		5B031279203C976A00391F4A /* batanimalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = batanimalUITests.swift; sourceTree = "<group>"; };
 		5B03127B203C976A00391F4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B131A71209508DD00316B3D /* Cards.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
+		5B4568982115C94100C529F8 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		5B4BA7B9203F367A00F60CD8 /* GamePlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePlay.swift; sourceTree = "<group>"; };
 		5B4BA7BD203F41EF00F60CD8 /* card-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-back.png"; path = "resources/card-back.png"; sourceTree = "<group>"; };
 		5B4BA7BE203F41EF00F60CD8 /* card-batanimo-1a.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-1a.png"; path = "resources/card-batanimo-1a.png"; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 				5B4BA8092041963000F60CD8 /* PlayerController.swift */,
 				5B4BA80D2043333E00F60CD8 /* GameSlot.swift */,
 				5BC0781E20508B1B0060CEF7 /* GameSession.swift */,
+				5B4568982115C94100C529F8 /* Player.swift */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -688,6 +691,7 @@
 				5B03125C203C976A00391F4A /* ViewController.swift in Sources */,
 				5B131A72209508DD00316B3D /* Cards.swift in Sources */,
 				5BC0781F20508B1B0060CEF7 /* GameSession.swift in Sources */,
+				5B4568992115C94100C529F8 /* Player.swift in Sources */,
 				5B98E38F203DE85F00BE085B /* GameBox.swift in Sources */,
 				5B98E397203DED3600BE085B /* Card.swift in Sources */,
 				5B4BA80A2041963000F60CD8 /* PlayerController.swift in Sources */,
