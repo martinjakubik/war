@@ -11,8 +11,8 @@ import SpriteKit
 
 class GameSlot {
 
-    var player0:Player?
-    var player1:Player?
+    var player0:PlayerController?
+    var player1:PlayerController?
     var restOfCards:[Card]? = []
 
     var scene:SKScene
@@ -39,7 +39,7 @@ class GameSlot {
                     self.scene.addChild(player0Node)
 
                     // makes player controller
-                    let player = Player(withNumber:0, playerDictionary:playerDict, node:player0Node)
+                    let player = PlayerController(withNumber:0, playerDictionary:playerDict, node:player0Node)
                     player0 = player
 
                 }
@@ -54,7 +54,7 @@ class GameSlot {
                     self.scene.addChild(player1Node)
 
                     // makes player controller
-                    let player = Player(withNumber:1, playerDictionary:playerDict, node:player1Node)
+                    let player = PlayerController(withNumber:1, playerDictionary:playerDict, node:player1Node)
                     player1 = player
 
                 }

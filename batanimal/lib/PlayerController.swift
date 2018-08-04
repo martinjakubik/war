@@ -1,5 +1,5 @@
 //
-//  Player.swift
+//  PlayerController.swift
 //  batanimal
 //
 //  Created by Marcin Jakubik on 24/02/18.
@@ -10,7 +10,7 @@ import Foundation
 import FirebaseDatabase
 import SpriteKit
 
-class Player {
+class PlayerController {
 
     var number:Int = -1
     var name:String = ""
@@ -22,7 +22,7 @@ class Player {
     var node:SKNode
 
     /*
-     * initializes a Player from a player number and a dictionary of values
+     * initializes a Player controller from a player number and a dictionary of values
      */
     init (withNumber playerNumber:Int, playerDictionary:[String:AnyObject], node:SKNode) {
 
@@ -44,7 +44,7 @@ class Player {
     }
 
     /*
-     * initializes a Player from a player number, a remote database reference and some stuff
+     * initializes a Player controller from a player number, a remote database reference and some stuff
      */
     init (withNumber number:Int, reference:DatabaseReference, sessionId:String, isLocal:Bool, node:SKNode) {
 

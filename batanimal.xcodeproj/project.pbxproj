@@ -55,7 +55,7 @@
 		5B4BA806203F41EF00F60CD8 /* card-batanimo-6e.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA7E0203F41EF00F60CD8 /* card-batanimo-6e.png */; };
 		5B4BA807203F41EF00F60CD8 /* card-batanimo-6f.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA7E1203F41EF00F60CD8 /* card-batanimo-6f.png */; };
 		5B4BA808203F41EF00F60CD8 /* card-batanimo-14a.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA7E2203F41EF00F60CD8 /* card-batanimo-14a.png */; };
-		5B4BA80A2041963000F60CD8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4BA8092041963000F60CD8 /* Player.swift */; };
+		5B4BA80A2041963000F60CD8 /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4BA8092041963000F60CD8 /* PlayerController.swift */; };
 		5B4BA80C2042055100F60CD8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA80B2042055100F60CD8 /* GoogleService-Info.plist */; };
 		5B4BA80E2043333E00F60CD8 /* GameSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4BA80D2043333E00F60CD8 /* GameSlot.swift */; };
 		5B91426D2104C990000FC519 /* GameBoxScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B91426C2104C990000FC519 /* GameBoxScene.swift */; };
@@ -144,7 +144,7 @@
 		5B4BA7E0203F41EF00F60CD8 /* card-batanimo-6e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-6e.png"; path = "resources/card-batanimo-6e.png"; sourceTree = "<group>"; };
 		5B4BA7E1203F41EF00F60CD8 /* card-batanimo-6f.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-6f.png"; path = "resources/card-batanimo-6f.png"; sourceTree = "<group>"; };
 		5B4BA7E2203F41EF00F60CD8 /* card-batanimo-14a.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-14a.png"; path = "resources/card-batanimo-14a.png"; sourceTree = "<group>"; };
-		5B4BA8092041963000F60CD8 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		5B4BA8092041963000F60CD8 /* PlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
 		5B4BA80B2042055100F60CD8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5B4BA80D2043333E00F60CD8 /* GameSlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSlot.swift; sourceTree = "<group>"; };
 		5B91426C2104C990000FC519 /* GameBoxScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBoxScene.swift; sourceTree = "<group>"; };
@@ -325,7 +325,7 @@
 				5B98E396203DED3600BE085B /* Card.swift */,
 				5B4BA7B9203F367A00F60CD8 /* GamePlay.swift */,
 				5B91426E2104EF3F000FC519 /* CardNode.swift */,
-				5B4BA8092041963000F60CD8 /* Player.swift */,
+				5B4BA8092041963000F60CD8 /* PlayerController.swift */,
 				5B4BA80D2043333E00F60CD8 /* GameSlot.swift */,
 				5BC0781E20508B1B0060CEF7 /* GameSession.swift */,
 			);
@@ -690,7 +690,7 @@
 				5BC0781F20508B1B0060CEF7 /* GameSession.swift in Sources */,
 				5B98E38F203DE85F00BE085B /* GameBox.swift in Sources */,
 				5B98E397203DED3600BE085B /* Card.swift in Sources */,
-				5B4BA80A2041963000F60CD8 /* Player.swift in Sources */,
+				5B4BA80A2041963000F60CD8 /* PlayerController.swift in Sources */,
 				5B03125A203C976A00391F4A /* AppDelegate.swift in Sources */,
 				5B91426F2104EF3F000FC519 /* CardNode.swift in Sources */,
 				5B91426D2104C990000FC519 /* GameBoxScene.swift in Sources */,

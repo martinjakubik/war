@@ -20,7 +20,7 @@ class GamePlay {
     var gameSlot:GameSlot?
     var playerNames:[String] = []
     var playerReferences:[DatabaseReference] = []
-    var playerControllers:[Player] = []
+    var playerControllers:[PlayerController] = []
     var restOfCards:[Card] = []
 
     let firstSlotNumber:String = "3"
@@ -202,7 +202,7 @@ class GamePlay {
         self.scene.addChild(player0Node)
 
         // makes player 0 controller
-        self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isPlayerLocal: isLocal, playerNode:player0Node)
+        self.makePlayerController(playerNumber: 0, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isPlayerLocal: isLocal, playerNode:player0Node)
         self.playerControllers[0].name = "Fox"
 
         // distributes cards to player 0
@@ -252,7 +252,7 @@ class GamePlay {
             self.scene.addChild(player0Node)
 
             // makes player 0 controller
-            self.makePlayerController(playerNumber: 0, players: self.playerControllers, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isPlayerLocal: isPlayer0Local, playerNode:player0Node)
+            self.makePlayerController(playerNumber: 0, playerReference: playerReferences[0], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player0SessionId, isPlayerLocal: isPlayer0Local, playerNode:player0Node)
             self.playerControllers[0].name = "Fox"
 
             // makes player 1 view
@@ -261,7 +261,7 @@ class GamePlay {
             self.scene.addChild(player1Node)
 
             // makes player 1 controller
-            self.makePlayerController(playerNumber: 1, players: self.playerControllers, playerReference: playerReferences[1], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player1SessionId, isPlayerLocal: isPlayer1Local, playerNode:player1Node)
+            self.makePlayerController(playerNumber: 1, playerReference: playerReferences[1], /* oGamePlay.localPlayerTappedCardInHand, */ sessionId: player1SessionId, isPlayerLocal: isPlayer1Local, playerNode:player1Node)
             self.playerControllers[1].name = "Turkey"
 
             if let restOfCards = self.gameSlot?.restOfCards {
@@ -309,9 +309,9 @@ class GamePlay {
     /*
      *
      */
-    func makePlayerController(playerNumber:Int, players:[Player], playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isPlayerLocal:Bool, playerNode:SKNode) {
+    func makePlayerController(playerNumber:Int, playerReference:DatabaseReference, /*localPlayerWantsToPlayCard:func() {},*/ sessionId:String, isPlayerLocal:Bool, playerNode:SKNode) {
 
-        let player:Player = Player(withNumber: playerNumber, reference: playerReference, sessionId: sessionId, isLocal: isPlayerLocal, node:playerNode)
+        let player:PlayerController = PlayerController(withNumber: playerNumber, reference: playerReference, sessionId: sessionId, isLocal: isPlayerLocal, node:playerNode)
 
         self.playerControllers.append(player)
 
