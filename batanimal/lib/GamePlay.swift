@@ -237,15 +237,13 @@ class GamePlay {
      */
     func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (isPlayer1Local:Bool) {
 
-        let player0SessionId = GameSession.getSessionId()
-
         let player1SessionId = GameSession.getSessionId()
 
         // TODO: do we have a valid player0 from the remote slot at this point?
 
-        if let player0Value = self.gameSlot?.player0 {
+        if let player0 = self.gameSlot?.player0 {
 
-            let isPlayer0Local = GameSession.isLocal(player: player0Value)
+            let isPlayer0Local = GameSession.isLocal(player: player0)
 
             // makes player 0 view
             let player0Node = SKNode()
@@ -253,7 +251,6 @@ class GamePlay {
             self.scene.addChild(player0Node)
 
             // makes player 0 controller
-            let player0 = Player(withNumber: 0, sessionId:player0SessionId)
             let player0Controller = PlayerController(player: player0, reference: self.playerReferences[0], isLocal: isPlayer0Local, node: player0Node)
             self.playerControllers.append(player0Controller)
             self.playerControllers[0].setName(name: "Fox")
