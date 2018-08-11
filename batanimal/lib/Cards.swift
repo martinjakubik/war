@@ -78,4 +78,19 @@ class Cards {
 
     }
 
+    /*
+     * makes an image filename from a small ID
+     */
+    class func makeImageFilename (fromId:String) -> String {
+
+        let cardPrefix = "card"
+        let gameTag = "batanimo"
+        let graphicExtension = "png"
+
+        let imageName = cardPrefix + "-" + gameTag + "-" + fromId + "." + graphicExtension
+
+        return imageName
+
+    }
+
 }

@@ -89,7 +89,7 @@ class PlayerController {
 
         let cardId:String = String(card.value) + card.suit
 
-        let cardFileName = CardNode.makeImageFilename(fromId: cardId)
+        let cardFileName = Cards.makeImageFilename(fromId: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
         let cardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: cardWidth, height: cardHeight))
 
