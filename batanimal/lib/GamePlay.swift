@@ -104,6 +104,7 @@ class GamePlay {
 
         self.slotKey = referenceGameSlot.key
 
+        self.playerReferences.removeAll()
         self.playerReferences.append(referenceGameSlot.child("player0"))
         self.playerReferences.append(referenceGameSlot.child("player1"))
 

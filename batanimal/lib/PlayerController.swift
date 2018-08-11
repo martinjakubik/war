@@ -12,8 +12,13 @@ import SpriteKit
 
 class PlayerController {
 
+    // a player model
     var player:Player
+
+    // a reference to the player model on the remote database
     var reference:DatabaseReference?
+
+    // a player view
     var node:SKNode
 
     /*

@@ -32,19 +32,6 @@ class Player {
     /*
      *
      */
-    init (withNumber number:Int, sessionId:String, name:String, hand:[Card], table:[Card]) {
-        
-        self.number = number
-        self.sessionId = sessionId
-        self.name = name
-        self.hand = hand
-        self.table = table
-        
-    }
-    
-    /*
-     *
-     */
     init (withNumber number:Int, playerDictionary:[String:AnyObject]) {
 
         self.number = number
