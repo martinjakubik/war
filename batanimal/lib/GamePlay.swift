@@ -157,19 +157,19 @@ class GamePlay {
 
                     if (!isPlayer0SlotFull && !isPlayer1SlotFull) {
 
-                        self.keepPlayer0AndWaitForPlayer1()
+                        self.makePlayer0()
 
                     } else if (isPlayer0SlotFull && isPlayer1SlotFull) {
 
                         self.moveToNextGameSlot(referenceGameSlotList: referenceToGameSlotList)
 
-                        self.keepPlayer0AndWaitForPlayer1()
+                        self.makePlayer0()
 
                     } else if (isPlayer0SlotFull && !isPlayer1SlotFull) {
 
                         // TODO: check here if player 1 is local
 
-                        self.okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo(isPlayer1Local: true)
+                        self.makePlayer1(isPlayer1Local: true)
 
                     } else if (!isPlayer0SlotFull && isPlayer1SlotFull) {
 
@@ -186,7 +186,37 @@ class GamePlay {
     /*
      *
      */
-    func keepPlayer0AndWaitForPlayer1 () {
+    func makePlayerViewAndController(initializedPlayer:Player?, playerNumber:Int, playerSessionId:String, isPlayerLocal:Bool, playerTop:CGFloat, playerName:String) {
+
+        // makes player view
+        let playerNode = SKNode()
+        playerNode.position = CGPoint(x: self.gameLeft, y: playerTop)
+        self.scene.addChild(playerNode)
+
+        if let player = initializedPlayer {
+
+            // makes player controller
+            let initializedPlayerNumber = player.number
+            let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode)
+            self.playerControllers.append(playerController)
+            self.playerControllers[0].setName(name: playerName)
+
+        } else {
+
+            // makes player model first, then makes player controller
+            let player = Player(withNumber:playerNumber, sessionId:playerSessionId)
+            let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode)
+            self.playerControllers.append(playerController)
+            self.playerControllers[0].setName(name: playerName)
+
+        }
+
+    }
+
+    /*
+     *
+     */
+    func makePlayer0 () {
 
         let databaseReference = Database.database().reference()
         let referenceGameSlot = databaseReference.child("game/slots/list").child(String(self.slotKey))
@@ -195,16 +225,8 @@ class GamePlay {
 
         let isPlayer0Local = true
 
-        // makes player 0 view
-        let player0Node = SKNode()
-        player0Node.position = CGPoint(x: self.gameLeft, y: self.gameTop)
-        self.scene.addChild(player0Node)
-
-        // makes player 0 controller
-        let player0 = Player(withNumber: 0, sessionId:player0SessionId)
-        let player0Controller = PlayerController(player: player0, reference: self.playerReferences[0], isLocal: isPlayer0Local, node: player0Node)
-        self.playerControllers.append(player0Controller)
-        self.playerControllers[0].setName(name: "Fox")
+        // makes player 0 view and controller
+        makePlayerViewAndController(initializedPlayer: nil, playerNumber: 0, playerSessionId: player0SessionId, isPlayerLocal: isPlayer0Local, playerTop: self.gameTop, playerName: "Fox")
 
         // distributes cards to player 0
         distributeCardsToAvailablePlayers()
@@ -235,7 +257,7 @@ class GamePlay {
     /*
      *
      */
-    func okPlayer1JoinedAndPlayer0WasWaitingSoLetsGo (isPlayer1Local:Bool) {
+    func makePlayer1 (isPlayer1Local:Bool) {
 
         let player1SessionId = GameSession.getSessionId()
 
@@ -245,26 +267,11 @@ class GamePlay {
 
             let isPlayer0Local = GameSession.isLocal(player: player0)
 
-            // makes player 0 view
-            let player0Node = SKNode()
-            player0Node.position = CGPoint(x:self.gameLeft, y:self.gameTop)
-            self.scene.addChild(player0Node)
+            // makes player 0 view and controller
+            makePlayerViewAndController(initializedPlayer: player0, playerNumber: -1, playerSessionId: "", isPlayerLocal: isPlayer0Local, playerTop: self.gameTop, playerName: "Fox")
 
-            // makes player 0 controller
-            let player0Controller = PlayerController(player: player0, reference: self.playerReferences[0], isLocal: isPlayer0Local, node: player0Node)
-            self.playerControllers.append(player0Controller)
-            self.playerControllers[0].setName(name: "Fox")
-
-            // makes player 1 view
-            let player1Node = SKNode()
-            player1Node.position = CGPoint(x:self.gameLeft, y:self.gameTop + self.playerHeight)
-            self.scene.addChild(player1Node)
-
-            // makes player 1 controller
-            let player1 = Player(withNumber: 1, sessionId:player1SessionId)
-            let player1Controller = PlayerController(player: player1, reference: self.playerReferences[1], isLocal: isPlayer1Local, node: player1Node)
-            self.playerControllers.append(player1Controller)
-            self.playerControllers[1].setName(name: "Turkey")
+            // makes player 1 view and controller
+            makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerSessionId: player1SessionId, isPlayerLocal: isPlayer1Local, playerTop: self.gameTop + self.playerHeight, playerName: "Turkey")
 
             if let restOfCards = self.gameSlot?.restOfCards {
 

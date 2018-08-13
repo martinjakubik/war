@@ -15,7 +15,7 @@ class GameBox {
 
     let gameTop:CGFloat = 80
     let gameLeft:CGFloat = 20
-    let playerHeight:CGFloat = 240
+    let playerHeight:CGFloat = 360
 
     init(view:SKView) {
 
