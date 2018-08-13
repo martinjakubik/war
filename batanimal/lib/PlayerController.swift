@@ -84,8 +84,8 @@ class PlayerController {
         let handLeft:CGFloat = tableWidth + handSpace
 
         let cardSpace:CGFloat = 4
-        let cardHeight:CGFloat = 148
-        let cardWidth:CGFloat = 98
+        let cardHeight:CGFloat = 248
+        let cardWidth:CGFloat = 164
 
         let cardId:String = String(card.value) + card.suit
 
