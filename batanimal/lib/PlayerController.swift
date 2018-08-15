@@ -12,6 +12,16 @@ import SpriteKit
 
 class PlayerController {
 
+    let playerTop:CGFloat
+
+    let tableWidth:CGFloat
+    let handSpace:CGFloat
+    let handLeft:CGFloat
+
+    let cardSpace:CGFloat
+    let cardHeight:CGFloat
+    let cardWidth:CGFloat
+
     // a player model
     var player:Player
 
@@ -24,11 +34,21 @@ class PlayerController {
     /*
      * initializes a Player controller from a player model, a remote database reference and a sprite node
      */
-    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode) {
+    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat) {
 
         self.player = player
         self.reference = reference
         self.node = node
+
+        self.playerTop = playerTop
+
+        self.tableWidth = tableWidth
+        self.handSpace = handSpace
+        self.handLeft = self.tableWidth + self.handSpace
+
+        self.cardSpace = cardSpace
+        self.cardHeight = cardHeight
+        self.cardWidth = cardWidth
 
     }
     
@@ -77,23 +97,13 @@ class PlayerController {
      */
     func renderSingleCard (card:Card, atPosition:CGFloat) {
 
-        let playerTop:CGFloat = 0
-
-        let tableWidth:CGFloat = 40
-        let handSpace:CGFloat = 20
-        let handLeft:CGFloat = tableWidth + handSpace
-
-        let cardSpace:CGFloat = 4
-        let cardHeight:CGFloat = 248
-        let cardWidth:CGFloat = 164
-
         let cardId:String = String(card.value) + card.suit
 
         let cardFileName = Cards.makeImageFilename(fromId: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
-        let cardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: cardWidth, height: cardHeight))
+        let cardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: self.cardWidth, height: self.cardHeight))
 
-        let cardPoint = CGPoint(x: handLeft + atPosition * cardSpace, y: playerTop)
+        let cardPoint = CGPoint(x: self.handLeft + atPosition * self.cardSpace, y: self.playerTop)
         cardNode.position = cardPoint
 
         self.node.addChild(cardNode)

@@ -13,9 +13,18 @@ class GameBox {
     var view:SKView
     var scene:SKScene
 
-    let gameTop:CGFloat = 180
+    let gameTop:CGFloat = 60
     let gameLeft:CGFloat = 20
-    let playerHeight:CGFloat = 360
+    let playerHeight:CGFloat = 180
+
+    let tableWidth:CGFloat = 40
+    let handSpace:CGFloat = 20
+
+    let cardSpace:CGFloat = 4
+
+    // width:height ratio is 0.66
+    let cardHeight:CGFloat = 176
+    let cardWidth:CGFloat = 116
 
     init(view:SKView) {
 
@@ -104,7 +113,12 @@ class GameBox {
             playerNames:playerNames,
             gameTop:self.gameTop,
             gameLeft:self.gameLeft,
-            playerHeight:self.playerHeight
+            playerHeight:self.playerHeight,
+            tableWidth: self.tableWidth,
+            handSpace: self.handSpace,
+            cardSpace: self.cardSpace,
+            cardHeight: self.cardHeight,
+            cardWidth: self.cardWidth
         )
 
         gamePlay.start(shuffleCards:true)

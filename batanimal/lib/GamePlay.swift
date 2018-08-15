@@ -33,7 +33,14 @@ class GamePlay {
     var gameLeft:CGFloat
     var playerHeight:CGFloat
 
-    init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String], gameTop:CGFloat, gameLeft:CGFloat, playerHeight:CGFloat) {
+    let tableWidth:CGFloat
+    let handSpace:CGFloat
+
+    let cardSpace:CGFloat
+    let cardHeight:CGFloat
+    let cardWidth:CGFloat
+
+    init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String], gameTop:CGFloat, gameLeft:CGFloat, playerHeight:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat) {
 
         self.topView = topView
         self.scene = scene
@@ -43,6 +50,11 @@ class GamePlay {
         self.gameTop = gameTop
         self.gameLeft = gameLeft
         self.playerHeight = playerHeight
+        self.tableWidth = tableWidth
+        self.handSpace = handSpace
+        self.cardSpace = cardSpace
+        self.cardHeight = cardHeight
+        self.cardWidth = cardWidth
 
     }
 
@@ -197,7 +209,7 @@ class GamePlay {
 
             // makes player controller
             let initializedPlayerNumber = player.number
-            let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode)
+            let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
 
@@ -205,7 +217,7 @@ class GamePlay {
 
             // makes player model first, then makes player controller
             let player = Player(withNumber:playerNumber, sessionId:playerSessionId)
-            let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode)
+            let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
 
@@ -226,7 +238,7 @@ class GamePlay {
         let isPlayer0Local = true
 
         // makes player 0 view and controller
-        makePlayerViewAndController(initializedPlayer: nil, playerNumber: 0, playerSessionId: player0SessionId, isPlayerLocal: isPlayer0Local, playerTop: self.gameTop, playerName: "Fox")
+        makePlayerViewAndController(initializedPlayer: nil, playerNumber: 0, playerSessionId: player0SessionId, isPlayerLocal: isPlayer0Local, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
 
         // distributes cards to player 0
         distributeCardsToAvailablePlayers()
@@ -268,10 +280,10 @@ class GamePlay {
             let isPlayer0Local = GameSession.isLocal(player: player0)
 
             // makes player 0 view and controller
-            makePlayerViewAndController(initializedPlayer: player0, playerNumber: -1, playerSessionId: "", isPlayerLocal: isPlayer0Local, playerTop: self.gameTop, playerName: "Fox")
+            makePlayerViewAndController(initializedPlayer: player0, playerNumber: -1, playerSessionId: "", isPlayerLocal: isPlayer0Local, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
 
             // makes player 1 view and controller
-            makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerSessionId: player1SessionId, isPlayerLocal: isPlayer1Local, playerTop: self.gameTop + self.playerHeight, playerName: "Turkey")
+            makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerSessionId: player1SessionId, isPlayerLocal: isPlayer1Local, playerTop: self.gameTop, playerName: "Turkey")
 
             if let restOfCards = self.gameSlot?.restOfCards {
 
@@ -342,6 +354,7 @@ class GamePlay {
             }
 
             i = i + 1
+
         }
 
         return distributedCards
