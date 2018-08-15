@@ -26,6 +26,7 @@ class PlayerController {
     let gradientShader:SKShader
 
     let log:OSLog
+
     // a player model
     var player:Player
 
@@ -36,9 +37,9 @@ class PlayerController {
     var node:SKNode
 
     /*
-    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, gradientShader:SKShader, log:OSLog) {
+     * initializes a Player controller from a player model, a remote database reference and a sprite node
      */
-    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, gradientShader:SKShader) {
+    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, gradientShader:SKShader, log:OSLog) {
 
         self.player = player
         self.reference = reference
@@ -54,8 +55,9 @@ class PlayerController {
         self.cardHeight = cardHeight
         self.cardWidth = cardWidth
 
-        self.log = log
         self.gradientShader = gradientShader
+
+        self.log = log
 
     }
     
@@ -105,8 +107,12 @@ class PlayerController {
     func renderSingleCard (card:Card, atPosition:CGFloat) {
 
         let cardPoint = CGPoint(x: self.handLeft + atPosition * self.cardSpace, y: self.playerTop)
+        
+        os_log("card position x:%f, y:%f", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
 
-        let shapeNode = SKShapeNode(rect: CGRect(x: cardPoint.x + 1, y: cardPoint.y + 1, width: self.cardWidth + 2, height: self.cardHeight + 2), cornerRadius: 2.0)
+        let halfCardWidth = self.cardWidth / 2
+        let halfCardHeight = self.cardHeight / 2
+        let shapeNode = SKShapeNode(rect: CGRect(x: (cardPoint.x - halfCardWidth) + 1, y: (cardPoint.y - halfCardHeight) + 1, width: self.cardWidth + 2, height: self.cardHeight + 2), cornerRadius: 2.0)
         shapeNode.fillColor = UIColor.white
         shapeNode.fillShader = self.gradientShader
 
