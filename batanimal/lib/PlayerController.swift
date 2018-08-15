@@ -91,10 +91,11 @@ class PlayerController {
     func renderHand() {
 
         var position:CGFloat = 0
+        let numCards = getHand().count
 
         for card in getHand() {
 
-            renderSingleCard(card: card, atPosition: position)
+            renderSingleCard(card: card, atPosition: position, numCards: CGFloat(numCards))
             position = position + 1
 
         }
@@ -104,17 +105,22 @@ class PlayerController {
     /*
      * renders a single card
      */
-    func renderSingleCard (card:Card, atPosition:CGFloat) {
+    func renderSingleCard (card:Card, atPosition:CGFloat, numCards:CGFloat) {
 
         let cardPoint = CGPoint(x: self.handLeft + atPosition * self.cardSpace, y: self.playerTop)
         
         os_log("card position x:%f, y:%f", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
 
+        // calculates the z-index based on the position in the card set
+        let zPosition = numCards - atPosition + 1
+        
         let halfCardWidth = self.cardWidth / 2
         let halfCardHeight = self.cardHeight / 2
-        let shapeNode = SKShapeNode(rect: CGRect(x: (cardPoint.x - halfCardWidth) + 1, y: (cardPoint.y - halfCardHeight) + 1, width: self.cardWidth + 2, height: self.cardHeight + 2), cornerRadius: 2.0)
+        let borderWidth:CGFloat = 4
+        let shapeNode = SKShapeNode(rect: CGRect(x: (cardPoint.x - halfCardWidth) + borderWidth, y: (cardPoint.y - halfCardHeight) + borderWidth, width: self.cardWidth + (borderWidth * 2), height: self.cardHeight + (borderWidth * 2)), cornerRadius: 2.0)
         shapeNode.fillColor = UIColor.white
         shapeNode.fillShader = self.gradientShader
+        shapeNode.zPosition = zPosition
 
         let cardId:String = String(card.value) + card.suit
 
