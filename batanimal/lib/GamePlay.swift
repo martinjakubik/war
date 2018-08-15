@@ -198,36 +198,6 @@ class GamePlay {
     /*
      *
      */
-    func makePlayerViewAndController(initializedPlayer:Player?, playerNumber:Int, playerSessionId:String, isPlayerLocal:Bool, playerTop:CGFloat, playerName:String) {
-
-        // makes player view
-        let playerNode = SKNode()
-        playerNode.position = CGPoint(x: self.gameLeft, y: playerTop)
-        self.scene.addChild(playerNode)
-
-        if let player = initializedPlayer {
-
-            // makes player controller
-            let initializedPlayerNumber = player.number
-            let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth)
-            self.playerControllers.append(playerController)
-            self.playerControllers[0].setName(name: playerName)
-
-        } else {
-
-            // makes player model first, then makes player controller
-            let player = Player(withNumber:playerNumber, sessionId:playerSessionId)
-            let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth)
-            self.playerControllers.append(playerController)
-            self.playerControllers[0].setName(name: playerName)
-
-        }
-
-    }
-
-    /*
-     *
-     */
     func makePlayer0 () {
 
         let databaseReference = Database.database().reference()
@@ -311,6 +281,36 @@ class GamePlay {
 
         // renders cards of all players (TODO: overkill; we only need player 1)
         renderCards()
+
+    }
+
+    /*
+     *
+     */
+    func makePlayerViewAndController(initializedPlayer:Player?, playerNumber:Int, playerSessionId:String, isPlayerLocal:Bool, playerTop:CGFloat, playerName:String) {
+
+        // makes player view
+        let playerNode = SKNode()
+        playerNode.position = CGPoint(x: self.gameLeft, y: playerTop)
+        self.scene.addChild(playerNode)
+
+        if let player = initializedPlayer {
+
+            // makes player controller
+            let initializedPlayerNumber = player.number
+            let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth)
+            self.playerControllers.append(playerController)
+            self.playerControllers[0].setName(name: playerName)
+
+        } else {
+
+            // makes player model first, then makes player controller
+            let player = Player(withNumber:playerNumber, sessionId:playerSessionId)
+            let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth)
+            self.playerControllers.append(playerController)
+            self.playerControllers[0].setName(name: playerName)
+
+        }
 
     }
 
