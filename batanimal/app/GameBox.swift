@@ -26,11 +26,17 @@ class GameBox {
     let cardHeight:CGFloat = 176
     let cardWidth:CGFloat = 116
 
+    let gradientShader:SKShader
+
     init(view:SKView) {
 
         self.view = view
         self.scene = SKScene(size: self.view.frame.size)
 
+        self.gradientShader = SKShader(source: "void main() {" +
+            "float normalisedPosition = v_path_distance / u_path_length;" +
+            "gl_FragColor = vec4(normalisedPosition, normalisedPosition, 0.0, 1.0);" +
+            "}")
     }
 
     /*
@@ -118,7 +124,8 @@ class GameBox {
             handSpace: self.handSpace,
             cardSpace: self.cardSpace,
             cardHeight: self.cardHeight,
-            cardWidth: self.cardWidth
+            cardWidth: self.cardWidth,
+            gradientShader: self.gradientShader
         )
 
         gamePlay.start(shuffleCards:true)

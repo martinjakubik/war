@@ -22,6 +22,8 @@ class PlayerController {
     let cardHeight:CGFloat
     let cardWidth:CGFloat
 
+    let gradientShader:SKShader
+
     // a player model
     var player:Player
 
@@ -34,7 +36,7 @@ class PlayerController {
     /*
      * initializes a Player controller from a player model, a remote database reference and a sprite node
      */
-    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat) {
+    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, gradientShader:SKShader) {
 
         self.player = player
         self.reference = reference
@@ -49,6 +51,8 @@ class PlayerController {
         self.cardSpace = cardSpace
         self.cardHeight = cardHeight
         self.cardWidth = cardWidth
+
+        self.gradientShader = gradientShader
 
     }
     
@@ -97,16 +101,22 @@ class PlayerController {
      */
     func renderSingleCard (card:Card, atPosition:CGFloat) {
 
+        let cardPoint = CGPoint(x: self.handLeft + atPosition * self.cardSpace, y: self.playerTop)
+
+        let shapeNode = SKShapeNode(rect: CGRect(x: cardPoint.x + 1, y: cardPoint.y + 1, width: self.cardWidth + 2, height: self.cardHeight + 2), cornerRadius: 2.0)
+        shapeNode.fillColor = UIColor.white
+        shapeNode.fillShader = self.gradientShader
+
         let cardId:String = String(card.value) + card.suit
 
         let cardFileName = Cards.makeImageFilename(fromId: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
         let cardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: self.cardWidth, height: self.cardHeight))
-
-        let cardPoint = CGPoint(x: self.handLeft + atPosition * self.cardSpace, y: self.playerTop)
         cardNode.position = cardPoint
 
-        self.node.addChild(cardNode)
+        shapeNode.addChild(cardNode)
+
+        self.node.addChild(shapeNode)
 
     }
 
