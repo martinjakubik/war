@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import os.log
 
 class GameBox {
 
@@ -28,6 +29,8 @@ class GameBox {
 
     let gradientShader:SKShader
 
+    let log:OSLog
+
     init(view:SKView) {
 
         self.view = view
@@ -37,6 +40,9 @@ class GameBox {
             "float normalisedPosition = v_path_distance / u_path_length;" +
             "gl_FragColor = vec4(normalisedPosition, normalisedPosition, 0.0, 1.0);" +
             "}")
+
+        self.log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "game")
+
     }
 
     /*
@@ -125,7 +131,8 @@ class GameBox {
             cardSpace: self.cardSpace,
             cardHeight: self.cardHeight,
             cardWidth: self.cardWidth,
-            gradientShader: self.gradientShader
+            gradientShader: self.gradientShader,
+            log: self.log
         )
 
         gamePlay.start(shuffleCards:true)

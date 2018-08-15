@@ -7,8 +7,9 @@
 //
 
 import FirebaseDatabase
-import os.log
 import SpriteKit
+
+import os.log
 
 class GamePlay {
 
@@ -42,7 +43,9 @@ class GamePlay {
 
     let gradientShader:SKShader
 
-    init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String], gameTop:CGFloat, gameLeft:CGFloat, playerHeight:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, gradientShader:SKShader) {
+    let log:OSLog
+
+    init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String], gameTop:CGFloat, gameLeft:CGFloat, playerHeight:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, gradientShader:SKShader, log:OSLog) {
 
         self.topView = topView
         self.scene = scene
@@ -58,6 +61,7 @@ class GamePlay {
         self.cardHeight = cardHeight
         self.cardWidth = cardWidth
         self.gradientShader = gradientShader
+        self.log = log
 
     }
 
@@ -301,7 +305,7 @@ class GamePlay {
 
             // makes player controller
             let initializedPlayerNumber = player.number
-            let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, gradientShader: self.gradientShader)
+            let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, gradientShader: self.gradientShader, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
 
@@ -309,7 +313,7 @@ class GamePlay {
 
             // makes player model first, then makes player controller
             let player = Player(withNumber:playerNumber, sessionId:playerSessionId)
-            let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, gradientShader: self.gradientShader)
+            let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, gradientShader: self.gradientShader, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
 

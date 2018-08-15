@@ -9,6 +9,7 @@
 import Foundation
 import FirebaseDatabase
 import SpriteKit
+import os.log
 
 class PlayerController {
 
@@ -24,6 +25,7 @@ class PlayerController {
 
     let gradientShader:SKShader
 
+    let log:OSLog
     // a player model
     var player:Player
 
@@ -34,7 +36,7 @@ class PlayerController {
     var node:SKNode
 
     /*
-     * initializes a Player controller from a player model, a remote database reference and a sprite node
+    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, gradientShader:SKShader, log:OSLog) {
      */
     init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, gradientShader:SKShader) {
 
@@ -52,6 +54,7 @@ class PlayerController {
         self.cardHeight = cardHeight
         self.cardWidth = cardWidth
 
+        self.log = log
         self.gradientShader = gradientShader
 
     }
