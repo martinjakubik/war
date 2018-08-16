@@ -389,6 +389,25 @@ class GamePlay {
     /*
      *
      */
+    func showScene() {
+
+        // makes a light
+        self.sceneLight.isEnabled = true
+        self.sceneLight.position = CGPoint(
+            x: self.scene.size.width * 0.1,
+            y: self.scene.size.height * 0.8
+        )
+        self.sceneLight.lightColor = .white
+        self.scene.addChild(self.sceneLight)
+        
+        // shows the scene
+        self.topView.presentScene(self.scene)
+        
+    }
+
+    /*
+     *
+     */
     func start (shuffleCards:Bool) {
 
         if shuffleCards {
@@ -403,17 +422,8 @@ class GamePlay {
 
         setUpRemoteGameSlot()
 
-        // makes a light
-        self.sceneLight.isEnabled = true
-        self.sceneLight.position = CGPoint(
-            x: self.scene.size.width * 0.1,
-            y: self.scene.size.height * 0.8
-        )
-        self.sceneLight.lightColor = .white
-        self.scene.addChild(self.sceneLight)
-
-        // shows the scene
-        self.topView.presentScene(self.scene)
+        showScene()
 
     }
+
 }
