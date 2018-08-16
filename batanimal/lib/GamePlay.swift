@@ -42,7 +42,9 @@ class GamePlay {
     // width:height ratio is 0.66
     let cardHeight:CGFloat = 176
     let cardWidth:CGFloat = 116
-    
+
+    let sceneLight:SKLightNode
+
     let log:OSLog
 
     init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String], log:OSLog) {
@@ -53,6 +55,8 @@ class GamePlay {
         self.cards = cards
         self.playerNames = playerNames
         self.log = log
+
+        self.sceneLight = SKLightNode()
 
     }
 
@@ -399,6 +403,16 @@ class GamePlay {
 
         setUpRemoteGameSlot()
 
+        // makes a light
+        self.sceneLight.isEnabled = true
+        self.sceneLight.position = CGPoint(
+            x: self.scene.size.width * 0.1,
+            y: self.scene.size.height * 0.8
+        )
+        self.sceneLight.lightColor = .white
+        self.scene.addChild(self.sceneLight)
+
+        // shows the scene
         self.topView.presentScene(self.scene)
 
     }
