@@ -124,10 +124,10 @@ class PlayerController {
         shapeNode.fillShader = self.gradientShader
         shapeNode.zPosition = zPosition
 
-        // gets the card for the given ID
+        // gets the picture of the card
         let cardId:String = String(card.value) + card.suit
 
-        // makes the card
+        // makes the card sprite
         let cardFileName = Cards.makeImageFilename(fromId: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
         let cardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: self.cardWidth, height: self.cardHeight))
