@@ -24,8 +24,6 @@ class PlayerController {
     let cardHeight:CGFloat
     let cardWidth:CGFloat
 
-    let gradientShader:SKShader
-
     let log:OSLog
 
     // a player model
@@ -40,7 +38,7 @@ class PlayerController {
     /*
      * initializes a Player controller from a player model, a remote database reference and a sprite node
      */
-    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, gradientShader:SKShader, log:OSLog) {
+    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, log:OSLog) {
 
         self.player = player
         self.reference = reference
@@ -55,8 +53,6 @@ class PlayerController {
         self.cardSpace = cardSpace
         self.cardHeight = cardHeight
         self.cardWidth = cardWidth
-
-        self.gradientShader = gradientShader
 
         self.log = log
 
@@ -132,7 +128,6 @@ class PlayerController {
             cornerRadius: 2.0
         )
         shapeNode.fillColor = UIColor.white
-        shapeNode.fillShader = self.gradientShader
         shapeNode.zPosition = zPosition
 
         // gets the picture of the card

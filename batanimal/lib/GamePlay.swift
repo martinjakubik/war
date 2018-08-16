@@ -43,8 +43,6 @@ class GamePlay {
     let cardHeight:CGFloat = 176
     let cardWidth:CGFloat = 116
     
-    let gradientShader:SKShader
-    
     let log:OSLog
 
     init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String], log:OSLog) {
@@ -55,11 +53,6 @@ class GamePlay {
         self.cards = cards
         self.playerNames = playerNames
         self.log = log
-
-        self.gradientShader = SKShader(source: "void main() {" +
-            "float normalisedPosition = v_path_distance / u_path_length;" +
-            "gl_FragColor = vec4(normalisedPosition, normalisedPosition, 0.0, 1.0);" +
-            "}")
 
     }
 
@@ -303,7 +296,7 @@ class GamePlay {
 
             // makes player controller
             let initializedPlayerNumber = player.number
-            let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, gradientShader: self.gradientShader, log: self.log)
+            let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
 
@@ -311,7 +304,7 @@ class GamePlay {
 
             // makes player model first, then makes player controller
             let player = Player(withNumber:playerNumber, sessionId:playerSessionId)
-            let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, gradientShader: self.gradientShader, log: self.log)
+            let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
 
