@@ -108,7 +108,10 @@ class PlayerController {
      */
     func renderSingleCard (card:Card, atPosition:CGFloat, numCards:CGFloat) {
 
-        let cardPoint = CGPoint(x: self.handLeft + atPosition * self.cardSpace, y: self.playerTop)
+        let cardPoint = CGPoint(
+            x: self.handLeft + atPosition * self.cardSpace,
+            y: self.playerTop
+        )
         
         os_log("card position x:%f, y:%f", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
 
@@ -119,7 +122,14 @@ class PlayerController {
         let halfCardWidth = self.cardWidth / 2
         let halfCardHeight = self.cardHeight / 2
         let borderWidth:CGFloat = 4
-        let shapeNode = SKShapeNode(rect: CGRect(x: (cardPoint.x - halfCardWidth) + borderWidth, y: (cardPoint.y - halfCardHeight) + borderWidth, width: self.cardWidth + (borderWidth * 2), height: self.cardHeight + (borderWidth * 2)), cornerRadius: 2.0)
+        let shapeNode = SKShapeNode(
+            rect: CGRect(
+                x: (cardPoint.x - halfCardWidth) + borderWidth,
+                y: (cardPoint.y - halfCardHeight) + borderWidth,
+                width: self.cardWidth + (borderWidth * 2),
+                height: self.cardHeight + (borderWidth * 2)),
+            cornerRadius: 2.0
+        )
         shapeNode.fillColor = UIColor.white
         shapeNode.fillShader = self.gradientShader
         shapeNode.zPosition = zPosition
