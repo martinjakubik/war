@@ -397,6 +397,19 @@ class GamePlay {
      */
     func showScene() {
 
+        // makes a background sprite
+        let backgroundFileName = "background.png"
+        let backgroundTexture = SKTexture(imageNamed: backgroundFileName)
+        let backgroundNode = SKSpriteNode(
+            texture: backgroundTexture,
+            size: self.scene.size
+        )
+        backgroundNode.position = CGPoint(
+            x: self.scene.size.width / 2,
+            y: self.scene.size.height / 2
+        )
+        self.scene.addChild(backgroundNode)
+
         // makes a light
         self.sceneLight.isEnabled = true
         self.sceneLight.position = CGPoint(

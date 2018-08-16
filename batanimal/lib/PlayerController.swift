@@ -136,7 +136,12 @@ class PlayerController {
         // makes the card sprite
         let cardFileName = Cards.makeImageFilename(fromId: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
-        let cardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: self.cardWidth, height: self.cardHeight))
+        let cardNode = SKSpriteNode(
+            texture: cardTexture,
+            size: CGSize(
+                width: self.cardWidth,
+                height: self.cardHeight
+        ))
         cardNode.position = cardPoint
 
         shapeNode.addChild(cardNode)
