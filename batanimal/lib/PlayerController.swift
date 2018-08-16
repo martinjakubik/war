@@ -121,11 +121,11 @@ class PlayerController {
         // makes the border shape
         let halfCardWidth = self.cardWidth / 2
         let halfCardHeight = self.cardHeight / 2
-        let borderWidth:CGFloat = 4
+        let borderWidth:CGFloat = 8
         let shapeNode = SKShapeNode(
             rect: CGRect(
-                x: (cardPoint.x - halfCardWidth) + borderWidth,
-                y: (cardPoint.y - halfCardHeight) + borderWidth,
+                x: (cardPoint.x - halfCardWidth) - borderWidth,
+                y: (cardPoint.y - halfCardHeight) - borderWidth,
                 width: self.cardWidth + (borderWidth * 2),
                 height: self.cardHeight + (borderWidth * 2)),
             cornerRadius: 2.0
