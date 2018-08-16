@@ -61,7 +61,7 @@ class GamePlay {
     }
 
     /*
-     *
+     * gets the key of the last game slot from the list of slots from the remote database
      */
     class func getLastGameSlotKey (allGameSlots:[String:AnyObject]) -> String {
 
@@ -83,7 +83,7 @@ class GamePlay {
     }
 
     /*
-     *
+     * gets the last used game slot from the remote database
      */
     func getLastGameSlot (allGameSlots:[String:AnyObject]) -> GameSlot {
 
@@ -106,7 +106,7 @@ class GamePlay {
     }
 
     /*
-     *
+     * creates a new game slot on the remote database
      */
     func moveToNextGameSlot (referenceGameSlotList:DatabaseReference) {
 
@@ -125,7 +125,7 @@ class GamePlay {
     }
 
     /*
-     *
+     * finds an available game slot in the remote database and sets up the game there
      */
     func setUpRemoteGameSlot () {
 
@@ -198,7 +198,7 @@ class GamePlay {
     }
 
     /*
-     *
+     * makes a model, view and controller for player 0;
      */
     func makePlayer0 () {
 
@@ -239,7 +239,8 @@ class GamePlay {
     }
 
     /*
-     *
+     * makes a view and controller for player 1;
+     * does nothing if there is no player 0 model yet
      */
     func makePlayer1 (isPlayer1Local:Bool) {
 
@@ -255,6 +256,7 @@ class GamePlay {
             makePlayerViewAndController(initializedPlayer: player0, playerNumber: -1, playerSessionId: "", isPlayerLocal: isPlayer0Local, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
 
             // makes player 1 view and controller
+            // TODO: what if we have a remote player1 model already here?
             makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerSessionId: player1SessionId, isPlayerLocal: isPlayer1Local, playerTop: self.gameTop, playerName: "Turkey")
 
             if let restOfCards = self.gameSlot?.restOfCards {
@@ -287,7 +289,9 @@ class GamePlay {
     }
 
     /*
-     *
+     * makes a view and a controller for the player;
+     * if a player model is given, uses that model to make the view and controller;
+     * if no player model is given, creates it first using the player number and session ID
      */
     func makePlayerViewAndController(initializedPlayer:Player?, playerNumber:Int, playerSessionId:String, isPlayerLocal:Bool, playerTop:CGFloat, playerName:String) {
 
@@ -317,7 +321,7 @@ class GamePlay {
     }
 
     /*
-     *
+     * renders the cards in the scene
      */
     func renderCards () {
 
@@ -330,7 +334,7 @@ class GamePlay {
     }
 
     /*
-     *
+     * distributes cards from the given array into the given number of mutliple arrays
      */
     func distribute (cards:[Card], numPlayersAmongWhichToDistribute:Int) -> [[Card]] {
 
@@ -363,7 +367,9 @@ class GamePlay {
     }
 
     /*
-     *
+     * distributes cards to all players that have joined the game
+     * (those that have player controllers);
+     * keeps the rest in restOfCards
      */
     func distributeCardsToAvailablePlayers () {
 
@@ -387,7 +393,7 @@ class GamePlay {
     }
 
     /*
-     *
+     * shows the scene
      */
     func showScene() {
 
@@ -406,7 +412,7 @@ class GamePlay {
     }
 
     /*
-     *
+     * starts the game
      */
     func start (shuffleCards:Bool) {
 
