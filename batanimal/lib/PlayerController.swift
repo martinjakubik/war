@@ -113,7 +113,8 @@ class PlayerController {
 
         // calculates the z-index based on the position in the card set
         let zPosition = numCards - atPosition + 1
-        
+
+        // makes the border shape
         let halfCardWidth = self.cardWidth / 2
         let halfCardHeight = self.cardHeight / 2
         let borderWidth:CGFloat = 4
@@ -122,15 +123,16 @@ class PlayerController {
         shapeNode.fillShader = self.gradientShader
         shapeNode.zPosition = zPosition
 
+        // gets the card for the given ID
         let cardId:String = String(card.value) + card.suit
 
+        // makes the card
         let cardFileName = Cards.makeImageFilename(fromId: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
         let cardNode = SKSpriteNode(texture: cardTexture, size: CGSize(width: self.cardWidth, height: self.cardHeight))
         cardNode.position = cardPoint
 
         shapeNode.addChild(cardNode)
-
         self.node.addChild(shapeNode)
 
     }
