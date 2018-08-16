@@ -30,38 +30,36 @@ class GamePlay {
     var topView:SKView
     var scene:SKScene
     
-    var gameTop:CGFloat
-    var gameLeft:CGFloat
-    var playerHeight:CGFloat
-
-    let tableWidth:CGFloat
-    let handSpace:CGFloat
-
-    let cardSpace:CGFloat
-    let cardHeight:CGFloat
-    let cardWidth:CGFloat
-
+    let gameTop:CGFloat = 60
+    let gameLeft:CGFloat = 20
+    let playerHeight:CGFloat = 180
+    
+    let tableWidth:CGFloat = 40
+    let handSpace:CGFloat = 20
+    
+    let cardSpace:CGFloat = 4
+    
+    // width:height ratio is 0.66
+    let cardHeight:CGFloat = 176
+    let cardWidth:CGFloat = 116
+    
     let gradientShader:SKShader
-
+    
     let log:OSLog
 
-    init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String], gameTop:CGFloat, gameLeft:CGFloat, playerHeight:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, gradientShader:SKShader, log:OSLog) {
+    init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String], log:OSLog) {
 
         self.topView = topView
         self.scene = scene
         self.numPlayers = numPlayers
         self.cards = cards
         self.playerNames = playerNames
-        self.gameTop = gameTop
-        self.gameLeft = gameLeft
-        self.playerHeight = playerHeight
-        self.tableWidth = tableWidth
-        self.handSpace = handSpace
-        self.cardSpace = cardSpace
-        self.cardHeight = cardHeight
-        self.cardWidth = cardWidth
-        self.gradientShader = gradientShader
         self.log = log
+
+        self.gradientShader = SKShader(source: "void main() {" +
+            "float normalisedPosition = v_path_distance / u_path_length;" +
+            "gl_FragColor = vec4(normalisedPosition, normalisedPosition, 0.0, 1.0);" +
+            "}")
 
     }
 

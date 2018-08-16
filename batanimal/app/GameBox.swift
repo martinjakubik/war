@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+
 import os.log
 
 class GameBox {
@@ -14,32 +15,12 @@ class GameBox {
     var view:SKView
     var scene:SKScene
 
-    let gameTop:CGFloat = 60
-    let gameLeft:CGFloat = 20
-    let playerHeight:CGFloat = 180
-
-    let tableWidth:CGFloat = 40
-    let handSpace:CGFloat = 20
-
-    let cardSpace:CGFloat = 4
-
-    // width:height ratio is 0.66
-    let cardHeight:CGFloat = 176
-    let cardWidth:CGFloat = 116
-
-    let gradientShader:SKShader
-
     let log:OSLog
 
     init(view:SKView) {
 
         self.view = view
         self.scene = SKScene(size: self.view.frame.size)
-
-        self.gradientShader = SKShader(source: "void main() {" +
-            "float normalisedPosition = v_path_distance / u_path_length;" +
-            "gl_FragColor = vec4(normalisedPosition, normalisedPosition, 0.0, 1.0);" +
-            "}")
 
         self.log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "game")
 
@@ -123,15 +104,6 @@ class GameBox {
             numPlayers:2,
             cards:cards,
             playerNames:playerNames,
-            gameTop:self.gameTop,
-            gameLeft:self.gameLeft,
-            playerHeight:self.playerHeight,
-            tableWidth: self.tableWidth,
-            handSpace: self.handSpace,
-            cardSpace: self.cardSpace,
-            cardHeight: self.cardHeight,
-            cardWidth: self.cardWidth,
-            gradientShader: self.gradientShader,
             log: self.log
         )
 
