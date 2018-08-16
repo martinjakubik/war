@@ -108,8 +108,12 @@ class PlayerController {
      */
     func renderSingleCard (card:Card, atPosition:CGFloat, numCards:CGFloat) {
 
+        let halfCardWidth = self.cardWidth / 2
+        let halfCardHeight = self.cardHeight / 2
+        let borderWidth:CGFloat = 8
+
         let cardPoint = CGPoint(
-            x: self.handLeft + atPosition * self.cardSpace,
+            x: self.handLeft + atPosition * (self.cardSpace + borderWidth),
             y: self.playerTop
         )
         
@@ -119,9 +123,6 @@ class PlayerController {
         let zPosition = numCards - atPosition + 1
 
         // makes the border shape
-        let halfCardWidth = self.cardWidth / 2
-        let halfCardHeight = self.cardHeight / 2
-        let borderWidth:CGFloat = 8
         let shapeNode = SKShapeNode(
             rect: CGRect(
                 x: (cardPoint.x - halfCardWidth) - borderWidth,
