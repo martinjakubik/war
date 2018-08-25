@@ -9,7 +9,7 @@
 import Foundation
 
 class Card {
-    
+
     var value:Int = 0
     var suit:String = ""
 

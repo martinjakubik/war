@@ -71,9 +71,9 @@ class PlayerController {
     }
 
     func getHand() -> [Card] {
-        
+
         return self.player.getHand()
-        
+
     }
     
     func setHand(hand:[Card]) {
@@ -124,7 +124,7 @@ class PlayerController {
             x: self.handLeft + atPosition * (self.cardSpace + borderWidth),
             y: self.playerTop
         )
-        
+
         os_log("card position x:%f, y:%f", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
 
         // calculates the z-index based on the position in the card set
@@ -195,7 +195,7 @@ class PlayerController {
         // moves the card in the model
         self.addCardToTable(card: self.getHand()[0])
         self.removeCardFromHand(at: 0)
-        
+
         // moves the card in the view
         let shapeNode = self.node.childNode(withName: cardId)
 
