@@ -82,6 +82,18 @@ class PlayerController {
 
     }
 
+    func removeCardFromHand(at position: Int) {
+
+        self.player.hand?.remove(at: position)
+
+    }
+
+    func addCardToTable(card: Card) {
+
+        self.player.table?.append(card)
+
+    }
+
     /*
      * renders the cards in the player's hand
      */
@@ -156,7 +168,7 @@ class PlayerController {
     }
 
     /*
-     *
+     * handles a tap on a card
      */
     func cardTapped(cardId:String) {
 
@@ -169,15 +181,28 @@ class PlayerController {
         // checks that the tapped card is the top card
         if (topCardId == cardId) {
 
-            // gets the node corresponding to that card
-            let shapeNode = self.node.childNode(withName: cardId)
+            moveCardToTable(cardId: cardId)
 
-            if let existingShapeNode:SKShapeNode = shapeNode as? SKShapeNode {
+        }
 
-                let moveAction = SKAction.moveTo(x: existingShapeNode.position.x - 100, duration: 0.2)
-                existingShapeNode.run(moveAction)
+    }
 
-            }
+    /*
+     * moves card from hand to table in model and view
+     */
+    func moveCardToTable(cardId:String) {
+
+        // moves the card in the model
+        self.addCardToTable(card: self.getHand()[0])
+        self.removeCardFromHand(at: 0)
+        
+        // moves the card in the view
+        let shapeNode = self.node.childNode(withName: cardId)
+
+        if let existingShapeNode:SKShapeNode = shapeNode as? SKShapeNode {
+
+            let moveAction = SKAction.moveTo(x: existingShapeNode.position.x - 100, duration: 0.2)
+            existingShapeNode.run(moveAction)
 
         }
 
