@@ -19,8 +19,12 @@ class CardNode:SKSpriteNode {
 
         if let playerController = self.playerController {
 
-            playerController.cardTapped()
-            
+            if let name = self.name {
+
+                playerController.cardTapped(cardId: name)
+
+            }
+
         }
 
     }

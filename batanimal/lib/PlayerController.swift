@@ -146,6 +146,10 @@ class PlayerController {
         cardNode.isUserInteractionEnabled = true
         cardNode.position = cardPoint
 
+        // makes sure shape and card have same name
+        shapeNode.name = cardId
+        cardNode.name = cardId
+
         shapeNode.addChild(cardNode)
         self.node.addChild(shapeNode)
 
@@ -154,16 +158,28 @@ class PlayerController {
     /*
      *
      */
-    func cardTapped() {
+    func cardTapped(cardId:String) {
 
-        os_log("card tapped", log:self.log, type:.debug)
+        os_log("card tapped, with Id: \"%@\"", log:self.log, type:.debug, cardId)
 
-        // moves the top card
-        let shapeNode = self.node.children[0]
+        // gets the top card in the hand
+        let topCard = self.getHand()[0]
+        let topCardId = topCard.getId()
 
-        let moveAction = SKAction.moveTo(x: shapeNode.position.x - 100, duration: 1.0)
+        // checks that the tapped card is the top card
+        if (topCardId == cardId) {
 
-        shapeNode.run(moveAction)
+            // gets the node corresponding to that card
+            let shapeNode = self.node.childNode(withName: cardId)
+
+            if let existingShapeNode:SKShapeNode = shapeNode as? SKShapeNode {
+
+                let moveAction = SKAction.moveTo(x: existingShapeNode.position.x - 100, duration: 0.2)
+                existingShapeNode.run(moveAction)
+
+            }
+
+        }
 
     }
 
