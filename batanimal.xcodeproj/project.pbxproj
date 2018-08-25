@@ -63,6 +63,7 @@
 		5B98E38F203DE85F00BE085B /* GameBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E38E203DE85E00BE085B /* GameBox.swift */; };
 		5B98E395203DE95A00BE085B /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E394203DE95A00BE085B /* Tools.swift */; };
 		5B98E397203DED3600BE085B /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E396203DED3600BE085B /* Card.swift */; };
+		5BADD385213198D20028B4F5 /* CardNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BADD384213198D20028B4F5 /* CardNode.swift */; };
 		5BC0781F20508B1B0060CEF7 /* GameSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC0781E20508B1B0060CEF7 /* GameSession.swift */; };
 		5BC0782120508EDA0060CEF7 /* WarGamePlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC0782020508EDA0060CEF7 /* WarGamePlay.swift */; };
 		705703AD8331986EE0DB90D7 /* Pods_batanimal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39530A1500D0FD8395BE9A8F /* Pods_batanimal.framework */; };
@@ -151,6 +152,7 @@
 		5B98E38E203DE85E00BE085B /* GameBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBox.swift; sourceTree = "<group>"; };
 		5B98E394203DE95A00BE085B /* Tools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tools.swift; sourceTree = "<group>"; };
 		5B98E396203DED3600BE085B /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		5BADD384213198D20028B4F5 /* CardNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardNode.swift; sourceTree = "<group>"; };
 		5BC0781E20508B1B0060CEF7 /* GameSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSession.swift; sourceTree = "<group>"; };
 		5BC0782020508EDA0060CEF7 /* WarGamePlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WarGamePlay.swift; sourceTree = "<group>"; };
 		5F654EEFFB81C6F97F9FF55F /* Pods-batanimal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-batanimal.debug.xcconfig"; path = "Pods/Target Support Files/Pods-batanimal/Pods-batanimal.debug.xcconfig"; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 				5B4BA80D2043333E00F60CD8 /* GameSlot.swift */,
 				5BC0781E20508B1B0060CEF7 /* GameSession.swift */,
 				5B4568982115C94100C529F8 /* Player.swift */,
+				5BADD384213198D20028B4F5 /* CardNode.swift */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -692,6 +695,7 @@
 				5B03125A203C976A00391F4A /* AppDelegate.swift in Sources */,
 				5B98E395203DE95A00BE085B /* Tools.swift in Sources */,
 				5B4BA80E2043333E00F60CD8 /* GameSlot.swift in Sources */,
+				5BADD385213198D20028B4F5 /* CardNode.swift in Sources */,
 				5B4BA7BA203F367B00F60CD8 /* GamePlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

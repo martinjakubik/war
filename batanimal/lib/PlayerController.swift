@@ -136,7 +136,7 @@ class PlayerController {
         // makes the card sprite
         let cardFileName = Cards.makeImageFilename(fromId: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
-        let cardNode = SKSpriteNode(
+        let cardNode = CardNode(
             texture: cardTexture,
             size: CGSize(
                 width: self.cardWidth,
@@ -146,6 +146,13 @@ class PlayerController {
 
         shapeNode.addChild(cardNode)
         self.node.addChild(shapeNode)
+
+    }
+
+    /*
+     *
+     */
+    func cardTapped() {
 
     }
 
