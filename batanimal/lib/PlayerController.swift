@@ -131,8 +131,7 @@ class PlayerController {
         shapeNode.zPosition = zPosition
 
         // gets the picture of the card
-        let cardId:String = String(card.value) + card.suit
-        shapeNode.name = cardId
+        let cardId:String = card.getId()
 
         // makes the card sprite
         let cardFileName = Cards.makeImageFilename(fromId: cardId)

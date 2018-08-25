@@ -8,9 +8,25 @@
 
 import Foundation
 
-struct Card {
+class Card {
     
-    var value:Int
-    var suit:String
+    var value:Int = 0
+    var suit:String = ""
+
+    init(value:Int, suit:String) {
+
+        self.value = value
+        self.suit = suit
+
+    }
+
+    /*
+     *
+     */
+    func getId() -> String {
+
+        return String(self.value) + self.suit
+
+    }
 
 }
