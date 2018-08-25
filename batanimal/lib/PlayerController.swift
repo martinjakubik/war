@@ -142,6 +142,8 @@ class PlayerController {
                 width: self.cardWidth,
                 height: self.cardHeight
         ))
+        cardNode.playerController = self
+        cardNode.isUserInteractionEnabled = true
         cardNode.position = cardPoint
 
         shapeNode.addChild(cardNode)
@@ -154,6 +156,7 @@ class PlayerController {
      */
     func cardTapped() {
 
+        os_log("card tapped", log:self.log, type:.debug)
     }
 
 }

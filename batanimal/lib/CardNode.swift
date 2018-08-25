@@ -11,4 +11,18 @@ import SpriteKit
 
 class CardNode:SKSpriteNode {
 
+    var playerController:PlayerController?
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+
+        super.touchesEnded(touches, with: event)
+
+        if let playerController = self.playerController {
+
+            playerController.cardTapped()
+            
+        }
+
+    }
+
 }
