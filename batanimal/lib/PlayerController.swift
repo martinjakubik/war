@@ -175,13 +175,17 @@ class PlayerController {
         os_log("card tapped, with Id: \"%@\"", log:self.log, type:.debug, cardId)
 
         // gets the top card in the hand
-        let topCard = self.getHand()[0]
-        let topCardId = topCard.getId()
+        if self.getHand().count > 0 {
 
-        // checks that the tapped card is the top card
-        if (topCardId == cardId) {
+            let topCard = self.getHand()[0]
+            let topCardId = topCard.getId()
 
-            moveCardToTable(cardId: cardId)
+            // checks that the tapped card is the top card
+            if (topCardId == cardId) {
+
+                moveCardToTable(cardId: cardId)
+
+            }
 
         }
 
@@ -193,16 +197,20 @@ class PlayerController {
     func moveCardToTable(cardId:String) {
 
         // moves the card in the model
-        self.addCardToTable(card: self.getHand()[0])
-        self.removeCardFromHand(at: 0)
+        if (self.getHand().count > 0) {
 
-        // moves the card in the view
-        let shapeNode = self.node.childNode(withName: cardId)
+            self.addCardToTable(card: self.getHand()[0])
+            self.removeCardFromHand(at: 0)
 
-        if let existingShapeNode:SKShapeNode = shapeNode as? SKShapeNode {
+            // moves the card in the view
+            let shapeNode = self.node.childNode(withName: cardId)
 
-            let moveAction = SKAction.moveTo(x: existingShapeNode.position.x - 100, duration: 0.2)
-            existingShapeNode.run(moveAction)
+            if let existingShapeNode:SKShapeNode = shapeNode as? SKShapeNode {
+
+                let moveAction = SKAction.moveTo(x: existingShapeNode.position.x - 100, duration: 0.2)
+                existingShapeNode.run(moveAction)
+
+            }
 
         }
 
