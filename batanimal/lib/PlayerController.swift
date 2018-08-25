@@ -132,6 +132,7 @@ class PlayerController {
 
         // gets the picture of the card
         let cardId:String = String(card.value) + card.suit
+        shapeNode.name = cardId
 
         // makes the card sprite
         let cardFileName = Cards.makeImageFilename(fromId: cardId)
@@ -157,6 +158,14 @@ class PlayerController {
     func cardTapped() {
 
         os_log("card tapped", log:self.log, type:.debug)
+
+        // moves the top card
+        let shapeNode = self.node.children[0]
+
+        let moveAction = SKAction.moveTo(x: shapeNode.position.x - 100, duration: 1.0)
+
+        shapeNode.run(moveAction)
+
     }
 
 }
