@@ -196,9 +196,9 @@ class PlayerController {
      */
     func moveCardToTable(cardId:String) {
 
-        // moves the card in the model
         if (self.getHand().count > 0) {
 
+            // moves the card in the model
             self.addCardToTable(card: self.getHand()[0])
             self.removeCardFromHand(at: 0)
 
@@ -207,7 +207,7 @@ class PlayerController {
 
             if let existingShapeNode:SKShapeNode = shapeNode as? SKShapeNode {
 
-                let moveAction = SKAction.moveTo(x: existingShapeNode.position.x - 100, duration: 0.2)
+                let moveAction = SKAction.moveTo(x: existingShapeNode.position.x - 100, duration: 0.02)
                 existingShapeNode.run(moveAction)
 
             }
