@@ -1,0 +1,4 @@
+card-batanimo-bo-sh
+    width: 233
+    height: 345
+    pixels at: 90.10 dpi
