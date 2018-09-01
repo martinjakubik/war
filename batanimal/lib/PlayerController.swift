@@ -116,9 +116,8 @@ class PlayerController {
      */
     func renderSingleCard (card:Card, atPosition:CGFloat, numCards:CGFloat) {
 
-        let halfCardWidth = self.cardWidth / 2
-        let halfCardHeight = self.cardHeight / 2
         let borderWidth:CGFloat = 8
+        let shadowWidth:CGFloat = 8
 
         let cardPoint = CGPoint(
             x: self.handLeft + atPosition * (self.cardSpace + borderWidth),
@@ -130,17 +129,18 @@ class PlayerController {
         // calculates the z-index based on the position in the card set
         let zPosition = numCards - atPosition + 1
 
-        // makes the border shape
-        let shapeNode = SKShapeNode(
-            rect: CGRect(
-                x: (cardPoint.x - halfCardWidth) - borderWidth,
-                y: (cardPoint.y - halfCardHeight) - borderWidth,
-                width: self.cardWidth + (borderWidth * 2),
-                height: self.cardHeight + (borderWidth * 2)),
-            cornerRadius: 2.0
+        // makes the border + shadow sprite
+        let borderShadowFileName = "card-border-shadow.png"
+        let borderShadowTexture = SKTexture(imageNamed: borderShadowFileName)
+        let borderShadowNode = CardNode(
+            texture: borderShadowTexture,
+            size: CGSize(
+                width: self.cardWidth + borderWidth * 2 + shadowWidth,
+                height: self.cardHeight + borderWidth * 2 + shadowWidth
+            )
         )
-        shapeNode.fillColor = UIColor.white
-        shapeNode.zPosition = zPosition
+        borderShadowNode.position = cardPoint
+        borderShadowNode.zPosition = zPosition
 
         // gets the picture of the card
         let cardId:String = card.getId()
@@ -153,17 +153,21 @@ class PlayerController {
             size: CGSize(
                 width: self.cardWidth,
                 height: self.cardHeight
-        ))
+            )
+        )
         cardNode.playerController = self
         cardNode.isUserInteractionEnabled = true
-        cardNode.position = cardPoint
+        cardNode.position = CGPoint(
+            x: -2.0,
+            y: 0.0
+        )
 
-        // makes sure shape and card have same name
-        shapeNode.name = cardId
+        // makes sure border + shadow and card have same name
+        borderShadowNode.name = cardId
         cardNode.name = cardId
 
-        shapeNode.addChild(cardNode)
-        self.node.addChild(shapeNode)
+        borderShadowNode.addChild(cardNode)
+        self.node.addChild(borderShadowNode)
 
     }
 
