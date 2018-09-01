@@ -4,6 +4,8 @@
 node_modules
 public
 
+build
+
 js/lib
 
 grunttasks/ftpPut.js
