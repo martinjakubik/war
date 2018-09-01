@@ -87,10 +87,29 @@ class Cards {
         let gameTag = "batanimo"
         let graphicExtension = "png"
 
-        let imageName = cardPrefix + "-" + gameTag + "-" + fromId + "." + graphicExtension
+        let fileName = cardPrefix + "-" + gameTag + "-" + fromId + "." + graphicExtension
 
-        return imageName
+        // format: card-batanimo-1f.png
+        return fileName
 
     }
 
+    /*
+     * makes an image filename with border and shadow, from a small ID
+     */
+    class func makeImageWithBorderAndShadowFilename (from id:String) -> String {
+        
+        let cardPrefix = "card"
+        let gameTag = "batanimo"
+        let graphicExtension = "png"
+        let borderTag = "bo"
+        let shadowTag = "sh"
+        
+        // format: card-batanimo-1f-bo-sh.png
+        let fileName = cardPrefix + "-" + gameTag + "-" + id + "-" + borderTag + "-" + shadowTag + "." + graphicExtension
+        
+        return fileName
+        
+    }
+    
 }

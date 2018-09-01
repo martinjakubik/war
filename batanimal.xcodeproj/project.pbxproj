@@ -17,6 +17,43 @@
 		5B03127A203C976A00391F4A /* batanimalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B031279203C976A00391F4A /* batanimalUITests.swift */; };
 		5B131A72209508DD00316B3D /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B131A71209508DD00316B3D /* Cards.swift */; };
 		5B38274A213AD6EF00A90164 /* card-border-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382749213AD6EE00A90164 /* card-border-shadow.png */; };
+		5B382770213B055E00A90164 /* card-batanimo-3b-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38274B213B055700A90164 /* card-batanimo-3b-bo-sh.png */; };
+		5B382771213B055E00A90164 /* card-batanimo-4b-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38274C213B055700A90164 /* card-batanimo-4b-bo-sh.png */; };
+		5B382772213B055E00A90164 /* card-batanimo-1b-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38274D213B055800A90164 /* card-batanimo-1b-bo-sh.png */; };
+		5B382773213B055E00A90164 /* card-batanimo-3f-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38274E213B055800A90164 /* card-batanimo-3f-bo-sh.png */; };
+		5B382774213B055E00A90164 /* card-batanimo-2a-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38274F213B055800A90164 /* card-batanimo-2a-bo-sh.png */; };
+		5B382775213B055E00A90164 /* card-batanimo-4d-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382750213B055900A90164 /* card-batanimo-4d-bo-sh.png */; };
+		5B382776213B055E00A90164 /* card-batanimo-4f-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382751213B055900A90164 /* card-batanimo-4f-bo-sh.png */; };
+		5B382777213B055E00A90164 /* card-batanimo-5e-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382752213B055900A90164 /* card-batanimo-5e-bo-sh.png */; };
+		5B382778213B055E00A90164 /* card-batanimo-2d-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382753213B055900A90164 /* card-batanimo-2d-bo-sh.png */; };
+		5B382779213B055E00A90164 /* card-batanimo-3a-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382754213B055900A90164 /* card-batanimo-3a-bo-sh.png */; };
+		5B38277A213B055E00A90164 /* card-batanimo-5f-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382755213B055900A90164 /* card-batanimo-5f-bo-sh.png */; };
+		5B38277B213B055E00A90164 /* card-batanimo-14a-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382756213B055A00A90164 /* card-batanimo-14a-bo-sh.png */; };
+		5B38277C213B055E00A90164 /* card-batanimo-5a-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382757213B055A00A90164 /* card-batanimo-5a-bo-sh.png */; };
+		5B38277D213B055E00A90164 /* card-batanimo-2e-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382758213B055A00A90164 /* card-batanimo-2e-bo-sh.png */; };
+		5B38277E213B055E00A90164 /* card-batanimo-1d-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382759213B055A00A90164 /* card-batanimo-1d-bo-sh.png */; };
+		5B38277F213B055E00A90164 /* card-batanimo-1f-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38275A213B055A00A90164 /* card-batanimo-1f-bo-sh.png */; };
+		5B382780213B055E00A90164 /* card-batanimo-3e-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38275B213B055A00A90164 /* card-batanimo-3e-bo-sh.png */; };
+		5B382781213B055E00A90164 /* card-batanimo-3c-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38275C213B055A00A90164 /* card-batanimo-3c-bo-sh.png */; };
+		5B382782213B055E00A90164 /* card-batanimo-2c-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38275D213B055B00A90164 /* card-batanimo-2c-bo-sh.png */; };
+		5B382783213B055E00A90164 /* card-batanimo-2f-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38275E213B055B00A90164 /* card-batanimo-2f-bo-sh.png */; };
+		5B382784213B055E00A90164 /* card-batanimo-4a-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38275F213B055B00A90164 /* card-batanimo-4a-bo-sh.png */; };
+		5B382785213B055E00A90164 /* card-batanimo-6d-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382760213B055B00A90164 /* card-batanimo-6d-bo-sh.png */; };
+		5B382786213B055E00A90164 /* card-batanimo-3d-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382761213B055B00A90164 /* card-batanimo-3d-bo-sh.png */; };
+		5B382787213B055E00A90164 /* card-batanimo-5c-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382762213B055B00A90164 /* card-batanimo-5c-bo-sh.png */; };
+		5B382788213B055E00A90164 /* card-batanimo-6e-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382763213B055B00A90164 /* card-batanimo-6e-bo-sh.png */; };
+		5B382789213B055E00A90164 /* card-batanimo-5d-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382764213B055C00A90164 /* card-batanimo-5d-bo-sh.png */; };
+		5B38278A213B055E00A90164 /* card-batanimo-4e-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382765213B055C00A90164 /* card-batanimo-4e-bo-sh.png */; };
+		5B38278B213B055E00A90164 /* card-batanimo-5b-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382766213B055C00A90164 /* card-batanimo-5b-bo-sh.png */; };
+		5B38278C213B055E00A90164 /* card-batanimo-6a-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382767213B055C00A90164 /* card-batanimo-6a-bo-sh.png */; };
+		5B38278D213B055E00A90164 /* card-batanimo-6b-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382768213B055D00A90164 /* card-batanimo-6b-bo-sh.png */; };
+		5B38278E213B055E00A90164 /* card-batanimo-1a-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382769213B055D00A90164 /* card-batanimo-1a-bo-sh.png */; };
+		5B38278F213B055E00A90164 /* card-batanimo-1c-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38276A213B055D00A90164 /* card-batanimo-1c-bo-sh.png */; };
+		5B382790213B055E00A90164 /* card-batanimo-4c-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38276B213B055D00A90164 /* card-batanimo-4c-bo-sh.png */; };
+		5B382791213B055E00A90164 /* card-batanimo-6f-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38276C213B055D00A90164 /* card-batanimo-6f-bo-sh.png */; };
+		5B382792213B055E00A90164 /* card-batanimo-1e-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38276D213B055D00A90164 /* card-batanimo-1e-bo-sh.png */; };
+		5B382793213B055E00A90164 /* card-batanimo-2b-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38276E213B055D00A90164 /* card-batanimo-2b-bo-sh.png */; };
+		5B382794213B055E00A90164 /* card-batanimo-6c-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38276F213B055E00A90164 /* card-batanimo-6c-bo-sh.png */; };
 		5B4568992115C94100C529F8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4568982115C94100C529F8 /* Player.swift */; };
 		5B4BA7BA203F367B00F60CD8 /* GamePlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4BA7B9203F367A00F60CD8 /* GamePlay.swift */; };
 		5B4BA7E3203F41EF00F60CD8 /* card-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA7BD203F41EF00F60CD8 /* card-back.png */; };
@@ -107,6 +144,43 @@
 		5B03127B203C976A00391F4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B131A71209508DD00316B3D /* Cards.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
 		5B382749213AD6EE00A90164 /* card-border-shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-border-shadow.png"; path = "resources/card-border-shadow.png"; sourceTree = "<group>"; };
+		5B38274B213B055700A90164 /* card-batanimo-3b-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-3b-bo-sh.png"; path = "resources/card-batanimo-3b-bo-sh.png"; sourceTree = "<group>"; };
+		5B38274C213B055700A90164 /* card-batanimo-4b-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-4b-bo-sh.png"; path = "resources/card-batanimo-4b-bo-sh.png"; sourceTree = "<group>"; };
+		5B38274D213B055800A90164 /* card-batanimo-1b-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-1b-bo-sh.png"; path = "resources/card-batanimo-1b-bo-sh.png"; sourceTree = "<group>"; };
+		5B38274E213B055800A90164 /* card-batanimo-3f-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-3f-bo-sh.png"; path = "resources/card-batanimo-3f-bo-sh.png"; sourceTree = "<group>"; };
+		5B38274F213B055800A90164 /* card-batanimo-2a-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-2a-bo-sh.png"; path = "resources/card-batanimo-2a-bo-sh.png"; sourceTree = "<group>"; };
+		5B382750213B055900A90164 /* card-batanimo-4d-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-4d-bo-sh.png"; path = "resources/card-batanimo-4d-bo-sh.png"; sourceTree = "<group>"; };
+		5B382751213B055900A90164 /* card-batanimo-4f-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-4f-bo-sh.png"; path = "resources/card-batanimo-4f-bo-sh.png"; sourceTree = "<group>"; };
+		5B382752213B055900A90164 /* card-batanimo-5e-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-5e-bo-sh.png"; path = "resources/card-batanimo-5e-bo-sh.png"; sourceTree = "<group>"; };
+		5B382753213B055900A90164 /* card-batanimo-2d-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-2d-bo-sh.png"; path = "resources/card-batanimo-2d-bo-sh.png"; sourceTree = "<group>"; };
+		5B382754213B055900A90164 /* card-batanimo-3a-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-3a-bo-sh.png"; path = "resources/card-batanimo-3a-bo-sh.png"; sourceTree = "<group>"; };
+		5B382755213B055900A90164 /* card-batanimo-5f-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-5f-bo-sh.png"; path = "resources/card-batanimo-5f-bo-sh.png"; sourceTree = "<group>"; };
+		5B382756213B055A00A90164 /* card-batanimo-14a-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-14a-bo-sh.png"; path = "resources/card-batanimo-14a-bo-sh.png"; sourceTree = "<group>"; };
+		5B382757213B055A00A90164 /* card-batanimo-5a-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-5a-bo-sh.png"; path = "resources/card-batanimo-5a-bo-sh.png"; sourceTree = "<group>"; };
+		5B382758213B055A00A90164 /* card-batanimo-2e-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-2e-bo-sh.png"; path = "resources/card-batanimo-2e-bo-sh.png"; sourceTree = "<group>"; };
+		5B382759213B055A00A90164 /* card-batanimo-1d-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-1d-bo-sh.png"; path = "resources/card-batanimo-1d-bo-sh.png"; sourceTree = "<group>"; };
+		5B38275A213B055A00A90164 /* card-batanimo-1f-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-1f-bo-sh.png"; path = "resources/card-batanimo-1f-bo-sh.png"; sourceTree = "<group>"; };
+		5B38275B213B055A00A90164 /* card-batanimo-3e-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-3e-bo-sh.png"; path = "resources/card-batanimo-3e-bo-sh.png"; sourceTree = "<group>"; };
+		5B38275C213B055A00A90164 /* card-batanimo-3c-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-3c-bo-sh.png"; path = "resources/card-batanimo-3c-bo-sh.png"; sourceTree = "<group>"; };
+		5B38275D213B055B00A90164 /* card-batanimo-2c-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-2c-bo-sh.png"; path = "resources/card-batanimo-2c-bo-sh.png"; sourceTree = "<group>"; };
+		5B38275E213B055B00A90164 /* card-batanimo-2f-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-2f-bo-sh.png"; path = "resources/card-batanimo-2f-bo-sh.png"; sourceTree = "<group>"; };
+		5B38275F213B055B00A90164 /* card-batanimo-4a-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-4a-bo-sh.png"; path = "resources/card-batanimo-4a-bo-sh.png"; sourceTree = "<group>"; };
+		5B382760213B055B00A90164 /* card-batanimo-6d-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-6d-bo-sh.png"; path = "resources/card-batanimo-6d-bo-sh.png"; sourceTree = "<group>"; };
+		5B382761213B055B00A90164 /* card-batanimo-3d-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-3d-bo-sh.png"; path = "resources/card-batanimo-3d-bo-sh.png"; sourceTree = "<group>"; };
+		5B382762213B055B00A90164 /* card-batanimo-5c-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-5c-bo-sh.png"; path = "resources/card-batanimo-5c-bo-sh.png"; sourceTree = "<group>"; };
+		5B382763213B055B00A90164 /* card-batanimo-6e-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-6e-bo-sh.png"; path = "resources/card-batanimo-6e-bo-sh.png"; sourceTree = "<group>"; };
+		5B382764213B055C00A90164 /* card-batanimo-5d-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-5d-bo-sh.png"; path = "resources/card-batanimo-5d-bo-sh.png"; sourceTree = "<group>"; };
+		5B382765213B055C00A90164 /* card-batanimo-4e-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-4e-bo-sh.png"; path = "resources/card-batanimo-4e-bo-sh.png"; sourceTree = "<group>"; };
+		5B382766213B055C00A90164 /* card-batanimo-5b-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-5b-bo-sh.png"; path = "resources/card-batanimo-5b-bo-sh.png"; sourceTree = "<group>"; };
+		5B382767213B055C00A90164 /* card-batanimo-6a-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-6a-bo-sh.png"; path = "resources/card-batanimo-6a-bo-sh.png"; sourceTree = "<group>"; };
+		5B382768213B055D00A90164 /* card-batanimo-6b-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-6b-bo-sh.png"; path = "resources/card-batanimo-6b-bo-sh.png"; sourceTree = "<group>"; };
+		5B382769213B055D00A90164 /* card-batanimo-1a-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-1a-bo-sh.png"; path = "resources/card-batanimo-1a-bo-sh.png"; sourceTree = "<group>"; };
+		5B38276A213B055D00A90164 /* card-batanimo-1c-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-1c-bo-sh.png"; path = "resources/card-batanimo-1c-bo-sh.png"; sourceTree = "<group>"; };
+		5B38276B213B055D00A90164 /* card-batanimo-4c-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-4c-bo-sh.png"; path = "resources/card-batanimo-4c-bo-sh.png"; sourceTree = "<group>"; };
+		5B38276C213B055D00A90164 /* card-batanimo-6f-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-6f-bo-sh.png"; path = "resources/card-batanimo-6f-bo-sh.png"; sourceTree = "<group>"; };
+		5B38276D213B055D00A90164 /* card-batanimo-1e-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-1e-bo-sh.png"; path = "resources/card-batanimo-1e-bo-sh.png"; sourceTree = "<group>"; };
+		5B38276E213B055D00A90164 /* card-batanimo-2b-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-2b-bo-sh.png"; path = "resources/card-batanimo-2b-bo-sh.png"; sourceTree = "<group>"; };
+		5B38276F213B055E00A90164 /* card-batanimo-6c-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-6c-bo-sh.png"; path = "resources/card-batanimo-6c-bo-sh.png"; sourceTree = "<group>"; };
 		5B4568982115C94100C529F8 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		5B4BA7B9203F367A00F60CD8 /* GamePlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePlay.swift; sourceTree = "<group>"; };
 		5B4BA7BD203F41EF00F60CD8 /* card-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-back.png"; path = "resources/card-back.png"; sourceTree = "<group>"; };
@@ -266,6 +340,43 @@
 		5B98E38D203DCA1100BE085B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5B382769213B055D00A90164 /* card-batanimo-1a-bo-sh.png */,
+				5B38274D213B055800A90164 /* card-batanimo-1b-bo-sh.png */,
+				5B38276A213B055D00A90164 /* card-batanimo-1c-bo-sh.png */,
+				5B382759213B055A00A90164 /* card-batanimo-1d-bo-sh.png */,
+				5B38276D213B055D00A90164 /* card-batanimo-1e-bo-sh.png */,
+				5B38275A213B055A00A90164 /* card-batanimo-1f-bo-sh.png */,
+				5B38274F213B055800A90164 /* card-batanimo-2a-bo-sh.png */,
+				5B38276E213B055D00A90164 /* card-batanimo-2b-bo-sh.png */,
+				5B38275D213B055B00A90164 /* card-batanimo-2c-bo-sh.png */,
+				5B382753213B055900A90164 /* card-batanimo-2d-bo-sh.png */,
+				5B382758213B055A00A90164 /* card-batanimo-2e-bo-sh.png */,
+				5B38275E213B055B00A90164 /* card-batanimo-2f-bo-sh.png */,
+				5B382754213B055900A90164 /* card-batanimo-3a-bo-sh.png */,
+				5B38274B213B055700A90164 /* card-batanimo-3b-bo-sh.png */,
+				5B38275C213B055A00A90164 /* card-batanimo-3c-bo-sh.png */,
+				5B382761213B055B00A90164 /* card-batanimo-3d-bo-sh.png */,
+				5B38275B213B055A00A90164 /* card-batanimo-3e-bo-sh.png */,
+				5B38274E213B055800A90164 /* card-batanimo-3f-bo-sh.png */,
+				5B38275F213B055B00A90164 /* card-batanimo-4a-bo-sh.png */,
+				5B38274C213B055700A90164 /* card-batanimo-4b-bo-sh.png */,
+				5B38276B213B055D00A90164 /* card-batanimo-4c-bo-sh.png */,
+				5B382750213B055900A90164 /* card-batanimo-4d-bo-sh.png */,
+				5B382765213B055C00A90164 /* card-batanimo-4e-bo-sh.png */,
+				5B382751213B055900A90164 /* card-batanimo-4f-bo-sh.png */,
+				5B382757213B055A00A90164 /* card-batanimo-5a-bo-sh.png */,
+				5B382766213B055C00A90164 /* card-batanimo-5b-bo-sh.png */,
+				5B382762213B055B00A90164 /* card-batanimo-5c-bo-sh.png */,
+				5B382764213B055C00A90164 /* card-batanimo-5d-bo-sh.png */,
+				5B382752213B055900A90164 /* card-batanimo-5e-bo-sh.png */,
+				5B382755213B055900A90164 /* card-batanimo-5f-bo-sh.png */,
+				5B382767213B055C00A90164 /* card-batanimo-6a-bo-sh.png */,
+				5B382768213B055D00A90164 /* card-batanimo-6b-bo-sh.png */,
+				5B38276F213B055E00A90164 /* card-batanimo-6c-bo-sh.png */,
+				5B382760213B055B00A90164 /* card-batanimo-6d-bo-sh.png */,
+				5B382763213B055B00A90164 /* card-batanimo-6e-bo-sh.png */,
+				5B38276C213B055D00A90164 /* card-batanimo-6f-bo-sh.png */,
+				5B382756213B055A00A90164 /* card-batanimo-14a-bo-sh.png */,
 				5B382749213AD6EE00A90164 /* card-border-shadow.png */,
 				5B4BA7BD203F41EF00F60CD8 /* card-back.png */,
 				5B4BA7BE203F41EF00F60CD8 /* card-batanimo-1a.png */,
@@ -467,47 +578,84 @@
 				5B031264203C976A00391F4A /* LaunchScreen.storyboard in Resources */,
 				5B4BA806203F41EF00F60CD8 /* card-batanimo-6e.png in Resources */,
 				5B4BA7FB203F41EF00F60CD8 /* card-batanimo-4f.png in Resources */,
+				5B38277D213B055E00A90164 /* card-batanimo-2e-bo-sh.png in Resources */,
+				5B382791213B055E00A90164 /* card-batanimo-6f-bo-sh.png in Resources */,
+				5B382778213B055E00A90164 /* card-batanimo-2d-bo-sh.png in Resources */,
+				5B382793213B055E00A90164 /* card-batanimo-2b-bo-sh.png in Resources */,
 				5B4BA7EB203F41EF00F60CD8 /* card-batanimo-2b.png in Resources */,
+				5B38278D213B055E00A90164 /* card-batanimo-6b-bo-sh.png in Resources */,
+				5B382788213B055E00A90164 /* card-batanimo-6e-bo-sh.png in Resources */,
+				5B382782213B055E00A90164 /* card-batanimo-2c-bo-sh.png in Resources */,
 				5B4BA7F5203F41EF00F60CD8 /* card-batanimo-3f.png in Resources */,
+				5B382772213B055E00A90164 /* card-batanimo-1b-bo-sh.png in Resources */,
 				5B4BA808203F41EF00F60CD8 /* card-batanimo-14a.png in Resources */,
 				5B4BA7F0203F41EF00F60CD8 /* card-batanimo-3a.png in Resources */,
+				5B382794213B055E00A90164 /* card-batanimo-6c-bo-sh.png in Resources */,
+				5B382781213B055E00A90164 /* card-batanimo-3c-bo-sh.png in Resources */,
 				5B4BA7E3203F41EF00F60CD8 /* card-back.png in Resources */,
 				5B4BA7E7203F41EF00F60CD8 /* card-batanimo-1d.png in Resources */,
+				5B382786213B055E00A90164 /* card-batanimo-3d-bo-sh.png in Resources */,
+				5B382784213B055E00A90164 /* card-batanimo-4a-bo-sh.png in Resources */,
 				5B4BA7E6203F41EF00F60CD8 /* card-batanimo-1c.png in Resources */,
+				5B38278A213B055E00A90164 /* card-batanimo-4e-bo-sh.png in Resources */,
+				5B382773213B055E00A90164 /* card-batanimo-3f-bo-sh.png in Resources */,
+				5B38278C213B055E00A90164 /* card-batanimo-6a-bo-sh.png in Resources */,
 				5B4BA80C2042055100F60CD8 /* GoogleService-Info.plist in Resources */,
+				5B38278E213B055E00A90164 /* card-batanimo-1a-bo-sh.png in Resources */,
 				5B4BA7EF203F41EF00F60CD8 /* card-batanimo-2f.png in Resources */,
 				5B4BA7E4203F41EF00F60CD8 /* card-batanimo-1a.png in Resources */,
+				5B382779213B055E00A90164 /* card-batanimo-3a-bo-sh.png in Resources */,
+				5B38277B213B055E00A90164 /* card-batanimo-14a-bo-sh.png in Resources */,
 				5B4BA7EA203F41EF00F60CD8 /* card-batanimo-2a.png in Resources */,
 				5B4BA7EC203F41EF00F60CD8 /* card-batanimo-2c.png in Resources */,
 				5B4BA7F7203F41EF00F60CD8 /* card-batanimo-4b.png in Resources */,
 				5B4BA7F6203F41EF00F60CD8 /* card-batanimo-4a.png in Resources */,
+				5B38277E213B055E00A90164 /* card-batanimo-1d-bo-sh.png in Resources */,
+				5B382790213B055E00A90164 /* card-batanimo-4c-bo-sh.png in Resources */,
 				5B38274A213AD6EF00A90164 /* card-border-shadow.png in Resources */,
 				5B98E38C203DCA0000BE085B /* background.png in Resources */,
+				5B382776213B055E00A90164 /* card-batanimo-4f-bo-sh.png in Resources */,
 				5B4BA7E8203F41EF00F60CD8 /* card-batanimo-1e.png in Resources */,
+				5B38277C213B055E00A90164 /* card-batanimo-5a-bo-sh.png in Resources */,
 				5B4BA801203F41EF00F60CD8 /* card-batanimo-5f.png in Resources */,
+				5B382789213B055E00A90164 /* card-batanimo-5d-bo-sh.png in Resources */,
 				5B4BA804203F41EF00F60CD8 /* card-batanimo-6c.png in Resources */,
+				5B382771213B055E00A90164 /* card-batanimo-4b-bo-sh.png in Resources */,
 				5B4BA7F8203F41EF00F60CD8 /* card-batanimo-4c.png in Resources */,
+				5B382770213B055E00A90164 /* card-batanimo-3b-bo-sh.png in Resources */,
 				5B4BA7E5203F41EF00F60CD8 /* card-batanimo-1b.png in Resources */,
 				5B4BA7ED203F41EF00F60CD8 /* card-batanimo-2d.png in Resources */,
 				5B4BA803203F41EF00F60CD8 /* card-batanimo-6b.png in Resources */,
+				5B38277A213B055E00A90164 /* card-batanimo-5f-bo-sh.png in Resources */,
+				5B382787213B055E00A90164 /* card-batanimo-5c-bo-sh.png in Resources */,
 				5B031261203C976A00391F4A /* Assets.xcassets in Resources */,
+				5B382777213B055E00A90164 /* card-batanimo-5e-bo-sh.png in Resources */,
+				5B382783213B055E00A90164 /* card-batanimo-2f-bo-sh.png in Resources */,
+				5B38278B213B055E00A90164 /* card-batanimo-5b-bo-sh.png in Resources */,
+				5B382785213B055E00A90164 /* card-batanimo-6d-bo-sh.png in Resources */,
 				5B4BA7EE203F41EF00F60CD8 /* card-batanimo-2e.png in Resources */,
 				5B4BA7F9203F41EF00F60CD8 /* card-batanimo-4d.png in Resources */,
+				5B382774213B055E00A90164 /* card-batanimo-2a-bo-sh.png in Resources */,
 				5B4BA807203F41EF00F60CD8 /* card-batanimo-6f.png in Resources */,
 				5B4BA800203F41EF00F60CD8 /* card-batanimo-5e.png in Resources */,
+				5B38277F213B055E00A90164 /* card-batanimo-1f-bo-sh.png in Resources */,
 				5B4BA7F2203F41EF00F60CD8 /* card-batanimo-3c.png in Resources */,
 				5B4BA7F3203F41EF00F60CD8 /* card-batanimo-3d.png in Resources */,
 				5B4BA7F4203F41EF00F60CD8 /* card-batanimo-3e.png in Resources */,
 				5B4BA805203F41EF00F60CD8 /* card-batanimo-6d.png in Resources */,
 				5B03125F203C976A00391F4A /* Main.storyboard in Resources */,
 				5B4BA7FF203F41EF00F60CD8 /* card-batanimo-5d.png in Resources */,
+				5B38278F213B055E00A90164 /* card-batanimo-1c-bo-sh.png in Resources */,
+				5B382792213B055E00A90164 /* card-batanimo-1e-bo-sh.png in Resources */,
 				5B4BA802203F41EF00F60CD8 /* card-batanimo-6a.png in Resources */,
 				5B4BA7FC203F41EF00F60CD8 /* card-batanimo-5a.png in Resources */,
 				5B4BA7FD203F41EF00F60CD8 /* card-batanimo-5b.png in Resources */,
 				5B4BA7F1203F41EF00F60CD8 /* card-batanimo-3b.png in Resources */,
 				5B4BA7E9203F41EF00F60CD8 /* card-batanimo-1f.png in Resources */,
 				5B4BA7FE203F41EF00F60CD8 /* card-batanimo-5c.png in Resources */,
+				5B382775213B055E00A90164 /* card-batanimo-4d-bo-sh.png in Resources */,
 				5B4BA7FA203F41EF00F60CD8 /* card-batanimo-4e.png in Resources */,
+				5B382780213B055E00A90164 /* card-batanimo-3e-bo-sh.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

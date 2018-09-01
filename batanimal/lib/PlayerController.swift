@@ -104,7 +104,7 @@ class PlayerController {
 
         for card in getHand() {
 
-            renderSingleCard(card: card, atPosition: position, numCards: CGFloat(numCards))
+            renderSingleCard(card: card, at: position, numCards: CGFloat(numCards))
             position = position + 1
 
         }
@@ -114,39 +114,25 @@ class PlayerController {
     /*
      * renders a single card
      */
-    func renderSingleCard (card:Card, atPosition:CGFloat, numCards:CGFloat) {
+    func renderSingleCard (card:Card, at position:CGFloat, numCards:CGFloat) {
 
         let borderWidth:CGFloat = 8
-        let shadowWidth:CGFloat = 8
 
         let cardPoint = CGPoint(
-            x: self.handLeft + atPosition * (self.cardSpace + borderWidth),
+            x: self.handLeft + position * (self.cardSpace + borderWidth),
             y: self.playerTop
         )
 
         os_log("card position x:%f, y:%f", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
 
         // calculates the z-index based on the position in the card set
-        let zPosition = numCards - atPosition + 1
-
-        // makes the border + shadow sprite
-        let borderShadowFileName = "card-border-shadow.png"
-        let borderShadowTexture = SKTexture(imageNamed: borderShadowFileName)
-        let borderShadowNode = CardNode(
-            texture: borderShadowTexture,
-            size: CGSize(
-                width: self.cardWidth + borderWidth * 2 + shadowWidth,
-                height: self.cardHeight + borderWidth * 2 + shadowWidth
-            )
-        )
-        borderShadowNode.position = cardPoint
-        borderShadowNode.zPosition = zPosition
+        let zPosition = numCards - position + 1
 
         // gets the picture of the card
         let cardId:String = card.getId()
 
         // makes the card sprite
-        let cardFileName = Cards.makeImageFilename(fromId: cardId)
+        let cardFileName = Cards.makeImageWithBorderAndShadowFilename(from: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
         let cardNode = CardNode(
             texture: cardTexture,
@@ -157,17 +143,13 @@ class PlayerController {
         )
         cardNode.playerController = self
         cardNode.isUserInteractionEnabled = true
-        cardNode.position = CGPoint(
-            x: -2.0,
-            y: 0.0
-        )
+        cardNode.position = cardPoint
+        cardNode.zPosition = zPosition
 
-        // makes sure border + shadow and card have same name
-        borderShadowNode.name = cardId
+        // makes sure UI node and model card have same ID
         cardNode.name = cardId
 
-        borderShadowNode.addChild(cardNode)
-        self.node.addChild(borderShadowNode)
+        self.node.addChild(cardNode)
 
     }
 
@@ -207,12 +189,12 @@ class PlayerController {
             self.removeCardFromHand(at: 0)
 
             // moves the card in the view
-            let shapeNode = self.node.childNode(withName: cardId)
+            let cardNode = self.node.childNode(withName: cardId)
 
-            if let existingShapeNode:SKShapeNode = shapeNode as? SKShapeNode {
+            if let existingCardNode:CardNode = cardNode as? CardNode {
 
-                let moveAction = SKAction.moveTo(x: existingShapeNode.position.x - 100, duration: 0.02)
-                existingShapeNode.run(moveAction)
+                let moveAction = SKAction.moveTo(x: existingCardNode.position.x - 100, duration: 0.02)
+                existingCardNode.run(moveAction)
 
             }
 
