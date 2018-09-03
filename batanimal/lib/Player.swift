@@ -13,8 +13,8 @@ class Player {
     var number:Int
     var sessionId:String
     var name:String
-    var hand:[Card]? = []
-    var table:[Card]? = []
+    var hand:[Card] = []
+    var table:[Card] = []
 
     /*
      *
@@ -38,12 +38,6 @@ class Player {
         self.name = playerDictionary["name"] as? String ?? ""
         self.sessionId = playerDictionary["sessionId"] as? String ?? ""
 
-        if self.hand?.isEmpty == true {
-
-            self.hand = []
-
-        }
-
         self.hand = Cards.makeCardArrayFromAnyObject(cardObject: playerDictionary["hand"])
 
         self.table = playerDictionary["table"] as? [Card] ?? []
@@ -51,20 +45,16 @@ class Player {
     }
 
     /*
-     * returns a hand, making sure it's not an optional type
+     * removes the given card from the hand
      */
-    func getHand () -> [Card] {
-        
-        if (self.hand?.isEmpty == true) {
-            
-            return []
-            
-        } else {
-            
-            return self.hand!
-            
-        }
-        
-    }
+    func removeCardFromHand(card: Card) {
 
+        if let index = self.hand.index(where: {
+            $0.getId() == card.getId()
+        }) {
+            self.hand.remove(at: index)
+        }
+
+    }
+    
 }

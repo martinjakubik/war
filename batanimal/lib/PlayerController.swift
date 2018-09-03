@@ -72,7 +72,7 @@ class PlayerController {
 
     func getHand() -> [Card] {
 
-        return self.player.getHand()
+        return self.player.hand
 
     }
     
@@ -82,15 +82,18 @@ class PlayerController {
 
     }
 
-    func removeCardFromHand(at position: Int) {
+    func addCardToTable(card: Card) {
 
-        self.player.hand?.remove(at: position)
+        self.player.table.append(card)
 
     }
 
-    func addCardToTable(card: Card) {
+    /*
+     * removes the given card from the hand
+     */
+    func removeCardFromHand(card: Card) {
 
-        self.player.table?.append(card)
+        self.player.removeCardFromHand(card: card)
 
     }
 
@@ -169,7 +172,7 @@ class PlayerController {
             // checks that the tapped card is the top card
             if (topCardId == cardId) {
 
-                moveCardToTable(cardId: cardId)
+                moveCardToTable(card: topCard)
 
             }
 
@@ -180,23 +183,47 @@ class PlayerController {
     /*
      * moves card from hand to table in model and view
      */
-    func moveCardToTable(cardId:String) {
+    func moveCardToTable(card:Card) {
 
         if (self.getHand().count > 0) {
 
-            // moves the card in the model
-            self.addCardToTable(card: self.getHand()[0])
-            self.removeCardFromHand(at: 0)
+            moveCardToTableInModel(card: card)
+            moveCardToTableInView(card: card)
 
-            // moves the card in the view
-            let cardNode = self.node.childNode(withName: cardId)
+        }
 
-            if let existingCardNode:CardNode = cardNode as? CardNode {
+    }
 
-                let moveAction = SKAction.moveTo(x: existingCardNode.position.x - 100, duration: 0.02)
-                existingCardNode.run(moveAction)
+    /*
+     * moves card from hand to table in model
+     */
+    func moveCardToTableInModel(card:Card) {
 
-            }
+        // moves the card in the model
+        self.addCardToTable(card: card)
+        self.removeCardFromHand(card: card)
+        
+        os_log("hand: ", log: self.log, type: .debug)
+        var i = 0
+        for card in self.getHand() {
+            os_log("%d | %@ ", log: self.log, type: .debug, i, card.getId())
+            i = i + 1
+        }
+
+    }
+
+    /*
+     * moves card from hand to table in view
+     */
+    func moveCardToTableInView(card:Card) {
+
+        // moves the card in the view
+        let cardNode = self.node.childNode(withName: card.getId())
+
+        if let existingCardNode:CardNode = cardNode as? CardNode {
+
+            let moveAction = SKAction.moveTo(x: existingCardNode.position.x - 100, duration: 0.02)
+            existingCardNode.run(moveAction)
 
         }
 
