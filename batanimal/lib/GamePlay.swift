@@ -219,7 +219,8 @@ class GamePlay {
             "player0": [
 
                 "name": self.playerControllers[0].getName(),
-                "hand": player0HandDictionary
+                "hand": player0HandDictionary,
+                "sessionId": player0SessionId
 
                 ] as NSDictionary,
 
@@ -266,7 +267,8 @@ class GamePlay {
             playerReferences[1].setValue([
 
                 "name": self.playerControllers[1].getName(),
-                "hand": player1HandDictionary
+                "hand": player1HandDictionary,
+                "sessionId": player1SessionId
 
                 ] as NSDictionary
             )
