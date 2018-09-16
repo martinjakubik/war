@@ -14,6 +14,7 @@ import os.log
 class GamePlay {
 
     var numPlayers:Int = 0
+    let maxNumPlayers:Int = 2
     var cards:[Card] = []
     var shuffledCards:[Card] =  []
     var slotIncrement:Int = 0
@@ -143,7 +144,7 @@ class GamePlay {
                     // TODO: do we have everything we need from the remote game slot here? ie. the restofcards and stuff?
                     self.gameSlot = self.getLastGameSlot(allGameSlots: allGameSlots)
 
-                    for i in 0...1 {
+                    for i in 0...(self.maxNumPlayers - 1) {
 
                         let playerReference = referenceToAllGameSlots.child("list").child(String(self.slotKey)).child("player" + String(i))
 
@@ -188,6 +189,7 @@ class GamePlay {
                     }
 
                     referenceToAllGameSlots.child("lastSlot").setValue(["value": self.slotKey])
+                    self.setUpHandlerForRemotePlayerEvents()
 
                 }
         })
@@ -313,6 +315,48 @@ class GamePlay {
             let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
+
+        }
+
+    }
+
+    /*
+     *
+     */
+    func setUpHandlerForRemotePlayerEvents() {
+
+        for playerNumber in 0...(maxNumPlayers - 1) {
+
+            self.playerReferences[playerNumber].observe(
+
+                DataEventType.value,
+                with: {(snapshot) in
+
+                    self.handleRemotePlayerEvents(for: playerNumber, snapshot: snapshot)
+
+            })
+
+        }
+
+    }
+
+    /*
+     *
+     */
+    func handleRemotePlayerEvents(for playerNumber:Int, snapshot:DataSnapshot) {
+
+        if let playerDict = snapshot.value as? [String:AnyObject] {
+
+            let remotePlayer = Player(withNumber: playerNumber, playerDictionary: playerDict)
+
+            // sets name
+            self.playerControllers[playerNumber].setName(name: remotePlayer.name)
+
+            // sets hand
+            self.playerControllers[playerNumber].setHand(hand: remotePlayer.hand)
+
+            // sets table
+//            self.playerControllers[playerNumber].setTable(table: remotePlayer.table)
 
         }
 
