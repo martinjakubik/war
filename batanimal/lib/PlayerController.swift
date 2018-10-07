@@ -193,6 +193,20 @@ class PlayerController {
     }
 
     /*
+     * puts the top card in the hand on the table
+     */
+    func putCardOnTable() {
+
+        if self.getHand().count > 0 {
+
+            let topCard = self.getHand()[0]
+            moveCardToTable(card: topCard)
+
+        }
+
+    }
+
+    /*
      * moves card from hand to table in model and view
      */
     func moveCardToTable(card:Card) {
@@ -241,4 +255,34 @@ class PlayerController {
 
     }
 
+    /*
+     * checks if player has a face-up card on the table
+     */
+    func doesPlayerHaveCardOnTableFaceUp() -> Bool {
+
+        if (self.getTable().count % 2 == 1) {
+
+            return true
+
+        }
+
+        return false
+
+    }
+
+    /*
+     * checks if player has a face-down card on the table
+     */
+    func doesPlayerHaveCardOnTableFaceDown() -> Bool {
+        
+        if (self.getTable().count % 2 == 0) {
+            
+            return true
+            
+        }
+        
+        return false
+        
+    }
+    
 }

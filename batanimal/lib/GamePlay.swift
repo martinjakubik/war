@@ -99,6 +99,24 @@ class GamePlay {
         case .waitingToFillTable:
 
             os_log("game state: %@", log:self.log, type:.debug, "waiting to fill table")
+            if (playerController.doesPlayerHaveCardOnTableFaceUp()) {
+
+                if (isEventLocal) {
+
+                    // wiggle card
+                    
+                }
+                
+            } else {
+
+                if (isEventLocal) {
+
+                    // puts card on table
+                    playerController.putCardOnTable()
+
+                }
+
+            }
             break
 
         case .waitingForFaceDownWarCard:
