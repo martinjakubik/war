@@ -44,6 +44,15 @@ class GamePlay {
     let cardHeight:CGFloat = 176
     let cardWidth:CGFloat = 116
 
+    enum GameState {
+        case waitingToGatherCards
+        case waitingToFillTable
+        case waitingForFaceDownWarCard
+        case gameOver
+    }
+
+    var gameState:GameState
+
     let log:OSLog
 
     init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String], log:OSLog) {
@@ -53,6 +62,7 @@ class GamePlay {
         self.numPlayers = numPlayers
         self.cards = cards
         self.playerNames = playerNames
+        self.gameState = GameState.waitingToFillTable
         self.log = log
 
     }
@@ -77,6 +87,49 @@ class GamePlay {
 
         return lastGameSlotKey
 
+    }
+
+    /*
+     * updates the game when player wants to play a card, based on current state
+     */
+    func playerWantsToPlayACard(playerController:PlayerController, isEventLocal:Bool) {
+
+        switch self.gameState {
+
+        case .waitingToFillTable:
+
+            os_log("game state: %@", log:self.log, type:.debug, "waiting to fill table")
+            break
+
+        case .waitingForFaceDownWarCard:
+
+            os_log("game state: %@", log:self.log, type:.debug, "waiting for face down war card")
+            break
+
+        case .waitingToGatherCards:
+
+            os_log("game state: %@", log:self.log, type:.debug, "waiting to gather cards")
+            if (isEventLocal) {
+
+                gatherCards()
+
+            }
+
+            break
+
+        default:
+
+            break
+
+        }
+
+    }
+
+    /*
+     *
+     */
+    func gatherCards() {
+        
     }
 
     /*
@@ -356,7 +409,10 @@ class GamePlay {
             self.playerControllers[playerNumber].setHand(hand: remotePlayer.hand)
 
             // sets table
-//            self.playerControllers[playerNumber].setTable(table: remotePlayer.table)
+            self.playerControllers[playerNumber].setTable(table: remotePlayer.table)
+
+            // indicates that a player wants to play a card so the game can update itself
+            self.playerWantsToPlayACard(playerController: self.playerControllers[playerNumber], isEventLocal: false)
 
         }
 

@@ -75,10 +75,22 @@ class PlayerController {
         return self.player.hand
 
     }
-    
+
     func setHand(hand:[Card]) {
 
         self.player.hand = hand
+
+    }
+
+    func getTable() -> [Card] {
+
+        return self.player.table
+
+    }
+
+    func setTable(table:[Card]) {
+    
+        self.player.table = table
 
     }
 
