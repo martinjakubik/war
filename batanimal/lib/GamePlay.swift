@@ -207,7 +207,7 @@ class GamePlay {
 
             }
 
-        } else if (playerControllers.count > 1
+        } else if (playerControllers.count > 1 // TODO: protect this array access using swift style
                 && playerControllers[0].getTable().count == 0
                 && playerControllers[1].getTable().count == 0) {
 
@@ -225,6 +225,7 @@ class GamePlay {
 
         var doAllPlayersHaveSameNumberOfCardsOnTable:Bool = false
 
+        // TODO: protect this array access using swift style
         if (playerControllers.count > 1) {
 
             let player0TableCount = playerControllers[0].getTable().count
