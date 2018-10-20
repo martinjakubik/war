@@ -94,64 +94,75 @@ class GamePlay {
     /*
      * updates the game when player wants to play a card, based on current state
      */
-    func playerWantsToPlayACard(playerController:PlayerController, isEventLocal:Bool) {
+    func handlePlayerWantsToPlayACard(playerController:PlayerController, isEventLocal:Bool) {
 
         // only handles local events
         if (isEventLocal) {
 
-            switch self.gameState {
-
-            case .waitingToFillTable:
-
-                os_log("game state: %@", log:self.log, type:.debug, "waiting to fill table")
-                // checks if the player already has a face-up card on the table
-
-                    if (playerController.doesPlayerHaveCardOnTableFaceUp()) {
-
-                        // wiggles card
-                        playerController.wiggleCardInHand()
-
-                    } else {
-
-                        // puts card on table
-                        playerController.putCardOnTable()
-
-                    }
-
-                break
-
-            case .waitingForFaceDownWarCard:
-
-                os_log("game state: %@", log:self.log, type:.debug, "waiting for face down war card")
-                // checks if player only has a face-up card on table
-                if (playerController.doesPlayerHaveCardOnTableFaceUp()) {
-
-                    playerController.putCardOnTable()
-
-                } else {
-
-                    playerController.wiggleCardInHand()
-
-                }
-                break
-
-            case .waitingToGatherCards:
-
-                os_log("game state: %@", log:self.log, type:.debug, "waiting to gather cards")
-                gatherCards()
-                self.numMoves = self.numMoves + 1
-
-                break
-
-            default:
-
-                break
-
-            }
+            handleLocalPlayerWantsToPlayACard(for: playerController)
 
         }
 
         updateGameState()
+
+    }
+
+    /*
+     * updates the game when local player wants to play a card, based on current state
+     */
+    func handleLocalPlayerWantsToPlayACard(for playerController:PlayerController) {
+
+        switch self.gameState {
+
+        case .waitingToFillTable:
+
+            os_log("game state: %@", log:self.log, type:.debug, "waiting to fill table")
+
+            // checks if the player already has a face-up card on the table
+            if (playerController.doesPlayerHaveCardOnTableFaceUp()) {
+
+                // wiggles card
+                playerController.wiggleCardInHand()
+
+            } else {
+
+                // puts card on table
+                playerController.putCardOnTable()
+
+            }
+
+            break
+
+        case .waitingForFaceDownWarCard:
+
+            os_log("game state: %@", log:self.log, type:.debug, "waiting for face down war card")
+
+            // checks if player only has a face-up card on table
+            if (playerController.doesPlayerHaveCardOnTableFaceUp()) {
+
+                playerController.putCardOnTable()
+
+            } else {
+
+                playerController.wiggleCardInHand()
+
+            }
+            break
+
+        case .waitingToGatherCards:
+
+            os_log("game state: %@", log:self.log, type:.debug, "waiting to gather cards")
+
+            gatherCards()
+            self.numMoves = self.numMoves + 1
+
+            break
+
+        default:
+
+            break
+
+        }
 
     }
 
@@ -449,7 +460,7 @@ class GamePlay {
             self.playerControllers[playerNumber].setTable(table: remotePlayer.table)
 
             // indicates that a player wants to play a card so the game can update itself
-            self.playerWantsToPlayACard(playerController: self.playerControllers[playerNumber], isEventLocal: false)
+            self.handlePlayerWantsToPlayACard(playerController: self.playerControllers[playerNumber], isEventLocal: false)
 
         }
 
