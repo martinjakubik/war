@@ -44,6 +44,8 @@ class GamePlay {
     let cardHeight:CGFloat = 176
     let cardWidth:CGFloat = 116
 
+    var numMoves = 0
+
     enum GameState {
         case waitingToGatherCards
         case waitingToFillTable
@@ -94,52 +96,62 @@ class GamePlay {
      */
     func playerWantsToPlayACard(playerController:PlayerController, isEventLocal:Bool) {
 
-        switch self.gameState {
+        // only handles local events
+        if (isEventLocal) {
 
-        case .waitingToFillTable:
+            switch self.gameState {
 
-            os_log("game state: %@", log:self.log, type:.debug, "waiting to fill table")
-            if (playerController.doesPlayerHaveCardOnTableFaceUp()) {
+            case .waitingToFillTable:
 
-                if (isEventLocal) {
+                os_log("game state: %@", log:self.log, type:.debug, "waiting to fill table")
+                // checks if the player already has a face-up card on the table
 
-                    // wiggle card
-                    
-                }
-                
-            } else {
+                    if (playerController.doesPlayerHaveCardOnTableFaceUp()) {
 
-                if (isEventLocal) {
+                        // wiggles card
+                        playerController.wiggleCardInHand()
 
-                    // puts card on table
+                    } else {
+
+                        // puts card on table
+                        playerController.putCardOnTable()
+
+                    }
+
+                break
+
+            case .waitingForFaceDownWarCard:
+
+                os_log("game state: %@", log:self.log, type:.debug, "waiting for face down war card")
+                // checks if player only has a face-up card on table
+                if (playerController.doesPlayerHaveCardOnTableFaceUp()) {
+
                     playerController.putCardOnTable()
 
+                } else {
+
+                    playerController.wiggleCardInHand()
+
                 }
+                break
 
-            }
-            break
+            case .waitingToGatherCards:
 
-        case .waitingForFaceDownWarCard:
-
-            os_log("game state: %@", log:self.log, type:.debug, "waiting for face down war card")
-            break
-
-        case .waitingToGatherCards:
-
-            os_log("game state: %@", log:self.log, type:.debug, "waiting to gather cards")
-            if (isEventLocal) {
-
+                os_log("game state: %@", log:self.log, type:.debug, "waiting to gather cards")
                 gatherCards()
+                self.numMoves = self.numMoves + 1
+
+                break
+
+            default:
+
+                break
 
             }
-
-            break
-
-        default:
-
-            break
 
         }
+
+        updateGameState()
 
     }
 
@@ -147,7 +159,14 @@ class GamePlay {
      *
      */
     func gatherCards() {
-        
+
+    }
+
+    /*
+     *
+     */
+    func updateGameState() {
+
     }
 
     /*
