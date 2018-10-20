@@ -107,7 +107,7 @@ class GameBox {
             log: self.log
         )
 
-        gamePlay.start(shuffleCards:true)
+        gamePlay.startGame(shuffleCards:true)
 
     }
 

@@ -663,7 +663,7 @@ class GamePlay {
     /*
      * starts the game
      */
-    func start (shuffleCards:Bool) {
+    func startGame (shuffleCards:Bool) {
 
         if shuffleCards {
 
