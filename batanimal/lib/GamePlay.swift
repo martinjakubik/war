@@ -178,6 +178,57 @@ class GamePlay {
      */
     func updateGameState() {
 
+        if (doAllPlayersHaveSameNumberOfCardsOnTable()) {
+
+            if (playerControllers[0].doesPlayerHaveCardOnTableFaceDown()) {
+
+                self.gameState = .waitingToFillTable
+
+            } else if (playerControllers[0].doesPlayerHaveCardOnTableFaceUp()
+                    && doPlayersHaveSameCardOnTable())
+            {
+
+            }
+
+        }
+
+    }
+
+    /*
+     *
+     */
+    func doAllPlayersHaveSameNumberOfCardsOnTable() -> Bool {
+
+        var doAllPlayersHaveSameNumberOfCardsOnTable:Bool = true
+
+        let player0TableCount = playerControllers[0].getTable().count
+        let player1TableCount = playerControllers[1].getTable().count
+
+        doAllPlayersHaveSameNumberOfCardsOnTable = (player0TableCount == player1TableCount)
+
+        return doAllPlayersHaveSameNumberOfCardsOnTable
+
+    }
+
+    /*
+     *
+     */
+    func doPlayersHaveSameCardOnTable() -> Bool {
+
+        var doPlayersHaveSameCardOnTable:Bool = false
+
+        if let player0Card = playerControllers[0].getTopCardOnTable() {
+
+            if let player1Card = playerControllers[1].getTopCardOnTable() {
+
+                doPlayersHaveSameCardOnTable = (player0Card.value == player1Card.value)
+
+            }
+
+        }
+
+        return doPlayersHaveSameCardOnTable
+
     }
 
     /*
