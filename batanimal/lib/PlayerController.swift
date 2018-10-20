@@ -284,5 +284,26 @@ class PlayerController {
         return false
         
     }
-    
+
+    /*
+     * wiggles a card
+     */
+    func wiggleCardInHand() {
+
+        if self.getHand().count > 0 {
+
+            let topCard = self.getHand()[0]
+            let cardNode = self.node.childNode(withName: topCard.getId())
+            if let existingCardNode:CardNode = cardNode as? CardNode {
+
+                let wigglePath:CGPath = Tools.makeWigglePath().cgPath
+                let wiggleAction = SKAction.follow(wigglePath, speed: 1.0)
+                existingCardNode.run(wiggleAction)
+
+            }
+
+        }
+
+    }
+
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class Tools {
     
@@ -47,4 +48,17 @@ class Tools {
 
     }
 
+    class func makeWigglePath () -> UIBezierPath {
+
+        let wigglePath:UIBezierPath = UIBezierPath()
+        
+        let p0 = CGPoint(x: -10.0, y: 0.0)
+        let p1 = CGPoint(x:  0.0,  y: 0.0)
+        let p2 = CGPoint(x:  10.0, y: 0.0)
+
+        wigglePath.move(to: p0)
+        wigglePath.addQuadCurve(to: p2, controlPoint: p1)
+
+        return wigglePath
+    }
 }
