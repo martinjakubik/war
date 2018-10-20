@@ -16,6 +16,12 @@
 		5B03126F203C976A00391F4A /* batanimalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B03126E203C976A00391F4A /* batanimalTests.swift */; };
 		5B03127A203C976A00391F4A /* batanimalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B031279203C976A00391F4A /* batanimalUITests.swift */; };
 		5B131A72209508DD00316B3D /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B131A71209508DD00316B3D /* Cards.swift */; };
+		5B359B2D217B9BF9004D9143 /* rabbit-crunch.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5B359B27217B9BF8004D9143 /* rabbit-crunch.wav */; };
+		5B359B2E217B9BF9004D9143 /* tiger-growl.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5B359B28217B9BF8004D9143 /* tiger-growl.wav */; };
+		5B359B2F217B9BF9004D9143 /* cat-meow.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5B359B29217B9BF9004D9143 /* cat-meow.wav */; };
+		5B359B30217B9BF9004D9143 /* dog-bark.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5B359B2A217B9BF9004D9143 /* dog-bark.wav */; };
+		5B359B31217B9BF9004D9143 /* elephant.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5B359B2B217B9BF9004D9143 /* elephant.wav */; };
+		5B359B32217B9BF9004D9143 /* hamster-wheel.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5B359B2C217B9BF9004D9143 /* hamster-wheel.wav */; };
 		5B38274A213AD6EF00A90164 /* card-border-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B382749213AD6EE00A90164 /* card-border-shadow.png */; };
 		5B382770213B055E00A90164 /* card-batanimo-3b-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38274B213B055700A90164 /* card-batanimo-3b-bo-sh.png */; };
 		5B382771213B055E00A90164 /* card-batanimo-4b-bo-sh.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B38274C213B055700A90164 /* card-batanimo-4b-bo-sh.png */; };
@@ -143,6 +149,12 @@
 		5B031279203C976A00391F4A /* batanimalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = batanimalUITests.swift; sourceTree = "<group>"; };
 		5B03127B203C976A00391F4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B131A71209508DD00316B3D /* Cards.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
+		5B359B27217B9BF8004D9143 /* rabbit-crunch.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "rabbit-crunch.wav"; path = "resources/rabbit-crunch.wav"; sourceTree = "<group>"; };
+		5B359B28217B9BF8004D9143 /* tiger-growl.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "tiger-growl.wav"; path = "resources/tiger-growl.wav"; sourceTree = "<group>"; };
+		5B359B29217B9BF9004D9143 /* cat-meow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "cat-meow.wav"; path = "resources/cat-meow.wav"; sourceTree = "<group>"; };
+		5B359B2A217B9BF9004D9143 /* dog-bark.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "dog-bark.wav"; path = "resources/dog-bark.wav"; sourceTree = "<group>"; };
+		5B359B2B217B9BF9004D9143 /* elephant.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = elephant.wav; path = resources/elephant.wav; sourceTree = "<group>"; };
+		5B359B2C217B9BF9004D9143 /* hamster-wheel.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "hamster-wheel.wav"; path = "resources/hamster-wheel.wav"; sourceTree = "<group>"; };
 		5B382749213AD6EE00A90164 /* card-border-shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-border-shadow.png"; path = "resources/card-border-shadow.png"; sourceTree = "<group>"; };
 		5B38274B213B055700A90164 /* card-batanimo-3b-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-3b-bo-sh.png"; path = "resources/card-batanimo-3b-bo-sh.png"; sourceTree = "<group>"; };
 		5B38274C213B055700A90164 /* card-batanimo-4b-bo-sh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-4b-bo-sh.png"; path = "resources/card-batanimo-4b-bo-sh.png"; sourceTree = "<group>"; };
@@ -340,6 +352,12 @@
 		5B98E38D203DCA1100BE085B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5B359B29217B9BF9004D9143 /* cat-meow.wav */,
+				5B359B2A217B9BF9004D9143 /* dog-bark.wav */,
+				5B359B2B217B9BF9004D9143 /* elephant.wav */,
+				5B359B2C217B9BF9004D9143 /* hamster-wheel.wav */,
+				5B359B27217B9BF8004D9143 /* rabbit-crunch.wav */,
+				5B359B28217B9BF8004D9143 /* tiger-growl.wav */,
 				5B382769213B055D00A90164 /* card-batanimo-1a-bo-sh.png */,
 				5B38274D213B055800A90164 /* card-batanimo-1b-bo-sh.png */,
 				5B38276A213B055D00A90164 /* card-batanimo-1c-bo-sh.png */,
@@ -578,6 +596,8 @@
 				5B031264203C976A00391F4A /* LaunchScreen.storyboard in Resources */,
 				5B4BA806203F41EF00F60CD8 /* card-batanimo-6e.png in Resources */,
 				5B4BA7FB203F41EF00F60CD8 /* card-batanimo-4f.png in Resources */,
+				5B359B2D217B9BF9004D9143 /* rabbit-crunch.wav in Resources */,
+				5B359B32217B9BF9004D9143 /* hamster-wheel.wav in Resources */,
 				5B38277D213B055E00A90164 /* card-batanimo-2e-bo-sh.png in Resources */,
 				5B382791213B055E00A90164 /* card-batanimo-6f-bo-sh.png in Resources */,
 				5B382778213B055E00A90164 /* card-batanimo-2d-bo-sh.png in Resources */,
@@ -585,6 +605,7 @@
 				5B4BA7EB203F41EF00F60CD8 /* card-batanimo-2b.png in Resources */,
 				5B38278D213B055E00A90164 /* card-batanimo-6b-bo-sh.png in Resources */,
 				5B382788213B055E00A90164 /* card-batanimo-6e-bo-sh.png in Resources */,
+				5B359B2E217B9BF9004D9143 /* tiger-growl.wav in Resources */,
 				5B382782213B055E00A90164 /* card-batanimo-2c-bo-sh.png in Resources */,
 				5B4BA7F5203F41EF00F60CD8 /* card-batanimo-3f.png in Resources */,
 				5B382772213B055E00A90164 /* card-batanimo-1b-bo-sh.png in Resources */,
@@ -618,6 +639,7 @@
 				5B4BA7E8203F41EF00F60CD8 /* card-batanimo-1e.png in Resources */,
 				5B38277C213B055E00A90164 /* card-batanimo-5a-bo-sh.png in Resources */,
 				5B4BA801203F41EF00F60CD8 /* card-batanimo-5f.png in Resources */,
+				5B359B2F217B9BF9004D9143 /* cat-meow.wav in Resources */,
 				5B382789213B055E00A90164 /* card-batanimo-5d-bo-sh.png in Resources */,
 				5B4BA804203F41EF00F60CD8 /* card-batanimo-6c.png in Resources */,
 				5B382771213B055E00A90164 /* card-batanimo-4b-bo-sh.png in Resources */,
@@ -646,12 +668,14 @@
 				5B03125F203C976A00391F4A /* Main.storyboard in Resources */,
 				5B4BA7FF203F41EF00F60CD8 /* card-batanimo-5d.png in Resources */,
 				5B38278F213B055E00A90164 /* card-batanimo-1c-bo-sh.png in Resources */,
+				5B359B30217B9BF9004D9143 /* dog-bark.wav in Resources */,
 				5B382792213B055E00A90164 /* card-batanimo-1e-bo-sh.png in Resources */,
 				5B4BA802203F41EF00F60CD8 /* card-batanimo-6a.png in Resources */,
 				5B4BA7FC203F41EF00F60CD8 /* card-batanimo-5a.png in Resources */,
 				5B4BA7FD203F41EF00F60CD8 /* card-batanimo-5b.png in Resources */,
 				5B4BA7F1203F41EF00F60CD8 /* card-batanimo-3b.png in Resources */,
 				5B4BA7E9203F41EF00F60CD8 /* card-batanimo-1f.png in Resources */,
+				5B359B31217B9BF9004D9143 /* elephant.wav in Resources */,
 				5B4BA7FE203F41EF00F60CD8 /* card-batanimo-5c.png in Resources */,
 				5B382775213B055E00A90164 /* card-batanimo-4d-bo-sh.png in Resources */,
 				5B4BA7FA203F41EF00F60CD8 /* card-batanimo-4e.png in Resources */,

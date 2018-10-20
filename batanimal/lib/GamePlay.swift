@@ -563,6 +563,8 @@ class GamePlay {
      */
     func playWarSound () {
 
+        SKAction.playSoundFileNamed("tiger-growl.wav", waitForCompletion: false)
+
     }
 
     /*
