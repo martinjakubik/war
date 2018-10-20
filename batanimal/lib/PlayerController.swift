@@ -110,6 +110,36 @@ class PlayerController {
     }
 
     /*
+     * gets the top card in the hand
+     */
+    func getTopCardInHand() -> Card? {
+
+        var topCard:Card?
+        if self.getHand().count > 0 {
+
+            topCard = self.getHand()[0]
+
+        }
+        return topCard
+
+    }
+
+    /*
+     * gets the top card on the table
+     */
+    func getTopCardOnTable() -> Card? {
+
+        var topCard:Card?
+        if self.getTable().count > 0 {
+
+            topCard = self.getTable()[0]
+
+        }
+        return topCard
+
+    }
+
+    /*
      * renders the cards in the player's hand
      */
     func renderHand() {
@@ -176,9 +206,8 @@ class PlayerController {
         os_log("card tapped, with Id: \"%@\"", log:self.log, type:.debug, cardId)
 
         // gets the top card in the hand
-        if self.getHand().count > 0 {
+        if let topCard = getTopCardInHand() {
 
-            let topCard = self.getHand()[0]
             let topCardId = topCard.getId()
 
             // checks that the tapped card is the top card
@@ -197,9 +226,8 @@ class PlayerController {
      */
     func putCardOnTable() {
 
-        if self.getHand().count > 0 {
+        if let topCard = getTopCardInHand() {
 
-            let topCard = self.getHand()[0]
             moveCardToTable(card: topCard)
 
         }
@@ -211,12 +239,8 @@ class PlayerController {
      */
     func moveCardToTable(card:Card) {
 
-        if (self.getHand().count > 0) {
-
-            moveCardToTableInModel(card: card)
-            moveCardToTableInView(card: card)
-
-        }
+        moveCardToTableInModel(card: card)
+        moveCardToTableInView(card: card)
 
     }
 
@@ -225,7 +249,6 @@ class PlayerController {
      */
     func moveCardToTableInModel(card:Card) {
 
-        // moves the card in the model
         self.addCardToTable(card: card)
         self.removeCardFromHand(card: card)
         
@@ -243,7 +266,6 @@ class PlayerController {
      */
     func moveCardToTableInView(card:Card) {
 
-        // moves the card in the view
         let cardNode = self.node.childNode(withName: card.getId())
 
         if let existingCardNode:CardNode = cardNode as? CardNode {
@@ -252,6 +274,21 @@ class PlayerController {
             existingCardNode.run(moveAction)
 
         }
+
+    }
+
+    /*
+     * checks if player has a face-up card on the table
+     */
+    func doesPlayerHaveCardOnTable() -> Bool {
+
+        if (self.getTable().count > 0) {
+
+            return true
+
+        }
+
+        return false
 
     }
 
