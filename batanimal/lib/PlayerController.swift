@@ -35,10 +35,13 @@ class PlayerController {
     // a player view
     var node:SKNode
 
+    // the function called when a card is tapped
+    var handleCardTapped:(PlayerController, Bool) -> Void
+
     /*
      * initializes a Player controller from a player model, a remote database reference and a sprite node
      */
-    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, log:OSLog) {
+    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, handleCardTapped:@escaping (PlayerController, Bool) -> Void, log:OSLog) {
 
         self.player = player
         self.reference = reference
@@ -55,6 +58,8 @@ class PlayerController {
         self.cardWidth = cardWidth
 
         self.log = log
+
+        self.handleCardTapped = handleCardTapped
 
     }
     
@@ -205,19 +210,8 @@ class PlayerController {
 
         os_log("card tapped, with Id: \"%@\"", log:self.log, type:.debug, cardId)
 
-        // gets the top card in the hand
-        if let topCard = getTopCardInHand() {
-
-            let topCardId = topCard.getId()
-
-            // checks that the tapped card is the top card
-            if (topCardId == cardId) {
-
-                moveCardToTable(card: topCard)
-
-            }
-
-        }
+        let isEventLocal = true
+        self.handleCardTapped(self, isEventLocal)
 
     }
 
