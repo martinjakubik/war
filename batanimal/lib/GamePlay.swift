@@ -222,12 +222,16 @@ class GamePlay {
      */
     func doAllPlayersHaveSameNumberOfCardsOnTable() -> Bool {
 
-        var doAllPlayersHaveSameNumberOfCardsOnTable:Bool = true
+        var doAllPlayersHaveSameNumberOfCardsOnTable:Bool = false
 
-        let player0TableCount = playerControllers[0].getTable().count
-        let player1TableCount = playerControllers[1].getTable().count
+        if (playerControllers.count > 1) {
 
-        doAllPlayersHaveSameNumberOfCardsOnTable = (player0TableCount == player1TableCount)
+            let player0TableCount = playerControllers[0].getTable().count
+            let player1TableCount = playerControllers[1].getTable().count
+
+            doAllPlayersHaveSameNumberOfCardsOnTable = (player0TableCount == player1TableCount)
+
+        }
 
         return doAllPlayersHaveSameNumberOfCardsOnTable
 
