@@ -174,22 +174,45 @@ class GamePlay {
     }
 
     /*
-     *
+     * Checks table to see if it's a war, or if it's time to gather cards.
      */
     func updateGameState() {
 
+        // checks if the players have the same number of cards on the table
         if (doAllPlayersHaveSameNumberOfCardsOnTable()) {
 
             if (playerControllers[0].doesPlayerHaveCardOnTableFaceDown()) {
 
+                // assumes both players need to play another card
                 self.gameState = .waitingToFillTable
 
             } else if (playerControllers[0].doesPlayerHaveCardOnTableFaceUp()
-                    && doPlayersHaveSameCardOnTable())
-            {
+                    && doPlayersHaveSameCardOnTable()) {
+
+                // assumes both players have the same face-up card (starts war)
+                playWarSound()
+                self.gameState = .waitingForFaceDownWarCard
+
+            } else {
+
+                // assumes one player has a winning card
+                self.gameState = .waitingToGatherCards
+
+                // checks if the game is finished
+                if (isGameFinished()) {
+
+                    endGame()
+
+                }
 
             }
 
+        } else if (playerControllers[0].getTable().count == 0
+                && playerControllers[1].getTable().count == 0) {
+
+            // assumes the players have no cards on the table
+            self.gameState = .waitingToFillTable
+            
         }
 
     }
@@ -228,6 +251,24 @@ class GamePlay {
         }
 
         return doPlayersHaveSameCardOnTable
+
+    }
+
+    /*
+     *
+     */
+    func isGameFinished() -> Bool {
+
+        var isGameFinished:Bool = false
+
+        return isGameFinished
+
+    }
+
+    /*
+     * ends the game
+     */
+    func endGame() {
 
     }
 
@@ -514,6 +555,13 @@ class GamePlay {
             self.handlePlayerWantsToPlayACard(playerController: self.playerControllers[playerNumber], isEventLocal: false)
 
         }
+
+    }
+
+    /*
+     * plays a war sound
+     */
+    func playWarSound () {
 
     }
 
