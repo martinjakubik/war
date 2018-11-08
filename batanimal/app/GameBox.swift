@@ -17,21 +17,35 @@ class GameBox {
 
     let log:OSLog
 
+    /*
+     * returns a random player name
+     */
+    class func getRandomPlayerName (notThis:String) -> String {
+
+        let names = [ "Albatross", "Badger", "Chicken", "Dolphin", "Eagle",
+                      "Ferret", "Gorilla", "Hedgehog", "Iguana", "Jackal",
+                      "Koala", "Lemming", "Magpie", "Newt", "Otter", "Pig",
+                      "Quail", "Rabbit", "Sole", "Turtle", "Upupa",
+                      "Vulture", "Whale", "Xantus", "Yak", "Zebra" ]
+
+        let size = names.count
+
+        var tryThis:String = notThis
+        while (tryThis == notThis) {
+            let n = Int.random(in: 0..<size)
+            tryThis = names[ n ]
+        }
+
+        return tryThis
+
+    }
+
     init(view:SKView) {
 
         self.view = view
         self.scene = SKScene(size: self.view.frame.size)
 
         self.log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "game")
-
-    }
-
-    /*
-     *
-     */
-    func getRandomPlayerName () -> String {
-
-        return "Fox"
 
     }
 

@@ -15,15 +15,22 @@ class batanimalTests: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testGetRandomPlayerName() {
+
+        let expected:Bool = false
+
+        for _ in 1...50 {
+            let randomPlayerName = GameBox.getRandomPlayerName(notThis: "Albatross")
+            let actual = (randomPlayerName == "Albatross")
+            XCTAssert((expected == actual), "random player name returned unwanted name")
+        }
+
     }
     
     func testPerformanceExample() {
