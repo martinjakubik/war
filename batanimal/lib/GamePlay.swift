@@ -20,7 +20,6 @@ class GamePlay {
     var slotIncrement:Int = 0
     var slotKey:String = ""
     var gameSlot:GameSlot?
-    var playerNames:[String] = []
     var playerReferences:[DatabaseReference] = []
     var playerControllers:[PlayerController] = []
     var restOfCards:[Card] = []
@@ -57,13 +56,12 @@ class GamePlay {
 
     let log:OSLog
 
-    init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], playerNames:[String], log:OSLog) {
+    init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], log:OSLog) {
 
         self.topView = topView
         self.scene = scene
         self.numPlayers = numPlayers
         self.cards = cards
-        self.playerNames = playerNames
         self.gameState = GameState.waitingToFillTable
         self.log = log
 

@@ -110,14 +110,11 @@ class GameBox {
 
         let cards:[Card] = makeCards(cardValues: batanimalCardValues, addSkunk: true)
 
-        let playerNames = [ "cat", "dog", "cow", "pig", "horse", "skunk", "ferret", "duck", "jackal" ]
-
         let gamePlay = WarGamePlay(
             topView:self.view,
             scene:self.scene,
             numPlayers:2,
             cards:cards,
-            playerNames:playerNames,
             log: self.log
         )
 
