@@ -29,10 +29,14 @@ class GamePlay {
 
     var topView:SKView
     var scene:SKScene
+    var statusText:String
+    var statusNode:SKLabelNode
     
-    let gameTop:CGFloat = 60
+    let statusTop:CGFloat = 100
+    let statusWidth:CGFloat = 80
+    let gameTop:CGFloat = 160
     let gameLeft:CGFloat = 20
-    let playerHeight:CGFloat = 180
+    let playerHeight:CGFloat = 160
     
     let tableWidth:CGFloat = 120
     let handSpace:CGFloat = 20
@@ -63,6 +67,8 @@ class GamePlay {
         self.numPlayers = numPlayers
         self.cards = cards
         self.gameState = GameState.waitingToFillTable
+        self.statusText = ""
+        self.statusNode = SKLabelNode(fontNamed: "Monaco")
         self.log = log
 
     }
@@ -172,6 +178,7 @@ class GamePlay {
     }
 
     /*
+
      * Checks table to see if it's a war, or if it's time to gather cards.
      */
     func updateGameState() {
@@ -273,6 +280,9 @@ class GamePlay {
      * ends the game
      */
     func endGame() {
+
+        self.statusText = "someone won"
+        renderStatus()
 
     }
 
@@ -432,6 +442,9 @@ class GamePlay {
         // renders cards of all players (TODO: overkill; we only need player 0)
         renderCards()
 
+        self.statusText = "waiting for player 2"
+        renderStatus()
+
     }
 
     /*
@@ -482,6 +495,9 @@ class GamePlay {
 
         // renders cards of all players (TODO: overkill; we only need player 1)
         renderCards()
+
+        self.statusText = "game on"
+        renderStatus()
 
     }
 
@@ -585,6 +601,17 @@ class GamePlay {
     }
 
     /*
+     * renders the status
+     */
+    func renderStatus () {
+
+        self.statusNode.fontSize = 28
+        self.statusNode.color = UIColor(red: 0.1, green: 0.8, blue: 0.1, alpha: 0.8)
+        self.statusNode.text = self.statusText
+
+    }
+
+    /*
      * distributes cards from the given array into the given number of mutliple arrays
      */
     func distribute (cards:[Card], numPlayersAmongWhichToDistribute:Int) -> [[Card]] {
@@ -660,6 +687,14 @@ class GamePlay {
             y: self.scene.size.height / 2
         )
         self.scene.addChild(backgroundNode)
+
+        // makes a status box
+        self.statusNode.position = CGPoint(
+            x: self.scene.size.width / 2,
+            y: self.statusTop
+        )
+
+        self.scene.addChild(self.statusNode)
         
         // shows the scene
         self.topView.presentScene(self.scene)
