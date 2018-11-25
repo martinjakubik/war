@@ -605,8 +605,6 @@ class GamePlay {
      */
     func renderStatus () {
 
-        self.statusNode.fontSize = 28
-        self.statusNode.color = UIColor(red: 0.1, green: 0.8, blue: 0.1, alpha: 0.8)
         self.statusNode.text = self.statusText
 
     }
