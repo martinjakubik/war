@@ -137,7 +137,7 @@ class PlayerController {
         var topCard:Card?
         if self.getTable().count > 0 {
 
-            topCard = self.getTable()[0]
+            topCard = self.getTable()[self.getTable().count - 1]
 
         }
         return topCard

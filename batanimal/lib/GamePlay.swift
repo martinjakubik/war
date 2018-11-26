@@ -13,6 +13,8 @@ import os.log
 
 class GamePlay {
 
+    var gamePlayDelegate:GamePlayProtocol!
+
     var numPlayers:Int = 0
     let maxNumPlayers:Int = 2
     var cards:[Card] = []
@@ -415,7 +417,7 @@ class GamePlay {
         let isPlayer0Local = true
 
         // makes player 0 view and controller
-        makePlayerViewAndController(initializedPlayer: nil, playerNumber: 0, playerSessionId: player0SessionId, isPlayerLocal: isPlayer0Local, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
+        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 0, playerSessionId: player0SessionId, isPlayerLocal: isPlayer0Local, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
 
         // distributes cards to player 0
         distributeCardsToAvailablePlayers()
@@ -462,11 +464,11 @@ class GamePlay {
             let isPlayer0Local = GameSession.isLocal(player: player0)
 
             // makes player 0 view and controller
-            makePlayerViewAndController(initializedPlayer: player0, playerNumber: -1, playerSessionId: "", isPlayerLocal: isPlayer0Local, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
+            gamePlayDelegate.makePlayerViewAndController(initializedPlayer: player0, playerNumber: -1, playerSessionId: "", isPlayerLocal: isPlayer0Local, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
 
             // makes player 1 view and controller
             // TODO: what if we have a remote player1 model already here?
-            makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerSessionId: player1SessionId, isPlayerLocal: isPlayer1Local, playerTop: self.gameTop, playerName: "Turkey")
+            gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerSessionId: player1SessionId, isPlayerLocal: isPlayer1Local, playerTop: self.gameTop, playerName: "Turkey")
 
             if let restOfCards = self.gameSlot?.restOfCards {
 
@@ -498,38 +500,6 @@ class GamePlay {
 
         self.statusText = "game on"
         renderStatus()
-
-    }
-
-    /*
-     * makes a view and a controller for the player;
-     * if a player model is given, uses that model to make the view and controller;
-     * if no player model is given, creates it first using the player number and session ID
-     */
-    func makePlayerViewAndController(initializedPlayer:Player?, playerNumber:Int, playerSessionId:String, isPlayerLocal:Bool, playerTop:CGFloat, playerName:String) {
-
-        // makes player view
-        let playerNode = SKNode()
-        playerNode.position = CGPoint(x: self.gameLeft, y: playerTop)
-        self.scene.addChild(playerNode)
-
-        if let player = initializedPlayer {
-
-            // makes player controller
-            let initializedPlayerNumber = player.number
-            let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
-            self.playerControllers.append(playerController)
-            self.playerControllers[0].setName(name: playerName)
-
-        } else {
-
-            // makes player model first, then makes player controller
-            let player = Player(withNumber:playerNumber, sessionId:playerSessionId)
-            let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
-            self.playerControllers.append(playerController)
-            self.playerControllers[0].setName(name: playerName)
-
-        }
 
     }
 
