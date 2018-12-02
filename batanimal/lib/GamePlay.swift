@@ -501,6 +501,8 @@ class GamePlay {
         self.statusText = "game on"
         renderStatus()
 
+        hideDontWaitButton()
+
     }
 
     /*
@@ -545,6 +547,13 @@ class GamePlay {
             self.handlePlayerWantsToPlayACard(playerController: self.playerControllers[playerNumber], isEventLocal: false)
 
         }
+
+    }
+
+    /*
+     * hides the Dont Wait button
+     */
+    func hideDontWaitButton () {
 
     }
 
