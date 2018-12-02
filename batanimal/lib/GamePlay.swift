@@ -206,7 +206,7 @@ class GamePlay {
                 self.gameState = .waitingToGatherCards
 
                 // checks if the game is finished
-                if (isGameFinished()) {
+                if (isGameOver()) {
 
                     endGame()
 
@@ -268,13 +268,42 @@ class GamePlay {
     }
 
     /*
-     *
+     * checks if a player won the game
      */
-    func isGameFinished() -> Bool {
+    func isGameOver() -> Bool {
 
-        var isGameFinished:Bool = false
+        var isGameOver:Bool = false
+        var winningPlayerNumber:Int
 
-        return isGameFinished
+        if (self.playerControllers.count < 2) {
+            return isGameOver
+        }
+
+        if (self.playerControllers[0].doesPlayerHaveCardOnTable() && self.playerControllers[1].doesPlayerHaveCardOnTable()) {
+
+            winningPlayerNumber = self.gamePlayDelegate.whoseCardWins()
+
+            // checks if the other player's hand is empty
+            for i in 0 ... self.playerControllers.count - 1 {
+
+                if (i != winningPlayerNumber) {
+
+                    if (self.playerControllers[i].getHand().count == 0) {
+
+                        isGameOver = true
+                        self.gameState = GameState.gameOver
+                        self.statusText = self.playerControllers[winningPlayerNumber].getName() + " wins"
+                        self.renderStatus()
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return isGameOver
 
     }
 
