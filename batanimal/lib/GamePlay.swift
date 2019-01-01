@@ -231,13 +231,12 @@ class GamePlay {
     }
 
     /*
-     *
+     * if there is more than one player, returns true if all have same number of cards on the table; otherwise false
      */
     func doAllPlayersHaveSameNumberOfCardsOnTable() -> Bool {
 
         var doAllPlayersHaveSameNumberOfCardsOnTable:Bool = false
 
-        // TODO: protect this array access using swift style
         if (playerControllers.count > 1) {
 
             let player0TableCount = playerControllers[0].getTable().count
@@ -252,7 +251,7 @@ class GamePlay {
     }
 
     /*
-     *
+     * returns true if players 0 and 1 have the same value of card on the table
      */
     func doPlayersHaveSameCardOnTable() -> Bool {
 
