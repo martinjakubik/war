@@ -56,5 +56,18 @@ class Player {
         }
 
     }
-    
+
+    /*
+     * removes the given card from the table
+     */
+    func removeCardFromTable(card: Card) {
+        
+        if let index = self.table.index(where: {
+            $0.getId() == card.getId()
+        }) {
+            self.table.remove(at: index)
+        }
+
+    }
+
 }

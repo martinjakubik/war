@@ -178,14 +178,63 @@ class GamePlay {
     }
 
     /*
-     *
+     * Moves the table cards to the hand of the player that won the turn.
+     * Or waits for more cards on the table in case of a tie.
      */
     func gatherCards() {
+
+        var winningPlayerNumber:Int = -1
+
+        // decides what to do if all players have played
+        if (doAllPlayersHaveSameNumberOfCardsOnTable() && self.gameState == .waitingToGatherCards) {
+
+            winningPlayerNumber = self.gamePlayDelegate.whoseCardWins()
+
+            // checks if player 0 won the hand
+            if (winningPlayerNumber == 0) {
+
+                // every five moves, randomly switches order of the gathered cards
+                if (numMoves % 5 == 0 && Int.random(in: 0..<10) < 5) {
+
+                    // moves everyone's cards to the winner's hand, player 1 first
+                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[1])
+                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[0])
+
+                } else {
+
+                    // moves everyone's cards to the winner's hand, player 0 first
+                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[0])
+                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[1])
+
+                }
+
+            } else if (winningPlayerNumber == 1) {
+
+                // player 1 won the hand
+
+                if (numMoves % 5 == 0 && Int.random(in: 0..<10) < 5) {
+
+                    // moves everyone's cards to the winner's hand, player 0 first
+                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[0])
+                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[1])
+
+                } else {
+
+                    // moves everyone's cards to the winner's hand, player 1 first
+                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[1])
+                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[0])
+
+                }
+
+            }
+
+            self.gameState = .waitingToFillTable
+
+        }
 
     }
 
     /*
-
      * Checks table to see if it's a war, or if it's time to gather cards.
      */
     func updateGameState() {
