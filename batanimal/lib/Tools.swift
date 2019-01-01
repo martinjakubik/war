@@ -24,7 +24,7 @@ class Tools {
         
         while (copyThings.count > 0) {
             
-            n = Int(arc4random_uniform(UInt32(copyThings.count)))
+            n = Int.random(in: 0..<copyThings.count)
             shuffledThings.append(copyThings.remove(at: n))
             
         }
@@ -37,9 +37,9 @@ class Tools {
      */
     class func generateId () -> String {
 
-        func s4 () -> UInt32 {
+        func s4 () -> Int {
 
-            let n = arc4random_uniform(9999)
+            let n = Int.random(in: 0..<10000)
             return n
 
         }
