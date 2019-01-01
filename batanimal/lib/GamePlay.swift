@@ -61,6 +61,7 @@ class GamePlay {
     var gameState:GameState
 
     let wigglePath:CGPath = Tools.makeWigglePath()
+    let wiggleAction:SKAction
 
     let log:OSLog
 
@@ -73,6 +74,8 @@ class GamePlay {
         self.gameState = GameState.waitingToFillTable
         self.statusText = ""
         self.statusNode = SKLabelNode(fontNamed: "Monaco")
+        self.wiggleAction = SKAction.follow(wigglePath, asOffset: true, orientToPath: false, speed: 600)
+
         self.log = log
 
     }
@@ -280,8 +283,6 @@ class GamePlay {
             let cardNode = playerController.node.childNode(withName: topCard.getId())
             if let existingCardNode:CardNode = cardNode as? CardNode {
 
-                let wigglePath:CGPath = self.wigglePath
-                let wiggleAction = SKAction.follow(wigglePath, asOffset: true, orientToPath: false, speed: 600)
                 existingCardNode.run(wiggleAction)
 
             }
