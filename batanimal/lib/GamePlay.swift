@@ -60,6 +60,8 @@ class GamePlay {
 
     var gameState:GameState
 
+    let wigglePath:CGPath = Tools.makeWigglePath()
+
     let log:OSLog
 
     init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], log:OSLog) {
@@ -128,7 +130,7 @@ class GamePlay {
             if (playerController.doesPlayerHaveCardOnTableFaceUp()) {
 
                 // wiggles card
-                playerController.wiggleCardInHand()
+                wiggleCardInHand(for: playerController)
 
             } else {
 
@@ -150,7 +152,7 @@ class GamePlay {
 
             } else {
 
-                playerController.wiggleCardInHand()
+                wiggleCardInHand(for: playerController)
 
             }
             break
@@ -264,6 +266,27 @@ class GamePlay {
         }
 
         return doPlayersHaveSameCardOnTable
+
+    }
+
+    /*
+     * wiggles a card
+     */
+    func wiggleCardInHand(for playerController:PlayerController) {
+
+        if playerController.getHand().count > 0 {
+
+            let topCard = playerController.getHand()[0]
+            let cardNode = playerController.node.childNode(withName: topCard.getId())
+            if let existingCardNode:CardNode = cardNode as? CardNode {
+
+                let wigglePath:CGPath = self.wigglePath
+                let wiggleAction = SKAction.follow(wigglePath, asOffset: true, orientToPath: false, speed: 600)
+                existingCardNode.run(wiggleAction)
+
+            }
+
+        }
 
     }
 
