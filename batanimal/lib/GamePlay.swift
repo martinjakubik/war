@@ -615,7 +615,45 @@ class GamePlay {
      */
     func playWarSound () {
 
-        SKAction.playSoundFileNamed("tiger-growl.wav", waitForCompletion: false)
+        var soundFileName = "tiger-growl.wav"
+
+        if let card:Card = playerControllers[0].getTopCardOnTable() {
+
+            switch card.value {
+
+            case 1:
+
+                soundFileName = "hamster-wheel.wav"
+
+            case 2:
+
+                soundFileName = "rabbit-crunch.wav"
+
+            case 3:
+
+                soundFileName = "cat-meow.wav"
+
+            case 4:
+
+                soundFileName = "dog-bark.wav"
+
+            case 5:
+
+                soundFileName = "tiger-growl.wav"
+
+            case 6:
+
+                soundFileName = "elephant.wav"
+
+            default:
+
+                soundFileName = "tiger-growl.wav"
+
+            }
+
+            SKAction.playSoundFileNamed(soundFileName, waitForCompletion: false)
+
+        }
 
     }
 
