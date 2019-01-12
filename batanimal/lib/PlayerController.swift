@@ -68,7 +68,7 @@ class PlayerController {
         return self.player.name
 
     }
-    
+
     func setName(name:String) {
 
         self.player.name = name
