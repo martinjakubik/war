@@ -811,10 +811,10 @@ class GamePlay {
         )
 
         self.scene.addChild(self.statusNode)
-        
+
         // shows the scene
         self.topView.presentScene(self.scene)
-        
+
     }
 
     /*
