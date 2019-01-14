@@ -33,7 +33,10 @@ class GamePlay {
     var scene:SKScene
     var statusText:String
     var statusNode:SKLabelNode
-    
+    var dontWaitButton:Button
+
+    let dontWaitButtonTop:CGFloat = 60
+    let dontWaitButtonWidth:CGFloat = 80
     let statusTop:CGFloat = 100
     let statusWidth:CGFloat = 80
     let gameTop:CGFloat = 160
@@ -74,6 +77,8 @@ class GamePlay {
         self.gameState = GameState.waitingToFillTable
         self.statusText = ""
         self.statusNode = SKLabelNode(fontNamed: "Monaco")
+        func nilFunction () -> Void {}
+        self.dontWaitButton = Button(withText: "Dont Wait", onPress:nilFunction)
         self.wiggleAction = SKAction.follow(wigglePath, asOffset: true, orientToPath: false, speed: 600)
 
         self.log = log
@@ -656,6 +661,9 @@ class GamePlay {
      */
     func hideDontWaitButton () {
 
+        os_log("removing dont wait button")
+        self.scene.removeChildren(in: [self.dontWaitButton])
+
     }
 
     /*
@@ -809,8 +817,17 @@ class GamePlay {
             x: self.scene.size.width / 2,
             y: self.statusTop
         )
-
+        
         self.scene.addChild(self.statusNode)
+        
+        // makes a dont wait button
+        self.dontWaitButton = Button(withText: "Dont Wait", onPress: self.hideDontWaitButton)
+        self.dontWaitButton.position = CGPoint(
+            x: self.scene.size.width / 2,
+            y: self.dontWaitButtonTop
+        )
+
+        self.scene.addChild(self.dontWaitButton)
 
         // shows the scene
         self.topView.presentScene(self.scene)
