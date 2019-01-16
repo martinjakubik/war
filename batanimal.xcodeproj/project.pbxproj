@@ -16,7 +16,7 @@
 		5B03126F203C976A00391F4A /* batanimalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B03126E203C976A00391F4A /* batanimalTests.swift */; };
 		5B03127A203C976A00391F4A /* batanimalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B031279203C976A00391F4A /* batanimalUITests.swift */; };
 		5B131A72209508DD00316B3D /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B131A71209508DD00316B3D /* Cards.swift */; };
-		5B1AC92A21EB973700B5FEB2 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1AC92921EB973700B5FEB2 /* Button.swift */; };
+		5B1AC92A21EB973700B5FEB2 /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1AC92921EB973700B5FEB2 /* ButtonNode.swift */; };
 		5B1AC92C21ED302500B5FEB2 /* button.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B1AC92B21ED302500B5FEB2 /* button.png */; };
 		5B359B2D217B9BF9004D9143 /* rabbit-crunch.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5B359B27217B9BF8004D9143 /* rabbit-crunch.wav */; };
 		5B359B2E217B9BF9004D9143 /* tiger-growl.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5B359B28217B9BF8004D9143 /* tiger-growl.wav */; };
@@ -152,7 +152,7 @@
 		5B031279203C976A00391F4A /* batanimalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = batanimalUITests.swift; sourceTree = "<group>"; };
 		5B03127B203C976A00391F4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B131A71209508DD00316B3D /* Cards.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
-		5B1AC92921EB973700B5FEB2 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		5B1AC92921EB973700B5FEB2 /* ButtonNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
 		5B1AC92B21ED302500B5FEB2 /* button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button.png; path = resources/button.png; sourceTree = "<group>"; };
 		5B359B27217B9BF8004D9143 /* rabbit-crunch.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "rabbit-crunch.wav"; path = "resources/rabbit-crunch.wav"; sourceTree = "<group>"; };
 		5B359B28217B9BF8004D9143 /* tiger-growl.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "tiger-growl.wav"; path = "resources/tiger-growl.wav"; sourceTree = "<group>"; };
@@ -461,7 +461,7 @@
 				5B98E394203DE95A00BE085B /* Tools.swift */,
 				5B131A71209508DD00316B3D /* Cards.swift */,
 				5B98E396203DED3600BE085B /* Card.swift */,
-				5B1AC92921EB973700B5FEB2 /* Button.swift */,
+				5B1AC92921EB973700B5FEB2 /* ButtonNode.swift */,
 				5B4BA7B9203F367A00F60CD8 /* GamePlay.swift */,
 				5B4BA8092041963000F60CD8 /* PlayerController.swift */,
 				5B4BA80D2043333E00F60CD8 /* GameSlot.swift */,
@@ -880,7 +880,7 @@
 				5B4BA80A2041963000F60CD8 /* PlayerController.swift in Sources */,
 				5B03125A203C976A00391F4A /* AppDelegate.swift in Sources */,
 				5B3DDBCA21AC867D00DEAC7D /* GamePlayProtocol.swift in Sources */,
-				5B1AC92A21EB973700B5FEB2 /* Button.swift in Sources */,
+				5B1AC92A21EB973700B5FEB2 /* ButtonNode.swift in Sources */,
 				5B98E395203DE95A00BE085B /* Tools.swift in Sources */,
 				5B4BA80E2043333E00F60CD8 /* GameSlot.swift in Sources */,
 				5BADD385213198D20028B4F5 /* CardNode.swift in Sources */,

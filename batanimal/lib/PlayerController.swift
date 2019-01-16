@@ -197,7 +197,7 @@ class PlayerController {
         let cardId:String = card.getId()
 
         // makes the card sprite
-        let cardFileName = Cards.makeImageWithBorderAndShadowFilename(from: cardId)
+        let cardFileName = Cards.makeFilenameForImageWithBorderAndShadow(from: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
         let cardNode = CardNode(
             texture: cardTexture,

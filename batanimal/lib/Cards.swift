@@ -97,7 +97,7 @@ class Cards {
     /*
      * makes an image filename with border and shadow, from a small ID
      */
-    class func makeImageWithBorderAndShadowFilename (from id:String) -> String {
+    class func makeFilenameForImageWithBorderAndShadow (from id:String) -> String {
         
         let cardPrefix = "card"
         let gameTag = "batanimo"

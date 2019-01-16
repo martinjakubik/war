@@ -32,8 +32,6 @@ class GamePlay {
     var topView:SKView
     var scene:SKScene
     var statusText:String
-    var statusNode:SKLabelNode
-    var dontWaitButton:Button
 
     let dontWaitButtonTop:CGFloat = 60
     let dontWaitButtonWidth:CGFloat = 80
@@ -76,9 +74,6 @@ class GamePlay {
         self.cards = cards
         self.gameState = GameState.waitingToFillTable
         self.statusText = ""
-        self.statusNode = SKLabelNode(fontNamed: "Monaco")
-        func nilFunction () -> Void {}
-        self.dontWaitButton = Button(withText: "Dont Wait", onPress:nilFunction)
         self.wiggleAction = SKAction.follow(wigglePath, asOffset: true, orientToPath: false, speed: 600)
 
         self.log = log
@@ -657,12 +652,21 @@ class GamePlay {
     }
 
     /*
+     * handles Dont Wait press
+     */
+    func handleButtonPressed () {
+
+        os_log("dont wait button pressed", log:self.log, type:.debug)
+        hideDontWaitButton()
+
+    }
+
+    /*
      * hides the Dont Wait button
      */
     func hideDontWaitButton () {
 
-        os_log("removing dont wait button")
-        self.scene.removeChildren(in: [self.dontWaitButton])
+        os_log("removing dont wait button", log:self.log, type:.debug)
 
     }
 
@@ -731,7 +735,6 @@ class GamePlay {
      */
     func renderStatus () {
 
-        self.statusNode.text = self.statusText
 
     }
 
@@ -813,21 +816,31 @@ class GamePlay {
         self.scene.addChild(backgroundNode)
 
         // makes a status box
-        self.statusNode.position = CGPoint(
+        let statusNode = SKLabelNode(fontNamed: "Monaco")
+        statusNode.position = CGPoint(
             x: self.scene.size.width / 2,
             y: self.statusTop
         )
         
-        self.scene.addChild(self.statusNode)
+        self.scene.addChild(statusNode)
         
         // makes a dont wait button
-        self.dontWaitButton = Button(withText: "Dont Wait", onPress: self.hideDontWaitButton)
-        self.dontWaitButton.position = CGPoint(
+        let dontWaitButton = ButtonNode()
+        dontWaitButton.position = CGPoint(
             x: self.scene.size.width / 2,
             y: self.dontWaitButtonTop
         )
 
-        self.scene.addChild(self.dontWaitButton)
+        dontWaitButton.setLabel(withText: "Don't Wait")
+        dontWaitButton.controller = self
+        let buttonTexture:SKTexture = SKTexture(imageNamed: "button.png")
+        let buttonColor:UIColor = UIColor(red: 0.8, green: 0.8, blue: 0.9, alpha: 1.0)
+        let buttonSize:CGSize = CGSize(width: 80, height: 30)
+        dontWaitButton.texture = buttonTexture
+        dontWaitButton.color = buttonColor
+        dontWaitButton.size = buttonSize
+
+        self.scene.addChild(dontWaitButton)
 
         // shows the scene
         self.topView.presentScene(self.scene)
