@@ -662,10 +662,11 @@ class GamePlay {
     /*
      * handles Dont Wait press
      */
-    func handleButtonPressed () {
+    func handleDontWaitButtonPressed () {
 
         os_log("dont wait button pressed", log:self.log, type:.debug)
         hideDontWaitButton()
+        self.makePlayer1(isPlayer1Local: true)
 
     }
 

@@ -44,7 +44,7 @@ class ButtonNode:SKSpriteNode {
 
         if let controller = self.controller {
 
-            controller.handleButtonPressed()
+            controller.handleDontWaitButtonPressed()
 
         }
 
