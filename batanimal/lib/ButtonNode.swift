@@ -13,11 +13,20 @@ class ButtonNode:SKSpriteNode {
 
     var label:String = ""
     var controller:GamePlay?
+    
+    init(withLabel label: String, position: CGPoint, controller: GamePlay) {
 
-    func setLabel(withText label: String) {
-
+        let buttonTexture:SKTexture = SKTexture(imageNamed: "button.png")
+        super.init(texture: buttonTexture, color: UIColor.clear, size: buttonTexture.size())
+        self.position = position
         self.label = label
+        self.controller = controller
+        self.isUserInteractionEnabled = true
 
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

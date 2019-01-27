@@ -825,21 +825,11 @@ class GamePlay {
         self.scene.addChild(statusNode)
         
         // makes a dont wait button
-        let dontWaitButton = ButtonNode()
-        dontWaitButton.position = CGPoint(
+        let buttonPosition = CGPoint(
             x: self.scene.size.width / 2,
             y: self.dontWaitButtonTop
         )
-
-        dontWaitButton.setLabel(withText: "Don't Wait")
-        dontWaitButton.controller = self
-        let buttonTexture:SKTexture = SKTexture(imageNamed: "button.png")
-        let buttonColor:UIColor = UIColor(red: 0.8, green: 0.8, blue: 0.9, alpha: 1.0)
-        let buttonSize:CGSize = CGSize(width: 80, height: 30)
-        dontWaitButton.texture = buttonTexture
-        dontWaitButton.color = buttonColor
-        dontWaitButton.size = buttonSize
-
+        let dontWaitButton = ButtonNode(withLabel: "Don't Wait", position: buttonPosition, controller: self)
         self.scene.addChild(dontWaitButton)
 
         // shows the scene
