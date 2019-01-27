@@ -64,6 +64,8 @@ class GamePlay {
     let wigglePath:CGPath = Tools.makeWigglePath()
     let wiggleAction:SKAction
 
+    var dontWaitButton:ButtonNode
+
     let log:OSLog
 
     init(topView:SKView, scene:SKScene, numPlayers:Int, cards:[Card], log:OSLog) {
@@ -75,6 +77,12 @@ class GamePlay {
         self.gameState = GameState.waitingToFillTable
         self.statusText = ""
         self.wiggleAction = SKAction.follow(wigglePath, asOffset: true, orientToPath: false, speed: 600)
+
+        let buttonPosition = CGPoint(
+            x: self.scene.size.width / 2,
+            y: self.dontWaitButtonTop
+        )
+        self.dontWaitButton = ButtonNode(withText: "Don't Wait", position: buttonPosition)
 
         self.log = log
 
@@ -667,6 +675,7 @@ class GamePlay {
     func hideDontWaitButton () {
 
         os_log("removing dont wait button", log:self.log, type:.debug)
+        self.scene.removeChildren(in: [self.dontWaitButton])
 
     }
 
@@ -824,13 +833,9 @@ class GamePlay {
         
         self.scene.addChild(statusNode)
         
-        // makes a dont wait button
-        let buttonPosition = CGPoint(
-            x: self.scene.size.width / 2,
-            y: self.dontWaitButtonTop
-        )
-        let dontWaitButton = ButtonNode(withLabel: "Don't Wait", position: buttonPosition, controller: self)
-        self.scene.addChild(dontWaitButton)
+        // shows the dont wait button
+        self.dontWaitButton.controller = self
+        self.scene.addChild(self.dontWaitButton)
 
         // shows the scene
         self.topView.presentScene(self.scene)

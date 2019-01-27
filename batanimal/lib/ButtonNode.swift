@@ -11,17 +11,26 @@ import SpriteKit
 
 class ButtonNode:SKSpriteNode {
 
-    var label:String = ""
+    var labelText:String = ""
     var controller:GamePlay?
     
-    init(withLabel label: String, position: CGPoint, controller: GamePlay) {
+    init(withText labelText: String, position: CGPoint) {
 
         let buttonTexture:SKTexture = SKTexture(imageNamed: "button.png")
         super.init(texture: buttonTexture, color: UIColor.clear, size: buttonTexture.size())
         self.position = position
-        self.label = label
-        self.controller = controller
+        self.labelText = labelText
         self.isUserInteractionEnabled = true
+
+        let labelNode = SKLabelNode(fontNamed: "Avenir-Medium")
+        labelNode.text = self.labelText
+        labelNode.fontColor = UIColor.darkGray
+        labelNode.fontSize = 28.0
+        labelNode.verticalAlignmentMode = .center
+        self.addChild(labelNode)
+        labelNode.zPosition = 51
+
+        self.zPosition = 50
 
     }
 
