@@ -555,8 +555,8 @@ class GamePlay {
 
         ] as NSDictionary)
 
-        // renders cards of all players (TODO: overkill; we only need player 0)
-        renderCards()
+        // renders player O's cards
+        self.playerControllers[0].renderHand()
 
         self.statusText = "waiting for player 2"
         renderStatus()
@@ -609,8 +609,8 @@ class GamePlay {
 
         }
 
-        // renders cards of all players (TODO: overkill; we only need player 1)
-        renderCards()
+        // renders cards (TODO overkill: we only need player 1)
+        self.renderCards()
 
         self.statusText = "game on"
         renderStatus()
