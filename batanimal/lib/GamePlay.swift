@@ -808,9 +808,9 @@ class GamePlay {
     }
 
     /*
-     * shows the scene
+     * makes and shows the scene
      */
-    func showScene() {
+    func makeScene() {
 
         // makes a background sprite
         let backgroundFileName = "background.png"
@@ -860,7 +860,7 @@ class GamePlay {
 
         setUpRemoteGameSlot()
 
-        showScene()
+        makeScene()
 
     }
 
