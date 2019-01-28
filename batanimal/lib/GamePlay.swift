@@ -64,7 +64,10 @@ class GamePlay {
     let wigglePath:CGPath = Tools.makeWigglePath()
     let wiggleAction:SKAction
 
+    var statusLabel:SKLabelNode
     var dontWaitButton:ButtonNode
+
+    let control_layer_z_position:CGFloat = 50.0
 
     let log:OSLog
 
@@ -82,6 +85,8 @@ class GamePlay {
             x: self.scene.size.width / 2,
             y: self.dontWaitButtonTop
         )
+        self.statusLabel = SKLabelNode(text: "")
+        self.statusLabel.zPosition = control_layer_z_position
         self.dontWaitButton = ButtonNode(withText: "Don't Wait", position: buttonPosition)
 
         self.log = log
@@ -610,7 +615,7 @@ class GamePlay {
         self.statusText = "game on"
         renderStatus()
 
-        hideDontWaitButton()
+        hideDontWaitMessage()
 
     }
 
@@ -665,7 +670,7 @@ class GamePlay {
     func handleDontWaitButtonPressed () {
 
         os_log("dont wait button pressed", log:self.log, type:.debug)
-        hideDontWaitButton()
+        hideDontWaitMessage()
         self.makePlayer1(isPlayer1Local: true)
 
     }
@@ -673,10 +678,10 @@ class GamePlay {
     /*
      * hides the Dont Wait button
      */
-    func hideDontWaitButton () {
+    func hideDontWaitMessage () {
 
         os_log("removing dont wait button", log:self.log, type:.debug)
-        self.scene.removeChildren(in: [self.dontWaitButton])
+        self.scene.removeChildren(in: [self.dontWaitButton, self.statusLabel])
 
     }
 
@@ -825,15 +830,10 @@ class GamePlay {
         )
         self.scene.addChild(backgroundNode)
 
-        // makes a status box
-        let statusNode = SKLabelNode(fontNamed: "Monaco")
-        statusNode.position = CGPoint(
-            x: self.scene.size.width / 2,
-            y: self.statusTop
-        )
-        
-        self.scene.addChild(statusNode)
-        
+        // shows the status box
+        self.scene.addChild(self.statusLabel)
+        self.statusLabel.text = "Waiting for player 2"
+
         // shows the dont wait button
         self.dontWaitButton.controller = self
         self.scene.addChild(self.dontWaitButton)
