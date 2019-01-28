@@ -331,11 +331,31 @@ class PlayerController {
      */
     func animateMoveCardFromTableToHand(fromPlayer:PlayerController, card:Card) {
 
+        os_log("moving card: %@", log:self.log, type:.debug, card.getId())
         let cardNode = fromPlayer.node.childNode(withName: card.getId())
 
         if let existingCardNode:CardNode = cardNode as? CardNode {
 
-            let moveAction = SKAction.moveTo(x: existingCardNode.position.x + 100, duration: 0.02)
+            let startPoint:CGPoint = existingCardNode.position
+            let endPoint:CGPoint = CGPoint(
+                x: CGFloat(self.getHand().count) * cardSpace,
+                y: self.playerTop
+            )
+
+            let controlPoint1 = CGPoint(
+                x: startPoint.x + (endPoint.x - startPoint.x) / 3,
+                y: startPoint.y + (endPoint.y - startPoint.y) / 8
+            )
+            let controlPoint2 = CGPoint(
+                x: startPoint.x + 2 * (endPoint.x - startPoint.x) / 3,
+                y: startPoint.y + 6 * (endPoint.y - startPoint.y) / 8
+            )
+            let path:UIBezierPath = UIBezierPath()
+            path.move(to: startPoint)
+            path.addCurve(to: endPoint, controlPoint1: controlPoint1, controlPoint2: controlPoint2)
+            path.close()
+
+            let moveAction = SKAction.follow(path.cgPath, speed: 40)
             existingCardNode.run(moveAction)
 
         }
