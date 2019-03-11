@@ -188,7 +188,7 @@ class PlayerController {
             y: self.playerTop
         )
 
-        os_log("card position x:%f, y:%f", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
+        // os_log("card position x:%f, y:%f", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
 
         // calculates the z-index based on the position in the card set
         let zPosition = numCards - position + 1
@@ -352,10 +352,10 @@ class PlayerController {
             )
             let path:UIBezierPath = UIBezierPath()
             path.move(to: startPoint)
-            path.addCurve(to: endPoint, controlPoint1: controlPoint1, controlPoint2: controlPoint2)
+            path.move(to: endPoint)
             path.close()
 
-            let moveAction = SKAction.follow(path.cgPath, speed: 40)
+            let moveAction = SKAction.follow(path.cgPath, asOffset: true, orientToPath: false, duration: 0.02)
             existingCardNode.run(moveAction)
 
         }
