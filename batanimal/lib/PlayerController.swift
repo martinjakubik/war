@@ -167,6 +167,8 @@ class PlayerController {
         var position:CGFloat = 0
         let numCards = getHand().count
 
+        os_log("player %d has %d cards in hand", log:self.log, type:.debug, self.player.number, numCards)
+
         for card in getHand() {
 
             renderSingleCard(card: card, at: position, numCards: CGFloat(numCards))
@@ -188,7 +190,7 @@ class PlayerController {
             y: self.playerTop
         )
 
-        // os_log("card position x:%f, y:%f", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
+         os_log("card position x:%f, y:%f", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
 
         // calculates the z-index based on the position in the card set
         let zPosition = numCards - position + 1

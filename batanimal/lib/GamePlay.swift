@@ -577,6 +577,8 @@ class GamePlay {
 
             let isPlayer0Local = GameSession.isLocal(player: player0)
 
+            os_log("player 0 top: %f, player 1 top: %f", log:self.log, type:.debug, "string parameter", self.gameTop + self.playerHeight, self.gameTop)
+
             // makes player 0 view and controller
             gamePlayDelegate.makePlayerViewAndController(initializedPlayer: player0, playerNumber: -1, playerSessionId: "", isPlayerLocal: isPlayer0Local, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
 
@@ -737,9 +739,10 @@ class GamePlay {
      */
     func renderCards () {
 
-        for player in self.playerControllers {
+        for playerController in self.playerControllers {
 
-            player.renderHand()
+            os_log("rendering cards for player: %d", log:self.log, type:.debug, playerController.player.number)
+            playerController.renderHand()
 
         }
 

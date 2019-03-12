@@ -71,7 +71,7 @@ class WarGamePlay:GamePlay, GamePlayProtocol {
             // makes player controller
             let initializedPlayerNumber = player.number
 
-            os_log("making player %d: model exists", log:self.log, type:.debug, initializedPlayerNumber)
+            os_log("making player %d: model exists, player top: %f", log:self.log, type:.debug, initializedPlayerNumber, playerTop)
 
             let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
             self.playerControllers.append(playerController)
@@ -82,7 +82,7 @@ class WarGamePlay:GamePlay, GamePlayProtocol {
             // makes player model first, then makes player controller
             let player = Player(withNumber:playerNumber, sessionId:playerSessionId)
 
-            os_log("making player %d: model does not exist", log:self.log, type:.debug, playerNumber)
+            os_log("making player %d: model does not exist, player top: %f", log:self.log, type:.debug, playerNumber, playerTop)
 
             let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
             self.playerControllers.append(playerController)
