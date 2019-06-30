@@ -6,7 +6,6 @@
 //  Copyright © 2018 martin jakubik. All rights reserved.
 //
 
-import FirebaseDatabase
 import SpriteKit
 
 import os.log
@@ -19,22 +18,15 @@ class GamePlay {
     let maxNumPlayers:Int = 2
     var cards:[Card] = []
     var shuffledCards:[Card] =  []
-    var slotIncrement:Int = 0
-    var slotKey:String = ""
-    var gameSlot:GameSlot?
-    var playerReferences:[DatabaseReference] = []
     var playerControllers:[PlayerController] = []
     var restOfCards:[Card] = []
-
-    let firstSlotNumber:String = "3"
-    let maxNumberOfSlots = 3
 
     var topView:SKView
     var scene:SKScene
     var statusText:String
 
-    let dontWaitButtonTop:CGFloat = 60
-    let dontWaitButtonWidth:CGFloat = 80
+    let restartButtonTop:CGFloat = 60
+    let restartButtonWidth:CGFloat = 80
     let statusTop:CGFloat = 100
     let statusWidth:CGFloat = 80
     let gameTop:CGFloat = 160
@@ -65,7 +57,7 @@ class GamePlay {
     let wiggleAction:SKAction
 
     var statusLabel:SKLabelNode
-    var dontWaitButton:ButtonNode
+    var restartButton:ButtonNode
 
     let control_layer_z_position:CGFloat = 50.0
 
@@ -83,49 +75,22 @@ class GamePlay {
 
         let buttonPosition = CGPoint(
             x: self.scene.size.width / 2,
-            y: self.dontWaitButtonTop
+            y: self.restartButtonTop
         )
         self.statusLabel = SKLabelNode(text: "")
         self.statusLabel.zPosition = control_layer_z_position
-        self.dontWaitButton = ButtonNode(withText: "Don't Wait", position: buttonPosition)
+        self.restartButton = ButtonNode(withText: "Restart", position: buttonPosition)
 
         self.log = log
 
     }
 
     /*
-     * gets the key of the last game slot from the list of slots from the remote database
-     */
-    class func getLastGameSlotKey (allGameSlots:[String:AnyObject]) -> String {
-
-        var lastGameSlotKey:String = "0"
-
-        // gets the current game slot number
-        if let gameSlotObject = allGameSlots["lastSlot"] as? [String:AnyObject] {
-
-            if let gameSlotStringValue = gameSlotObject["value"] as? String {
-
-                lastGameSlotKey = gameSlotStringValue
-
-            }
-
-        }
-
-        return lastGameSlotKey
-
-    }
-
-    /*
      * updates the game when player wants to play a card, based on current state
      */
-    func handlePlayerWantsToPlayACard(playerController:PlayerController, isEventLocal:Bool) {
+    func handlePlayerWantsToPlayACard(playerController:PlayerController) {
 
-        // only handles local events
-        if (isEventLocal) {
-
-            handleLocalPlayerWantsToPlayACard(for: playerController)
-
-        }
+        handleLocalPlayerWantsToPlayACard(for: playerController)
 
         updateGameState()
 
@@ -403,162 +368,19 @@ class GamePlay {
     }
 
     /*
-     * gets the last used game slot from the remote database
-     */
-    func getLastGameSlot (allGameSlots:[String:AnyObject]) -> GameSlot {
-
-        var lastGameSlot:GameSlot = GameSlot(withDictionary:[:], scene: self.scene, gameTop:self.gameTop, gameLeft:self.gameLeft, playerHeight:self.playerHeight)
-
-        // gets the content of the current game slot
-        if let gameSlotList = allGameSlots["list"] as? [String:AnyObject] {
-
-            let slotKey = GamePlay.getLastGameSlotKey(allGameSlots: allGameSlots)
-
-            if let singleSlotDictionary = gameSlotList[slotKey] as? [String:AnyObject] {
-
-                lastGameSlot = GameSlot(withDictionary:singleSlotDictionary, scene: self.scene, gameTop:self.gameTop, gameLeft:self.gameLeft, playerHeight:self.playerHeight)
-
-            }
-
-        }
-        return lastGameSlot
-
-    }
-
-    /*
-     * creates a new game slot on the remote database
-     */
-    func moveToNextGameSlot (referenceGameSlotList:DatabaseReference) {
-
-        let referenceGameSlot:DatabaseReference = referenceGameSlotList.childByAutoId()
-
-        let myGameSlot = ["player0": ["name" : "_new_" as AnyObject]]
-
-        referenceGameSlot.setValue(myGameSlot)
-
-        self.slotKey = referenceGameSlot.key
-
-        self.playerReferences.removeAll()
-        self.playerReferences.append(referenceGameSlot.child("player0"))
-        self.playerReferences.append(referenceGameSlot.child("player1"))
-
-    }
-
-    /*
-     * finds an available game slot in the remote database and sets up the game there
-     */
-    func setUpRemoteGameSlot () {
-
-        let databaseReference = Database.database().reference()
-
-        let referenceToAllGameSlots = databaseReference.child("game/slots")
-
-        let referenceToGameSlotList = databaseReference.child("game/slots/list")
-
-        referenceToAllGameSlots.observeSingleEvent(
-
-            of: DataEventType.value,
-            with: {(snapshot) in
-
-                if let allGameSlots = snapshot.value as? [String:AnyObject] {
-
-                    self.slotKey = GamePlay.getLastGameSlotKey(allGameSlots: allGameSlots)
-
-                    // TODO: do we have everything we need from the remote game slot here? ie. the restofcards and stuff?
-                    self.gameSlot = self.getLastGameSlot(allGameSlots: allGameSlots)
-
-                    for i in 0...(self.maxNumPlayers - 1) {
-
-                        let playerReference = referenceToAllGameSlots.child("list").child(String(self.slotKey)).child("player" + String(i))
-
-                        self.playerReferences.append(playerReference)
-
-                    }
-
-                    let isPlayer0SlotFull:Bool
-                    let isPlayer1SlotFull:Bool
-                    if let gameSlot = self.gameSlot {
-
-                        isPlayer0SlotFull = gameSlot.player0 != nil
-                        isPlayer1SlotFull = gameSlot.player1 != nil
-
-                    } else {
-
-                        isPlayer0SlotFull = false
-                        isPlayer1SlotFull = false
-
-                    }
-
-                    if (!isPlayer0SlotFull && !isPlayer1SlotFull) {
-
-                        self.makePlayer0()
-
-                    } else if (isPlayer0SlotFull && isPlayer1SlotFull) {
-
-                        self.moveToNextGameSlot(referenceGameSlotList: referenceToGameSlotList)
-
-                        self.makePlayer0()
-
-                    } else if (isPlayer0SlotFull && !isPlayer1SlotFull) {
-
-                        // TODO: check here if player 1 is local
-
-                        self.makePlayer1(isPlayer1Local: true)
-
-                    } else if (!isPlayer0SlotFull && isPlayer1SlotFull) {
-
-                        // TODO
-
-                    }
-
-                    referenceToAllGameSlots.child("lastSlot").setValue(["value": self.slotKey])
-                    self.setUpHandlerForRemotePlayerEvents()
-
-                }
-        })
-    }
-
-    /*
      * makes a model, view and controller for player 0;
      */
     func makePlayer0 () {
 
-        let databaseReference = Database.database().reference()
-        let referenceGameSlot = databaseReference.child("game/slots/list").child(String(self.slotKey))
-
-        let player0SessionId = GameSession.makeNewSessionId()
-
-        let isPlayer0Local = true
-
         // makes player 0 view and controller
-        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 0, playerSessionId: player0SessionId, isPlayerLocal: isPlayer0Local, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
+        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 0, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
 
         // distributes cards to player 0
         distributeCardsToAvailablePlayers()
 
-        let player0HandDictionary = Cards.getCardsAsNSDictionary(cards: self.playerControllers[0].getHand())
-        let restOfCardDictionary = Cards.getCardsAsNSDictionary(cards: self.restOfCards)
-
-        referenceGameSlot.setValue([
-
-            "player0": [
-
-                "name": self.playerControllers[0].getName(),
-                "hand": player0HandDictionary,
-                "sessionId": player0SessionId
-
-                ] as NSDictionary,
-
-            "player1": [:] as NSDictionary,
-
-            "restOfCards": restOfCardDictionary
-
-        ] as NSDictionary)
-
         // renders player O's cards
         self.playerControllers[0].renderHand()
 
-        self.statusText = "waiting for player 2"
         renderStatus()
 
     }
@@ -569,47 +391,14 @@ class GamePlay {
      */
     func makePlayer1 (isPlayer1Local:Bool) {
 
-        let player1SessionId = GameSession.getSessionId()
+        os_log("player 0 top: %f, player 1 top: %f", log:self.log, type:.debug, "string parameter", self.gameTop + self.playerHeight, self.gameTop)
 
-        // TODO: do we have a valid player0 from the remote slot at this point?
+        // makes player 0 view and controller
+        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: self.playerControllers[0].player, playerNumber: -1, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
 
-        if let player0 = self.gameSlot?.player0 {
-
-            let isPlayer0Local = GameSession.isLocal(player: player0)
-
-            os_log("player 0 top: %f, player 1 top: %f", log:self.log, type:.debug, "string parameter", self.gameTop + self.playerHeight, self.gameTop)
-
-            // makes player 0 view and controller
-            gamePlayDelegate.makePlayerViewAndController(initializedPlayer: player0, playerNumber: -1, playerSessionId: "", isPlayerLocal: isPlayer0Local, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
-
-            // makes player 1 view and controller
-            // TODO: what if we have a remote player1 model already here?
-            gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerSessionId: player1SessionId, isPlayerLocal: isPlayer1Local, playerTop: self.gameTop, playerName: "Turkey")
-
-            if let restOfCards = self.gameSlot?.restOfCards {
-
-                self.playerControllers[1].setHand(hand: restOfCards)
-
-            }
-
-            let player1HandDictionary = Cards.getCardsAsNSDictionary(cards: self.playerControllers[1].getHand())
-
-            playerReferences[1].setValue([
-
-                "name": self.playerControllers[1].getName(),
-                "hand": player1HandDictionary,
-                "sessionId": player1SessionId
-
-                ] as NSDictionary
-            )
-
-            // cleans rest of cards from remote database
-            let databaseReference = Database.database().reference()
-            let referenceGameSlot = databaseReference.child("game/slots/list").child(String(self.slotKey))
-            let referenceRestOfCards = referenceGameSlot.child("restOfCards")
-            referenceRestOfCards.removeValue()
-
-        }
+        // makes player 1 view and controller
+        // TODO: what if we have a remote player1 model already here?
+        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerTop: self.gameTop, playerName: "Turkey")
 
         // renders cards (TODO overkill: we only need player 1)
         self.renderCards()
@@ -617,73 +406,15 @@ class GamePlay {
         self.statusText = "game on"
         renderStatus()
 
-        hideDontWaitMessage()
-
     }
 
     /*
-     *
+     * hides the Restart button
      */
-    func setUpHandlerForRemotePlayerEvents() {
+    func hideRestartMessage () {
 
-        for playerNumber in 0...(maxNumPlayers - 1) {
-
-            self.playerReferences[playerNumber].observe(
-
-                DataEventType.value,
-                with: {(snapshot) in
-
-                    self.handleRemotePlayerEvents(for: playerNumber, snapshot: snapshot)
-
-            })
-
-        }
-
-    }
-
-    /*
-     *
-     */
-    func handleRemotePlayerEvents(for playerNumber:Int, snapshot:DataSnapshot) {
-
-        if let playerDict = snapshot.value as? [String:AnyObject] {
-
-            let remotePlayer = Player(withNumber: playerNumber, playerDictionary: playerDict)
-
-            // sets name
-            self.playerControllers[playerNumber].setName(name: remotePlayer.name)
-
-            // sets hand
-            self.playerControllers[playerNumber].setHand(hand: remotePlayer.hand)
-
-            // sets table
-            self.playerControllers[playerNumber].setTable(table: remotePlayer.table)
-
-            // indicates that a player wants to play a card so the game can update itself
-            self.handlePlayerWantsToPlayACard(playerController: self.playerControllers[playerNumber], isEventLocal: false)
-
-        }
-
-    }
-
-    /*
-     * handles Dont Wait press
-     */
-    func handleDontWaitButtonPressed () {
-
-        os_log("dont wait button pressed", log:self.log, type:.debug)
-        hideDontWaitMessage()
-        self.makePlayer1(isPlayer1Local: true)
-
-    }
-
-    /*
-     * hides the Dont Wait button
-     */
-    func hideDontWaitMessage () {
-
-        os_log("removing dont wait button", log:self.log, type:.debug)
-        self.scene.removeChildren(in: [self.dontWaitButton, self.statusLabel])
+        os_log("removing restart button", log:self.log, type:.debug)
+        self.scene.removeChildren(in: [self.restartButton, self.statusLabel])
 
     }
 
@@ -838,8 +569,8 @@ class GamePlay {
         self.statusLabel.text = "Waiting for player 2"
 
         // shows the dont wait button
-        self.dontWaitButton.controller = self
-        self.scene.addChild(self.dontWaitButton)
+        self.restartButton.controller = self
+        self.scene.addChild(self.restartButton)
 
         // shows the scene
         self.topView.presentScene(self.scene)
@@ -860,8 +591,6 @@ class GamePlay {
             self.shuffledCards = self.cards
 
         }
-
-        setUpRemoteGameSlot()
 
         makeScene()
 

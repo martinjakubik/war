@@ -11,7 +11,6 @@ import Foundation
 class Player {
 
     var number:Int
-    var sessionId:String
     var name:String
     var hand:[Card] = []
     var table:[Card] = []
@@ -19,10 +18,9 @@ class Player {
     /*
      *
      */
-    init (withNumber number:Int, sessionId:String) {
+    init (withNumber number:Int) {
         
         self.number = number
-        self.sessionId = sessionId
         self.name = ""
         self.hand = []
         self.table = []
@@ -36,7 +34,6 @@ class Player {
 
         self.number = number
         self.name = playerDictionary["name"] as? String ?? ""
-        self.sessionId = playerDictionary["sessionId"] as? String ?? ""
 
         self.hand = Cards.makeCardArrayFromAnyObject(cardObject: playerDictionary["hand"])
 

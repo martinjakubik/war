@@ -11,7 +11,7 @@ import UIKit
 
 protocol GamePlayProtocol {
 
-    func makePlayerViewAndController(initializedPlayer:Player?, playerNumber:Int, playerSessionId:String, isPlayerLocal:Bool, playerTop:CGFloat, playerName:String)
+    func makePlayerViewAndController(initializedPlayer:Player?, playerNumber:Int, playerTop:CGFloat, playerName:String)
 
     func whoseCardWins() -> Int
 

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FirebaseDatabase
 import SpriteKit
 
 import os.log
@@ -59,7 +58,7 @@ class WarGamePlay:GamePlay, GamePlayProtocol {
      * if a player model is given, uses that model to make the view and controller;
      * if no player model is given, creates it first using the player number and session ID
      */
-    func makePlayerViewAndController(initializedPlayer:Player?, playerNumber:Int, playerSessionId:String, isPlayerLocal:Bool, playerTop:CGFloat, playerName:String) {
+    func makePlayerViewAndController(initializedPlayer:Player?, playerNumber:Int, playerTop:CGFloat, playerName:String) {
 
         // makes player view
         let playerNode = SKNode()
@@ -73,18 +72,18 @@ class WarGamePlay:GamePlay, GamePlayProtocol {
 
             os_log("making player %d: model exists, player top: %f", log:self.log, type:.debug, initializedPlayerNumber, playerTop)
 
-            let playerController = PlayerController(player: player, reference: self.playerReferences[initializedPlayerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
+            let playerController = PlayerController(player: player, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
 
         } else {
 
             // makes player model first, then makes player controller
-            let player = Player(withNumber:playerNumber, sessionId:playerSessionId)
+            let player = Player(withNumber:playerNumber)
 
             os_log("making player %d: model does not exist, player top: %f", log:self.log, type:.debug, playerNumber, playerTop)
 
-            let playerController = PlayerController(player: player, reference: self.playerReferences[playerNumber], isLocal: isPlayerLocal, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
+            let playerController = PlayerController(player: player, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
 

@@ -42,12 +42,6 @@ class ButtonNode:SKSpriteNode {
 
         super.touchesEnded(touches, with: event)
 
-        if let controller = self.controller {
-
-            controller.handleDontWaitButtonPressed()
-
-        }
-
     }
 
 }

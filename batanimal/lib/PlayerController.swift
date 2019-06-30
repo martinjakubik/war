@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FirebaseDatabase
 import SpriteKit
 
 import os.log
@@ -29,22 +28,18 @@ class PlayerController {
     // a player model
     var player:Player
 
-    // a reference to the player model on the remote database
-    var reference:DatabaseReference?
-
     // a player view
     var node:SKNode
 
     // the function called when a card is tapped
-    var handleCardTapped:(PlayerController, Bool) -> Void
+    var handleCardTapped:(PlayerController) -> Void
 
     /*
-     * initializes a Player controller from a player model, a remote database reference and a sprite node
+     * initializes a Player controller from a player model and a sprite node
      */
-    init (player:Player, reference:DatabaseReference, isLocal:Bool, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, handleCardTapped:@escaping (PlayerController, Bool) -> Void, log:OSLog) {
+    init (player:Player, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, handleCardTapped:@escaping (PlayerController) -> Void, log:OSLog) {
 
         self.player = player
-        self.reference = reference
         self.node = node
 
         self.playerTop = playerTop
@@ -227,8 +222,7 @@ class PlayerController {
 
         os_log("card tapped, with Id: \"%@\"", log:self.log, type:.debug, cardId)
 
-        let isEventLocal = true
-        self.handleCardTapped(self, isEventLocal)
+        self.handleCardTapped(self)
 
     }
 
