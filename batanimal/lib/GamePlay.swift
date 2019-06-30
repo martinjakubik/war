@@ -367,6 +367,13 @@ class GamePlay {
 
     }
 
+    func setUpGameSlot () {
+
+        makePlayer0()
+        makePlayer1()
+
+    }
+
     /*
      * makes a model, view and controller for player 0;
      */
@@ -389,7 +396,7 @@ class GamePlay {
      * makes a view and controller for player 1;
      * does nothing if there is no player 0 model yet
      */
-    func makePlayer1 (isPlayer1Local:Bool) {
+    func makePlayer1 () {
 
         os_log("player 0 top: %f, player 1 top: %f", log:self.log, type:.debug, "string parameter", self.gameTop + self.playerHeight, self.gameTop)
 
@@ -592,6 +599,7 @@ class GamePlay {
 
         }
 
+        setUpGameSlot()
         makeScene()
 
     }
