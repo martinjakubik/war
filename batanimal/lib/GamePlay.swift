@@ -400,12 +400,11 @@ class GamePlay {
 
         os_log("player 0 top: %f, player 1 top: %f", log:self.log, type:.debug, "string parameter", self.gameTop + self.playerHeight, self.gameTop)
 
-        // makes player 0 view and controller
-        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: self.playerControllers[0].player, playerNumber: -1, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
-
         // makes player 1 view and controller
         // TODO: what if we have a remote player1 model already here?
         gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerTop: self.gameTop, playerName: "Turkey")
+
+        self.playerControllers[1].setHand(hand: self.restOfCards)
 
         // renders cards (TODO overkill: we only need player 1)
         self.renderCards()
