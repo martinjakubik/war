@@ -437,7 +437,6 @@ class GamePlay {
         referenceGameSlot.setValue(myGameSlot)
 
         self.slotKey = referenceGameSlot.key
-        self.gameSlot = myGameSlot
 
         self.playerReferences.removeAll()
         self.playerReferences.append(referenceGameSlot.child("player0"))
