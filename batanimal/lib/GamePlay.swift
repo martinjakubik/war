@@ -168,41 +168,18 @@ class GamePlay {
 
             winningPlayerNumber = self.gamePlayDelegate.whoseCardWins()
 
-            // checks if player 0 won the hand
-            if (winningPlayerNumber == 0) {
+            // every five moves, randomly switches order of the gathered cards
+            if (numMoves % 5 == 0 && Int.random(in: 0..<10) < 5) {
 
-                // every five moves, randomly switches order of the gathered cards
-                if (numMoves % 5 == 0 && Int.random(in: 0..<10) < 5) {
+                // moves everyone's cards to the winner's hand, player 1 first
+                self.playerControllers[winningPlayerNumber].moveTableCardsToHand(fromPlayer: self.playerControllers[1])
+                self.playerControllers[winningPlayerNumber].moveTableCardsToHand(fromPlayer: self.playerControllers[0])
 
-                    // moves everyone's cards to the winner's hand, player 1 first
-                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[1])
-                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[0])
+            } else {
 
-                } else {
-
-                    // moves everyone's cards to the winner's hand, player 0 first
-                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[0])
-                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[1])
-
-                }
-
-            } else if (winningPlayerNumber == 1) {
-
-                // player 1 won the hand
-
-                if (numMoves % 5 == 0 && Int.random(in: 0..<10) < 5) {
-
-                    // moves everyone's cards to the winner's hand, player 0 first
-                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[0])
-                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[1])
-
-                } else {
-
-                    // moves everyone's cards to the winner's hand, player 1 first
-                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[1])
-                    self.playerControllers[0].moveTableCardsToHand(fromPlayer: self.playerControllers[0])
-
-                }
+                // moves everyone's cards to the winner's hand, player 0 first
+                self.playerControllers[winningPlayerNumber].moveTableCardsToHand(fromPlayer: self.playerControllers[0])
+                self.playerControllers[winningPlayerNumber].moveTableCardsToHand(fromPlayer: self.playerControllers[1])
 
             }
 
