@@ -23,6 +23,8 @@ class PlayerController {
     let cardHeight:CGFloat
     let cardWidth:CGFloat
 
+    let borderWidth:CGFloat = 8
+    
     let log:OSLog
 
     // a player model
@@ -178,10 +180,8 @@ class PlayerController {
      */
     func renderSingleCard (card:Card, at position:CGFloat, numCards:CGFloat) {
 
-        let borderWidth:CGFloat = 8
-
         let cardPoint = CGPoint(
-            x: self.handLeft + position * (self.cardSpace + borderWidth),
+            x: self.handLeft + position * (self.cardSpace + self.borderWidth),
             y: self.playerTop
         )
 
@@ -334,7 +334,7 @@ class PlayerController {
         if let existingCardNode:CardNode = cardNode as? CardNode {
 
             let endPoint:CGPoint = CGPoint(
-                x: CGFloat(self.getHand().count) * cardSpace,
+                x: self.handLeft + CGFloat(self.getHand().count) * (self.cardSpace + self.borderWidth),
                 y: self.playerTop
             )
 
