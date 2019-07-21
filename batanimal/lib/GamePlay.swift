@@ -407,7 +407,7 @@ class GamePlay {
         self.playerControllers[1].setHand(hand: self.restOfCards)
 
         // renders cards (TODO overkill: we only need player 1)
-        self.renderCards()
+        self.renderGame()
 
         self.statusText = "game on"
         renderStatus()
@@ -474,7 +474,7 @@ class GamePlay {
     /*
      * renders the cards in the scene
      */
-    func renderCards () {
+    func renderGame () {
 
         for playerController in self.playerControllers {
 
