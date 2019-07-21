@@ -28,8 +28,8 @@ class PlayerController {
     // a player model
     var player:Player
 
-    // a player view
-    var node:SKNode
+    // a reference to the game view
+    var gameNode:SKNode
 
     // the function called when a card is tapped
     var handleCardTapped:(PlayerController) -> Void
@@ -37,10 +37,10 @@ class PlayerController {
     /*
      * initializes a Player controller from a player model and a sprite node
      */
-    init (player:Player, node:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, handleCardTapped:@escaping (PlayerController) -> Void, log:OSLog) {
+    init (player:Player, gameNode:SKNode, playerTop:CGFloat, tableWidth:CGFloat, handSpace:CGFloat, cardSpace:CGFloat, cardHeight:CGFloat, cardWidth:CGFloat, handleCardTapped:@escaping (PlayerController) -> Void, log:OSLog) {
 
         self.player = player
-        self.node = node
+        self.gameNode = gameNode
 
         self.playerTop = playerTop
 
@@ -211,7 +211,7 @@ class PlayerController {
         // makes sure UI node and model card have same ID
         cardNode.name = cardId
 
-        self.node.addChild(cardNode)
+        self.gameNode.addChild(cardNode)
 
     }
 
@@ -294,7 +294,7 @@ class PlayerController {
      */
     func animateMoveCardFromHandToTable(card:Card) {
 
-        let cardNode = self.node.childNode(withName: card.getId())
+        let cardNode = self.gameNode.childNode(withName: card.getId())
 
         if let existingCardNode:CardNode = cardNode as? CardNode {
 
@@ -327,8 +327,8 @@ class PlayerController {
      */
     func animateMoveCardFromTableToHand(fromPlayer:PlayerController, card:Card) {
 
-        os_log("moving card: %@; player top: %d", log:self.log, type:.debug, card.getId(), self.playerTop)
-        let cardNode = fromPlayer.node.childNode(withName: card.getId())
+        os_log("moving card: %@; player top: %f", log:self.log, type:.debug, card.getId(), self.playerTop)
+        let cardNode = fromPlayer.gameNode.childNode(withName: card.getId())
 
         if let existingCardNode:CardNode = cardNode as? CardNode {
 

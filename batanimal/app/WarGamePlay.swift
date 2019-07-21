@@ -54,16 +54,11 @@ class WarGamePlay:GamePlay, GamePlayProtocol {
     }
 
     /*
-     * makes a view and a controller for the player;
-     * if a player model is given, uses that model to make the view and controller;
+     * makes a controller for the player;
+     * if a player model is given, uses that model to make the controller;
      * if no player model is given, creates it first using the player number and session ID
      */
     func makePlayerViewAndController(initializedPlayer:Player?, playerNumber:Int, playerTop:CGFloat, playerName:String) {
-
-        // makes player view
-        let playerNode = SKNode()
-        playerNode.position = CGPoint(x: self.gameLeft, y: playerTop)
-        self.scene.addChild(playerNode)
 
         if let player = initializedPlayer {
 
@@ -72,7 +67,7 @@ class WarGamePlay:GamePlay, GamePlayProtocol {
 
             os_log("making player %d: model exists, player top: %f", log:self.log, type:.debug, initializedPlayerNumber, playerTop)
 
-            let playerController = PlayerController(player: player, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
+            let playerController = PlayerController(player: player, gameNode: self.scene, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
 
@@ -83,7 +78,7 @@ class WarGamePlay:GamePlay, GamePlayProtocol {
 
             os_log("making player %d: model does not exist, player top: %f", log:self.log, type:.debug, playerNumber, playerTop)
 
-            let playerController = PlayerController(player: player, node: playerNode, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
+            let playerController = PlayerController(player: player, gameNode: self.scene, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
 

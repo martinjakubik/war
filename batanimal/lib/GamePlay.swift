@@ -283,7 +283,7 @@ class GamePlay {
         if playerController.getHand().count > 0 {
 
             let topCard = playerController.getHand()[0]
-            let cardNode = playerController.node.childNode(withName: topCard.getId())
+            let cardNode = playerController.gameNode.childNode(withName: topCard.getId())
             if let existingCardNode:CardNode = cardNode as? CardNode {
 
                 existingCardNode.run(wiggleAction)
