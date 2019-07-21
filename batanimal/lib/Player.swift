@@ -46,7 +46,7 @@ class Player {
      */
     func removeCardFromHand(card: Card) {
 
-        if let index = self.hand.index(where: {
+        if let index = self.hand.firstIndex(where: {
             $0.getId() == card.getId()
         }) {
             self.hand.remove(at: index)
@@ -59,7 +59,7 @@ class Player {
      */
     func removeCardFromTable(card: Card) {
         
-        if let index = self.table.index(where: {
+        if let index = self.table.firstIndex(where: {
             $0.getId() == card.getId()
         }) {
             self.table.remove(at: index)
