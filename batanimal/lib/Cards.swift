@@ -38,46 +38,6 @@ class Cards {
 
     }
 
-    class func makeCardArrayFromAnyObject(cardObject:AnyObject?) -> [Card] {
-
-        var cards:[Card] = []
-
-        if let cardList = cardObject as? [String:AnyObject] {
-
-            // tries to read the list of cards from the card object as a dictionary
-            for cardValue in cardList {
-
-                if let cardDictionary = cardValue as? [String:AnyObject] {
-
-                    let card:Card = Card(value: cardDictionary["value"] as! Int, suit: cardDictionary["suit"] as! String)
-
-                    cards.append(card)
-
-                }
-
-            }
-
-        } else if let cardList = cardObject as? [AnyObject] {
-
-            // tries to read the list of cards from the card object as a list
-            for cardValue in cardList {
-
-                if let cardDictionary = cardValue as? [String:AnyObject] {
-
-                    let card:Card = Card(value: cardDictionary["value"] as! Int, suit: cardDictionary["suit"] as! String)
-
-                    cards.append(card)
-
-                }
-
-            }
-
-        }
-
-        return cards
-
-    }
-
     /*
      * makes an image filename from a small ID
      */

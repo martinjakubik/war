@@ -105,7 +105,6 @@
 		5B4BA808203F41EF00F60CD8 /* card-batanimo-14a.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA7E2203F41EF00F60CD8 /* card-batanimo-14a.png */; };
 		5B4BA80A2041963000F60CD8 /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4BA8092041963000F60CD8 /* PlayerController.swift */; };
 		5B4BA80C2042055100F60CD8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B4BA80B2042055100F60CD8 /* GoogleService-Info.plist */; };
-		5B4BA80E2043333E00F60CD8 /* GameSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4BA80D2043333E00F60CD8 /* GameSlot.swift */; };
 		5B98E38C203DCA0000BE085B /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B98E38B203DCA0000BE085B /* background.png */; };
 		5B98E38F203DE85F00BE085B /* GameBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E38E203DE85E00BE085B /* GameBox.swift */; };
 		5B98E395203DE95A00BE085B /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E394203DE95A00BE085B /* Tools.swift */; };
@@ -240,7 +239,6 @@
 		5B4BA7E2203F41EF00F60CD8 /* card-batanimo-14a.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "card-batanimo-14a.png"; path = "resources/card-batanimo-14a.png"; sourceTree = "<group>"; };
 		5B4BA8092041963000F60CD8 /* PlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
 		5B4BA80B2042055100F60CD8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		5B4BA80D2043333E00F60CD8 /* GameSlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSlot.swift; sourceTree = "<group>"; };
 		5B98E38B203DCA0000BE085B /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = resources/background.png; sourceTree = "<group>"; };
 		5B98E38E203DE85E00BE085B /* GameBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBox.swift; sourceTree = "<group>"; };
 		5B98E394203DE95A00BE085B /* Tools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tools.swift; sourceTree = "<group>"; };
@@ -462,7 +460,6 @@
 				5B1AC92921EB973700B5FEB2 /* ButtonNode.swift */,
 				5B4BA7B9203F367A00F60CD8 /* GamePlay.swift */,
 				5B4BA8092041963000F60CD8 /* PlayerController.swift */,
-				5B4BA80D2043333E00F60CD8 /* GameSlot.swift */,
 				5B4568982115C94100C529F8 /* Player.swift */,
 				5BADD384213198D20028B4F5 /* CardNode.swift */,
 				5B3DDBC921AC867D00DEAC7D /* GamePlayProtocol.swift */,
@@ -878,7 +875,6 @@
 				5B3DDBCA21AC867D00DEAC7D /* GamePlayProtocol.swift in Sources */,
 				5B1AC92A21EB973700B5FEB2 /* ButtonNode.swift in Sources */,
 				5B98E395203DE95A00BE085B /* Tools.swift in Sources */,
-				5B4BA80E2043333E00F60CD8 /* GameSlot.swift in Sources */,
 				5BADD385213198D20028B4F5 /* CardNode.swift in Sources */,
 				5B4BA7BA203F367B00F60CD8 /* GamePlay.swift in Sources */,
 			);

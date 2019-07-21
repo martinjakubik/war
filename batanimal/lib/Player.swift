@@ -28,20 +28,6 @@ class Player {
     }
     
     /*
-     *
-     */
-    init (withNumber number:Int, playerDictionary:[String:AnyObject]) {
-
-        self.number = number
-        self.name = playerDictionary["name"] as? String ?? ""
-
-        self.hand = Cards.makeCardArrayFromAnyObject(cardObject: playerDictionary["hand"])
-
-        self.table = playerDictionary["table"] as? [Card] ?? []
-
-    }
-
-    /*
      * removes the given card from the hand
      */
     func removeCardFromHand(card: Card) {
