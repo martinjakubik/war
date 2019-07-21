@@ -29,7 +29,7 @@ class GamePlay {
     let restartButtonWidth:CGFloat = 80
     let statusTop:CGFloat = 100
     let statusWidth:CGFloat = 80
-    let gameTop:CGFloat = 160
+    let gameBottom:CGFloat
     let gameLeft:CGFloat = 20
     let playerHeight:CGFloat = 160
     
@@ -73,6 +73,8 @@ class GamePlay {
         self.statusText = ""
         self.wiggleAction = SKAction.follow(wigglePath, asOffset: true, orientToPath: false, speed: 600)
 
+        self.gameBottom = (self.topView.frame.size.height - playerHeight) / 2.0
+        
         let buttonPosition = CGPoint(
             x: self.scene.size.width / 2,
             y: self.restartButtonTop
@@ -355,7 +357,7 @@ class GamePlay {
     func makePlayer0 () {
 
         // makes player 0 view and controller
-        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 0, playerTop: self.gameTop + self.playerHeight, playerName: "Fox")
+        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 0, playerTop: self.gameBottom + self.playerHeight, playerName: "Fox")
 
         // distributes cards to player 0
         distributeCardsToAvailablePlayers()
@@ -371,11 +373,11 @@ class GamePlay {
      */
     func makePlayer1 () {
 
-        os_log("player 0 top: %f, player 1 top: %f", log:self.log, type:.debug, "string parameter", self.gameTop + self.playerHeight, self.gameTop)
+        os_log("player 0 top: %f, player 1 top: %f", log:self.log, type:.debug, "string parameter", self.gameBottom + self.playerHeight, self.gameBottom)
 
         // makes player 1 view and controller
         // TODO: what if we have a remote player1 model already here?
-        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerTop: self.gameTop, playerName: "Turkey")
+        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerTop: self.gameBottom, playerName: "Turkey")
 
         self.playerControllers[1].setHand(hand: self.restOfCards)
 
