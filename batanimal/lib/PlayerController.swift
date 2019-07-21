@@ -280,10 +280,10 @@ class PlayerController {
         self.addCardToTable(card: card)
         self.removeCardFromHand(card: card)
         
-        os_log("hand: ", log: self.log, type: .debug)
+        os_log("player: %d; hand: ", log: self.log, type: .debug, self.player.number)
         var i = 0
         for card in self.getHand() {
-            os_log("%d | %@ ", log: self.log, type: .debug, i, card.getId())
+            os_log("%2d | %@ ", log: self.log, type: .debug, i, card.getId())
             i = i + 1
         }
 
@@ -313,10 +313,10 @@ class PlayerController {
         fromPlayer.removeCardFromTable(card: card)
         self.addCardToHand(card: card)
 
-        os_log("hand: ", log: self.log, type: .debug)
+        os_log("player: %d; hand: ", log: self.log, type: .debug, self.player.number)
         var i = 0
         for card in self.getHand() {
-            os_log("%d | %@ ", log: self.log, type: .debug, i, card.getId())
+            os_log("%2d | %@ ", log: self.log, type: .debug, i, card.getId())
             i = i + 1
         }
 
