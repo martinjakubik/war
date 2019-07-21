@@ -300,6 +300,7 @@ class PlayerController {
 
             let moveAction = SKAction.moveTo(x: existingCardNode.position.x - 100, duration: 0.02)
             existingCardNode.run(moveAction)
+            existingCardNode.zPosition = CGFloat(self.getTable().count)
 
         }
 
@@ -339,6 +340,29 @@ class PlayerController {
 
             let moveAction = SKAction.move(to: endPoint, duration: 0.02)
             existingCardNode.run(moveAction)
+            shiftZPositionsOfHand()
+
+        }
+
+    }
+
+    func shiftZPositionsOfHand() {
+
+        let numCards = self.getHand().count
+        var position = 0
+        var zPosition = 0
+        for card in self.getHand() {
+
+            let cardNode = self.gameNode.childNode(withName: card.getId())
+
+            if let existingCardNode:CardNode = cardNode as? CardNode {
+
+                // calculates the z-index based on the position in the card set
+                zPosition = numCards - position + 1
+                existingCardNode.zPosition = CGFloat(zPosition)
+
+            }
+            position = position + 1
 
         }
 
