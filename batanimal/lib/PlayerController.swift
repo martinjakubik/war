@@ -327,23 +327,17 @@ class PlayerController {
      */
     func animateMoveCardFromTableToHand(fromPlayer:PlayerController, card:Card) {
 
-        os_log("moving card: %@", log:self.log, type:.debug, card.getId())
+        os_log("moving card: %@; player top: %d", log:self.log, type:.debug, card.getId(), self.playerTop)
         let cardNode = fromPlayer.node.childNode(withName: card.getId())
 
         if let existingCardNode:CardNode = cardNode as? CardNode {
 
-            let startPoint:CGPoint = existingCardNode.position
             let endPoint:CGPoint = CGPoint(
                 x: CGFloat(self.getHand().count) * cardSpace,
                 y: self.playerTop
             )
 
-            let path:UIBezierPath = UIBezierPath()
-            path.move(to: startPoint)
-            path.move(to: endPoint)
-            path.close()
-
-            let moveAction = SKAction.follow(path.cgPath, asOffset: true, orientToPath: false, duration: 0.02)
+            let moveAction = SKAction.move(to: endPoint, duration: 0.02)
             existingCardNode.run(moveAction)
 
         }

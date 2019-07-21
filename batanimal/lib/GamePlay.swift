@@ -320,7 +320,6 @@ class GamePlay {
                         isGameOver = true
                         self.gameState = GameState.gameOver
                         self.statusText = self.playerControllers[winningPlayerNumber].getName() + " wins"
-                        self.renderStatus()
 
                     }
 
@@ -340,7 +339,6 @@ class GamePlay {
     func endGame() {
 
         self.statusText = "someone won"
-        renderStatus()
 
     }
 
@@ -365,8 +363,6 @@ class GamePlay {
         // renders player O's cards
         self.playerControllers[0].renderHand()
 
-        renderStatus()
-
     }
 
     /*
@@ -383,11 +379,8 @@ class GamePlay {
 
         self.playerControllers[1].setHand(hand: self.restOfCards)
 
-        // renders cards (TODO overkill: we only need player 1)
-        self.renderGame()
-
-        self.statusText = "game on"
-        renderStatus()
+        // renders player 1's cards
+        self.playerControllers[1].renderHand()
 
     }
 
@@ -445,28 +438,6 @@ class GamePlay {
             SKAction.playSoundFileNamed(soundFileName, waitForCompletion: false)
 
         }
-
-    }
-
-    /*
-     * renders the cards in the scene
-     */
-    func renderGame () {
-
-        for playerController in self.playerControllers {
-
-            os_log("rendering cards for player: %d", log:self.log, type:.debug, playerController.player.number)
-            playerController.renderHand()
-
-        }
-
-    }
-
-    /*
-     * renders the status
-     */
-    func renderStatus () {
-
 
     }
 
