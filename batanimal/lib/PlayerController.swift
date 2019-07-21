@@ -338,14 +338,6 @@ class PlayerController {
                 y: self.playerTop
             )
 
-            let controlPoint1 = CGPoint(
-                x: startPoint.x + (endPoint.x - startPoint.x) / 3,
-                y: startPoint.y + (endPoint.y - startPoint.y) / 8
-            )
-            let controlPoint2 = CGPoint(
-                x: startPoint.x + 2 * (endPoint.x - startPoint.x) / 3,
-                y: startPoint.y + 6 * (endPoint.y - startPoint.y) / 8
-            )
             let path:UIBezierPath = UIBezierPath()
             path.move(to: startPoint)
             path.move(to: endPoint)
