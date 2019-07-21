@@ -39,8 +39,8 @@ class GamePlay {
     let cardSpace:CGFloat = 0
     
     // width:height ratio is 0.644
-    let cardHeight:CGFloat = 176
-    let cardWidth:CGFloat = 116
+    let cardHeight:CGFloat = 86
+    let cardWidth:CGFloat = 55
 
     var numMoves = 0
 
