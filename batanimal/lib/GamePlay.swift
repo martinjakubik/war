@@ -485,7 +485,7 @@ class GamePlay {
 
         // distributes the cards to the local players
         let numPlayersAmongWhichToDistributeCards = self.numPlayers > 1 ? self.numPlayers : 2;
-        var distributedCards = distribute(cards: self.shuffledCards, numPlayersAmongWhichToDistribute: numPlayersAmongWhichToDistributeCards)
+        let distributedCards = distribute(cards: self.shuffledCards, numPlayersAmongWhichToDistribute: numPlayersAmongWhichToDistributeCards)
 
         var i:Int = 0
         for playerController in self.playerControllers {

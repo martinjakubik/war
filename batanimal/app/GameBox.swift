@@ -56,7 +56,7 @@ class GameBox {
 
         var cards:[Card] = []
 
-        var suitLetters = [ "a", "b", "c", "d", "e", "f" ]
+        let suitLetters = [ "a", "b", "c", "d", "e", "f" ]
 
         var suit:Int
         var highestSuitsFoundForValue = [Int: Int]()
