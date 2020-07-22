@@ -11,6 +11,8 @@ js/lib
 grunttasks/ftpPut.js
 grunttasks/ftpPut.js.orig
 
+dev/npmaudit
+
 batanimal.xcodeproj/project.xcworkspace/xcuserdata/*
 batanimal.xcodeproj/xcuserdata/*
 batanimal.xcworkspace/xcuserdata/*
