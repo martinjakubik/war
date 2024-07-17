@@ -1,6 +1,7 @@
 {
   "name": "war",
   "version": "0.1.0",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/martinjakubik/war.git"
@@ -15,5 +16,8 @@
   },
   "dependencies": {
     "npm-check-updates": "^16.5.6"
+  },
+  "scripts": {
+    "postinstall": "node postinstall.js"
   }
 }
