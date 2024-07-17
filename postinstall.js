@@ -2,26 +2,43 @@ import * as oFs from 'fs/promises';
 
 const sLibPath = './js/lib';
 
-const oMkDirOptions = {
-    recursive: true
-};
+const sSrcPathToKierkiLib = './node_modules/kierki';
+const sDestPathToKierkiLib = `${sLibPath}/kierki`;
+const sSrcPathToKierkiJsLib = `${sSrcPathToKierkiLib}/js`;
+const sDestPathToKierkiJsLib = `${sDestPathToKierkiLib}/js`;
+const sSrcPathToKierkiCssLib = `${sSrcPathToKierkiLib}/css`;
+const sDestPathToKierkiCssLib = `${sDestPathToKierkiLib}/css`;
+const sSrcPathToKierkiResourceLib = `${sSrcPathToKierkiLib}/resources`;
+const sDestPathToKierkiResourceLib = `${sDestPathToKierkiLib}/resources`;
 
-oFs.mkdir(`${sLibPath}/kierki`, oMkDirOptions).then((oResult) => {
-    console.log(oResult);
-    const sSrcPathToKierkiLib = './node_modules/kierki/js';
-    const sDestPathToKierkiLib = `${sLibPath}/kierki`;
-
-    const aLibFiles = ['GamePlay', 'GameSession', 'Player', 'Tools'];
-    aLibFiles.forEach(sLibFile => {
-        oFs.cp(
-            `${sSrcPathToKierkiLib}/${sLibFile}.js`, `${sDestPathToKierkiLib}/${sLibFile}.js`
-        ).then((oResult) => {
-            console.log(oResult);
-        }).catch((oError) => {
-            console.log(oError);
-        });
+const aJsLibFiles = ['GamePlay', 'GameSession', 'Player', 'Tools'];
+aJsLibFiles.forEach(sLibFile => {
+    oFs.cp(
+        `${sSrcPathToKierkiJsLib}/${sLibFile}.js`, `${sDestPathToKierkiJsLib}/${sLibFile}.js`
+    ).then((oResult) => {
+        console.log(oResult);
+    }).catch((oError) => {
+        console.log(oError);
     });
-}).catch((oError) => {
-    console.log(oError);
+});
+const aCssLibFiles = ['screen'];
+aCssLibFiles.forEach(sLibFile => {
+    oFs.cp(
+        `${sSrcPathToKierkiCssLib}/${sLibFile}.css`, `${sDestPathToKierkiCssLib}/${sLibFile}.css`
+    ).then((oResult) => {
+        console.log(oResult);
+    }).catch((oError) => {
+        console.log(oError);
+    });
+});
+const aResourceLibFiles = ['cardshwip'];
+aResourceLibFiles.forEach(sLibFile => {
+    oFs.cp(
+        `${sSrcPathToKierkiResourceLib}/${sLibFile}.wav`, `${sDestPathToKierkiResourceLib}/${sLibFile}.wav`
+    ).then((oResult) => {
+        console.log(oResult);
+    }).catch((oError) => {
+        console.log(oError);
+    });
 });
 
