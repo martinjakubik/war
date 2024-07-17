@@ -4,6 +4,9 @@
 node_modules
 public
 
+package.sh
+package-war.sh
+
 build
 
 js/lib
