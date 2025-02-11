@@ -1,0 +1,8 @@
+ 
+ - create ./app directory
+ - move ./js files to ./app
+ - move ./js/app files to ./app
+ - move ./js/lib files to ./app
+ - move ./js/test files to ./test
+ - update links in ./app/*.js files from ./app to ./
+ - update links in ./app/*.js files from ../lib to ./
