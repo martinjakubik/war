@@ -12,3 +12,4 @@
  - delete grunt file
  - delete grunttasks directory
  - rewrite js function-classes as ES6 classes (...X.prototype = Object.create(...prototype) => class X)
+ - add DOCTYPE html
