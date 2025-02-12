@@ -10,3 +10,5 @@
  - update links in ./app/*.html files from ../app/ to ./
  - update links in ./app/*.html files from ../js/lib/ to ./
  - delete grunt file
+ - delete grunttasks directory
+ - rewrite js function-classes as ES6 classes (...X.prototype = Object.create(...prototype) => class X)
