@@ -1,26 +1,24 @@
-var Card = function (oFaceView, oRearView) {
+class Card {
+    constructor(oFaceView, oRearView) {
+        this.faceView = oFaceView;
+        this.rearView = oRearView;
+    }
 
-    this.faceView = oFaceView;
-    this.rearView = oRearView;
+    getFaceView() {
+        return this.faceView;
+    }
 
+    setFaceView(oFaceView) {
+        this.faceView = oFaceView;
+    }
+
+    getReariew() {
+        return this.rearView;
+    }
+
+    setRearView(oRearView) {
+        this.rearView = oRearView;
+    }
 };
 
-Card.prototype.getFaceView = function () {
-    return this.faceView;
-}
-
-Card.prototype.setFaceView = function (oFaceView) {
-    this.faceView = oFaceView;
-}
-
-Card.prototype.getReariew = function () {
-    return this.rearView;
-}
-
-Card.prototype.setRearView = function (oRearView) {
-    this.rearView = oRearView;
-}
-
-return Card;
-
-export default Card;
+export { Card };
