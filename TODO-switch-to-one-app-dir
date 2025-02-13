@@ -11,5 +11,6 @@
  - update links in ./app/*.html files from ../js/lib/ to ./
  - delete grunt file
  - delete grunttasks directory
+ - delete grunt file from kierki
  - rewrite js function-classes as ES6 classes (...X.prototype = Object.create(...prototype) => class X)
  - add DOCTYPE html
