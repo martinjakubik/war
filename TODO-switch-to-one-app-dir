@@ -1,11 +1,8 @@
  
- - create ./app directory
- - move ./js files to ./app
- - move ./js/app files to ./app
- - move ./js/lib files to ./app
  - move ./js/test files to ./test
- - update links in ./app/*.js files from ./app to ./
- - update links in ./app/*.js files from ../lib to ./
  - move ./html files to ./app
  - update links in ./app/*.html files from ../app/ to ./
  - update links in ./app/*.html files from ../js/lib/ to ./
+ - update links in ./app/*.css files from ../js/lib/ to ./
+ - update Card.js to ES6 imports and class
+ - update Roundwar and Queen Liz and its paths to kierki (especially CSS which references ../ ... /resources)
