@@ -1,16 +1,13 @@
-/*global define */
-define('WarGamePlay', ['GamePlay', 'Player', 'Tools', 'GameSession'], function (GamePlay, Player, Tools, GameSession) {
+import { GamePlay } from '../lib/kierki/js/GamePlay.js';
+import { Player } from '../lib/kierki/js/Player.js';
+import { GameSession } from '../lib/kierki/js/GameSession.js';
 
-    'use strict';
+class WarGamePlay extends GamePlay {
+    constructor(nNumPlayers, aCards, aSounds, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
 
-    var WarGamePlay = function (nNumPlayers, aCards, aSounds, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
-
-        GamePlay.call(this, nNumPlayers, aCards, aSounds, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks);
+        super(nNumPlayers, aCards, aSounds, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks);
 
     };
-
-    // inherits from GamePlay
-    WarGamePlay.prototype = Object.create(GamePlay.prototype);
 
     /**
      * Indicates who has the winning card on the table, based on the two
@@ -21,7 +18,7 @@ define('WarGamePlay', ['GamePlay', 'Player', 'Tools', 'GameSession'], function (
      * @return number of the player whose table card is winning, or -1 if it's a
      *          tie; the first player is 0
      */
-    WarGamePlay.prototype.whoseCardWins = function (aPlayerControllers) {
+    whoseCardWins(aPlayerControllers) {
 
         var nWinningPlayer = -1;
 
@@ -49,7 +46,7 @@ define('WarGamePlay', ['GamePlay', 'Player', 'Tools', 'GameSession'], function (
      * @param sSessionId the ID of the current browser session
      * @param bIsLocal if the player is local
      */
-    WarGamePlay.prototype.makePlayerController = function(nPlayerNum, aPlayers, oPlayerRef, fnLocalPlayerWantsToPlayCard, sSessionId, bIsLocal) {
+    makePlayerController(nPlayerNum, aPlayers, oPlayerRef, fnLocalPlayerWantsToPlayCard, sSessionId, bIsLocal) {
 
         // gets or creates player's browser session Id
         sSessionId = sSessionId ? sSessionId : GameSession.getBrowserSessionId();
@@ -58,6 +55,6 @@ define('WarGamePlay', ['GamePlay', 'Player', 'Tools', 'GameSession'], function (
         aPlayers[nPlayerNum].setOnTapCardInHand(fnLocalPlayerWantsToPlayCard.bind(this));
 
     };
+}
 
-    return WarGamePlay;
-});
+export { WarGamePlay };
