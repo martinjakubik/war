@@ -1,0 +1,441 @@
+body {
+    margin: 0 0 0 0;
+    background-image: radial-gradient(transparent 80%, rgb(232,232,230) 150%),
+        url('../../../resources/background.png');
+    background-size: cover;
+}
+
+.game {
+    height: 80%;
+    width: 100%;
+}
+
+.playArea {
+    width: 80%;
+    margin: 6% auto;
+}
+
+.player {
+    width: 100%;
+}
+
+.table {
+    position: absolute;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 10pt 0 2pt;
+    min-width: 18%;
+}
+
+.button {
+    height: 3em;
+    border: 3pt solid #488;
+    border-radius: 4pt;
+    padding: 4pt 14pt;
+    margin: 4pt 14pt;
+    background-color: white;
+    
+    font-size: 14pt;
+}
+
+.iconbutton {
+    height: 3em;
+    width: 3em;
+    border-radius: 8pt;
+    margin: 14pt 14pt 14pt 14pt;
+    background-color: white;
+    background-size: 80%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hand {
+    position: relative;
+    display: inline-block;
+
+    height: 172pt;
+
+    margin-left: 224pt;
+    vertical-align: middle;
+}
+
+.name {
+    display: block;
+
+    height: 3em;
+    margin: 1em 0 1em 21%;
+    padding: 1em;
+
+    border-radius: 4pt;
+    border-color: rgba(255,255,255,0.7);
+    border-width: 4pt;
+    border-style: solid;
+
+    font-size: 14pt;
+    font-family: fantasy;
+
+    background-color: rgba(40,80,10,0.4);
+    color: white;
+}
+
+@keyframes moveToTableFromLocalFlip {
+    0% {
+        transform: translateX(198pt) rotateY(-180deg);
+        background-image: url('../../../resources/card-back.png');
+    }
+
+    100% {
+        transform: translateX(0pt) rotateY(0deg);
+    }
+}
+
+@keyframes moveToTableFromLocal {
+    0% {
+        transform: translateX(198pt);
+    }
+
+    100% {
+        transform: translateX(0pt);
+    }
+}
+
+@keyframes moveToTableFromRemoteFlip {
+    0% {
+        transform: translateX(-198pt) rotateY(180deg);
+        background-image: url('../../../resources/card-back.png');
+    }
+
+    100% {
+        transform: translateX(0pt) rotateY(0deg);
+    }
+}
+
+@keyframes moveToTableFromRemote {
+    0% {
+        transform: translateX(-198pt);
+    }
+
+    100% {
+        transform: translateX(0pt);
+    }
+}
+
+@keyframes wiggling {
+    0% {
+        transform: translateX(0);
+    }
+
+    15% {
+        transform: translateX(10px);
+    }
+
+    37% {
+        transform: translateX(-20px);
+    }
+
+    59% {
+        transform: translateX(20px);
+    }
+
+    81% {
+        transform: translateX(-10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.table>.card.movingToTableFromLocalFlip {
+    animation-duration: 200ms;
+    animation-timing-function: cubic-bezier(.17,.03,.95,.3);
+    animation-name: moveToTableFromLocalFlip;
+}
+
+.table>.card.movingToTableFromLocal {
+    animation-duration: 200ms;
+    animation-timing-function: cubic-bezier(.17,.03,.95,.3);
+    animation-name: moveToTableFromLocal;
+}
+
+.table>.card.movingToTableFromRemoteFlip {
+    animation-duration: 200ms;
+    animation-timing-function: cubic-bezier(.17,.03,.95,.3);
+    animation-name: moveToTableFromRemoteFlip;
+}
+
+.table>.card.movingToTableFromRemote {
+    animation-duration: 200ms;
+    animation-timing-function: cubic-bezier(.17,.03,.95,.3);
+    animation-name: moveToTableFromRemote;
+}
+
+.hand>.card.wiggling {
+    animation-duration: 200ms;
+    animation-name: wiggling;
+}
+
+.card {
+    display: inline-block;
+    position: absolute;
+
+    vertical-align: middle;
+    margin: 2pt 2pt 2pt 2pt;
+    height: 120pt;
+    width: 74pt;
+
+    border: 12pt solid #fff;
+    border-radius: 12pt;
+
+    background-color: white;
+    background-size: cover;
+
+    box-shadow: 1px 1px 3px #333;
+}
+
+.showBack {
+    background-image: url('../../../resources/card-back.png');
+}
+
+.fannedCard {
+    margin: 0 0 0 2pt;
+    width: 74pt;
+
+    transition: width .5s;
+}
+
+.result {
+    display: inline-block;
+    padding: 4pt 14pt;
+    margin: 4pt 14pt;
+
+    font-family: sans-serif;
+    font-size: 14pt;
+}
+
+@media only screen
+    and (min-device-width: 320px)
+    and (max-device-width: 568px) {
+
+    .button {
+        width: 300pt;
+        height: 88pt;
+        font-size: 38pt;
+    }
+
+    .playArea {
+        width: 100%;
+    }
+
+    .hand {
+        position: relative;
+        display: inline-block;
+
+        height: 270pt;
+
+        margin-left: 224pt;
+        vertical-align: middle;
+    }
+
+    .card {
+        height: 240pt;
+        width: 148pt;
+    }
+}
+
+@media only screen
+    and (min-device-width: 320px)
+    and (max-device-width: 568px)
+    and (orientation: landscape) {
+
+    .game {
+        height: 64%;
+    }
+
+    .button {
+        width: 300pt;
+        height: 88pt;
+        font-size: 38pt;
+    }
+
+    .playArea {
+        width: 80%;
+    }
+
+    .hand {
+        position: relative;
+        display: inline-block;
+
+        height: 112pt;
+
+        margin-left: 224pt;
+        vertical-align: middle;
+    }
+
+    .card {
+        height: 120pt;
+        width: 74pt;
+    }
+}
+
+#clock {
+    font-family: fantasy;
+    font-size: 18pt;
+    font-weight: bold;
+}
+
+#togglesound {
+    background-image: url('../../../resources/soundoff.png');
+}
+
+#togglesound.soundon {
+    background-image: url('../../../resources/soundon.png');
+}
+
+#card1-a.showFace {
+    background-image: url('../../../resources/card-batanimo-1a.png');
+}
+
+#card2-a.showFace {
+    background-image: url('../../../resources/card-batanimo-2a.png');
+}
+
+#card3-a.showFace {
+    background-image: url('../../../resources/card-batanimo-3a.png');
+}
+
+#card4-a.showFace {
+    background-image: url('../../../resources/card-batanimo-4a.png');
+}
+
+#card5-a.showFace {
+    background-image: url('../../../resources/card-batanimo-5a.png');
+}
+
+#card6-a.showFace {
+    background-image: url('../../../resources/card-batanimo-6a.png');
+}
+
+#card1-b.showFace {
+    background-image: url('../../../resources/card-batanimo-1b.png');
+}
+
+#card2-b.showFace {
+    background-image: url('../../../resources/card-batanimo-2b.png');
+}
+
+#card3-b.showFace {
+    background-image: url('../../../resources/card-batanimo-3b.png');
+}
+
+#card4-b.showFace {
+    background-image: url('../../../resources/card-batanimo-4b.png');
+}
+
+#card5-b.showFace {
+    background-image: url('../../../resources/card-batanimo-5b.png');
+}
+
+#card6-b.showFace {
+    background-image: url('../../../resources/card-batanimo-6b.png');
+}
+
+#card1-c.showFace {
+    background-image: url('../../../resources/card-batanimo-1c.png');
+}
+
+#card2-c.showFace {
+    background-image: url('../../../resources/card-batanimo-2c.png');
+}
+
+#card3-c.showFace {
+    background-image: url('../../../resources/card-batanimo-3c.png');
+}
+
+#card4-c.showFace {
+    background-image: url('../../../resources/card-batanimo-4c.png');
+}
+
+#card5-c.showFace {
+    background-image: url('../../../resources/card-batanimo-5c.png');
+}
+
+#card6-c.showFace {
+    background-image: url('../../../resources/card-batanimo-6c.png');
+}
+
+#card1-d.showFace {
+    background-image: url('../../../resources/card-batanimo-1d.png');
+}
+
+#card2-d.showFace {
+    background-image: url('../../../resources/card-batanimo-2d.png');
+}
+
+#card3-d.showFace {
+    background-image: url('../../../resources/card-batanimo-3d.png');
+}
+
+#card4-d.showFace {
+    background-image: url('../../../resources/card-batanimo-4d.png');
+}
+
+#card5-d.showFace {
+    background-image: url('../../../resources/card-batanimo-5d.png');
+}
+
+#card6-d.showFace {
+    background-image: url('../../../resources/card-batanimo-6d.png');
+}
+
+#card1-e.showFace {
+    background-image: url('../../../resources/card-batanimo-1e.png');
+}
+
+#card2-e.showFace {
+    background-image: url('../../../resources/card-batanimo-2e.png');
+}
+
+#card3-e.showFace {
+    background-image: url('../../../resources/card-batanimo-3e.png');
+}
+
+#card4-e.showFace {
+    background-image: url('../../../resources/card-batanimo-4e.png');
+}
+
+#card5-e.showFace {
+    background-image: url('../../../resources/card-batanimo-5e.png');
+}
+
+#card6-e.showFace {
+    background-image: url('../../../resources/card-batanimo-6e.png');
+}
+
+#card1-f.showFace {
+    background-image: url('../../../resources/card-batanimo-1f.png');
+}
+
+#card2-f.showFace {
+    background-image: url('../../../resources/card-batanimo-2f.png');
+}
+
+#card3-f.showFace {
+    background-image: url('../../../resources/card-batanimo-3f.png');
+}
+
+#card4-f.showFace {
+    background-image: url('../../../resources/card-batanimo-4f.png');
+}
+
+#card5-f.showFace {
+    background-image: url('../../../resources/card-batanimo-5f.png');
+}
+
+#card6-f.showFace {
+    background-image: url('../../../resources/card-batanimo-6f.png');
+}
+
+#card14-a.showFace {
+    background-image: url('../../../resources/card-batanimo-14a.png');
+}

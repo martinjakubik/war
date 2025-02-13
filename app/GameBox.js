@@ -1,5 +1,5 @@
 import { WarGamePlay } from './WarGamePlay.js';
-import { Tools } from '../lib/kierki/js/Tools.js';
+import { Tools } from './kierki/js/Tools.js';
 
 var GameBox = function () {
 

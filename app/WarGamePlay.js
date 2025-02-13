@@ -1,6 +1,6 @@
-import { GamePlay } from '../lib/kierki/js/GamePlay.js';
-import { Player } from '../lib/kierki/js/Player.js';
-import { GameSession } from '../lib/kierki/js/GameSession.js';
+import { GamePlay } from './kierki/js/GamePlay.js';
+import { Player } from './kierki/js/Player.js';
+import { GameSession } from './kierki/js/GameSession.js';
 
 class WarGamePlay extends GamePlay {
     constructor(nNumPlayers, aCards, aSounds, aPlayerNames, nMaxNumberOfSlots, nCardWidth, oCallbacks) {
