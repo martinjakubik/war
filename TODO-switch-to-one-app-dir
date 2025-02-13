@@ -1,4 +1,3 @@
  
- - move ./js/test files to ./test
  - update Card.js to ES6 imports and class
  - update Roundwar and Queen Liz and its paths to kierki (especially CSS which references ../ ... /resources)
