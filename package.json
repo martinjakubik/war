@@ -7,12 +7,6 @@
     "url": "https://github.com/martinjakubik/war.git"
   },
   "license": "SEE LICENSE IN LICENSE.md",
-  "devDependencies": {
-    "grunt": "^1.5.3",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-ftp": "^2.1.0",
-    "load-grunt-tasks": "^3.5.0"
-  },
   "dependencies": {
     "kierki": "^1.2.1",
     "npm-check-updates": "^16.5.6"
