@@ -1,2 +1,3 @@
  
  - update Roundwar and Queen Liz and its paths to kierki (especially CSS which references ../ ... /resources)
+ - update postinstall.js to point to new app and lib paths
