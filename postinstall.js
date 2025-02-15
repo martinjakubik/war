@@ -1,6 +1,6 @@
 import * as oFs from 'fs/promises';
 
-const sLibPath = './js/lib';
+const sLibPath = './app';
 
 const sSrcPathToKierkiLib = './node_modules/kierki';
 const sDestPathToKierkiLib = `${sLibPath}/kierki`;
