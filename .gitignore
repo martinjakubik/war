@@ -9,7 +9,7 @@ package-war.sh
 
 build
 
-js/lib
+app/kierki
 
 grunttasks/ftpPut.js
 grunttasks/ftpPut.js.orig
