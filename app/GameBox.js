@@ -117,12 +117,12 @@ var bAddSkunk = true;
 var aCards = oGameBox.makeCards(aBatanimalCardValues, bAddSkunk);
 
 var aSounds = {
-    hamsterSound: new Audio('../resources/hamster-wheel.wav'),
-    rabbitSound: new Audio('../resources/rabbit-crunch.wav'),
-    meowSound: new Audio('../resources/cat-meow.wav'),
-    barkSound: new Audio('../resources/dog-bark.wav'),
-    tigerSound: new Audio('../resources/tiger-growl.wav'),
-    elephantSound: new Audio('../resources/elephant.wav')
+    hamsterSound: new Audio('hamster-wheel.wav'),
+    rabbitSound: new Audio('rabbit-crunch.wav'),
+    meowSound: new Audio('cat-meow.wav'),
+    barkSound: new Audio('dog-bark.wav'),
+    tigerSound: new Audio('tiger-growl.wav'),
+    elephantSound: new Audio('elephant.wav')
 }
 
 GameBox.makeView();

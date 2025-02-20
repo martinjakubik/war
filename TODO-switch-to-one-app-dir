@@ -1,3 +1,2 @@
-  - copy resources/* to app/
-  - update references in css from ../resources to ./
+  
   
