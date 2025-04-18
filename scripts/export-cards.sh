@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ ! -d build ]] ; then
+    mkdir build
+fi
+
 inkscape resources-src/card-batanimo.svg -i layer38 -j -C --export-png=build/border.png
 inkscape resources-src/card-batanimo.svg -i layer39 -j -C --export-png=build/shadow.png
 inkscape resources-src/card-batanimo.svg -i layer41 -j -C --export-png=build/measure.forhtml.png --export-area=11:20:228:358
