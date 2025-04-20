@@ -16,8 +16,8 @@ grunttasks/ftpPut.js.orig
 
 dev/npmaudit
 
-war.xcodeproj/project.xcworkspace/xcuserdata/*
-war.xcodeproj/xcuserdata/*
+**/war.xcodeproj/project.xcworkspace/xcuserdata/*
+**/war.xcodeproj/xcuserdata/*
 war/MyPlayground.playground/playground.xcworkspace/xcuserdata/*
 war/GoogleService-Info.plist
 war-ios/war/resources
