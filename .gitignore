@@ -16,12 +16,11 @@ grunttasks/ftpPut.js.orig
 
 dev/npmaudit
 
-batanimal.xcodeproj/project.xcworkspace/xcuserdata/*
-batanimal.xcodeproj/xcuserdata/*
-batanimal.xcworkspace/xcuserdata/*
-batanimal/MyPlayground.playground/playground.xcworkspace/xcuserdata/*
-
-batanimal/GoogleService-Info.plist
+war.xcodeproj/project.xcworkspace/xcuserdata/*
+war.xcodeproj/xcuserdata/*
+war/MyPlayground.playground/playground.xcworkspace/xcuserdata/*
+war/GoogleService-Info.plist
+war-ios/war/resources
 
 Pods
 Podfile.lock
