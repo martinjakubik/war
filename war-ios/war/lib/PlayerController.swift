@@ -206,7 +206,7 @@ class PlayerController {
                 x: self.handLeft + CGFloat(self.getHand().count) * (self.cardSpace + self.borderWidth),
                 y: self.playerTop
             )
-            let moveAction = SKAction.move(to: endPoint, duration: 0.02)
+            let moveAction = SKAction.move(to: endPoint, duration: 0.2)
             existingCardNode.run(moveAction)
             shiftZPositionsOfHand()
         }
