@@ -7,50 +7,32 @@
 //
 
 import Foundation
-
 class Player {
+    var number: Int
+    var name: String
+    var hand: [Card] = []
+    var table: [Card] = []
 
-    var number:Int
-    var name:String
-    var hand:[Card] = []
-    var table:[Card] = []
-
-    /*
-     *
-     */
-    init (withNumber number:Int) {
-        
+    init (withNumber number: Int) {
         self.number = number
         self.name = ""
         self.hand = []
         self.table = []
-        
     }
     
-    /*
-     * removes the given card from the hand
-     */
     func removeCardFromHand(card: Card) {
-
         if let index = self.hand.firstIndex(where: {
             $0.getId() == card.getId()
         }) {
             self.hand.remove(at: index)
         }
-
     }
 
-    /*
-     * removes the given card from the table
-     */
     func removeCardFromTable(card: Card) {
-        
         if let index = self.table.firstIndex(where: {
             $0.getId() == card.getId()
         }) {
             self.table.remove(at: index)
         }
-
     }
-
 }

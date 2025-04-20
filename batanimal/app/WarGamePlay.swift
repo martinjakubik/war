@@ -11,16 +11,13 @@ import SpriteKit
 
 import os.log
 
-class WarGamePlay:GamePlay, GamePlayProtocol {
-
-    override init(topView: SKView, scene: SKScene, numPlayers: Int, cards: [Card], log: OSLog) {
-
-        super.init(topView: topView, scene: scene, numPlayers: numPlayers, cards: cards, log: log)
+class WarGamePlay: GamePlay, GamePlayProtocol {
+    override init(viewSize: CGSize, scene: SKScene, numPlayers: Int, cards: [Card], log: OSLog) {
+        super.init(viewSize: viewSize, scene: scene, numPlayers: numPlayers, cards: cards, log: log)
         gamePlayDelegate = self
-
     }
 
-    /**
+    /*
      * Indicates who has the winning card on the table, based on the two
      * players' cards.
      *
@@ -28,29 +25,17 @@ class WarGamePlay:GamePlay, GamePlayProtocol {
      *          tie; the first player is 0
      */
     func whoseCardWins() -> Int {
-
         var winningPlayer = -1
-
         if let player0TopCard:Card = self.playerControllers[0].getTopCardOnTable() {
-
             if let player1TopCard:Card = self.playerControllers[1].getTopCardOnTable() {
-
                 if (player0TopCard.value > player1TopCard.value) {
-
                     winningPlayer = 0
-
                 } else if (player0TopCard.value < player1TopCard.value) {
-
                     winningPlayer = 1
-
                 }
-
             }
-
         }
-
         return winningPlayer
-
     }
 
     /*
@@ -58,32 +43,22 @@ class WarGamePlay:GamePlay, GamePlayProtocol {
      * if a player model is given, uses that model to make the controller;
      * if no player model is given, creates it first using the player number and session ID
      */
-    func makePlayerViewAndController(initializedPlayer:Player?, playerNumber:Int, playerTop:CGFloat, playerName:String) {
-
+    func makePlayerViewAndController(initializedPlayer: Player?, playerNumber:Int, playerTop:CGFloat, playerName:String) {
         if let player = initializedPlayer {
-
             // makes player controller
             let initializedPlayerNumber = player.number
-
-            os_log("making player %d: model exists, player top: %f", log:self.log, type:.debug, initializedPlayerNumber, playerTop)
+            os_log("making player %d: model exists, player top: %f", log: self.log, type:.debug, initializedPlayerNumber, playerTop)
 
             let playerController = PlayerController(player: player, gameNode: self.scene, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
-
         } else {
-
             // makes player model first, then makes player controller
-            let player = Player(withNumber:playerNumber)
-
+            let player = Player(withNumber: playerNumber)
             os_log("making player %d: model does not exist, player top: %f", log:self.log, type:.debug, playerNumber, playerTop)
-
             let playerController = PlayerController(player: player, gameNode: self.scene, playerTop: playerTop, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
-
         }
-
     }
-
 }

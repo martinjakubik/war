@@ -7,69 +7,43 @@
 //
 
 import Foundation
-
 class Cards {
-
-    class func getCardsAsNSDictionary(cards:[Card]) -> NSDictionary {
-
-        let cardDictionary:NSDictionary = NSMutableDictionary.init()
-
-        var i:Int = 0
+    class func getCardsAsNSDictionary(cards: [Card]) -> NSDictionary {
+        let cardDictionary: NSDictionary = NSMutableDictionary.init()
+        var i: Int = 0
         for card in cards {
-
-            let key:String = String(i)
+            let key: String = String(i)
             let cardAsDict = getCardAsNSDictionary(card)
             cardDictionary.setValue(cardAsDict, forKey: key)
             i = i + 1
-
         }
-
         return cardDictionary
     }
     
     class func getCardAsNSDictionary(_ card:Card) -> NSDictionary {
-
-        let cardDictionary:NSDictionary = NSMutableDictionary.init()
-
+        let cardDictionary: NSDictionary = NSMutableDictionary.init()
         cardDictionary.setValue(card.suit, forKey: "suit")
         cardDictionary.setValue(card.value, forKey: "value")
-
         return cardDictionary
-
     }
 
-    /*
-     * makes an image filename from a small ID
-     */
-    class func makeImageFilename (fromId:String) -> String {
-
+    class func makeImageFilename (fromId: String) -> String {
         let cardPrefix = "card"
         let gameTag = "batanimo"
         let graphicExtension = "png"
-
         let fileName = cardPrefix + "-" + gameTag + "-" + fromId + "." + graphicExtension
-
         // format: card-batanimo-1f.png
         return fileName
-
     }
 
-    /*
-     * makes an image filename with border and shadow, from a small ID
-     */
-    class func makeFilenameForImageWithBorderAndShadow (from id:String) -> String {
-        
+    class func makeFilenameForImageWithBorderAndShadow (from id: String) -> String {
         let cardPrefix = "card"
         let gameTag = "batanimo"
         let graphicExtension = "png"
         let borderTag = "bo"
         let shadowTag = "sh"
-        
         // format: card-batanimo-1f-bo-sh.png
         let fileName = cardPrefix + "-" + gameTag + "-" + id + "-" + borderTag + "-" + shadowTag + "." + graphicExtension
-        
         return fileName
-        
     }
-    
 }
