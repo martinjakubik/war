@@ -208,11 +208,11 @@ class PlayerController {
             )
             let moveAction = SKAction.move(to: endPoint, duration: 0.2)
             existingCardNode.run(moveAction)
-            shiftZPositionsOfHand()
+            shiftPositionsOfHand()
         }
     }
 
-    func shiftZPositionsOfHand() {
+    func shiftPositionsOfHand() {
         let numCards = self.getHand().count
         var position = 0
         var zPosition = 0
@@ -221,6 +221,7 @@ class PlayerController {
             if let existingCardNode: CardNode = cardNode as? CardNode {
                 zPosition = numCards - position + 1
                 existingCardNode.zPosition = CGFloat(zPosition)
+                existingCardNode.position.x = existingCardNode.position.x - 10
             }
             position = position + 1
         }
