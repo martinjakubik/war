@@ -13,6 +13,7 @@ import os.log
 
 class PlayerController {
     let playerTop: CGFloat
+    let tablePosition: CGFloat
     let tableWidth: CGFloat
     let handSpace: CGFloat
     let handLeft: CGFloat
@@ -31,9 +32,10 @@ class PlayerController {
     /*
      * initializes a Player controller from a player model and a sprite node
      */
-    init (player: Player, gameNode: SKNode, playerTop: CGFloat, tableWidth: CGFloat, handSpace: CGFloat, cardSpace: CGFloat, cardHeight: CGFloat, cardWidth: CGFloat, handleCardTapped: @escaping (PlayerController) -> Void, log: OSLog) {
+    init (player: Player, gameNode: SKNode, playerTop: CGFloat, tablePosition: CGFloat, tableWidth: CGFloat, handSpace: CGFloat, cardSpace: CGFloat, cardHeight: CGFloat, cardWidth: CGFloat, handleCardTapped: @escaping (PlayerController) -> Void, log: OSLog) {
         self.player = player
         self.gameNode = gameNode
+        self.tablePosition = tablePosition
         self.playerTop = playerTop
         self.tableWidth = tableWidth
         self.handSpace = handSpace
@@ -181,7 +183,7 @@ class PlayerController {
     func animateMoveCardFromHandToTable(card: Card) {
         let cardNode = self.gameNode.childNode(withName: card.getId())
         if let existingCardNode:CardNode = cardNode as? CardNode {
-            let moveAction = SKAction.moveTo(x: existingCardNode.position.x - 100, duration: 0.02)
+            let moveAction = SKAction.moveTo(x: self.tablePosition, duration: 0.1)
             existingCardNode.run(moveAction)
             existingCardNode.zPosition = CGFloat(self.getTable().count)
         }
