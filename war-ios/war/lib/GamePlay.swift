@@ -333,7 +333,7 @@ class GamePlay {
         let backgroundTexture = SKTexture(imageNamed: backgroundFileName)
         let backgroundNode = SKSpriteNode(
             texture: backgroundTexture,
-            size: self.scene.size
+            size: backgroundTexture.size()
         )
         backgroundNode.position = CGPoint(
             x: self.scene.size.width / 2,
