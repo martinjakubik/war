@@ -10,9 +10,11 @@ import SpriteKit
 
 struct ContentView: View {
     var body: some View {
-        let gameBox = GameBox(viewSize: CGSize(width: 400, height: 700))
-        let gameScene: SKScene = gameBox.go()
-        SpriteView(scene: gameScene)
+        GeometryReader {geometry in
+            let gameBox = GameBox(viewSize: geometry.size)
+            let gameScene: SKScene = gameBox.go()
+            SpriteView(scene: gameScene)
+        }
     }
 }
 

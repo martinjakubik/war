@@ -35,6 +35,7 @@ class GameBox {
         self.viewSize = viewSize
         self.scene = SKScene(size: viewSize)
         self.log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "game")
+        os_log("game box width: %f height: %f", log:self.log, type:.debug, self.viewSize.width, self.viewSize.height)
     }
 
     func makeCards (cardValues: [Int], addSkunk: Bool) -> [Card] {

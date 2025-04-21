@@ -243,7 +243,7 @@ class GamePlay {
      * does nothing if there is no player 0 model yet
      */
     func makePlayer1 () {
-        os_log("player 0 top: %f, player 1 top: %f", log:self.log, type:.debug, "string parameter", self.gameBottom + self.playerHeight, self.gameBottom)
+        os_log("player 0 top: %f, player 1 top: %f", log:self.log, type:.debug, self.gameBottom + self.playerHeight, self.gameBottom)
         // makes player 1 view and controller
         // TODO: what if we have a remote player1 model already here?
         gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerTop: self.gameBottom, playerName: "Turkey")
