@@ -221,7 +221,7 @@ class PlayerController {
             if let existingCardNode: CardNode = cardNode as? CardNode {
                 zPosition = numCards - position + 1
                 existingCardNode.zPosition = CGFloat(zPosition)
-                existingCardNode.position.x = existingCardNode.position.x - 10
+                existingCardNode.position.x = existingCardNode.position.x - 2
             }
             position = position + 1
         }

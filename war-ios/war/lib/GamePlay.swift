@@ -27,14 +27,14 @@ class GamePlay {
     let statusWidth: CGFloat = 80
     let gameBottom: CGFloat
     let gameLeft: CGFloat = 20
-    let playerHeight: CGFloat = 160
+    var playerHeight: CGFloat = 160
     let tableWidth: CGFloat = 120
     let handSpace: CGFloat = 20
     let cardSpace: CGFloat = 0
     
     // width:height ratio is 0.644
-    let cardHeight: CGFloat = 86
-    let cardWidth: CGFloat = 55
+    var cardHeight: CGFloat = 86
+    var cardWidth: CGFloat = 55
 
     var numMoves = 0
 
@@ -61,6 +61,7 @@ class GamePlay {
         self.gameState = GameState.waitingToFillTable
         self.statusText = ""
         self.wiggleAction = SKAction.follow(wigglePath, asOffset: true, orientToPath: false, speed: 600)
+        self.playerHeight = viewSize.height / 3.0
         self.gameBottom = (viewSize.height - playerHeight) / 2.0
         let buttonPosition = CGPoint(
             x: self.scene.size.width / 2,
@@ -69,6 +70,8 @@ class GamePlay {
         self.statusLabel = SKLabelNode(text: "")
         self.statusLabel.zPosition = control_layer_z_position
         self.restartButton = ButtonNode(withText: "Restart", position: buttonPosition)
+        self.cardWidth = viewSize.width / 3.0
+        self.cardHeight = self.cardWidth / 0.644
         self.log = log
     }
 
