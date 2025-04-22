@@ -49,7 +49,6 @@ class GamePlay {
     let wigglePath: CGPath = Tools.makeWigglePath()
     let wiggleAction: SKAction
     var statusLabel: SKLabelNode
-    var restartButton: ButtonNode
     let control_layer_z_position: CGFloat = 50.0
 
     let log: OSLog
@@ -63,18 +62,13 @@ class GamePlay {
         self.wiggleAction = SKAction.follow(wigglePath, asOffset: true, orientToPath: false, speed: 600)
         self.playerHeight = viewSize.height / 3.0
         self.gameBottom = (viewSize.height - playerHeight) / 2.0
-        let buttonPosition = CGPoint(
-            x: self.scene.size.width / 2,
-            y: self.restartButtonTop
-        )
         self.statusLabel = SKLabelNode(text: "")
         self.statusLabel.zPosition = control_layer_z_position
-        self.restartButton = ButtonNode(withText: "Restart", position: buttonPosition)
         self.cardWidth = viewSize.width / 3.0
         self.cardHeight = self.cardWidth / 0.644
         self.log = log
     }
-
+    
     /*
      * updates the game when player wants to play a card, based on current state
      */
@@ -259,7 +253,7 @@ class GamePlay {
      */
     func hideRestartMessage () {
         os_log("removing restart button", log:self.log, type:.debug)
-        self.scene.removeChildren(in: [self.restartButton, self.statusLabel])
+//        self.scene.removeChildren(in: [self.restartButton, self.statusLabel])
     }
 
     func playWarSound () {
@@ -320,7 +314,7 @@ class GamePlay {
             playerController.setHand(hand: distributedCards[i])
             i = i + 1
         }
-        if (distributedCards.count > i - 1) {
+        if (distributedCards.count > i) {
             self.restOfCards = distributedCards[i]
         }
     }
@@ -344,8 +338,12 @@ class GamePlay {
         self.scene.addChild(self.statusLabel)
         self.statusLabel.text = "Waiting for player 2"
         // shows the dont wait button
-        self.restartButton.controller = self
-        self.scene.addChild(self.restartButton)
+        let buttonPosition = CGPoint(
+            x: self.scene.size.width / 2,
+            y: self.restartButtonTop
+        )
+        let restartButton = ButtonNode(withText: "Restart", position: buttonPosition, handleTap: restartGame)
+        self.scene.addChild(restartButton)
     }
 
     func startGame (shuffleCards:Bool) {
@@ -356,5 +354,15 @@ class GamePlay {
         }
         setUpGameSlot()
         makeScene()
+    }
+
+    func restartGame() {
+        os_log("%@", log: self.log, type: .debug, "restarting")
+        playerControllers[0].clearHand()
+        playerControllers[1].clearHand()
+        self.shuffledCards = Tools.shuffle(things: self.cards)
+        distributeCardsToAvailablePlayers()
+        self.playerControllers[0].renderHand()
+        self.playerControllers[1].renderHand()
     }
 }

@@ -102,6 +102,15 @@ class PlayerController {
         }
         return topCard
     }
+    
+    func clearHand() {
+        for card in getHand() {
+            let cardNode = self.gameNode.childNode(withName: card.getId())
+            cardNode?.removeFromParent()
+        }
+        self.player.hand.removeAll()
+        self.player.table.removeAll()
+    }
 
     func renderHand() {
         var position: CGFloat = 0

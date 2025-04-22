@@ -12,9 +12,11 @@ import SpriteKit
 class ButtonNode:SKSpriteNode {
     var labelText:String = ""
     var controller:GamePlay?
+    let handleTap: () -> Void
     
-    init(withText labelText: String, position: CGPoint) {
+    init(withText labelText: String, position: CGPoint, handleTap: @escaping () -> Void) {
         let buttonTexture:SKTexture = SKTexture(imageNamed: "button.png")
+        self.handleTap = handleTap
         super.init(texture: buttonTexture, color: UIColor.clear, size: buttonTexture.size())
         self.position = position
         self.labelText = labelText
@@ -35,5 +37,6 @@ class ButtonNode:SKSpriteNode {
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
+        self.handleTap()
     }
 }
