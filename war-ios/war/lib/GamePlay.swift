@@ -30,7 +30,7 @@ class GamePlay {
     var playerHeight: CGFloat = 160
     let tableWidth: CGFloat = 120
     let handSpace: CGFloat = 20
-    let cardSpace: CGFloat = 0
+    let cardSpace: CGFloat = 2
     
     // width:height ratio is 0.644
     var cardHeight: CGFloat = 86

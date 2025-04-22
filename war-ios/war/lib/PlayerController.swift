@@ -20,7 +20,7 @@ class PlayerController {
     let cardSpace: CGFloat
     let cardHeight: CGFloat
     let cardWidth: CGFloat
-    let borderWidth: CGFloat = 8
+    let borderWidth: CGFloat = 0
     let log: OSLog
     // a player model
     var player: Player
