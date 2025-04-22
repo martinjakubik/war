@@ -111,7 +111,7 @@ class PlayerController {
 
     func renderSingleCard (card: Card, at position: CGFloat, numCards: CGFloat) {
         let cardPoint = CGPoint(
-            x: self.gameDimensions.gamePadding.right + self.gameDimensions.handMargin.left + position * (self.gameDimensions.cardMargin.left + self.gameDimensions.cardPadding.left),
+            x: self.gameDimensions.gameSize.width - self.gameDimensions.gamePadding.right - self.gameDimensions.handMargin.right - self.gameDimensions.cardSize.width / 2 - position * (self.gameDimensions.cardMargin.right + self.gameDimensions.cardPadding.right),
             y: self.playerTop
         )
         os_log("card position: (%.0f, %.0f)", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
@@ -181,7 +181,7 @@ class PlayerController {
     func animateMoveCardFromHandToTable(card: Card) {
         let cardNode = self.gameNode.childNode(withName: card.getId())
         if let existingCardNode:CardNode = cardNode as? CardNode {
-            let moveAction = SKAction.moveTo(x: self.gameDimensions.tableMargin.left, duration: 0.1)
+            let moveAction = SKAction.moveTo(x: self.gameDimensions.gameSize.width - self.gameDimensions.tableMargin.right - self.gameDimensions.cardSize.width / 2, duration: 0.1)
             existingCardNode.run(moveAction)
             existingCardNode.zPosition = CGFloat(self.getTable().count)
         }
@@ -205,7 +205,7 @@ class PlayerController {
         let cardNode = fromPlayer.gameNode.childNode(withName: card.getId())
         if let existingCardNode:CardNode = cardNode as? CardNode {
             let endPoint:CGPoint = CGPoint(
-                x: self.gameDimensions.gameMargin.right + self.gameDimensions.handMargin.left + CGFloat(self.getHand().count) * (self.gameDimensions.cardMargin.left + self.gameDimensions.cardPadding.left),
+                x: self.gameDimensions.gameSize.width - self.gameDimensions.gamePadding.right - self.gameDimensions.handMargin.right - self.gameDimensions.cardSize.width / 2 - CGFloat(self.getHand().count) * (self.gameDimensions.cardMargin.right + self.gameDimensions.cardPadding.right),
                 y: self.playerTop
             )
             let moveAction = SKAction.move(to: endPoint, duration: 0.2)
@@ -224,7 +224,7 @@ class PlayerController {
                 zPosition = numCards - position + 1
                 existingCardNode.zPosition = CGFloat(zPosition)
                 let endPoint:CGPoint = CGPoint(
-                    x: existingCardNode.position.x - self.gameDimensions.cardMargin.left,
+                    x: existingCardNode.position.x + self.gameDimensions.cardMargin.right,
                     y: existingCardNode.position.y
                 )
                 let moveAction = SKAction.move(to: endPoint, duration: 0.02)
