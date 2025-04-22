@@ -237,7 +237,7 @@ class PlayerController {
                 zPosition = numCards - position + 1
                 existingCardNode.zPosition = CGFloat(zPosition)
                 let endPoint:CGPoint = CGPoint(
-                    x: existingCardNode.position.x - 2,
+                    x: existingCardNode.position.x - self.cardSpace,
                     y: existingCardNode.position.y
                 )
                 let moveAction = SKAction.move(to: endPoint, duration: 0.02)
