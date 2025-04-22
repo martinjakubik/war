@@ -118,7 +118,7 @@ class PlayerController {
             x: self.handLeft + position * (self.cardSpace + self.borderWidth),
             y: self.playerTop
         )
-        os_log("card position x:%f, y:%f", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
+        os_log("card position: (%.0f, %.0f)", log:self.log, type:.debug, cardPoint.x, cardPoint.y)
         // calculates the z-index based on the position in the card set
         let zPosition = numCards - position + 1
         // gets the picture of the card
@@ -174,10 +174,12 @@ class PlayerController {
         self.removeCardFromHand(card: card)
         os_log("player: %d; hand: ", log: self.log, type: .debug, self.player.number)
         var i = 0
+        var log_cards: String = ""
         for card in self.getHand() {
-            os_log("%2d | %@ ", log: self.log, type: .debug, i, card.getId())
+            log_cards = log_cards + String(format: "%2d: %@", i, card.getId()) + " | "
             i = i + 1
         }
+        os_log("%@", log: self.log, type: .debug, log_cards)
     }
 
     func animateMoveCardFromHandToTable(card: Card) {
@@ -194,21 +196,23 @@ class PlayerController {
         self.addCardToHand(card: card)
         os_log("player: %d; hand: ", log: self.log, type: .debug, self.player.number)
         var i = 0
+        var log_cards: String = ""
         for card in self.getHand() {
-            os_log("%2d | %@ ", log: self.log, type: .debug, i, card.getId())
+            log_cards = log_cards + String(format: "%2d: %@", i, card.getId()) + " | "
             i = i + 1
         }
+        os_log("%@", log: self.log, type: .debug, log_cards)
     }
 
     func animateMoveCardFromTableToHand(fromPlayer: PlayerController, card: Card) {
-        os_log("moving card: %@; player top: %f", log:self.log, type:.debug, card.getId(), self.playerTop)
+        os_log("moving card: %@; player %d top: %.0f", log:self.log, type:.debug, card.getId(), self.player.number, self.playerTop)
         let cardNode = fromPlayer.gameNode.childNode(withName: card.getId())
         if let existingCardNode:CardNode = cardNode as? CardNode {
             let endPoint:CGPoint = CGPoint(
                 x: self.handLeft + CGFloat(self.getHand().count) * (self.cardSpace + self.borderWidth),
-                y: self.playerTop
+                y: self.playerTop + (self.player.number == 0 ? self.cardHeight : -self.cardHeight)
             )
-            let moveAction = SKAction.move(to: endPoint, duration: 0.2)
+            let moveAction = SKAction.group([SKAction.move(to: endPoint, duration: 0.2), SKAction.scale(by: 0.4, duration: 0.2)])
             existingCardNode.run(moveAction)
             shiftPositionsOfHand()
         }

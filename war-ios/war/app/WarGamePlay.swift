@@ -49,7 +49,7 @@ class WarGamePlay: GamePlay, GamePlayProtocol {
         if let player = initializedPlayer {
             // makes player controller
             let initializedPlayerNumber = player.number
-            os_log("making player %d: model exists, player top: %f", log: self.log, type:.debug, initializedPlayerNumber, playerTop)
+            os_log("making player %d: model exists, player top: %.0f", log: self.log, type:.debug, initializedPlayerNumber, playerTop)
 
             let playerController = PlayerController(player: player, gameNode: self.scene, playerTop: playerTop, tablePosition: tablePosition, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
             self.playerControllers.append(playerController)
@@ -57,7 +57,7 @@ class WarGamePlay: GamePlay, GamePlayProtocol {
         } else {
             // makes player model first, then makes player controller
             let player = Player(withNumber: playerNumber)
-            os_log("making player %d: model does not exist, player top: %f", log:self.log, type:.debug, playerNumber, playerTop)
+            os_log("making player %d: model does not exist, player top: %.0f", log:self.log, type:.debug, playerNumber, playerTop)
             let playerController = PlayerController(player: player, gameNode: self.scene, playerTop: playerTop, tablePosition: tablePosition, tableWidth: self.tableWidth, handSpace: self.handSpace, cardSpace: self.cardSpace, cardHeight: self.cardHeight, cardWidth: self.cardWidth, handleCardTapped: self.handlePlayerWantsToPlayACard, log: self.log)
             self.playerControllers.append(playerController)
             self.playerControllers[0].setName(name: playerName)
