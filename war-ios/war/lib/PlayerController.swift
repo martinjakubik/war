@@ -172,7 +172,7 @@ class PlayerController {
         var i = 0
         var log_cards: String = ""
         for card in self.getHand() {
-            log_cards = log_cards + String(format: "%2d: %@", i, card.getId()) + " | "
+            log_cards = log_cards + String(format: "%d=(%@) ", i, card.getId())
             i = i + 1
         }
         os_log("%@", log: self.log, type: .debug, log_cards)
@@ -194,7 +194,7 @@ class PlayerController {
         var i = 0
         var log_cards: String = ""
         for card in self.getHand() {
-            log_cards = log_cards + String(format: "%2d: %@", i, card.getId()) + " | "
+            log_cards = log_cards + String(format: "%d=(%@) ", i, card.getId())
             i = i + 1
         }
         os_log("%@", log: self.log, type: .debug, log_cards)
@@ -206,14 +206,14 @@ class PlayerController {
         if let existingCardNode:CardNode = cardNode as? CardNode {
             let endPoint:CGPoint = CGPoint(
                 x: self.gameDimensions.gameMargin.right + self.gameDimensions.handMargin.left + CGFloat(self.getHand().count) * (self.gameDimensions.cardMargin.left + self.gameDimensions.cardPadding.left),
-                y: self.playerTop + (self.player.number == 0 ? self.gameDimensions.cardSize.height : -self.gameDimensions.cardSize.height)
+                y: self.playerTop
             )
-            let moveAction = SKAction.group([SKAction.move(to: endPoint, duration: 0.2), SKAction.scale(by: 0.4, duration: 0.2)])
+            let moveAction = SKAction.move(to: endPoint, duration: 0.2)
             existingCardNode.run(moveAction)
             shiftPositionsOfHand()
         }
     }
-
+// 0=2d 1=3c 2=1d 3=2b 4=1f 5=6f 6=5f 7=6a 8=4d 9=5e 10=2e | 11: 5c | 12: 6b | 13: 3d | 14: 1a | 15: 6e | 16: 4c | 17: 3b | 18: 1c |
     func shiftPositionsOfHand() {
         let numCards = self.getHand().count
         var position = 0
