@@ -27,6 +27,18 @@ for layerId in {1..36}; do
     convert -background none -page +0+0 build/shadow.png -page +0+0 build/border.png -page +0+0 build/card-batanimo-${label}.forswift.png -layers merge +repage build/card-batanimo-${label}-bo-sh.png
 done
 
+# card back
+for layerId in {g10562}; do
+    label=card-back
+
+    # exports two versions of the drawing scene
+    inkscape resources-src/card-batanimo.svg -i g10562 -j -C --export-png=build/${label}.forswift.png
+    inkscape resources-src/card-batanimo.svg -i g10562 -j -C --export-png=build/${label}.png --export-area=11:20:228:358
+
+    # adds border and shadow to swift version
+    convert -background none -page +0+0 build/shadow.png -page +0+0 build/border.png -page +0+0 build/${label}.forswift.png -layers merge +repage build/${label}-bo-sh.png
+done
+
 # skunk card
 for layerId in {37..37}; do
     label=$(xmllint --xpath "string(/*[local-name() = 'svg']/*[local-name() = 'g'][@*[local-name() = 'id'] = 'layer${layerId}']/@*[local-name() = 'label'])"  resources-src/card-batanimo.svg)
