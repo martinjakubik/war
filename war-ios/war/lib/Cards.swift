@@ -26,7 +26,7 @@ class Cards {
         cardDictionary.setValue(card.value, forKey: "value")
         return cardDictionary
     }
-
+    
     class func makeImageFilename (fromId: String) -> String {
         let cardPrefix = "card"
         let gameTag = "batanimo"
@@ -35,7 +35,7 @@ class Cards {
         // format: card-batanimo-1f.png
         return fileName
     }
-
+    
     class func makeFilenameForImageWithBorderAndShadow (from id: String) -> String {
         let cardPrefix = "card"
         let gameTag = "batanimo"
@@ -44,6 +44,15 @@ class Cards {
         let shadowTag = "sh"
         // format: card-batanimo-1f-bo-sh.png
         let fileName = cardPrefix + "-" + gameTag + "-" + id + "-" + borderTag + "-" + shadowTag + "." + graphicExtension
+        return fileName
+    }
+    
+    class func makeFilenameForCardBackImageWithBorderAndShadow () -> String {
+        let graphicExtension = "png"
+        let borderTag = "bo"
+        let shadowTag = "sh"
+        // format: card-back-bo-sh.png
+        let fileName = "card-back" + "-" + borderTag + "-" + shadowTag + "." + graphicExtension
         return fileName
     }
 }

@@ -184,6 +184,11 @@ class PlayerController {
             let moveAction = SKAction.moveTo(x: self.gameDimensions.gameSize.width - self.gameDimensions.tableMargin.right - self.gameDimensions.cardSize.width / 2, duration: 0.1)
             existingCardNode.run(moveAction)
             existingCardNode.zPosition = CGFloat(self.getTable().count)
+            if (self.getTable().count % 2 == 0) {
+                let cardFileName = Cards.makeFilenameForCardBackImageWithBorderAndShadow()
+                let cardBackTexture = SKTexture(imageNamed: cardFileName)
+                existingCardNode.texture = cardBackTexture
+            }
         }
     }
 
