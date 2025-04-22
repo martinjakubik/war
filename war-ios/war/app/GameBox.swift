@@ -14,6 +14,7 @@ import os.log
 class GameBox {
     var viewSize: CGSize
     var scene: SKScene
+    let gameDimensions: GameDimensions
     let log: OSLog
     
     class func getRandomPlayerName (notThis:String) -> String {
@@ -32,8 +33,25 @@ class GameBox {
     }
 
     init(viewSize: CGSize) {
+        let playerHeight: CGFloat = viewSize.height / 3.0
+        let cardWidth = viewSize.width / 3.0
+        let cardHeight = cardWidth / 0.644
+        let handMarginSide: CGFloat = viewSize.width / 2.0
         self.viewSize = viewSize
         self.scene = SKScene(size: viewSize)
+        self.gameDimensions = GameDimensions(
+            cardSize: CGSize(width: cardWidth, height: cardHeight),
+            cardMargin: Spacing(top: 0, right: 2, bottom: 0, left: 2),
+            cardPadding: Spacing(top: 0, right: 0, bottom: 0, left: 0),
+            playerSize: CGSize(width: 0, height: playerHeight),
+            playerMargin: Spacing(top: 0, right: 0, bottom: 0, left: 0),
+            playerPadding: Spacing(top: 0, right: 0, bottom: 0, left: 0),
+            tableMargin: Spacing(top: 0, right: 20, bottom: 0, left: 20),
+            handMargin: Spacing(top: 0, right: handMarginSide, bottom: 0, left: handMarginSide),
+            gameSize: viewSize,
+            gameMargin: Spacing(top: 0, right: 0, bottom: (viewSize.height - playerHeight) / 2, left: 0),
+            gamePadding: Spacing(top: 0, right: 0, bottom: 0, left: 0),
+            gamePosition: CGPoint(x: 0, y: 0))
         self.log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "game")
         os_log("game box width: %.0f height: %.0f", log:self.log, type:.debug, self.viewSize.width, self.viewSize.height)
     }
@@ -77,6 +95,7 @@ class GameBox {
         let gamePlay = WarGamePlay(
             viewSize: self.viewSize,
             scene: self.scene,
+            gameDimensions: self.gameDimensions,
             numPlayers: 2,
             cards: cards,
             log: self.log

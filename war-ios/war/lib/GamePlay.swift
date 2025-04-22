@@ -19,23 +19,13 @@ class GamePlay {
     var shuffledCards: [Card] =  []
     var playerControllers: [PlayerController] = []
     var restOfCards: [Card] = []
+    let gameDimensions: GameDimensions
     var scene: SKScene
     var statusText: String
     let restartButtonTop: CGFloat = 60
     let restartButtonWidth: CGFloat = 80
     let statusTop: CGFloat = 100
     let statusWidth: CGFloat = 80
-    let gameBottom: CGFloat
-    let gameLeft: CGFloat = 20
-    var playerHeight: CGFloat = 160
-    let tableWidth: CGFloat = 120
-    let handSpace: CGFloat = 20
-    let cardSpace: CGFloat = 2
-    
-    // width:height ratio is 0.644
-    var cardHeight: CGFloat = 86
-    var cardWidth: CGFloat = 55
-
     var numMoves = 0
 
     enum GameState {
@@ -53,26 +43,23 @@ class GamePlay {
 
     let log: OSLog
 
-    init(viewSize: CGSize, scene: SKScene, numPlayers: Int, cards: [Card], log: OSLog) {
+    init(viewSize: CGSize, scene: SKScene, gameDimensions: GameDimensions, numPlayers: Int, cards: [Card], log: OSLog) {
         self.scene = scene
+        self.gameDimensions = gameDimensions
         self.numPlayers = numPlayers
         self.cards = cards
         self.gameState = GameState.waitingToFillTable
         self.statusText = ""
         self.wiggleAction = SKAction.follow(wigglePath, asOffset: true, orientToPath: false, speed: 600)
-        self.playerHeight = viewSize.height / 3.0
-        self.gameBottom = (viewSize.height - playerHeight) / 2.0
         self.statusLabel = SKLabelNode(text: "")
         self.statusLabel.zPosition = control_layer_z_position
-        self.cardWidth = viewSize.width / 3.0
-        self.cardHeight = self.cardWidth / 0.644
         self.log = log
     }
     
     /*
      * updates the game when player wants to play a card, based on current state
      */
-    func handlePlayerWantsToPlayACard(playerController:PlayerController) {
+    func handlePlayerWantsToPlayACard(playerController: PlayerController) {
         handleLocalPlayerWantsToPlayACard(for: playerController)
         updateGameState()
     }
@@ -80,7 +67,7 @@ class GamePlay {
     /*
      * updates the game when local player wants to play a card, based on current state
      */
-    func handleLocalPlayerWantsToPlayACard(for playerController:PlayerController) {
+    func handleLocalPlayerWantsToPlayACard(for playerController: PlayerController) {
         switch self.gameState {
         case .waitingToFillTable:
             os_log("game state: %@", log:self.log, type:.debug, "waiting to fill table")
@@ -164,7 +151,7 @@ class GamePlay {
      * if there is more than one player, returns true if all have same number of cards on the table; otherwise false
      */
     func doAllPlayersHaveSameNumberOfCardsOnTable() -> Bool {
-        var doAllPlayersHaveSameNumberOfCardsOnTable:Bool = false
+        var doAllPlayersHaveSameNumberOfCardsOnTable: Bool = false
         if (playerControllers.count > 1) {
             let player0TableCount = playerControllers[0].getTable().count
             let player1TableCount = playerControllers[1].getTable().count
@@ -174,7 +161,7 @@ class GamePlay {
     }
 
     func doPlayersHaveSameCardOnTable() -> Bool {
-        var doPlayersHaveSameCardOnTable:Bool = false
+        var doPlayersHaveSameCardOnTable: Bool = false
         if let player0Card = playerControllers[0].getTopCardOnTable() {
             if let player1Card = playerControllers[1].getTopCardOnTable() {
                 doPlayersHaveSameCardOnTable = (player0Card.value == player1Card.value)
@@ -183,7 +170,7 @@ class GamePlay {
         return doPlayersHaveSameCardOnTable
     }
 
-    func wiggleCardInHand(for playerController:PlayerController) {
+    func wiggleCardInHand(for playerController: PlayerController) {
         if playerController.getHand().count > 0 {
             let topCard = playerController.getHand()[0]
             let cardNode = playerController.gameNode.childNode(withName: topCard.getId())
@@ -194,8 +181,8 @@ class GamePlay {
     }
 
     func isGameOver() -> Bool {
-        var isGameOver:Bool = false
-        var winningPlayerNumber:Int
+        var isGameOver: Bool = false
+        var winningPlayerNumber: Int
         if (self.playerControllers.count < 2) {
             return isGameOver
         }
@@ -229,7 +216,7 @@ class GamePlay {
      */
     func makePlayer0 () {
         // makes player 0 view and controller
-        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 0, playerTop: self.gameBottom + self.playerHeight, playerName: "Fox")
+        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 0, gameDimensions: self.gameDimensions, playerTop: self.gameDimensions.gameMargin.bottom + self.gameDimensions.playerSize.height, playerName: "Fox")
         // distributes cards to player 0
         distributeCardsToAvailablePlayers()
         self.playerControllers[0].renderHand()
@@ -240,10 +227,10 @@ class GamePlay {
      * does nothing if there is no player 0 model yet
      */
     func makePlayer1 () {
-        os_log("player 0 top: %f, player 1 top: %f", log:self.log, type:.debug, self.gameBottom + self.playerHeight, self.gameBottom)
+        os_log("player 0 top: %f, player 1 top: %f", log: self.log, type: .debug, self.gameDimensions.gameMargin.bottom + self.gameDimensions.playerSize.height, self.gameDimensions.gameMargin.bottom)
         // makes player 1 view and controller
         // TODO: what if we have a remote player1 model already here?
-        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, playerTop: self.gameBottom, playerName: "Turkey")
+        gamePlayDelegate.makePlayerViewAndController(initializedPlayer: nil, playerNumber: 1, gameDimensions: self.gameDimensions, playerTop: self.gameDimensions.gameMargin.bottom, playerName: "Turkey")
         self.playerControllers[1].setHand(hand: self.restOfCards)
         self.playerControllers[1].renderHand()
     }
@@ -252,7 +239,7 @@ class GamePlay {
      * hides the Restart button
      */
     func hideRestartMessage () {
-        os_log("removing restart button", log:self.log, type:.debug)
+        os_log("removing restart button", log: self.log, type: .debug)
 //        self.scene.removeChildren(in: [self.restartButton, self.statusLabel])
     }
 
