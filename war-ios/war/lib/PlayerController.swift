@@ -21,6 +21,7 @@ class PlayerController {
     var gameNode: SKNode
     // the function called when a card is tapped
     var handleCardTapped:(PlayerController) -> Void
+    let cardBackTexture: SKTexture
 
     /*
      * initializes a Player controller from a player model and a sprite node
@@ -32,6 +33,8 @@ class PlayerController {
         self.playerTop = playerTop
         self.log = log
         self.handleCardTapped = handleCardTapped
+        let cardFileName = Cards.makeFilenameForCardBackImageWithBorderAndShadow()
+        self.cardBackTexture = SKTexture(imageNamed: cardFileName)
     }
     
     func getName() -> String {
@@ -186,7 +189,7 @@ class PlayerController {
             existingCardNode.zPosition = CGFloat(self.getTable().count)
             if (self.getTable().count % 2 == 0) {
                 let cardFileName = Cards.makeFilenameForCardBackImageWithBorderAndShadow()
-                let cardBackTexture = SKTexture(imageNamed: cardFileName)
+                let cardBackTexture = self.cardBackTexture
                 existingCardNode.texture = cardBackTexture
             }
         }
