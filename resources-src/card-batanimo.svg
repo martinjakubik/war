@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    style="enable-background:new"
    inkscape:export-ydpi="90.099998"
    inkscape:export-xdpi="90.099998"
    inkscape:export-filename="/Users/martin/code/gitwork/war/resources/card-batanimo-bo-sh-1a.png"
    sodipodi:docname="card-batanimo.svg"
-   inkscape:version="1.0beta1 (32d4812, 2019-09-19)"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
    version="1.1"
    id="svg2"
    viewBox="0 0 232.80267 345.454"
    height="368.48425"
-   width="248.32283">
+   width="248.32283"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <sodipodi:namedview
      fit-margin-bottom="0"
      fit-margin-right="0"
@@ -30,17 +30,17 @@
      inkscape:bbox-nodes="false"
      inkscape:snap-bbox="true"
      inkscape:window-maximized="0"
-     inkscape:window-y="23"
+     inkscape:window-y="25"
      inkscape:window-x="0"
-     inkscape:window-height="855"
+     inkscape:window-height="847"
      inkscape:window-width="1440"
      units="px"
      showgrid="false"
-     inkscape:current-layer="layer28"
+     inkscape:current-layer="g10562"
      inkscape:document-units="px"
-     inkscape:cy="146.73802"
-     inkscape:cx="116.69013"
-     inkscape:zoom="2.1063621"
+     inkscape:cy="184.63527"
+     inkscape:cx="116.48807"
+     inkscape:zoom="1.4894229"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -52,10 +52,17 @@
      inkscape:object-nodes="true"
      inkscape:object-paths="false"
      inkscape:snap-intersection-paths="false"
-     inkscape:snap-smooth-nodes="false">
+     inkscape:snap-smooth-nodes="false"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
-       id="grid4522" />
+       id="grid4522"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px" />
   </sodipodi:namedview>
   <defs
      id="defs4">
@@ -4216,7 +4223,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -12527,8 +12533,8 @@
        transform="rotate(5.3906346,132.46533,366.21047)"><textPath
          xlink:href="#path11074"
          id="textPath5855"><tspan
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.9381px;line-height:125%;font-family:Luminari;-inkscape-font-specification:'Luminari, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
-   id="tspan11072">BATANIMAL</tspan></textPath></text>
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.9381px;line-height:125%;font-family:Luminari;-inkscape-font-specification:'Luminari, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
+           id="tspan11072">BATANIMAL</tspan></textPath></text>
     <path
        style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 23.782742,103.38212 c 0,0 20.708785,-12.619411 81.783518,-12.619411 61.07473,0 80.81279,12.619411 80.81279,12.619411"
@@ -12550,8 +12556,8 @@
        xml:space="preserve"><textPath
          id="textPath5868"
          xlink:href="#path11074"><tspan
-   id="tspan5870"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.9381px;line-height:125%;font-family:Luminari;-inkscape-font-specification:'Luminari, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">BATANIMAL</tspan></textPath></text>
+           id="tspan5870"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.9381px;line-height:125%;font-family:Luminari;-inkscape-font-specification:'Luminari, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">BATANIMAL</tspan></textPath></text>
     <path
        style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 184.44675,208.12567 c 0,0 -20.70878,12.61941 -81.78352,12.61941 -61.074726,0 -80.812786,-12.61941 -80.812786,-12.61941"
@@ -12563,7 +12569,7 @@
      inkscape:groupmode="layer"
      id="layer37"
      inkscape:label="14a"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(-4.4135643e-7,-737.36219)"
