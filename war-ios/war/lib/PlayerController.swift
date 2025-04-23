@@ -126,13 +126,14 @@ class PlayerController {
         let cardFileName = Cards.makeFilenameForImageWithBorderAndShadow(from: cardId)
         let cardTexture = SKTexture(imageNamed: cardFileName)
         let cardNode = CardNode(
-            texture: cardTexture,
+            playerController: self,
+            frontTexture: cardTexture,
+            backTexture: self.cardBackTexture,
             size: CGSize(
                 width: self.gameDimensions.cardSize.width,
                 height: self.gameDimensions.cardSize.height
             )
         )
-        cardNode.playerController = self
         cardNode.isUserInteractionEnabled = true
         cardNode.position = cardPoint
         cardNode.zPosition = zPosition
@@ -187,10 +188,10 @@ class PlayerController {
             let moveAction = SKAction.moveTo(x: self.gameDimensions.gameSize.width - self.gameDimensions.tableMargin.right - self.gameDimensions.cardSize.width / 2, duration: 0.1)
             existingCardNode.run(moveAction)
             existingCardNode.zPosition = CGFloat(self.getTable().count)
-            if (self.getTable().count % 2 == 0) {
-                let cardFileName = Cards.makeFilenameForCardBackImageWithBorderAndShadow()
-                let cardBackTexture = self.cardBackTexture
-                existingCardNode.texture = cardBackTexture
+            if (self.getTable().count % 2 == 1) {
+                existingCardNode.showFront()
+            } else {
+                existingCardNode.showBack()
             }
         }
     }
@@ -218,6 +219,7 @@ class PlayerController {
             )
             let moveAction = SKAction.move(to: endPoint, duration: 0.2)
             existingCardNode.run(moveAction)
+            existingCardNode.showBack()
             shiftPositionsOfHand()
         }
     }
