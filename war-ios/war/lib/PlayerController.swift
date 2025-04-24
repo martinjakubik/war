@@ -208,8 +208,8 @@ class PlayerController {
 
     func animateMoveCardFromTableToHand(fromPlayer: PlayerController, card: Card) {
         os_log("moving card: %@; player %d top: %.0f", log:self.log, type:.debug, card.getId(), self.player.number, self.playerTop)
-        let cardNode = fromPlayer.gameNode.childNode(withName: card.getId())
-        if let existingCardNode:CardNode = cardNode as? CardNode {
+        if let existingCardNode: CardNode = fromPlayer.gameNode.childNode(withName: card.getId()) as? CardNode {
+            existingCardNode.playerController = self
             let endPoint:CGPoint = CGPoint(
                 x: self.gameDimensions.gameSize.width - self.gameDimensions.gamePadding.right - self.gameDimensions.handMargin.right - self.gameDimensions.cardSize.width / 2 - CGFloat(self.getHand().count) * (self.gameDimensions.cardMargin.right + self.gameDimensions.cardPadding.right),
                 y: self.playerTop
