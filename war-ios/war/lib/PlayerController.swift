@@ -169,9 +169,7 @@ class PlayerController {
         animateMoveCardFromTableToHand(fromPlayer: fromPlayer, card: card)
     }
     
-    func moveCardToTableInModel(card: Card) {
-        self.addCardToTable(card: card)
-        self.removeCardFromHand(card: card)
+    func log_hand() {
         os_log("player: %d; hand: ", log: self.log, type: .debug, self.player.number)
         var i = 0
         var log_cards: String = ""
@@ -180,6 +178,12 @@ class PlayerController {
             i = i + 1
         }
         os_log("%@", log: self.log, type: .debug, log_cards)
+    }
+
+    func moveCardToTableInModel(card: Card) {
+        self.addCardToTable(card: card)
+        self.removeCardFromHand(card: card)
+        log_hand()
     }
 
     func animateMoveCardFromHandToTable(card: Card) {
@@ -195,18 +199,11 @@ class PlayerController {
             }
         }
     }
-
+    
     func moveCardFromTableToHandInModel(fromPlayer: PlayerController, card:Card) {
         fromPlayer.removeCardFromTable(card: card)
         self.addCardToHand(card: card)
-        os_log("player: %d; hand: ", log: self.log, type: .debug, self.player.number)
-        var i = 0
-        var log_cards: String = ""
-        for card in self.getHand() {
-            log_cards = log_cards + String(format: "%d=(%@) ", i, card.getId())
-            i = i + 1
-        }
-        os_log("%@", log: self.log, type: .debug, log_cards)
+        log_hand()
     }
 
     func animateMoveCardFromTableToHand(fromPlayer: PlayerController, card: Card) {
@@ -223,7 +220,7 @@ class PlayerController {
             shiftPositionsOfHand()
         }
     }
-// 0=2d 1=3c 2=1d 3=2b 4=1f 5=6f 6=5f 7=6a 8=4d 9=5e 10=2e | 11: 5c | 12: 6b | 13: 3d | 14: 1a | 15: 6e | 16: 4c | 17: 3b | 18: 1c |
+
     func shiftPositionsOfHand() {
         let numCards = self.getHand().count
         var position = 0
