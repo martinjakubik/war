@@ -39,7 +39,7 @@
      inkscape:current-layer="g10562"
      inkscape:document-units="px"
      inkscape:cy="184.63527"
-     inkscape:cx="116.48807"
+     inkscape:cx="116.15237"
      inkscape:zoom="1.4894229"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -5505,7 +5505,7 @@
      inkscape:groupmode="layer"
      id="layer7"
      inkscape:label="1b"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -5626,7 +5626,7 @@
      inkscape:groupmode="layer"
      id="layer8"
      inkscape:label="2b"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -5771,7 +5771,7 @@
      inkscape:groupmode="layer"
      id="layer9"
      inkscape:label="3b"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -5894,7 +5894,7 @@
      inkscape:groupmode="layer"
      id="layer10"
      inkscape:label="4b"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -6020,7 +6020,7 @@
      inkscape:groupmode="layer"
      id="layer11"
      inkscape:label="5b"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -6285,7 +6285,7 @@
      inkscape:groupmode="layer"
      id="layer12"
      inkscape:label="6b"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -6501,7 +6501,7 @@
      inkscape:groupmode="layer"
      id="layer13"
      inkscape:label="1c"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -6621,7 +6621,7 @@
      inkscape:groupmode="layer"
      id="layer14"
      inkscape:label="2c"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -6853,7 +6853,7 @@
      inkscape:groupmode="layer"
      id="layer15"
      inkscape:label="3c"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -7113,7 +7113,7 @@
      inkscape:groupmode="layer"
      id="layer16"
      inkscape:label="4c"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -7280,7 +7280,7 @@
      inkscape:groupmode="layer"
      id="layer17"
      inkscape:label="5c"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -7558,7 +7558,7 @@
      inkscape:groupmode="layer"
      id="layer18"
      inkscape:label="6c"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -7916,7 +7916,7 @@
      inkscape:groupmode="layer"
      id="layer19"
      inkscape:label="1d"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -8037,7 +8037,7 @@
      inkscape:groupmode="layer"
      id="layer20"
      inkscape:label="2d"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -8183,7 +8183,7 @@
      inkscape:groupmode="layer"
      id="layer21"
      inkscape:label="3d"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -8307,7 +8307,7 @@
      inkscape:groupmode="layer"
      id="layer22"
      inkscape:label="4d"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -8434,7 +8434,7 @@
      inkscape:groupmode="layer"
      id="layer23"
      inkscape:label="5d"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -8732,7 +8732,7 @@
      inkscape:groupmode="layer"
      id="layer24"
      inkscape:label="6d"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -8948,7 +8948,7 @@
      inkscape:groupmode="layer"
      id="layer25"
      inkscape:label="1e"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -9161,7 +9161,7 @@
      inkscape:groupmode="layer"
      id="layer26"
      inkscape:label="2e"
-     style="display:inline;opacity:1"
+     style="display:none;opacity:1"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -9718,7 +9718,7 @@
      inkscape:groupmode="layer"
      id="layer27"
      inkscape:label="3e"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -9933,7 +9933,7 @@
      inkscape:groupmode="layer"
      id="layer28"
      inkscape:label="4e"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -10128,7 +10128,7 @@
      inkscape:groupmode="layer"
      id="layer29"
      inkscape:label="5e"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -10455,7 +10455,7 @@
      inkscape:groupmode="layer"
      id="layer30"
      inkscape:label="6e"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -10691,7 +10691,7 @@
      inkscape:groupmode="layer"
      id="layer31"
      inkscape:label="1f"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -10812,7 +10812,7 @@
      inkscape:groupmode="layer"
      id="layer32"
      inkscape:label="2f"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -10958,7 +10958,7 @@
      inkscape:groupmode="layer"
      id="layer33"
      inkscape:label="3f"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -11082,7 +11082,7 @@
      inkscape:groupmode="layer"
      id="layer34"
      inkscape:label="4f"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -11209,7 +11209,7 @@
      inkscape:groupmode="layer"
      id="layer35"
      inkscape:label="5f"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        transform="translate(0,-737.36219)"
@@ -11506,7 +11506,7 @@
      inkscape:groupmode="layer"
      id="layer36"
      inkscape:label="6f"
-     style="display:inline"
+     style="display:none"
      transform="translate(11.401337,11.477007)">
     <rect
        ry="8.2310534"
@@ -11848,7 +11848,7 @@
        sodipodi:nodetypes="ccccccccccccc" />
   </g>
   <g
-     style="display:inline;opacity:1"
+     style="display:none;opacity:1"
      inkscape:label="back"
      id="g10562"
      inkscape:groupmode="layer"
