@@ -8,8 +8,7 @@
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "kierki": "^2.1.0",
-    "npm-check-updates": "^16.5.6"
+    "kierki": "^2.1.0"
   },
   "scripts": {
     "postinstall": "node postinstall.js"
